@@ -1,11 +1,11 @@
 
-import Banner from "./Banner";
+import Experience from "./Experience";
 
 
 export default function Home() {
   return (
     <main className="w-full h-full">
-      <Banner />
+      <Experience />
     </main>
   )
 }
