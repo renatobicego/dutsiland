@@ -2,8 +2,11 @@
 
 import { Canvas} from "@react-three/fiber"
 import Tormenta from "./Tormenta"
+import { useTransform } from "framer-motion";
+import { useControls } from "leva";
 
-const Experience = () => {
+const Experience = ({scrollYProgress}) => {
+
   return (
     <Canvas
       shadows
@@ -15,7 +18,7 @@ const Experience = () => {
           position: [ 0, 1.5, 1 ]
       } }
     >
-      <Tormenta />
+      <Tormenta scrollYProgress={scrollYProgress}/>
     </Canvas>
   )
 }

@@ -1,13 +1,15 @@
 import { CameraShake, Cloud, Clouds, shaderMaterial } from "@react-three/drei"
 import {BlendFunction} from 'postprocessing'
 import { extend, useFrame } from "@react-three/fiber"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import seaVertexShader from './shaders/vertex.glsl'
 import seaFragmentShader from './shaders/fragment.glsl'
 import * as THREE from 'three'
 import { EffectComposer } from "@react-three/postprocessing"
 import Fog from "./Effects/Fog"
 import Rain from "./Effects/Rain"
+import { useTransform } from "framer-motion"
+import { useControls } from "leva"
 
 const SeaMaterial = shaderMaterial({
     uTime: 0,
@@ -43,17 +45,20 @@ const SeaMaterial = shaderMaterial({
 extend({SeaMaterial})
 
 
-const Tormenta = () => {
+const Tormenta = ({scrollYProgress}) => {
     const seaMaterial = useRef()
     const lightingRef = useRef()
     const fogRef = useRef()
     const rainRef = useRef()
-    
-    const textureLoader = new THREE.TextureLoader();
-    const rainTexture = textureLoader.load('/iChannel0.png')
-    rainTexture.repeat.x = 2;
-    rainTexture.wrapS = THREE.RepeatWrapping;
-    console.log('hola pa')
+    const x = useTransform(scrollYProgress, [0, 1], [3, 5]); 
+    const rainTexture = useMemo(() => {
+        const textureLoader = new THREE.TextureLoader();
+        const texture = textureLoader.load('/iChannel0.png');
+        texture.repeat.x = 2;
+        texture.wrapS = THREE.RepeatWrapping;
+        return texture;
+    }, []); 
+
     useFrame((state, delta) => {
         if(seaMaterial.current){
 
@@ -74,6 +79,7 @@ const Tormenta = () => {
                 0 : 
                 lightingRef.current.intensity - Math.random() * 10
         }
+        state.camera.position.x = x.current
     })
     return (
         <>
@@ -84,7 +90,7 @@ const Tormenta = () => {
                 pitchFrequency={0.4}
                 rollFrequency={0.3}
                 yawFrequency={0}
-            />
+            /> 
             <EffectComposer multisampling={8}>
                 <Fog 
                     ref={fogRef}
