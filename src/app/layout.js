@@ -2,7 +2,11 @@ import { Piazzolla } from 'next/font/google'
 import './globals.css'
 import Header from './Header'
 
-const piazzolla = Piazzolla({ subsets: ['latin'] })
+const piazzolla = Piazzolla({ 
+  subsets: ['latin'], 
+  display: 'swap',
+  weight: 'variable'
+})
 
 export const metadata = {
   title: 'Estudio Dutsiland',

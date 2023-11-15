@@ -3,7 +3,7 @@ import Image from "next/image"
 
 const Header = () => {
   return (
-    <header className="w-full flex items-center justify-between py-4 pl-10 pr-16 h-32">
+    <header className="w-full flex items-center justify-between py-4 pl-10 pr-16 h-32 fixed top-0 left-0">
         <Image
             alt="logo"
             width={300}
