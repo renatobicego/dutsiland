@@ -22,7 +22,7 @@ const fragmentShader = /* glsl */`
         float adjustedTime = mod(u_time, timeLimit);
 
         // Calculate st using the adjusted time
-        vec2 st = p * vec2(0.5, 0.01) + vec2(adjustedTime * 0.1, adjustedTime * 0.1);
+        vec2 st = p * vec2(0.2, 0.01) + vec2(adjustedTime * 0.1, adjustedTime * 0.1);
         float f = floor(mod(u_time / 9.0, 2.0));
         f = texture(iChannel0, st).x * texture(iChannel0, st * .773).y * 1.55;
         f = clamp(pow(abs(f), 23.0) * 13.0, 0.0, q.y * .14);

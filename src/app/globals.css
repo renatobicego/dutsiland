@@ -7,3 +7,8 @@ html, body {
     padding: 0;
 }
 
+@layer components {
+    .title-size {
+        @apply text-4xl lg:text-5xl xl:text-6xl uppercase text-white font-thin
+    }
+}
