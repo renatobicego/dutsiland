@@ -2,26 +2,26 @@ import { useTransform, motion } from "framer-motion";
 import Faro from "./Faro";
 import { Canvas } from "@react-three/fiber";
 const ExperienceFaro = ({ scrollYProgress }) => {
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
   return (
-    <motion.div
+    <div
       className="my-4 mx-auto !w-[93vw] !h-[75vh]"
-    //   style={{ opacity }}
+  
     >
       <Canvas
         shadows
         key={2}
-        className="w-full h-full"
+        flat
+        className="w-full h-fullr"
         camera={{
           fov: 45,
-          near: 0.1,
+          near: 0.01,
           far: 200,
-          position: [0, 0, 0],
+          position: [-0.1, 0.2, 1.4],
         }}
       >
-        <Faro scrollYProgress={scrollYProgress} />
+        <Faro />
       </Canvas>
-    </motion.div>
+    </div>
   );
 };
 
