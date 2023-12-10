@@ -1,10 +1,11 @@
 "use client"
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useScroll, useSpring, useTransform } from "framer-motion";
 import { motion } from "framer-motion";
 import ExperienceTormenta from "./Tormenta/ExperienceTormenta";
 const FirstAnimation = () => {
   const firstAnimationContainerRef = useRef(null);
+  const [showCanvas, setShowCanvas] = useState(true)
   const { scrollYProgress: scrollYProgressFirstAnimation } = useScroll({
     target: firstAnimationContainerRef,
   });
@@ -19,7 +20,7 @@ const FirstAnimation = () => {
 
   const xFirstAnimation = useTransform(
     scrollClampFirstAnimation,
-    [0, 0.75],
+    [0, 0.95],
     ["3%", "-72%"]
   );
   return (

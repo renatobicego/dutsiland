@@ -9,15 +9,16 @@ import {
 } from "@react-three/drei";
 import { BlendFunction } from "postprocessing";
 import { extend, useFrame } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import seaVertexShader from "./shaders/vertex.glsl";
 import seaFragmentShader from "./shaders/fragment.glsl";
 import * as THREE from "three";
 import { EffectComposer } from "@react-three/postprocessing";
 import Fog from "./Effects/Fog";
 import Rain from "./Effects/Rain";
-import { useTransform } from "framer-motion";
+import { useMotionValue, useTransform } from "framer-motion";
 import { useControls } from "leva";
+import { Perf } from "r3f-perf";
 
 const SeaMaterial = shaderMaterial(
   {
@@ -48,12 +49,12 @@ const Tormenta = ({ scrollYProgress }) => {
   const spotlightRef = useRef();
   const fogRef = useRef();
   const rainRef = useRef();
-  const zCameraP = useTransform(scrollYProgress, [0, 0.7], [0, -5]);
-  const yCameraP = useTransform(scrollYProgress, [0.45, 0.7], [0.15, 0.4]);
-  const xCameraP = useTransform(scrollYProgress, [0.45, 0.7], [3, 4])
+  const zCameraP = useTransform(scrollYProgress, [0, 0.9], [0, -5]);
+  const yCameraP = useTransform(scrollYProgress, [0.45, 0.9], [0.15, 0.4]);
+  const xCameraP = useTransform(scrollYProgress, [0.45, 0.9], [3, 4])
   const cameraShakeIntensity = useTransform(
     scrollYProgress,
-    [0, 0.25, 0.375],
+    [0, 0.6, 0.8],
     [1, 1, 0]
   );
   const cameraShakeRef = useRef();
@@ -69,7 +70,7 @@ const Tormenta = ({ scrollYProgress }) => {
     const data = useGLTF("/lighthouseWLight.glb");
     return data.scene;
   }, []);
-
+  
   useFrame((state, delta) => {
     if (seaMaterial.current && spotlightRef.current) {
       seaMaterial.current.uTime += delta;
@@ -78,7 +79,6 @@ const Tormenta = ({ scrollYProgress }) => {
       spotlightRef.current.target.position.z =
         Math.cos(seaMaterial.current.uTime * Math.PI * 0.25 - Math.PI) - 6.5;
       spotlightRef.current.target.position.y = 0.14;
-      spotlightRef.current.target.updateMatrixWorld();
     }
     if (state.clock.elapsedTime % 5 < 0.15 && lightingRef.current) {
       lightingRef.current.intensity += Math.random() * 10;
@@ -102,6 +102,7 @@ const Tormenta = ({ scrollYProgress }) => {
   });
   return (
     <>
+      <Perf />
       <CameraShake
         ref={cameraShakeRef}
         maxPitch={0.25}
@@ -148,6 +149,7 @@ const Tormenta = ({ scrollYProgress }) => {
       >
         <Cloud
           speed={0.01}
+          
           concentrate="inside"
           segments={40}
           bounds={[20, 1, 20]}

@@ -1,7 +1,8 @@
-import { useTransform, motion } from "framer-motion";
+
 import Faro from "./Faro";
 import { Canvas } from "@react-three/fiber";
 const ExperienceFaro = ({ scrollYProgress }) => {
+
   return (
     <div
       className="my-4 mx-auto !w-[93vw] !h-[75vh]"
@@ -19,7 +20,7 @@ const ExperienceFaro = ({ scrollYProgress }) => {
           position: [-0.1, 0.2, 1.4],
         }}
       >
-        <Faro />
+        <Faro scrollYProgress={scrollYProgress}/>
       </Canvas>
     </div>
   );
