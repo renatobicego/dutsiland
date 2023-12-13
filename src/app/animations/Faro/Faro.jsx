@@ -58,13 +58,13 @@ const Faro = ({ scrollYProgress }) => {
     [0.4, 0.2, 0.02]
   );
   const zCamPos = useTransform(scrollYProgress, [0, 0.2, 0.4], [1.6, 1.4, 0.4]);
-  const xCamRot = useTransform(scrollYProgress, [0.2, 0.4], [0, -Math.PI / 4]);
+  const xCamRot = useTransform(scrollYProgress, [0.2, 0.4], [0, -Math.PI / 5]);
   const yCamRot = useTransform(
     scrollYProgress,
     [0, 0.2, 0.4],
-    [Math.PI / 2, 0, -Math.PI / 4]
+    [Math.PI / 2, 0, -Math.PI / 7]
   );
-  const zCamRot = useTransform(scrollYProgress, [0.2, 0.4], [0, -Math.PI / 6]);
+  const zCamRot = useTransform(scrollYProgress, [0.2, 0.4], [0, -Math.PI / 9]);
 
   useFrame((state, delta) => {
     // if (seaMaterialBlue.current) {
@@ -89,10 +89,7 @@ const Faro = ({ scrollYProgress }) => {
         intensity={1}
       />
       <color attach={"background"} args={["#D3ECFF"]} />
-      {/* <mesh rotation={[-1.6, 0, 1.5]} position={[0, -0.15, 0]}>
-        <planeGeometry args={[30, 30, 512, 512]} />
-        <seaMaterialBlue ref={seaMaterialBlue} />
-      </mesh> */}
+      
       <primitive position={[0.6, 0, 0.5]} object={scene} />
       <directionalLight
         intensity={1}

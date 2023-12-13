@@ -1,6 +1,7 @@
 import { Piazzolla } from 'next/font/google'
 import './globals.css'
 import Header from './Header'
+import { Providers } from './providers'
 
 const piazzolla = Piazzolla({ 
   subsets: ['latin'], 
@@ -15,10 +16,12 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className='scroll-smooth'>
       <body className={piazzolla.className}>
-        <Header  />
-        {children}
+        <Providers>
+          <Header  />
+          {children}
+        </Providers>
       </body>
     </html>
   )

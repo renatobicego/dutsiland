@@ -4,14 +4,12 @@ import { Canvas } from "@react-three/fiber";
 import Tormenta from "./Tormenta";
 import { useState } from "react";
 import { useMotionValue } from "framer-motion";
-
 const ExperienceTormenta = ({ scrollYProgress }) => {
-
   return (
-    <div className="my-4 mx-auto !w-[93vw] !h-[75vh]">
+    <div className=" mx-auto !w-[93vw] !h-[83vh] relative">
       <Canvas
         key={1}
-        className="w-full h-full"
+        className="w-full h-full absolute right-0"
         camera={{
           fov: 45,
           near: 0.1,

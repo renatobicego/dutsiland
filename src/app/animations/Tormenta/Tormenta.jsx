@@ -19,6 +19,7 @@ import Rain from "./Effects/Rain";
 import { useMotionValue, useTransform } from "framer-motion";
 import { useControls } from "leva";
 import { Perf } from "r3f-perf";
+import useWindowSize from "../../utils/useWindowSize";
 
 const SeaMaterial = shaderMaterial(
   {
@@ -44,12 +45,13 @@ const SeaMaterial = shaderMaterial(
 extend({ SeaMaterial });
 
 const Tormenta = ({ scrollYProgress }) => {
+  const screenSize = useWindowSize()
   const seaMaterial = useRef();
   const lightingRef = useRef();
   const spotlightRef = useRef();
   const fogRef = useRef();
   const rainRef = useRef();
-  const zCameraP = useTransform(scrollYProgress, [0, 0.9], [0, -5]);
+  const zCameraP = useTransform(scrollYProgress, [0, 0.9], [0, screenSize.width > 1000 ? -5 : -6.1]);
   const yCameraP = useTransform(scrollYProgress, [0.45, 0.9], [0.15, 0.4]);
   const xCameraP = useTransform(scrollYProgress, [0.45, 0.9], [3, 4])
   const cameraShakeIntensity = useTransform(
@@ -102,7 +104,7 @@ const Tormenta = ({ scrollYProgress }) => {
   });
   return (
     <>
-      <Perf />
+
       <CameraShake
         ref={cameraShakeRef}
         maxPitch={0.25}

@@ -5,7 +5,7 @@ const ExperienceFaro = ({ scrollYProgress }) => {
 
   return (
     <div
-      className="my-4 mx-auto !w-[93vw] !h-[75vh]"
+      className="mx-auto !w-[93vw] !h-[83vh]"
   
     >
       <Canvas
