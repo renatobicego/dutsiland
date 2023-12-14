@@ -35,7 +35,7 @@ body {
   background: #666;
 }
 
-#services-container{
+.services-container{
     scrollbar-gutter: stable;
 }
 

@@ -51,48 +51,72 @@ const SecondAnimation = () => {
         </motion.div>
         <motion.div
           style={{ opacity: opacityServices }}
-          className="w-[50%] absolute z-40 left-28 top-1/2 -translate-y-1/2 h-[90%]"
+          className="w-[80%] absolute z-40 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 h-[90%] flex items-start"
         >
-          <div
-            id="services-container"
-            className="w-full flex items-start flex-col p-10 bg-[#CE9F5D]/80 rounded-lg text-white h-full overflow-auto"
-          >
+          <div className="services-container p-10 text-white h-full bg-[#CE9F5D]/80 flex items-start flex-col w-[50%] rounded-lg overflow-y-auto">
             <h4 className="text-5xl mb-4">¿Qué hacemos?</h4>
-            <p className="text-lg w-[80%]">
+            <p className="text-lg w-full">
               Construimos experiencias web sobresalientes y resolvemos problemas
               de negocio a través de código.
             </p>
             <Accordion
-              className="dark w-[80%] !px-0"
+              className="dark w-full !px-0"
               itemClasses={{ indicator: "text-white", title: "text-xl" }}
             >
-              <AccordionItem key="1" aria-label="UX/UI" title="UX / UI">
-                Impulsamos conexiones más profundas entre su negocio y sus clientes a través del diseño centrado en las personas.
+              <AccordionItem key="1" aria-label="Disenio Web" title="Diseño Web">
+                Impulsamos conexiones más profundas entre su negocio y sus
+                clientes a través de un diseño de interfaz que va más allá de lo estético, 
+                impulsando la narrativa, la funcionalidad, la accesibilidad y la usabilidad. 
+                <ul className="list-disc list-inside">
+                  <li>Diseño de interfaz de usuario</li>
+                  <li>Prototipado de aplicación web</li>
+                  <li>Diseño responsive</li>
+                  <li>Arquitectura de la información</li>
+                  <li>Diseño de identidad visual</li>
+                </ul>
               </AccordionItem>
               <AccordionItem
                 key="2"
                 aria-label="Backend/Frontend"
                 title="Backend / Frontend"
               >
-                Adoptamos un enfoque holístico para plataformas web, conectando la experiencia visual junto 
-                con la funcionalidad lógica para maximizar el valor de su producto.
+                Adoptamos un enfoque holístico para desarrollar aplicaciones
+                web, conectando la experiencia visual junto con la funcionalidad
+                lógica para maximizar el valor de su producto.
+                <ul className="list-disc list-inside">
+                  <li>Desarrollo de APIs</li>
+                  <li>Desarrollo de interfaces de usuario</li>
+                  <li>Organización e implementación de bases de datos</li>
+                  <li>Desarrollo de Eccomerce</li>
+                </ul>
               </AccordionItem>
               <AccordionItem
                 key="3"
-                aria-label="Experiencias Web 3D"
-                title="Experiencias Web 3D"
+                aria-label="Web Interactiva"
+                title="Web Interactiva / 3D"
               >
-                {defaultContent}
+                Fusionamos innovación y creatividad para construir landing pages
+                sobresalientes, combinando animaciones y modelos 3D para lograr 
+                una experiencia única, ¡como nuestra propia web!
               </AccordionItem>
               <AccordionItem
                 key="4"
                 aria-label="Soporte Técnico"
                 title="Soporte Técnico"
               >
-                {defaultContent}
+                Ofrecemos soluciones sólidas y eficientes para mantener sus
+                operaciones en perfecto funcionamiento, permitiéndole centrarse
+                en lo que hace mejor.
+                <ul className="list-disc list-inside">
+                  <li>Mantenimiento y actualización de aplicaciones web</li>
+                  <li>Diagnóstico y arreglo de errores</li>
+                </ul>
               </AccordionItem>
             </Accordion>
           </div>
+          {/* <div className="services-container w-[50%] h-full bg-[#759DBA]/80 rounded-lg overflow-y-auto">
+
+          </div> */}
         </motion.div>
         {/* <motion.div className="w-[30%] flex flex-col items-center">
             <h5 className="title-size">Nuestros Trabajos</h5>
