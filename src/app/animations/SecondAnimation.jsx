@@ -87,7 +87,7 @@ const SecondAnimation = () => {
                   <li>Desarrollo de APIs</li>
                   <li>Desarrollo de interfaces de usuario</li>
                   <li>Organización e implementación de bases de datos</li>
-                  <li>Desarrollo de Eccomerce</li>
+                  <li>Desarrollo de Ecommerce</li>
                 </ul>
               </AccordionItem>
               <AccordionItem
