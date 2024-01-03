@@ -5,7 +5,8 @@ import { motion } from "framer-motion";
 import ExperienceTormenta from "./Tormenta/ExperienceTormenta";
 const FirstAnimation = () => {
   const firstAnimationContainerRef = useRef(null);
-  const [showCanvas, setShowCanvas] = useState(true)
+
+  // scroll animations
   const { scrollYProgress: scrollYProgressFirstAnimation } = useScroll({
     target: firstAnimationContainerRef,
   });
@@ -18,6 +19,7 @@ const FirstAnimation = () => {
     restSpeed: 2,
   });
 
+  // div position based in scroll
   const xFirstAnimation = useTransform(
     scrollClampFirstAnimation,
     [0, 0.95],

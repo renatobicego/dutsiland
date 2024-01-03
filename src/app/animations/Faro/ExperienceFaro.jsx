@@ -12,7 +12,7 @@ const ExperienceFaro = ({ scrollYProgress }) => {
         shadows
         key={2}
         flat
-        className="w-full h-fullr"
+        className="w-full h-full"
         camera={{
           fov: 45,
           near: 0.01,
