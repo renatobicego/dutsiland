@@ -3,8 +3,9 @@ import { useRef } from "react";
 import { useScroll, useSpring, useTransform } from "framer-motion";
 import { motion } from "framer-motion";
 import ExperienceFaro from "./Faro/ExperienceFaro";
-import Services from '../components/Services'
+import Services from '../components/Services/Services'
 import Contact from '../components/Contact'
+import AboutUs from '../components/AboutUs'
 
 
 const SecondAnimation = () => {
@@ -31,8 +32,10 @@ const SecondAnimation = () => {
   return (
     <section ref={secondAnimationContainerRef} className="relative h-[400vh]">
       {/* used with navbar in header */}
-      <div id="servicios" className="absolute top-[140vh]"></div>
-      <div className="sticky top-[6.5rem] overflow-hidden z-10">
+      <div id="quienesSomos" className="absolute top-[122vh]"></div>
+      <div id="servicios" className="absolute top-[225vh]"></div>
+      <div id="contacto" className="absolute top-[285vh]"></div>
+      <div className="sticky top-16 md:top-[6.5rem] overflow-hidden z-10">
         <div className="w-[2.9vw] h-[75vh] absolute left-0 top-0 bg-white z-50"></div>
         <motion.div
           style={{ x: xTranslateFirstSection }}
@@ -46,6 +49,7 @@ const SecondAnimation = () => {
             somos tu faro en este viaje.
           </p>
         </motion.div>
+        <AboutUs scrollClampSecondAnimation={scrollClampSecondAnimation}/>
         <Services scrollClampSecondAnimation={scrollClampSecondAnimation}/>
         <Contact scrollClampSecondAnimation={scrollClampSecondAnimation}/>
         <ExperienceFaro scrollYProgress={scrollClampSecondAnimation} />

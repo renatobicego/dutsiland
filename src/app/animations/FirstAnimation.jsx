@@ -27,7 +27,7 @@ const FirstAnimation = () => {
   );
   return (
     <section ref={firstAnimationContainerRef} className="relative h-[400vh]">
-      <div className="sticky top-[6.5rem] overflow-hidden">
+      <div className="sticky top-16 md:top-[6.5rem] overflow-hidden">
         <motion.div
           style={{ x: xFirstAnimation }}
           className="w-[300vw] absolute h-[75vh] flex items-center justify-between left-0 top-0 z-40"

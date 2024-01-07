@@ -1,6 +1,6 @@
 import { Piazzolla } from 'next/font/google'
 import './globals.css'
-import Header from './components/Header'
+import Header from './components/Header/Header'
 import Footer from './components/Footer'
 import { Providers } from './providers'
 

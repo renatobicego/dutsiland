@@ -1,5 +1,5 @@
 import { object, string } from "yup";
-import { MotionValue, motion, useTransform } from "framer-motion";
+import { motion, useTransform } from "framer-motion";
 import { Field, Form, Formik } from "formik";
 import Swal from "sweetalert2";
 import sendMail from "../utils/sendMail";
@@ -12,14 +12,14 @@ const Contact = ({ scrollClampSecondAnimation }) => {
   // Opacity animation
   const opacityContact = useTransform(
     scrollClampSecondAnimation,
-    [0.65, 0.7, 0.78, 0.8],
-    [0, 1, 1, 0]
+    [0.85, 0.93],
+    [0, 1]
   );
 
   const zIndex = useTransform(
     scrollClampSecondAnimation,
-    [0.65, 0.7, 0.78, 0.8],
-    [0, 50, 50, 0]
+    [0.85, 0.93],
+    [0, 50]
   );
 
   const initialValues = {
@@ -30,7 +30,7 @@ const Contact = ({ scrollClampSecondAnimation }) => {
   return (
     <motion.div
       style={{ opacity: opacityContact, zIndex }}
-      className="w-3/4 h-3/5 lg:w-2/5 2xl:w-1/3 lg:h-5/6 bg-[#202020]/30 absolute top-1/2 -translate-y-1/2 lg:left-[10%] z-50
+      className="w-[90%] md:w-2/3 lg:w-2/5 2xl:w-1/3 lg:h-5/6 bg-[#202020]/30 absolute top-1/2 -translate-y-1/2 lg:left-[10%] z-50
                     rounded-lg flex flex-col items-center py-10 px-4 gap-6 left-1/2 -translate-x-1/2 lg:-translate-x-0"
     >
       <h4 className="text-3xl text-white font-semibold">¡Trabajemos Juntos!</h4>
@@ -40,11 +40,11 @@ const Contact = ({ scrollClampSecondAnimation }) => {
         validateOnChange={false}
         onSubmit={async (values, actions) => {
           try {
-            await sendEmail(values);
+            // await sendEmail(values);
             Swal.fire({
               text: "¡Solicitud de contacto enviada!",
               icon: "success",
-              background: "#CE9F5D",
+              background: "#202020",
               customClass: {
                 popup: "text-white",
               },
@@ -69,7 +69,7 @@ const Contact = ({ scrollClampSecondAnimation }) => {
         validationSchema={contactSchema}
       >
         {({ errors, isSubmitting }) => (
-          <Form className="flex flex-col items-start w-2/3 gap-2">
+          <Form className="flex flex-col items-start w-11/12 md:w-2/3 gap-2">
             <div className="w-full">
               <label className="text-white text-sm" htmlFor="name">
                 Nombre y Apellido

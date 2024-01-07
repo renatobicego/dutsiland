@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useMotionValue } from "framer-motion";
 const ExperienceTormenta = ({ scrollYProgress }) => {
   return (
-    <div className=" mx-auto !w-[93vw] !h-[83vh] relative">
+    <div className=" mx-auto !w-[93vw] !h-[87vh] lg:!h-[83vh] relative">
       <Canvas
         key={1}
         className="w-full h-full absolute right-0"
