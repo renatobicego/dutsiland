@@ -19,8 +19,7 @@ const ExperienceFaro = ({ scrollYProgress }) => {
       >
         <Faro scrollYProgress={scrollYProgress} />
       </Canvas>
-      {/* <R3FLoader background={"bg-[#D3ECFF]"} /> */}
-      <Loader />
+      <R3FLoader background={"bg-[#D3ECFF]"} />
     </div>
   );
 };

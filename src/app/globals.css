@@ -53,3 +53,23 @@ body {
     @apply text-sm md:text-base 2xl:text-lg 3xl:text-xl pt-1 pb-1.5 px-6 rounded-2xl hover:scale-[1.03] transition-all duration-200
   }
 }
+
+.hideLoader {
+    display: none;
+    animation: hide 0.4s;
+}
+
+@keyframes hide {
+  0%{
+    opacity: 1;
+    display: flex;
+  }
+  99%{
+    opacity: 0.01;
+    display: flex;
+  }
+  100% {
+    display: none;
+    opacity: 0;
+  }
+}
