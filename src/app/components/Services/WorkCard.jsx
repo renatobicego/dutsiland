@@ -6,31 +6,31 @@ const WorkCard = ({ data }) => {
 
   return (
     <>
-      <button
-        className="w-full h-32 md:h-40 rounded-lg hover:scale-[1.02] transition-all duration-200 relative"
-        onClick={onOpen}
-      >
+      <div className={`w-full h-32 xl:h-36 2xl:h-40 rounded-lg hover:scale-[1.02] transition-all duration-200 relative outline-none ${data.bg}
+      group`}>
         <Image
-          className="w-full object-cover h-full absolute left-0 top-0 rounded-lg"
+          className="w-full object-cover h-full absolute left-0 top-0 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300"
           width={400}
           height={400}
           quality={50}
-          src={data.coverImage}
+          src={data.imagesRoot + data.coverImage}
           alt={"Imagen de portada: " + data.title}
         />
-        <div
-          className="z-10 relative backdrop-brightness-50 lg:backdrop-brightness-90 w-full h-full flex items-center
+        <button
+          onClick={onOpen}
+          className="z-10 relative lg:backdrop-brightness-90 w-full h-full flex items-center
         justify-center hover:backdrop-brightness-50 transition-all duration-200 rounded-lg"
         >
           <Image
             width={200}
             height={200}
             quality={50}
-            src={data.coverLogo}
+            className="max-h-[60%] xl:max-h-[70%] object-contain"
+            src={data.imagesRoot + data.coverLogo}
             alt={"Logo: " + data.title}
           />
-        </div>
-      </button>
+        </button>
+      </div>
       <Modal
         classNames={{
           base: "max-w-[90%] md:max-w-[80%] lg:max-w-[90%] ",
@@ -42,15 +42,15 @@ const WorkCard = ({ data }) => {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
       >
-        <ModalContent className="w-full h-[90%] md:h-3/4 bg-[#202020]/80">
+        <ModalContent className="w-full h-[90%] bg-[#202020]/80">
           {(onClose) => (
             <div className="flex w-full h-full items-center flex-wrap overflow-y-auto">
               <div className="w-full lg:w-1/2 lg:h-full bg-[#CE9F5D]/80 flex flex-col text-white p-8 md:p-10 gap-4 md:gap-6 items-start">
-                <h6 className="text-2xl md:text-3xl lg:text-5xl font-semibold">
+                <h6 className="text-2xl md:text-3xl 2xl:text-5xl font-semibold">
                   {data.title}
                 </h6>
-                <p className="text-sm md:text-base">{data.text}</p>
-                <ul className="text-sm md:text-base">
+                <p className="text-sm 2xl:text-base">{data.text}</p>
+                <ul className="text-sm 2xl:text-base">
                   <p className="font-bold">Servicios</p>
                   {data.fields.map((field, i) => (
                     <li key={i} className="text-sm">
@@ -61,8 +61,7 @@ const WorkCard = ({ data }) => {
                 <a
                   href={data.link}
                   target="_blank"
-                  className="text-sm md:text-base pt-1 pb-1.5 px-6 text-[#202020] rounded-2xl bg-white 
-                  hover:scale-[1.03] transition-all duration-200"
+                  className="button text-[#202020] bg-white "
                 >
                   Échale un vistazo
                 </a>

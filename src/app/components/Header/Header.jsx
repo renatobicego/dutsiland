@@ -1,13 +1,15 @@
 "use client";
 import Image from "next/image";
-import Drawer from "./Drawer";
-import { Button, useDisclosure } from "@nextui-org/react";
+import { useDisclosure } from "@nextui-org/react";
 import CustomDrawer from "./Drawer";
 const Header = () => {
   const { isOpen, onOpenChange, onOpen } = useDisclosure();
 
   return (
-    <header className="w-[93vw] flex items-center justify-between py-2 pr-3.5 h-16 md:h-[6.5rem] fixed top-0 left-1/2 -translate-x-1/2 z-50 bg-white">
+    <header
+      className="w-[93vw] flex items-center justify-between py-2 pr-3.5 h-16 md:h-[6.5rem] 
+        fixed top-0 left-1/2 -translate-x-1/2 z-50 bg-white"
+    >
       <Image
         alt="logo"
         width={300}

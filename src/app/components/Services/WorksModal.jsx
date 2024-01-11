@@ -84,7 +84,7 @@ const WorksModal = ({ works, open, setOpen }) => {
     <>
       <button
         onClick={() => setOpen(true)}
-        className={`bg-white rounded-2xl text-[#202020] pt-1 pb-1.5 px-6 md:hidden my-6 ${
+        className={`bg-white text-sm rounded-2xl text-[#202020] pt-1 pb-1.5 px-6 md:hidden my-6 ${
           open ? "invisible" : ""
         }`}
       >

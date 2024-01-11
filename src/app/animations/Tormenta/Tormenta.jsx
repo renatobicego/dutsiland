@@ -1,12 +1,12 @@
 import {
   CameraShake,
+  Html,
   SpotLight,
   shaderMaterial,
-  useGLTF,
 } from "@react-three/drei";
 import { BlendFunction } from "postprocessing";
 import { extend, useFrame } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
+import { Suspense, useMemo, useRef } from "react";
 import seaVertexShader from "./shaders/vertex.glsl";
 import seaFragmentShader from "./shaders/fragment.glsl";
 import * as THREE from "three";
@@ -15,6 +15,8 @@ import Fog from "./Effects/Fog";
 import Rain from "./Effects/Rain";
 import { useTransform } from "framer-motion";
 import useWindowSize from "../../utils/useWindowSize";
+import FaroModel from './FaroModel'
+import R3FLoader from '../R3FLoader'
 
 // Shader material uniforms 
 const SeaMaterial = shaderMaterial(
@@ -67,10 +69,7 @@ const Tormenta = ({ scrollYProgress }) => {
     return texture;
   }, []);
 
-  const scene = useMemo(() => {
-    const data = useGLTF("/lighthouseWLight.glb");
-    return data.scene;
-  }, []);
+
   const newCameraPosition = new THREE.Vector3()
   useFrame((state, delta) => {
 
@@ -91,10 +90,11 @@ const Tormenta = ({ scrollYProgress }) => {
       zCameraP.current
     );
     state.camera.position.copy(newCameraPosition);
-    cameraShakeRef.current.setIntensity(cameraShakeIntensity.current);
+    cameraShakeRef.current?.setIntensity(cameraShakeIntensity.current);
   });
+
   return (
-    <>
+    <Suspense fallback={null}>
       <CameraShake
         ref={cameraShakeRef}
         maxPitch={0.25}
@@ -123,7 +123,7 @@ const Tormenta = ({ scrollYProgress }) => {
         <planeGeometry args={[30, 30, 512, 512]} />
         <seaMaterial ref={seaMaterial} />
       </mesh>
-      <primitive position={[1.3, -0.1, -6.5]} object={scene} />
+      <FaroModel />
       <SpotLight
         ref={spotlightRef}
         position={[1.32, 0.2, -6.5]}
@@ -133,8 +133,8 @@ const Tormenta = ({ scrollYProgress }) => {
         distance={100}
         attenuation={40}
         decay={8}
-      />
-    </>
+        />
+    </Suspense>
   );
 };
 

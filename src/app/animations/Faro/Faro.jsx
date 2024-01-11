@@ -1,9 +1,10 @@
 import { Stage, useGLTF } from "@react-three/drei";
-import { useMemo } from "react";
+import { Suspense, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { useTransform } from "framer-motion";
 import useWindowSize from "../../utils/useWindowSize";
+import R3FLoader from "../R3FLoader";
 const Faro = ({ scrollYProgress }) => {
   const scene = useMemo(() => {
     const { scene } = useGLTF("/lighthouse_on_island.glb");
@@ -30,14 +31,7 @@ const Faro = ({ scrollYProgress }) => {
   const zCamPos = useTransform(
     scrollYProgress,
     [0, 0.2, 0.4, 0.45, 0.75, 0.93],
-    [
-      1.6,
-      1.4,
-      screenSize.width > 1000 ? 0.47 : 0.44,
-      screenSize.width > 1000 ? 0.4 : 0.45,
-      screenSize.width > 1000 ? 0.4 : 0.45,
-      0.7,
-    ]
+    [1.6, 1.4, 0.47, 0.4, screenSize.width > 1000 ? 0.4 : 0.45, 0.7]
   );
   // Camera rotations
   const xCamRot = useTransform(
@@ -79,11 +73,13 @@ const Faro = ({ scrollYProgress }) => {
       />
       <color attach={"background"} args={["#D3ECFF"]} />
 
-      <primitive position={[0.6, 0, 0.5]} object={scene} />
-      <mesh rotation-y={1.5} position={[-10, 4, -2]}>
-        <circleGeometry />
-        <meshBasicMaterial color={"#FFF9C5"} />
-      </mesh>
+      <Suspense fallback={null}>
+        <primitive position={[0.6, 0, 0.5]} object={scene} />
+        <mesh rotation-y={1.5} position={[-10, 4, -2]}>
+          <circleGeometry />
+          <meshBasicMaterial color={"#FFF9C5"} />
+        </mesh>
+      </Suspense>
       <pointLight intensity={7} position={[-1, 1, 0]} color={"#FFF9C5"} />
     </>
   );

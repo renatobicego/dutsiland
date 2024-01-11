@@ -28,22 +28,25 @@ const AboutUs = ({ scrollClampSecondAnimation }) => {
   return (
     <motion.div
       style={{ opacity: opacityAboutUs, zIndex }}
-      className="w-[85%] md:w-1/2 2xl:w-[45%] absolute top-1/2 -translate-y-1/2 lg:left-[10%] z-50 p-10 gap-6 bg-[#6087A9]/60
-                   flex flex-col items-start left-1/2 -translate-x-1/2 lg:-translate-x-0 text-white rounded-lg overflow-hidden"
+      className="w-[85%] h-[80%] md:h-auto md:w-3/4 2xl:w-[45%] absolute top-1/2 -translate-y-1/2 lg:left-[10%] z-50 p-6 md:p-10 
+                    gap-6 bg-[#6087A9]/60
+                   flex flex-col items-start left-1/2 -translate-x-1/2 lg:-translate-x-0 text-white rounded-lg
+                   overflow-y-auto md:overflow-hidden"
     >
-      <h4 className={`text-3xl md:text-4xl lg:text-5xl font-semibold`}>
+      <h4 className={`title-second-animation`}>
         ¿Quiénes somos?
       </h4>
-      <p className={`text-base lg:text-lg w-full`}>
+      <p className={`subtitle-second-animation w-full`}>
         Dutsiland es un estudio de desarrollo que impulsa la evolución de
         negocios en la web, proporcionando las herramientas y soluciones
         esenciales para establecer una fuerte presencia en internet y alcanzar
         el máximo potencial de tu negocio.
       </p>
-      <div className="w-full grid grid-cols-2 gap-6">
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6">
         {team.map((member, i) => (
           <div
-            className="w-full h-56 flex flex-col justify-end items-start rounded-lg overflow-hidden relative hover:scale-[1.02] transition-all duration-200"
+            className="w-full h-48 md:h-56 flex flex-col justify-end items-start rounded-lg overflow-hidden relative 
+            lg:hover:scale-[1.02] transition-all duration-200"
             key={i}
           >
             <Image
@@ -58,17 +61,17 @@ const AboutUs = ({ scrollClampSecondAnimation }) => {
               className="flex flex-col items-start w-full h-full justify-end text-white relative z-10 p-5
              from-[#202020] bg-gradient-to-t hover:to-90% transition-all duration-200"
             >
-              <ul className="text-sm flex mb-1 gap-2 list-disc list-inside ml-1">
+              <ul className="text-xs md:text-sm flex mb-1 gap-2 list-disc list-inside ml-1">
                 {member.area.map((area, i) => (
                   <li key={i} className={`${i === 0 ? "list-none" : ""}`}>
-                    <span className={`relative -left-1`}>
+                    <span className={`relative -left-[1px] md:-left-1`}>
                       {area}
                     </span>
                   </li>
                 ))}
               </ul>
               <hr className="w-full opacity-30" />
-              <p className="text-xl font-semibold">{member.name}</p>
+              <p className="md:text-lg 2xl:text-xl 3xl:text-2xl font-semibold">{member.name}</p>
             </div>
           </div>
         ))}

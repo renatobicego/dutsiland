@@ -30,10 +30,10 @@ const Contact = ({ scrollClampSecondAnimation }) => {
   return (
     <motion.div
       style={{ opacity: opacityContact, zIndex }}
-      className="w-[90%] md:w-2/3 lg:w-2/5 2xl:w-1/3 lg:h-5/6 bg-[#202020]/30 absolute top-1/2 -translate-y-1/2 lg:left-[10%] z-50
+      className="w-[85%] md:w-2/3 lg:w-2/5 2xl:w-1/3 lg:h-5/6 bg-[#202020]/30 absolute top-1/2 -translate-y-1/2 lg:left-[10%] z-50
                     rounded-lg flex flex-col items-center py-10 px-4 gap-6 left-1/2 -translate-x-1/2 lg:-translate-x-0"
     >
-      <h4 className="text-3xl text-white font-semibold">¡Trabajemos Juntos!</h4>
+      <h4 className="text-2xl md:text-3xl text-white font-semibold">¡Trabajemos Juntos!</h4>
       <Formik
         initialValues={initialValues}
         validateOnBlur={false}
@@ -113,7 +113,7 @@ const Contact = ({ scrollClampSecondAnimation }) => {
             <button
               aria-disabled={isSubmitting}
               type="submit"
-              className="pt-1 pb-1.5 px-6 text-white rounded-2xl bg-[#B34D4D] flex items-center gap-2"
+              className="button text-white bg-[#B34D4D] flex items-center gap-2"
             >
               <svg
                 className={`animate-spin -ml-1 mr-3 h-5 w-5 text-white ${

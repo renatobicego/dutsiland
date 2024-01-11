@@ -59,10 +59,11 @@ const servicesList = [
 //List of works
 const works = [
   {
-    coverImage: "/works/mimpronta/mimpronts.png",
-    coverLogo: "/works/mimpronta/mimprontaLofo.png",
+    coverImage: "/mimpronts.png",
+    coverLogo: "/mimprontaLofo.png",
+    bg: "bg-[#004282]",
     title: "Mimpronta",
-    fields: ["Diseño UI Responsive", "Desarrollo Web"],
+    fields: ["Diseño UI Responsive", "Desarrollo de Web App"],
     text: `Mimpronta, una agencia de impacto ambiental, se acercó a nosotros con la tarea de diseñar y desarrollar su landing page con el objetivo de promover sus servicios. Con un enfoque en la plasmación de su identidad visual, trabajamos arduamente de la mano
     de los diseñadores para lograr un resultado que no solo fuera funcional, sino también estéticamente sobresaliente.`,
     link: "https://mimpronta.com/",
@@ -70,26 +71,29 @@ const works = [
     imagesRoot: "/works/mimpronta",
   },
   {
-    coverImage: "/works/mimpronta/mimpronts.png",
-    coverLogo: "/works/mimpronta/mimprontaLofo.png",
-    title: "Mimpronta",
-    fields: ["Diseño UI Responsive", "Desarrollo Web"],
-    text: `Mimpronta, una agencia de impacto ambiental, se acercó a nosotros con la tarea de diseñar y desarrollar su landing page con el objetivo de promover sus servicios. Con un enfoque en la plasmación de su identidad visual, trabajamos arduamente de la mano
-    de los diseñadores para lograr un resultado que no solo fuera funcional, sino también estéticamente sobresaliente.`,
-    link: "https://mimpronta.com/",
-    images: ["/2.png", "/1.png", "/3.png", "/5.png", "/4.png"],
-    imagesRoot: "/works/mimpronta",
+    coverImage: "/bsas.avif",
+    coverLogo: "/logo.png",
+    bg: "bg-[#263238]",
+    title: "Wonder Ventures",
+    fields: ["Diseño UI", "Desarrollo de Web App"],
+    text: `Wonder Ventures es nuestro proyecto integrador final de la carrera Certified Tech Developer de Digital House. 
+    Es una plataforma de reservas de experiencias turísticas, donde nos centramos en proporcionar una interfaz intuitiva y fácil de usar, además
+    de la implementación de un sistema robusto de gestión de contenido que permita la fácil actualización de información sobre destinos, actividades y disponibilidad.`,
+    link: "http://wonderventures3.s3-website-us-east-1.amazonaws.com/",
+    images: ["/2.png", "/1.png", "/3.png", "/4.png"],
+    imagesRoot: "/works/wonder",
   },
   {
-    coverImage: "/works/mimpronta/mimpronts.png",
-    coverLogo: "/works/mimpronta/mimprontaLofo.png",
-    title: "Mimpronta",
-    fields: ["Diseño UI Responsive", "Desarrollo Web"],
-    text: `Mimpronta, una agencia de impacto ambiental, se acercó a nosotros con la tarea de diseñar y desarrollar su landing page con el objetivo de promover sus servicios. Con un enfoque en la plasmación de su identidad visual, trabajamos arduamente de la mano
-    de los diseñadores para lograr un resultado que no solo fuera funcional, sino también estéticamente sobresaliente.`,
-    link: "https://mimpronta.com/",
-    images: ["/2.png", "/1.png", "/3.png", "/5.png", "/4.png"],
-    imagesRoot: "/works/mimpronta",
+    coverImage: "/ama.jpg",
+    coverLogo: "/logo.png",
+    bg: "bg-[#6C2F2F]",
+    title: "Asociación Mendocina de Atletismo",
+    fields: ["Diseño UI Responsive", "Desarrollo de Web App", "Investigación de experiencia de usuario"],
+    text: `La Asociación Mendocina de Atletismo confió en nosotros para diseñar y desarrollar su aplicación web con el propósito de establecer un nuevo espacio en la web para la publicación de noticias y la gestión de su sistema de inscripciones y federaciones. Iniciamos el proyecto basándonos en los valiosos insights y puntos de dolor recopilados durante la etapa de investigación.
+    El objetivo fue crear una plataforma que destacara por su facilidad de uso y simplicidad, considerando que gran parte de los usuarios pertenecen al grupo demográfico de personas mayores. Con este enfoque, nos propusimos eliminar obstáculos innecesarios en la navegación y proporcionar una experiencia intuitiva para que los usuarios pudieran acceder rápidamente a la información que necesitan.`,
+    link: "https://amamendoza.vercel.app/",
+    images: ["/2.png", "/1.png", "/3.png", "/4.png"],
+    imagesRoot: "/works/ama",
   },
 ];
 
@@ -147,14 +151,14 @@ const Services = ({ scrollClampSecondAnimation }) => {
         text-white h-auto lg:h-full flex items-start flex-col w-full lg:w-1/2 md:rounded-t-lg lg:rounded-r-lg overflow-y-auto`}
           >
             <h4
-              className={`text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 ${
+              className={`title-second-animation mb-4 ${
                 openWorksMobile ? "opacity-0" : "opacity-100"
               } transition-all duration-500`}
             >
               ¿Qué hacemos?
             </h4>
             <p
-              className={`text-base lg:text-lg w-full ${
+              className={`subtitle-second-animation w-full ${
                 openWorksMobile ? "opacity-0" : "opacity-100"
               } transition-all duration-500`}
             >
@@ -165,16 +169,16 @@ const Services = ({ scrollClampSecondAnimation }) => {
               className={`dark w-full !px-0`}
               itemClasses={{
                 indicator: "text-white",
-                title: "text-base md:text-lg lg:text-xl",
+                title: "text-base md:text-lg 2xl:text-xl",
               }}
             >
               {servicesList.map((service, i) => (
                 <AccordionItem
                   key={i}
                   aria-label={service.ariaLabel}
-                  className={`text-sm md:text-base ${
+                  className={`subtitle-second-animation ${
                     openWorksMobile ? "opacity-0" : "opacity-100"
-                  } transition-all duration-500`}
+                  } transition-all duration-500 font-semibold`}
                   title={service.title}
                 >
                   {service.text}

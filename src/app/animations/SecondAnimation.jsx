@@ -39,10 +39,10 @@ const SecondAnimation = () => {
         <div className="w-[2.9vw] h-[75vh] absolute left-0 top-0 bg-white z-50"></div>
         <motion.div
           style={{ x: xTranslateFirstSection }}
-          className="text-[#202020] w-4/5 md:w-3/4 lg:w-1/2 2xl:w-[40%] absolute z-40 left-6 md:left-16 top-[10%] lg:left-28 lg:top-28"
+          className="text-[#202020] w-4/5 md:w-3/4 lg:w-1/2 2xl:w-[40%] absolute z-40 left-6 md:left-16 top-[20%] lg:left-28 lg:top-28"
         >
-          <h3 className="text-4xl md:text-6xl font-semibold mb-4  ">¿En dónde estamos?</h3>
-          <p className="text-lg md:text-2xl w-full ">
+          <h3 className="text-3xl md:text-5xl 3xl:text-7xl font-semibold mb-4  ">¿En dónde estamos?</h3>
+          <p className="md:text-xl 3xl:text-3xl w-full ">
             En el lugar donde llevamos tu negocio a{" "}
             <span className="font-bold">nuevos horizontes</span> en el mundo
             digital. En esta era, ser una navegante web es esencial, y nosotros

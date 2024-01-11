@@ -2,8 +2,9 @@
 
 import { Canvas } from "@react-three/fiber";
 import Tormenta from "./Tormenta";
-import { useState } from "react";
-import { useMotionValue } from "framer-motion";
+import R3FLoader from "../R3FLoader";
+import { Loader } from "@react-three/drei";
+
 const ExperienceTormenta = ({ scrollYProgress }) => {
   return (
     <div className=" mx-auto !w-[93vw] !h-[87vh] lg:!h-[83vh] relative">
@@ -19,6 +20,7 @@ const ExperienceTormenta = ({ scrollYProgress }) => {
       >
         <Tormenta  scrollYProgress={scrollYProgress} />
       </Canvas>
+      <R3FLoader background={"bg-[#202020]"}/>
     </div>
   );
 };
