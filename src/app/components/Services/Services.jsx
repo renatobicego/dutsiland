@@ -1,5 +1,5 @@
 import { Accordion, AccordionItem } from "@nextui-org/react";
-import { MotionValue, motion, useMotionValueEvent } from "framer-motion";
+import { motion, useMotionValueEvent } from "framer-motion";
 import { useTransform } from "framer-motion";
 import { useState } from "react";
 import WorkCard from "./WorkCard";
