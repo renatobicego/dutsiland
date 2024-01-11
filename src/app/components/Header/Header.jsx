@@ -14,7 +14,7 @@ const Header = () => {
         alt="logo"
         width={300}
         height={300}
-        className="h-[90%] w-auto"
+        className="h-[90%] w-auto min-w-[7vw]"
         src={"/logo7-recortado.png"}
       />
       <nav>

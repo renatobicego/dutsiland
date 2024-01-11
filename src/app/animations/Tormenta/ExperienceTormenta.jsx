@@ -20,7 +20,9 @@ const ExperienceTormenta = ({ scrollYProgress }) => {
       >
         <Tormenta  scrollYProgress={scrollYProgress} />
       </Canvas>
-      <R3FLoader background={"bg-[#202020]"}/>
+      {/* <R3FLoader background={"bg-[#202020]"}/> */}
+      <Loader />
+
     </div>
   );
 };

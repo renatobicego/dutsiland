@@ -79,8 +79,8 @@ const Faro = ({ scrollYProgress }) => {
           <circleGeometry />
           <meshBasicMaterial color={"#FFF9C5"} />
         </mesh>
+        <pointLight intensity={7} position={[-1, 1, 0]} color={"#FFF9C5"} />
       </Suspense>
-      <pointLight intensity={7} position={[-1, 1, 0]} color={"#FFF9C5"} />
     </>
   );
 };
