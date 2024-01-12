@@ -22,6 +22,7 @@ const WorksModal = ({ works, open, setOpen }) => {
       <AnimatePresence>
         {open && (
           <motion.div
+            key={'workModal'}
             initial="hidden"
             animate="visible"
             exit="hidden"

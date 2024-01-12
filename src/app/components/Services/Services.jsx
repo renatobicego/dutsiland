@@ -102,7 +102,7 @@ const Services = ({ scrollClampSecondAnimation }) => {
   // Change opacity animation
   const opacityServices = useTransform(
     scrollClampSecondAnimation,
-    [0.68, 0.7, 0.75, 0.77],
+    [0.67, 0.7, 0.8, 0.83],
     [0, 1, 1, 0]
   );
   // To avoid scrolling body when scrolling inside div
@@ -111,13 +111,13 @@ const Services = ({ scrollClampSecondAnimation }) => {
   const [visible, setVisible] = useState(false);
 
   useMotionValueEvent(scrollClampSecondAnimation, "change", (latest) => {
-    if (latest < 0.77 && latest > 0.7) {
+    if (latest < 0.83 && latest > 0.7) {
       setOverscroll(true);
     } else {
       setOverscroll(false);
       setOpenWorksMobile(false);
     }
-    if (latest < 0.77 && latest > 0.68) {
+    if (latest < 0.83 && latest > 0.67) {
       setVisible(true);
     } else {
       setVisible(false);

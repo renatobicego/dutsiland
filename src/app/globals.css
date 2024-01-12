@@ -4,8 +4,8 @@
 
 html,
 body {
-  margin: 0;
-  padding: 0;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 /* width */
@@ -56,7 +56,7 @@ body {
 
 .hideLoader {
     display: none;
-    animation: hide 0.4s;
+    animation: hide 1s;
 }
 
 @keyframes hide {

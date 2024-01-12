@@ -40,7 +40,7 @@ const Contact = ({ scrollClampSecondAnimation }) => {
         validateOnChange={false}
         onSubmit={async (values, actions) => {
           try {
-            // await sendEmail(values);
+            await sendMail(values);
             Swal.fire({
               text: "¡Solicitud de contacto enviada!",
               icon: "success",
@@ -55,7 +55,7 @@ const Contact = ({ scrollClampSecondAnimation }) => {
             actions.resetForm();
           } catch (error) {
             Swal.fire({
-              text: "Error en la petición. Por favor, contactarse a través del correo: renato.bicego@gmail.com",
+              text: "Error en la petición. Por favor, contactarse a través del correo: dutsiland@gmail.com",
               icon: "error",
               background: "#CE9F5D",
               customClass: {

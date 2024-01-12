@@ -12,7 +12,8 @@ const Faro = ({ scrollYProgress }) => {
   }, []);
   // Breakpoints of the animation based in Scroll progress
   const sectionBreakpoints = [0, 0.2, 0.4, 0.45, 0.7, 0.75, 0.93];
-  const screenSize = useWindowSize();
+  const { windowSize: screenSize, mousePos } = useWindowSize();
+
   // Camera positions
   const xCamPos = useTransform(scrollYProgress, sectionBreakpoints, [
     2.5,
@@ -56,11 +57,13 @@ const Faro = ({ scrollYProgress }) => {
   const newCameraPosition = new THREE.Vector3();
   useFrame((state, delta) => {
     // Update camera position
-    newCameraPosition.set(xCamPos.current, yCamPos.current, zCamPos.current);
+    newCameraPosition.set(xCamPos.get(), yCamPos.get(), zCamPos.get());
     state.camera.position.copy(newCameraPosition);
-    state.camera.rotation.y = yCamRot.current;
-    state.camera.rotation.x = xCamRot.current;
-    state.camera.rotation.z = zCamRot.current;
+    if(mousePos){
+      state.camera.rotation.x = xCamRot.get() - mousePos.y * 0.1;
+      state.camera.rotation.y = yCamRot.get() - mousePos.x * 0.1;
+      state.camera.rotation.z = zCamRot.get(); 
+    }
   });
 
   return (

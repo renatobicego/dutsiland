@@ -1,3 +1,4 @@
+import axios from "axios";
 
 const sendEmail = async ({
   name,
@@ -6,7 +7,7 @@ const sendEmail = async ({
 }) => {
   try {
     await axios.post(
-      "",
+      "https://formspree.io/f/xnqenpeb",
       {
         name,
         email,
