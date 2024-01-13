@@ -40,7 +40,7 @@ export function Model(props) {
                 material={materials.material}
               />
               <group
-                position={[-0.343, 0.16, 0.02]}
+                position={[-0.343, 0.16, 0.025]}
                 rotation={[0, 0, -Math.PI / 2]}
               >
                 <mesh

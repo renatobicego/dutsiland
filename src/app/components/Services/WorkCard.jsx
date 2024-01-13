@@ -6,10 +6,13 @@ const WorkCard = ({ data }) => {
 
   return (
     <>
-      <div className={`w-full h-32 xl:h-36 2xl:h-40 rounded-lg hover:scale-[1.02] transition-all duration-200 relative outline-none ${data.bg}
-      group`}>
+      <div
+        className={`w-full h-32 xl:h-36 2xl:h-40 rounded-lg hover:scale-[1.02] active:scale-[1.02] transition-all duration-200 
+      relative outline-none ${data.bg} group`}
+      >
         <Image
-          className="w-full object-cover h-full absolute left-0 top-0 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300"
+          className="w-full object-cover h-full absolute left-0 top-0 rounded-lg opacity-0 group-hover:opacity-100 
+          group-active:opacity-100 transition-all duration-300"
           width={400}
           height={400}
           quality={50}
@@ -19,7 +22,7 @@ const WorkCard = ({ data }) => {
         <button
           onClick={onOpen}
           className="z-10 relative lg:backdrop-brightness-90 w-full h-full flex items-center
-        justify-center hover:backdrop-brightness-50 transition-all duration-200 rounded-lg"
+        justify-center active:backdrop-brightness-50 hover:backdrop-brightness-50 transition-all duration-200 rounded-lg"
         >
           <Image
             width={200}
@@ -63,7 +66,7 @@ const WorkCard = ({ data }) => {
                   target="_blank"
                   className="button text-[#202020] bg-white "
                 >
-                  Échale un vistazo
+                  Visitar proyecto
                 </a>
               </div>
               <div className="w-full lg:w-1/2 lg:max-h-full p-10 lg:overflow-y-auto grid grid-cols-1 gap-4">

@@ -10,10 +10,8 @@ const servicesList = [
   {
     ariaLabel: "Disenio Web",
     title: "Diseño Web",
-    text: `Impulsamos conexiones más profundas entre su negocio y sus clientes
-    a través de un diseño de interfaz que va más allá de lo estético,
-    impulsando la narrativa, la funcionalidad, la accesibilidad y la
-    usabilidad.`,
+    text: `Nuestro diseño de interfaz utiliza elementos narrativos para crear una experiencia envolvente y atractiva. 
+    También es funcional y accesible, para que todos puedan usarlo. Y, por supuesto, es útil para que su negocio logre sus objetivos.`,
     list: [
       "Diseño de interfaz de usuario",
       "Prototipado de aplicación web",
@@ -25,9 +23,9 @@ const servicesList = [
   {
     ariaLabel: "Backend/Frontend",
     title: "Backend / Frontend",
-    text: `Adoptamos un enfoque holístico para desarrollar aplicaciones web,
-    conectando la experiencia visual junto con la funcionalidad lógica
-    para maximizar el valor de su producto.`,
+    text: `Nuestro enfoque holístico para el desarrollo de aplicaciones web integra la
+    experiencia visual junto con la funcionalidad lógica y nna arquitectura escalable y mantenible,
+     maximizando el valor de su producto.`,
     list: [
       "Desarrollo de APIs",
       "Desarrollo de interfaces de usuario",
@@ -47,8 +45,8 @@ const servicesList = [
     ariaLabel: "Soporte Tecnico",
     title: "Soporte Técnico",
     text: `Ofrecemos soluciones sólidas y eficientes para mantener sus
-    operaciones en perfecto funcionamiento, permitiéndole centrarse en
-    lo que hace mejor.`,
+    operaciones en perfecto funcionamiento, permitiéndote centrarte en
+    lo que haces mejor.`,
     list: [
       "Mantenimiento y actualización de aplicaciones web",
       "Diagnóstico y arreglo de errores",
@@ -88,7 +86,11 @@ const works = [
     coverLogo: "/logo.png",
     bg: "bg-[#6C2F2F]",
     title: "Asociación Mendocina de Atletismo",
-    fields: ["Diseño UI Responsive", "Desarrollo de Web App", "Investigación de experiencia de usuario"],
+    fields: [
+      "Diseño UI Responsive",
+      "Desarrollo de Web App",
+      "Investigación de experiencia de usuario",
+    ],
     text: `La Asociación Mendocina de Atletismo confió en nosotros para diseñar y desarrollar su aplicación web con el propósito de establecer un nuevo espacio en la web para la publicación de noticias y la gestión de su sistema de inscripciones y federaciones. Iniciamos el proyecto basándonos en los valiosos insights y puntos de dolor recopilados durante la etapa de investigación.
     El objetivo fue crear una plataforma que destacara por su facilidad de uso y simplicidad, considerando que gran parte de los usuarios pertenecen al grupo demográfico de personas mayores. Con este enfoque, nos propusimos eliminar obstáculos innecesarios en la navegación y proporcionar una experiencia intuitiva para que los usuarios pudieran acceder rápidamente a la información que necesitan.`,
     link: "https://amamendoza.vercel.app/",
@@ -98,7 +100,6 @@ const works = [
 ];
 
 const Services = ({ scrollClampSecondAnimation }) => {
-  const [openWorksMobile, setOpenWorksMobile] = useState(false);
   // Change opacity animation
   const opacityServices = useTransform(
     scrollClampSecondAnimation,
@@ -115,13 +116,11 @@ const Services = ({ scrollClampSecondAnimation }) => {
       setOverscroll(true);
     } else {
       setOverscroll(false);
-      setOpenWorksMobile(false);
     }
     if (latest < 0.83 && latest > 0.67) {
       setVisible(true);
     } else {
       setVisible(false);
-      setOpenWorksMobile(false);
     }
   });
 
@@ -143,25 +142,12 @@ const Services = ({ scrollClampSecondAnimation }) => {
             ))}
           </div>
           <div
-            className={`${overscroll && "overscroll-contain"} 
+            className={`${overscroll && "overscroll-contain"} bg-[#CE9F5D]/80
             services-container p-6 max-h-[90%] md:p-10 md:max-h-[60%] lg:max-h-full rounded-lg md:rounded-b-none relative
-             ${
-               openWorksMobile ? "bg-transparent" : "bg-[#CE9F5D]/80"
-             } transition-all duration-500
-        text-white h-auto lg:h-full flex items-start flex-col w-full lg:w-1/2 md:rounded-t-lg lg:rounded-r-lg overflow-y-auto`}
+            text-white h-auto lg:h-full flex items-start flex-col w-full lg:w-1/2 md:rounded-t-lg lg:rounded-r-lg overflow-y-auto`}
           >
-            <h4
-              className={`title-second-animation mb-4 ${
-                openWorksMobile ? "opacity-0" : "opacity-100"
-              } transition-all duration-500`}
-            >
-              ¿Qué hacemos?
-            </h4>
-            <p
-              className={`subtitle-second-animation w-full ${
-                openWorksMobile ? "opacity-0" : "opacity-100"
-              } transition-all duration-500`}
-            >
+            <h4 className={`title-second-animation mb-4`}>¿Qué hacemos?</h4>
+            <p className={`subtitle-second-animation w-full`}>
               Construimos experiencias web sobresalientes y resolvemos problemas
               de negocio a través de código.
             </p>
@@ -176,9 +162,7 @@ const Services = ({ scrollClampSecondAnimation }) => {
                 <AccordionItem
                   key={i}
                   aria-label={service.ariaLabel}
-                  className={`subtitle-second-animation ${
-                    openWorksMobile ? "opacity-0" : "opacity-100"
-                  } transition-all duration-500 font-semibold`}
+                  className={`subtitle-second-animation font-semibold`}
                   title={service.title}
                 >
                   {service.text}
@@ -190,11 +174,7 @@ const Services = ({ scrollClampSecondAnimation }) => {
                 </AccordionItem>
               ))}
             </Accordion>
-            <WorksModal
-              works={works}
-              open={openWorksMobile}
-              setOpen={setOpenWorksMobile}
-            />
+            <WorksModal works={works} />
           </div>
         </>
       )}
