@@ -3,7 +3,7 @@ import './globals.css'
 import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
 import { Providers } from './providers'
-
+import { SpeedInsights } from "@vercel/speed-insights/next"
 const piazzolla = Piazzolla({ 
   subsets: ['latin'], 
   display: 'swap',
@@ -24,6 +24,7 @@ export default function RootLayout({ children }) {
           {children}
           <Footer />
         </Providers>
+        <SpeedInsights />
       </body>
     </html>
   )
