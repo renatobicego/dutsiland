@@ -4,7 +4,8 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { useTransform } from "framer-motion";
 import useWindowSize from "../../utils/useWindowSize";
-import R3FLoader from "../R3FLoader";
+import useMousePosition from "../../utils/useMousePos";
+import {Model} from './Model'
 const Faro = ({ scrollYProgress }) => {
   const scene = useMemo(() => {
     const { scene } = useGLTF("/lighthouse_on_island.glb");
@@ -12,7 +13,8 @@ const Faro = ({ scrollYProgress }) => {
   }, []);
   // Breakpoints of the animation based in Scroll progress
   const sectionBreakpoints = [0, 0.2, 0.4, 0.45, 0.7, 0.75, 0.93];
-  const { windowSize: screenSize, mousePos } = useWindowSize();
+  const screenSize = useWindowSize();
+  const mousePos = useMousePosition()
 
   // Camera positions
   const xCamPos = useTransform(scrollYProgress, sectionBreakpoints, [
@@ -77,7 +79,7 @@ const Faro = ({ scrollYProgress }) => {
       <color attach={"background"} args={["#D3ECFF"]} />
 
       <Suspense fallback={null}>
-        <primitive position={[0.6, 0, 0.5]} object={scene} />
+        <Model position={[0.6, 0, 0.5]} />
         <mesh rotation-y={1.5} position={[-10, 4, -2]}>
           <circleGeometry />
           <meshBasicMaterial color={"#FFF9C5"} />

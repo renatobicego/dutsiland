@@ -54,7 +54,7 @@ const fragmentShader = /* glsl */`
         r.x = fbm(st + 1.0 * q + vec2(1.7, 9.2) + 0.15 * u_time);
         r.y = fbm(st + 1.0 * q + vec2(8.3, 2.8) + 0.126 * u_time);
 
-        float f = fbm(st + r) * 0.3;
+        float f = fbm(st + r) * 0.7;
 
         color = mix(vec3(0.101961, 0.619608, 0.666667), vec3(0.666667, 0.666667, 0.498039), clamp((f * f) * 4.0, 0.0, 1.0));
 

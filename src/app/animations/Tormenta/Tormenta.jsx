@@ -43,7 +43,7 @@ const SeaMaterial = shaderMaterial(
 extend({ SeaMaterial });
 
 const Tormenta = ({ scrollYProgress }) => {
-  const { windowSize: screenSize } = useWindowSize();
+  const screenSize  = useWindowSize();
   const seaMaterial = useRef();
   const spotlightRef = useRef();
   const fogRef = useRef();
