@@ -22,7 +22,7 @@ const Header = () => {
           alt="logo"
           width={300}
           height={300}
-          className="h-full w-auto min-w-[7vw]"
+          className="h-full w-auto min-w-[18vw] lg:min-w-[129px]"
           src={"/logo7-recortado.png"}
         />
       </button>
