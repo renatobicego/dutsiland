@@ -6,26 +6,28 @@ import ExperienceFaro from "./Faro/ExperienceFaro";
 import Services from '../components/Services/Services'
 import Contact from '../components/Contact'
 import AboutUs from '../components/AboutUs'
+import useWindowSize from "../utils/useWindowSize";
 
 
 const SecondAnimation = () => {
   const secondAnimationContainerRef = useRef(null);
+  const {width} = useWindowSize()
   // Scroll animations
   const { scrollYProgress: scrollYProgressSecondAnimation } = useScroll({
     target: secondAnimationContainerRef,
   });
 
   const scrollClampSecondAnimation = useSpring(scrollYProgressSecondAnimation, {
-    stiffness: 100,
+    stiffness: width < 1000 ? 500 : 100,
     damping: 25,
-    mass: 0.1,
+    mass: width < 1000 ? 0.5 : 0.1,
     velocity: 0.01,
     restSpeed: 2,
   });
 
   // First section move based in scroll
   const xTranslateFirstSection = useTransform(
-    scrollClampSecondAnimation,
+    scrollYProgressSecondAnimation,
     [0.2, 0.25],
     ["3%", "-120%"]
   );
