@@ -3,9 +3,9 @@ import { motion, useTransform } from "framer-motion";
 import Image from "next/image";
 const team = [
   {
-    name: "Maximiliano Cattaneo",
+    name: "Maximiliano Cattaneo Cvetic",
     image: "/aboutus/maxi.jpeg",
-    area: ["Backend"],
+    area: ["Backend", "Infraestructura"],
   },
   {
     name: "Renato Bicego",

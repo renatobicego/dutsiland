@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useDisclosure } from "@nextui-org/react";
 import CustomDrawer from "./Drawer";
 const Header = () => {
-  const { isOpen, onOpenChange, onOpen } = useDisclosure();
+  const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure();
   const scrollToTop = () => {
     window?.scrollTo({
       top: 0,
@@ -51,13 +51,13 @@ const Header = () => {
         <nav className="absolute w-full top-0 left-0">
           <ul className="flex flex-col items-start gap-6 text-white uppercase pt-16 p-10">
             <li>Inicio</li>
-            <li>
+            <li onClick={onClose}>
               <a href="/#quienesSomos">¿quienes somos?</a>
             </li>
-            <li>
+            <li onClick={onClose}>
               <a href="/#servicios">servicios</a>
             </li>
-            <li>
+            <li onClick={onClose}>
               <a href="/#contacto">Contacto</a>
             </li>
           </ul>
