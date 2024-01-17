@@ -31,13 +31,13 @@ export const metadata = {
     locale: "es_ES",
     type: "website",
     description: "Construimos experiencias web sobresalientes.",
-    images: "/opengraph-image.png",
+    images: "opengraph-image.png",
   },
   twitter: {
     card: "summary_large_image",
     title: "Estudio Dutsiland",
     description: "Construimos experiencias web sobresalientes.",
-    images: ["/opengraph-image.png"], // Must be an absolute URL
+    images: ["https://dutsiland.com/opengraph-image.png"], // Must be an absolute URL
   },
   robots: {
     index: true,
@@ -53,7 +53,7 @@ export default function RootLayout({ children }) {
     "@type": "WebPage",
     "@id": "https://dutsiland.com/",
     name: "Estudio Dutsiland",
-    image: "/opengraph-image.png",
+    image: "https://dutsiland.com/opengraph-image.png",
     description:
       "Construimos experiencias web sobresalientes.",
   };
