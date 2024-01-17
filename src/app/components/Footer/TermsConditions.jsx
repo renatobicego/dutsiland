@@ -25,6 +25,7 @@ const TermsAndConditions = () => {
         }}
         size={"5xl"}
         isOpen={isOpen}
+        placement="center"
         onClose={onClose}
         backdrop="blur"
       >
