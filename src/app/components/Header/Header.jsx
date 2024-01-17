@@ -50,7 +50,6 @@ const Header = () => {
       <CustomDrawer isOpen={isOpen} onOpenChange={onOpenChange}>
         <nav className="absolute w-full top-0 left-0">
           <ul className="flex flex-col items-start gap-6 text-white uppercase pt-16 p-10">
-            <li>Inicio</li>
             <li onClick={onClose}>
               <a href="/#quienesSomos">¿quienes somos?</a>
             </li>
