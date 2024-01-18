@@ -18,11 +18,11 @@ const SecondAnimation = () => {
   });
 
   const scrollClampSecondAnimation = useSpring(scrollYProgressSecondAnimation, {
-    stiffness: 100,
+    stiffness: width < 1000 ? 200 : 100,
     damping: width < 1000 ? 20 : 25,
     mass: width < 1000 ? 1 : 0.1,
     velocity: 0.01,
-    restSpeed: 2,
+    restSpeed: width < 1000 ? 1 : 2,
   });
 
   // First section move based in scroll
