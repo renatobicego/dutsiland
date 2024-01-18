@@ -3,11 +3,10 @@
 import { Canvas } from "@react-three/fiber";
 import Tormenta from "./Tormenta";
 import R3FLoader from "../R3FLoader";
-import { Loader } from "@react-three/drei";
 
 const ExperienceTormenta = ({ scrollYProgress }) => {
   return (
-    <div className=" mx-auto !w-[93vw] !h-[87vh] lg:!h-[83vh] relative">
+    <div className=" mx-auto !w-[93vw] !h-[85dvh] lg:!h-[83vh] relative">
       <Canvas
         key={1}
         className="w-full h-full absolute right-0"

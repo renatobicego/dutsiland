@@ -1,6 +1,5 @@
 import {
   CameraShake,
-  Html,
   SpotLight,
   shaderMaterial,
 } from "@react-three/drei";
@@ -16,7 +15,6 @@ import Rain from "./Effects/Rain";
 import { useTransform } from "framer-motion";
 import useWindowSize from "../../utils/useWindowSize";
 import FaroModel from "./FaroModel";
-import R3FLoader from "../R3FLoader";
 
 // Shader material uniforms
 const SeaMaterial = shaderMaterial(

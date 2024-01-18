@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import ExperienceFaro from "./Faro/ExperienceFaro";
 import Services from '../components/Services/Services'
 import Contact from '../components/Contact'
-import AboutUs from '../components/AboutUs'
+import AboutUs from '../components/AboutUs/AboutUs'
 import useWindowSize from "../utils/useWindowSize";
 
 
@@ -18,9 +18,9 @@ const SecondAnimation = () => {
   });
 
   const scrollClampSecondAnimation = useSpring(scrollYProgressSecondAnimation, {
-    stiffness: width < 1000 ? 500 : 100,
-    damping: 25,
-    mass: width < 1000 ? 0.5 : 0.1,
+    stiffness: 100,
+    damping: width < 1000 ? 20 : 25,
+    mass: width < 1000 ? 1 : 0.1,
     velocity: 0.01,
     restSpeed: 2,
   });
@@ -28,7 +28,7 @@ const SecondAnimation = () => {
   // First section move based in scroll
   const xTranslateFirstSection = useTransform(
     scrollYProgressSecondAnimation,
-    [0.2, 0.25],
+    [0.3, 0.35],
     ["3%", "-120%"]
   );
   return (

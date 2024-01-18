@@ -1,8 +1,6 @@
-
-import WorkCard from "./WorkCard";
 import { Modal, ModalContent, useDisclosure } from "@nextui-org/react";
-
-const WorksModal = ({ works}) => {
+import OurTeam from './OurTeam'
+const OurTeamModal = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
     <>
@@ -10,7 +8,7 @@ const WorksModal = ({ works}) => {
         onClick={onOpenChange}
         className={`bg-white text-sm rounded-2xl text-[#202020] pt-1 pb-1.5 px-6 md:hidden my-6`}
       >
-        Nuestros Trabajos
+        Nuestros Equipo
       </button>
       <Modal
         classNames={{
@@ -23,16 +21,9 @@ const WorksModal = ({ works}) => {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
       >
-        <ModalContent className="h-[90%] bg-[#202020]/30">
+        <ModalContent className="h-auto max-h-[80%] overflow-y-auto bg-[#202020]/30">
           {(onClose) => (
-            <div
-              className="w-full max-h-full z-50 overflow-y-auto   rounded-lg grid grid-cols-1 
-         gap-4 px-4 py-12 transition-all duration-300"
-            >
-              {works.map((work, i) => (
-                <WorkCard key={i} data={work} />
-              ))}
-            </div>
+            <OurTeam />
           )}
         </ModalContent>
       </Modal>
@@ -40,4 +31,4 @@ const WorksModal = ({ works}) => {
   );
 };
 
-export default WorksModal;
+export default OurTeamModal;

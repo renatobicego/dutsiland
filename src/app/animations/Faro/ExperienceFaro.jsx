@@ -4,7 +4,7 @@ import Faro from "./Faro";
 import { Canvas } from "@react-three/fiber";
 const ExperienceFaro = ({ scrollYProgress }) => {
   return (
-    <div className="mx-auto !w-[93vw] !h-[87vh] lg:!h-[83vh] relative">
+    <div className="mx-auto !w-[93vw] !h-[85dvh] lg:!h-[83vh] relative">
       <Canvas
         shadows
         key={2}
