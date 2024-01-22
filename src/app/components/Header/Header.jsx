@@ -17,7 +17,8 @@ const Header = () => {
   return (
     <header
       className="w-screen px-[3.5vw] flex items-center justify-between py-2 h-16 md:h-20 
-        fixed top-0 left-0 z-30 bg-white"
+        fixed top-0 left-0 z-30 bg-white lg:text-sm 2xl:text-base
+        3xl:text-lg"
     >
       <button onClick={scrollToTop} className="h-[90%]">
         <Image

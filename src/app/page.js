@@ -3,7 +3,7 @@ import ExperienceFaro from "./animations/Faro/ExperienceFaro";
 import FirstAnimation from "./animations/FirstAnimation";
 import Footer from "./components/Footer/Footer";
 import { useEffect, useRef } from "react";
-import { useMotionValue, useScroll } from "framer-motion";
+import { useMotionValue, useMotionValueEvent, useScroll, useSpring } from "framer-motion";
 import Services from './components/Services/Services'
 import SelectedWorks from './components/Services/SelectedWorks'
 import AboutUs from './components/AboutUs/AboutUs'
@@ -59,14 +59,23 @@ export default function Home() {
   const containerRef = useRef(null);
 
   // Set up scroll animations
-  const { scrollYProgress } = useScroll({
+  const { scrollYProgress: scrollToClamp } = useScroll({
     container: containerRef,
   });
 
+  const scrollYProgress = useSpring(scrollToClamp, {
+    stiffness: 500,
+    damping: 25,
+  })
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    console.log(latest)
+  })
+ 
   return (
     <main
       ref={containerRef}
-      className="w-full relative pt-20 md:pt-[15vh] h-screen overflow-x-hidden overflow-y-scroll snap-y scroll-smooth"
+      className="w-full relative pt-20 md:pt-[15vh] h-screen overflow-x-hidden overflow-y-scroll snap-y  scroll-smooth"
     >
       {/* storm animation */}
       <FirstAnimation />

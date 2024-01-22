@@ -42,24 +42,26 @@ const works = [
     images: ["/2.png", "/1.png", "/3.png", "/4.png"],
     imagesRoot: "/works/ama",
   },
+
 ];
 const SelectedWorks = () => {
   return (
     <section
-      className="w-[93%] mx-auto snap-always snap-start flex flex-col h-screen justify-center gap-6 
-            items-start relative text-white pt-20"
+      className="w-[93%] mx-auto snap-always scroll-mt-[10vh] lg:scroll-mt-[1vh] snap-start flex flex-col h-[90svh] lg:h-screen 
+      justify-start lg:justify-center gap-6 items-start relative text-white pt-32 lg:pt-12 2xl:pt-20 "
     >
       <div
-        className="bg-negro rounded-[70px] lg:!rounded-[100px] 
-              w-full h-5/6 absolute max-auto bottom-4 -z-10"
+        className="bg-negro rounded-[55px] md:rounded-[70px] lg:!rounded-[100px] 
+              w-full h-[90%] lg:h-5/6 absolute max-auto max-lg:top-10 lg:bottom-4 -z-10"
       ></div>
       <div className="ml-[8%] flex flex-col gap-4">
-        <h4 className="text-3xl md:text-4xl xl:text-5xl 2xl:text-6xl 3xl:text-7xl font-semibold ">
+        <h4 className="subtitle-size font-semibold ">
           Proyectos Destacados
         </h4>
         <p>Una selección de nuestros trabajos más apasionantes</p>
       </div>
-      <div className="flex gap-4 w-5/6 mx-auto flex-shrink-0 overflow-x-auto overflow-y-hidden px-2 py-4 snap-x">
+      <div className="flex gap-4 w-5/6 mx-auto flex-shrink-0 overflow-y-auto overflow-x-hidden lg:overflow-x-auto 
+      lg:overflow-y-hidden px-2 py-4 max-lg:flex-col max-lg:max-h-[65%]">
         {works.map((work, i) => (
           <WorkCard key={i} data={work} />
         ))}

@@ -16,14 +16,14 @@ const Contact = () => {
   };
   return (
     <section
-      className="w-[93%] mx-auto snap-always snap-start flex flex-col scroll-mt-[5vh] h-full justify-center gap-6 
-      items-start relative text-white"
+      className="w-[93%] mx-auto snap-always snap-start flex flex-col scroll-mt-[5vh] h-2/3 lg:h-full justify-center gap-6 
+      items-start relative text-negro"
     >
-      <div
-          className="bg-rojo rounded-[70px] lg:!rounded-[100px] 
-        w-full h-5/6 absolute max-auto bottom-10  -z-10"
-        ></div>
-      <h4 className="text-3xl md:text-4xl xl:text-5xl 2xl:text-6xl 3xl:text-7xl font-semibold ml-[8%]">¡Trabajemos Juntos!</h4>
+      {/* <div
+          className=" rounded-[70px] lg:!rounded-[100px] 
+        w-full h-5/6 absolute bottom-9 -z-10 bg-rojo"
+        ></div> */}
+      <h4 className="subtitle-size mx-[10%] lg:ml-[9%] 2xl:ml-[7%] relative z-10">¡Trabajemos Juntos!</h4>
       <Formik
         initialValues={initialValues}
         validateOnBlur={false}
@@ -59,42 +59,43 @@ const Contact = () => {
         validationSchema={contactSchema}
       >
         {({ errors, isSubmitting }) => (
-          <Form className="flex flex-col items-start w-11/12 md:w-2/3 xl:w-1/3 gap-2 ml-[8%]">
+          <Form className="flex flex-col items-start w-11/12 md:w-2/3 lg:w-1/2 2xl:w-1/3 gap-2 
+          mx-[10%] lg:ml-[9%] 2xl:ml-[7%] relative z-10 max-lg:mb-16">
             <div className="w-full">
-              <label className="text-white text-sm" htmlFor="name">
+              <label className="text-negro text-sm" htmlFor="name">
                 Nombre y Apellido
               </label>
               <Field
                 id="name"
                 name="name"
-                className={`bg-white/10 border text-white py-1 px-3 rounded-lg w-full outline-none ${
+                className={`bg-negro/10 border text-negro py-2 px-3 rounded-2xl w-full outline-none ${
                   errors.name && "border-red-600"
                 }`}
                 type="text"
               />
             </div>
             <div className="w-full">
-              <label className="text-white text-sm" htmlFor="email">
+              <label className="text-negro text-sm" htmlFor="email">
                 Correo Electrónico
               </label>
               <Field
                 id="email"
                 name="email"
-                className={`bg-white/10 text-white border py-1 px-3 rounded-lg w-full outline-none ${
+                className={`bg-negro/10 text-negro border py-2 px-3 rounded-2xl w-full outline-none ${
                   errors.email && "border-red-600"
                 }`}
                 type="email"
               />
             </div>
             <div className="w-full">
-              <label className="text-white text-sm" htmlFor="message">
+              <label className="text-negro text-sm" htmlFor="message">
                 Mensaje
               </label>
               <Field
                 as="textarea"
                 id="message"
                 name="message"
-                className={`bg-white/10 text-white border py-1 outline-none px-3 rounded-lg w-full resize-none min-h-[100px] ${
+                className={`bg-negro/10 text-negro border py-2 outline-none px-3 rounded-2xl w-full resize-none min-h-[100px] ${
                   errors.message && "border-red-600"
                 }`}
                 type="text"
@@ -103,10 +104,10 @@ const Contact = () => {
             <button
               aria-disabled={isSubmitting}
               type="submit"
-              className="button text-white bg-[#B34D4D] flex items-center gap-2"
+              className="button button-animation-red text-white bg-rojo flex items-center gap-2"
             >
               <svg
-                className={`animate-spin -ml-1 mr-3 h-5 w-5 text-white ${
+                className={`animate-spin -ml-1 mr-3 h-5 w-5 text-negro ${
                   isSubmitting ? "" : "hidden"
                 }`}
                 xmlns="http://www.w3.org/2000/svg"

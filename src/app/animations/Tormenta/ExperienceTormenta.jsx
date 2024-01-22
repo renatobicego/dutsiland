@@ -6,10 +6,10 @@ import R3FLoader from "../R3FLoader";
 
 const ExperienceTormenta = ({ scrollYProgress }) => {
   return (
-    <div className=" mx-auto !w-[93vw] h-[80svh] md:h-[75vh] absolute top-0 ">
+    <div className=" mx-auto !w-[93vw] h-[80svh] lg:h-[75vh] absolute top-0 ">
       <Canvas
         key={1}
-        className="w-full h-full absolute right-0 rounded-[70px] lg:!rounded-[100px]"
+        className="w-full h-full absolute right-0 rounded-[55px] md:rounded-[70px] lg:!rounded-[100px]"
         camera={{
           fov: 45,
           near: 0.1,

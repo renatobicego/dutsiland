@@ -1,49 +1,27 @@
-
-import WorkCard from "./WorkCard";
-
 const servicesList = [
   {
     ariaLabel: "Disenio Web",
     title: "Diseño Web",
     text: `Una experiencia de usuario eficiente e inmersiva es la forma de captar la atención y transmitir un mensaje claro. Por eso creemos, ante todo, que la usabilidad está al servicio del diseño. Y que todo diseño debe ser elegante e innovador.`,
     list: [
-      "Diseño de interfaz de usuario",
-      "Prototipado de aplicación web",
-      "Diseño responsive",
-      "Arquitectura de la información",
-      "Diseño de identidad visual",
+      "Arquitectura de la Información",
+      "Prototipado de Aplicación Web",
+      "Diseño de Interfaz de Usuario",
+      "Diseño de Identidad Visual",
+      "Diseño Responsive",
     ],
   },
   {
     ariaLabel: "Backend/Frontend",
     title: "Desarrollo Web",
     text: `Nuestro enfoque holístico para el desarrollo de aplicaciones web integra la
-    experiencia visual junto con la funcionalidad lógica y nna arquitectura escalable y mantenible,
+    experiencia visual junto con la funcionalidad lógica y una arquitectura escalable y mantenible,
      maximizando el valor de su producto.`,
     list: [
-      "Desarrollo de APIs",
-      "Desarrollo de interfaces de usuario",
-      "Organización e implementación de bases de datos",
+      "Web Interactiva 3D - WebGL",
+      "Desarrollo de Landing Page",
       "Desarrollo de Ecommerce",
-    ],
-  },
-  {
-    ariaLabel: "Web Interactiva",
-    title: "Web Interactiva / 3D",
-    text: `Fusionamos innovación y creatividad para construir landing pages
-    sobresalientes, combinando animaciones y modelos 3D para lograr una
-    experiencia única, ¡como nuestra propia web!`,
-    list: [],
-  },
-  {
-    ariaLabel: "Soporte Tecnico",
-    title: "Soporte Técnico",
-    text: `Ofrecemos soluciones sólidas y eficientes para mantener sus
-    operaciones en perfecto funcionamiento, permitiéndote centrarte en
-    lo que haces mejor.`,
-    list: [
-      "Mantenimiento y actualización de aplicaciones web",
-      "Diagnóstico y arreglo de errores",
+      "Desarrollo de APIs",
     ],
   },
 ];
@@ -95,33 +73,42 @@ const Services = () => {
   return (
     <>
       <section
-        className="w-[93%] mx-auto scroll-mt-[15vh] snap-always snap-start flex flex-col h-full justify-center gap-10 
+        className="w-[93%] mx-auto scroll-mt-[7vh] md:scroll-mt-[15vh] snap-always snap-start flex flex-col h-2/3 md:h-1/2 lg:h-full justify-center gap-10 
       items-start relative text-white"
       >
         <div
-          className="bg-dorado rounded-[70px] lg:!rounded-[100px] 
-        w-full h-[190%] absolute mx-auto top-0 -z-10"
+          className="bg-dorado rounded-[55px] md:rounded-[70px] lg:!rounded-[100px] 
+        w-full h-[230%] md:h-[250%] lg:h-[190%] absolute mx-auto top-0 -z-10"
         ></div>
-        <h3 className="text-5xl md:text-6xl xl:text-7xl 2xl:text-8xl 3xl:text-9xl ml-[10%]">
-          Hagámoslo Juntos
-        </h3>
-        <h6 className="md:text-xl 3xl:text-3xl w-2/5 ml-[10%]">
+        <h3 className="title-size md:max-lg:text-7xl md:ml-[10%] max-md:text-center max-sm:mx-auto">Hagámoslo Juntos</h3>
+        <h6 className="max-sm:text-sm max-lg:text-center md:text-xl 3xl:text-3xl mx-[5%] lg:w-2/5 md:mx-[10%] lg:mb-[5vh] 2xl:mb-10">
           Estamos aquí para hacer realidad tus sueños. Ayudamos a convertir su
           idea inicial en una solución digital de vanguardia, donde el único
           límite es nuestra imaginación conjunta.
         </h6>
       </section>
-      <section className="ml-10 scroll-mt-[15vh] snap-always snap-start h-4/5 w-3/5 mx-[5vw] flex flex-col justify-center float-right text-white gap-6">
-        <h4 className="text-3xl md:text-4xl xl:text-5xl 2xl:text-6xl 3xl:text-7xl font-semibold">
-          Nuestros Servicios
-        </h4>
-        <div className="flex w-full flex-wrap">
+      <section className="max-lg:px-[9vw] lg:ml-10 scroll-mt-[15vh] snap-always snap-start h-5/6 md:h-3/4 lg:h-4/5 w-full lg:w-3/5 lg:mx-[5vw] flex 
+      flex-col justify-start lg:justify-center lg:float-right text-white gap-6">
+        <h4 className="subtitle-size">Nuestros Servicios</h4>
+        <p className="max-sm:text-sm xl:text-lg 3xl:text-xl">
+          La estrategia digital es un elemento clave de su transformación. Es
+          este apoyo que te ofrecemos durante todo el proyecto para desarrollar
+          su idea inicial en una ambiciosa solución digital.
+        </p>
+        <div className="flex w-full flex-wrap gap-4 md:gap-10">
           {servicesList.map((service, i) => (
-            <div key={i} className="w-1/2 pr-6 pb-6">
-              <h6 className="font-semibold md:text-lg xl:text-xl 2xl:text-2xl 3xl:text-3xl">
+            <div
+              key={i}
+              className="w-full md:w-[45%] p-6 md:p-10 bg-white text-negro rounded-3xl button-animation"
+            >
+              <h6 className="font-semibold text-sm md:text-lg xl:text-xl 2xl:text-2xl 3xl:text-3xl mb-2">
                 {service.title}
               </h6>
-              <p>{service.text}</p>
+              <ul className="text-xs md:text-sm xl:text-base">
+                {service.list.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
+              </ul>
             </div>
           ))}
         </div>

@@ -6,7 +6,7 @@ const OurTeamModal = () => {
     <>
       <button
         onClick={onOpenChange}
-        className={`bg-white button text-negro`}
+        className={`bg-white button text-negro button-animation`}
       >
         Nuestros Equipo
       </button>

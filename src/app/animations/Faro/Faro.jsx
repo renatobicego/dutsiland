@@ -11,8 +11,11 @@ const Faro = ({ scrollYProgress }) => {
   // Breakpoints of the animation based in Scroll progress
   const cameraRef = useRef(null);
   const modelRef = useRef(null);
-  const sectionBreakpoints = [0.22, 0.397, 0.592, 0.783, 1];
-  const screenSize = useWindowSize();
+  const { width: widthScreen } = useWindowSize();
+  const sectionBreakpoints =
+    widthScreen < 1020
+      ? [0.27, 0.492, 0.617, 0.81, 1]
+      : [0.22, 0.397, 0.592, 0.783, 1];
   const mousePos = useMousePosition();
 
   // Camera positions
@@ -50,7 +53,7 @@ const Faro = ({ scrollYProgress }) => {
   const zCamRot = useTransform(
     scrollYProgress,
     sectionBreakpoints,
-    [0, 0, 0, 0, 0]
+    [0, 0, 0, 0, -0.02]
   );
 
   const scale = useTransform(

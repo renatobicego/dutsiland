@@ -45,16 +45,25 @@ body {
 
 @layer components {
   .title-size {
-    @apply text-xl sm:text-2xl lg:text-3xl xl:text-4xl 3xl:text-5xl uppercase text-white font-thin;
+    @apply text-4xl sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl 3xl:text-9xl;
+  }
+  .first-animation-text {
+    @apply text-xl sm:text-2xl lg:text-3xl xl:text-4xl 3xl:text-5xl uppercase text-white font-thin
   }
   .title-second-animation {
     @apply text-3xl md:text-4xl 2xl:text-5xl 3xl:text-6xl font-semibold
   }
-  .subtitle-second-animation {
-    @apply text-sm md:text-base 2xl:text-lg 3xl:text-xl
+  .subtitle-size {
+    @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl 2xl:text-6xl 3xl:text-7xl font-semibold
   }
   .button {
-    @apply text-sm md:text-base 2xl:text-lg 3xl:text-xl pt-1 pb-1.5 px-6 rounded-2xl hover:scale-[1.03] transition-all duration-200
+    @apply text-sm md:text-base 2xl:text-lg 3xl:text-xl pt-1 pb-1.5 px-6 rounded-2xl
+  }
+  .button-animation {
+    @apply hover:text-white hover:bg-negro hover:scale-[1.03] transition-all duration-300
+  }
+  .button-animation-red {
+    @apply button-animation hover:text-rojo hover:bg-white font-semibold
   }
 }
 
