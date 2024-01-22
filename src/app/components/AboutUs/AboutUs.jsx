@@ -1,39 +1,26 @@
-import React from "react";
-import { motion, useTransform } from "framer-motion";
-import OurTeam from './OurTeam'
-import OurTeamModal from './OurTeamModal'
-const AboutUs = ({ scrollClampSecondAnimation }) => {
-  const opacityAboutUs = useTransform(
-    scrollClampSecondAnimation,
-    [0.37, 0.4, 0.5, 0.52],
-    [0, 1, 1, 0]
-  );
 
-  const zIndex = useTransform(
-    scrollClampSecondAnimation,
-    [0.37, 0.4, 0.5, 0.52],
-    [0, 50, 50, 0]
-  );
+import OurTeamModal from './OurTeamModal'
+const AboutUs = () => {
   return (
-    <motion.div
-      style={{ opacity: opacityAboutUs, zIndex }}
-      className="w-[85%] h-auto md:w-3/4 lg:w-[55%] 2xl:w-[45%] absolute top-1/2 -translate-y-1/2 lg:left-[10%] z-50 p-6 md:p-10 
-                    gap-6 bg-[#6087A9]/60
-                   flex flex-col items-start left-1/2 -translate-x-1/2 lg:-translate-x-0 text-white rounded-lg
-                   overflow-y-auto md:overflow-hidden"
-    >
-      <h4 className={`title-second-animation`}>
-        ¿Quiénes somos?
-      </h4>
-      <p className={`subtitle-second-animation w-full`}>
-        Dutsiland es un estudio de desarrollo que impulsa la evolución de
-        negocios en la web, proporcionando las herramientas y soluciones
-        esenciales para establecer una fuerte presencia en internet y alcanzar
-        el máximo potencial de tu negocio.
-      </p>
-      <OurTeam hidden={true}/>
-      <OurTeamModal />
-    </motion.div>
+    <section
+        className="w-[93%] mx-auto snap-always snap-start flex flex-col scroll-mt-[5vh] h-full justify-evenly 
+      items-start relative text-white">
+        <div
+          className="bg-[#B34D4D] rounded-[70px] lg:!rounded-[100px] 
+        w-full h-5/6 absolute max-auto bottom-10  -z-10"
+        ></div>
+        <h3 className="text-5xl md:text-6xl xl:text-7xl 2xl:text-8xl 3xl:text-9xl ml-12">
+          Bienvenido a Dutsiland
+        </h3>
+        <div className="w-1/3 self-end mr-40">
+          <h6 className="md:text-xl 3xl:text-3xl mb-6">
+            Somos un estudio que hace realidad tus ideas, construyendo
+            experiencias web sobresalientes y empujando los límites de nuestra
+            creatividad para resolver problemas de negocio.
+          </h6>
+          <OurTeamModal />
+        </div>
+      </section>
   );
 };
 

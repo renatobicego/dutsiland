@@ -1,5 +1,4 @@
 import { object, string } from "yup";
-import { motion, useTransform } from "framer-motion";
 import { Field, Form, Formik } from "formik";
 import Swal from "sweetalert2";
 import sendMail from "../utils/sendMail";
@@ -8,19 +7,7 @@ const contactSchema = object({
   email: string().email().required(),
   message: string().required().min(3),
 });
-const Contact = ({ scrollClampSecondAnimation }) => {
-  // Opacity animation
-  const opacityContact = useTransform(
-    scrollClampSecondAnimation,
-    [0.85, 0.93],
-    [0, 1]
-  );
-
-  const zIndex = useTransform(
-    scrollClampSecondAnimation,
-    [0.85, 0.93],
-    [0, 50]
-  );
+const Contact = () => {
 
   const initialValues = {
     name: "",
@@ -28,12 +15,15 @@ const Contact = ({ scrollClampSecondAnimation }) => {
     message: "",
   };
   return (
-    <motion.div
-      style={{ opacity: opacityContact, zIndex }}
-      className="w-[85%] md:w-2/3 lg:w-2/5 2xl:w-1/3 lg:h-5/6 bg-[#202020]/30 absolute top-1/2 -translate-y-1/2 lg:left-[10%] z-50
-                    rounded-lg flex flex-col items-center py-10 px-4 gap-6 left-1/2 -translate-x-1/2 lg:-translate-x-0"
+    <section
+      className="w-[93%] mx-auto snap-always snap-start flex flex-col scroll-mt-[5vh] h-full justify-center gap-6 
+      items-start relative text-white"
     >
-      <h4 className="text-2xl md:text-3xl text-white font-semibold">¡Trabajemos Juntos!</h4>
+      <div
+          className="bg-rojo rounded-[70px] lg:!rounded-[100px] 
+        w-full h-5/6 absolute max-auto bottom-10  -z-10"
+        ></div>
+      <h4 className="text-3xl md:text-4xl xl:text-5xl 2xl:text-6xl 3xl:text-7xl font-semibold ml-[8%]">¡Trabajemos Juntos!</h4>
       <Formik
         initialValues={initialValues}
         validateOnBlur={false}
@@ -69,7 +59,7 @@ const Contact = ({ scrollClampSecondAnimation }) => {
         validationSchema={contactSchema}
       >
         {({ errors, isSubmitting }) => (
-          <Form className="flex flex-col items-start w-11/12 md:w-2/3 gap-2">
+          <Form className="flex flex-col items-start w-11/12 md:w-2/3 xl:w-1/3 gap-2 ml-[8%]">
             <div className="w-full">
               <label className="text-white text-sm" htmlFor="name">
                 Nombre y Apellido
@@ -142,7 +132,7 @@ const Contact = ({ scrollClampSecondAnimation }) => {
           </Form>
         )}
       </Formik>
-    </motion.div>
+    </section>
   );
 };
 

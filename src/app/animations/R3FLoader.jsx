@@ -15,7 +15,7 @@ const R3FLoader = ({ background }) => {
   };
   return (
     <div
-      className={`${background} title-size absolute left-0 top-0 w-full h-full flex z-[1200]
+      className={`${background} title-size fixed left-0 top-0 w-full h-full flex z-[1200]
         items-center justify-center title-second-animation ${
           visible ? "" : "hideLoader"
         }`}

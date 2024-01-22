@@ -26,7 +26,7 @@ function useMousePosition() {
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, []); // Empty array ensures that effect is only run on mount
+  }, [windowSize]); // Empty array ensures that effect is only run on mount
   return mousePos;
 }
 

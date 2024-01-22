@@ -59,15 +59,15 @@ export default function RootLayout({ children }) {
   };
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={piazzolla.className}>
+      <body className={`${piazzolla.className} overflow-x-hidden`}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        
         <Providers>
           <Header />
           {children}
-          <Footer />
         </Providers>
         <SpeedInsights />
       </body>

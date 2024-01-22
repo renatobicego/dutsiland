@@ -1,17 +1,11 @@
-import { Accordion, AccordionItem } from "@nextui-org/react";
-import { motion, useMotionValueEvent } from "framer-motion";
-import { useTransform } from "framer-motion";
-import { useState } from "react";
-import WorkCard from "./WorkCard";
-import WorksModal from "./WorksModal";
 
-// List of services
+import WorkCard from "./WorkCard";
+
 const servicesList = [
   {
     ariaLabel: "Disenio Web",
     title: "Diseño Web",
-    text: `Nuestro diseño de interfaz utiliza elementos narrativos para crear una experiencia envolvente y atractiva. 
-    También es funcional y accesible, para que todos puedan usarlo. Y, por supuesto, es útil para que su negocio logre sus objetivos.`,
+    text: `Una experiencia de usuario eficiente e inmersiva es la forma de captar la atención y transmitir un mensaje claro. Por eso creemos, ante todo, que la usabilidad está al servicio del diseño. Y que todo diseño debe ser elegante e innovador.`,
     list: [
       "Diseño de interfaz de usuario",
       "Prototipado de aplicación web",
@@ -22,7 +16,7 @@ const servicesList = [
   },
   {
     ariaLabel: "Backend/Frontend",
-    title: "Backend / Frontend",
+    title: "Desarrollo Web",
     text: `Nuestro enfoque holístico para el desarrollo de aplicaciones web integra la
     experiencia visual junto con la funcionalidad lógica y nna arquitectura escalable y mantenible,
      maximizando el valor de su producto.`,
@@ -54,7 +48,6 @@ const servicesList = [
   },
 ];
 
-//List of works
 const works = [
   {
     coverImage: "/mimpronts.png",
@@ -98,87 +91,42 @@ const works = [
     imagesRoot: "/works/ama",
   },
 ];
-
-const Services = ({ scrollClampSecondAnimation }) => {
-  // Change opacity animation
-  const opacityServices = useTransform(
-    scrollClampSecondAnimation,
-    [0.67, 0.7, 0.8, 0.83],
-    [0, 1, 1, 0]
-  );
-  // To avoid scrolling body when scrolling inside div
-  const [overscroll, setOverscroll] = useState(false);
-  // To avoid errors with other sections that have absolute position
-  const [visible, setVisible] = useState(false);
-
-  useMotionValueEvent(scrollClampSecondAnimation, "change", (latest) => {
-    if (latest < 0.83 && latest > 0.7) {
-      setOverscroll(true);
-    } else {
-      setOverscroll(false);
-    }
-    if (latest < 0.83 && latest > 0.67) {
-      setVisible(true);
-    } else {
-      setVisible(false);
-    }
-  });
-
+const Services = () => {
   return (
-    <motion.div
-      style={{ opacity: opacityServices }}
-      className="w-[85%] md:w-[80%] absolute z-40 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 
-      h-[90%] flex items-center flex-wrap-reverse lg:flex-nowrap content-center"
-    >
-      {visible && (
-        <>
-          <div
-            className={`w-full lg:w-1/2 bg-[#202020]/30 h-auto md:max-h-[40%] lg:h-full lg:max-h-full md:rounded-b-lg lg:rounded-l-lg 
-            hidden md:grid grid-cols-1 overflow-y-auto gap-4 px-4 py-6 md:p-10
-         ${overscroll && "overscroll-contain"}`}
-          >
-            {works.map((work, i) => (
-              <WorkCard key={i} data={work} />
-            ))}
-          </div>
-          <div
-            className={`${overscroll && "overscroll-contain"} bg-[#CE9F5D]/80
-            services-container p-6 max-h-[90%] md:p-10 md:max-h-[60%] lg:max-h-full rounded-lg md:rounded-b-none relative
-            text-white h-auto lg:h-full flex items-start flex-col w-full lg:w-1/2 md:rounded-t-lg lg:rounded-r-lg overflow-y-auto`}
-          >
-            <h4 className={`title-second-animation mb-4`}>¿Qué hacemos?</h4>
-            <p className={`subtitle-second-animation w-full`}>
-              Construimos experiencias web sobresalientes y resolvemos problemas
-              de negocio a través de código.
-            </p>
-            <Accordion
-              className={`dark w-full !px-0`}
-              itemClasses={{
-                indicator: "text-white",
-                title: "text-base md:text-lg 2xl:text-xl",
-              }}
-            >
-              {servicesList.map((service, i) => (
-                <AccordionItem
-                  key={i}
-                  aria-label={service.ariaLabel}
-                  className={`subtitle-second-animation font-semibold`}
-                  title={service.title}
-                >
-                  {service.text}
-                  <ul className="list-disc list-inside">
-                    {service.list.map((item, i) => (
-                      <li key={i}>{item}</li>
-                    ))}
-                  </ul>
-                </AccordionItem>
-              ))}
-            </Accordion>
-            <WorksModal works={works} />
-          </div>
-        </>
-      )}
-    </motion.div>
+    <>
+      <section
+        className="w-[93%] mx-auto scroll-mt-[15vh] snap-always snap-start flex flex-col h-full justify-center gap-10 
+      items-start relative text-white"
+      >
+        <div
+          className="bg-dorado rounded-[70px] lg:!rounded-[100px] 
+        w-full h-[190%] absolute mx-auto top-0 -z-10"
+        ></div>
+        <h3 className="text-5xl md:text-6xl xl:text-7xl 2xl:text-8xl 3xl:text-9xl ml-[10%]">
+          Hagámoslo Juntos
+        </h3>
+        <h6 className="md:text-xl 3xl:text-3xl w-2/5 ml-[10%]">
+          Estamos aquí para hacer realidad tus sueños. Ayudamos a convertir su
+          idea inicial en una solución digital de vanguardia, donde el único
+          límite es nuestra imaginación conjunta.
+        </h6>
+      </section>
+      <section className="ml-10 scroll-mt-[15vh] snap-always snap-start h-4/5 w-3/5 mx-[5vw] flex flex-col justify-center float-right text-white gap-6">
+        <h4 className="text-3xl md:text-4xl xl:text-5xl 2xl:text-6xl 3xl:text-7xl font-semibold">
+          Nuestros Servicios
+        </h4>
+        <div className="flex w-full flex-wrap">
+          {servicesList.map((service, i) => (
+            <div key={i} className="w-1/2 pr-6 pb-6">
+              <h6 className="font-semibold md:text-lg xl:text-xl 2xl:text-2xl 3xl:text-3xl">
+                {service.title}
+              </h6>
+              <p>{service.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    </>
   );
 };
 

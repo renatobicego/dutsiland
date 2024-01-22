@@ -12,6 +12,11 @@ module.exports = {
     extend: {
       screens: {
         '3xl': '1750px'
+      },
+      colors: {
+        'negro': '#202020',
+        'rojo': "#B34D4D",
+        'dorado': "#CE9F5D"
       }
     },
   },

@@ -1,10 +1,11 @@
-import React, { useRef } from "react";
+import React, { forwardRef} from "react";
 import { Float, useGLTF } from "@react-three/drei";
 
-export function Model(props) {
+export default forwardRef(function Model(props, ref) {
   const { nodes, materials } = useGLTF("/lighthouse_on_island.glb");
+  
   return (
-    <group {...props} dispose={null}>
+    <group {...props} dispose={null} ref={ref}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <group rotation={[Math.PI / 2, 0, 0]}>
           <group position={[0, -0.138, 0]} rotation={[-Math.PI / 2, 0, 0]}>
@@ -177,4 +178,4 @@ export function Model(props) {
       </group>
     </group>
   );
-}
+})

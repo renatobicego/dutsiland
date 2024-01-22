@@ -7,8 +7,8 @@ const WorkCard = ({ data }) => {
   return (
     <>
       <div
-        className={`w-full h-32 xl:h-36 2xl:h-40 rounded-lg hover:scale-[1.02] active:scale-[1.02] transition-all duration-200 
-      relative outline-none ${data.bg} group`}
+        className={`w-2/5 h-32 xl:h-36 2xl:h-64 rounded-lg hover:scale-[1.02] active:scale-[1.02] transition-all duration-200 
+      relative outline-none ${data.bg} group shrink-0 snap-start scroll-m-2`}
       >
         <Image
           className="w-full object-cover h-full absolute left-0 top-0 rounded-lg opacity-0 group-hover:opacity-100 

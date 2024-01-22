@@ -3,19 +3,21 @@
 import { useEffect, useState } from "react";
 
 function useWindowSize() {
-  const isClient = typeof window === "object";
 
   // Initialize state with undefined width/height so server and client renders match
   const [windowSize, setWindowSize] = useState({
-    width: isClient ? window.innerWidth : undefined,
-    height: isClient ? window.innerHeight : undefined,
+    width:  0,
+    height: 0,
   });
 
-  useEffect(() => {
-    if (!isClient) {
-      return; // If running on the server, do nothing
-    }
+  const [isClient, setIsClient] = useState(false)
+ 
 
+  useEffect(() => {
+    if(!isClient){
+      setIsClient(true)
+      return
+    }
     // Handler to call on window resize
     function handleResize() {
       // Set window width/height to state

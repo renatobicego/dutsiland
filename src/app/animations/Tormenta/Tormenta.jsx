@@ -41,26 +41,26 @@ const SeaMaterial = shaderMaterial(
 extend({ SeaMaterial });
 
 const Tormenta = ({ scrollYProgress }) => {
-  const screenSize  = useWindowSize();
+  // const screenSize  = useWindowSize();
   const seaMaterial = useRef();
   const spotlightRef = useRef();
   const fogRef = useRef();
   const rainRef = useRef();
-  const cameraShakeRef = useRef();
+  // const cameraShakeRef = useRef();
 
-  // camera positions
-  const zCameraP = useTransform(
-    scrollYProgress,
-    [0, 0.9],
-    [0, screenSize.width > 1000 ? -5 : -6.1]
-  );
-  const yCameraP = useTransform(scrollYProgress, [0.45, 0.9], [0.15, 0.4]);
-  const xCameraP = useTransform(scrollYProgress, [0.45, 0.9], [3, 4]);
-  const cameraShakeIntensity = useTransform(
-    scrollYProgress,
-    [0, 0.6, 0.8],
-    [1, 1, 0]
-  );
+  // // camera positions
+  // const zCameraP = useTransform(
+  //   scrollYProgress,
+  //   [0, 0.9],
+  //   [0, screenSize.width > 1000 ? -5 : -6.1]
+  // );
+  // const yCameraP = useTransform(scrollYProgress, [0.45, 0.9], [0.15, 0.4]);
+  // const xCameraP = useTransform(scrollYProgress, [0.45, 0.9], [3, 4]);
+  // const cameraShakeIntensity = useTransform(
+  //   scrollYProgress,
+  //   [0, 0.6, 0.8],
+  //   [1, 1, 0]
+  // );
 
   // rain effect
   const rainTexture = useMemo(() => {
@@ -84,15 +84,15 @@ const Tormenta = ({ scrollYProgress }) => {
     }
 
     // Set new camera position based in scroll
-    newCameraPosition.set(xCameraP.current, yCameraP.current, zCameraP.current);
-    state.camera.position.copy(newCameraPosition);
-    cameraShakeRef.current?.setIntensity(cameraShakeIntensity.current);
+    // newCameraPosition.set(xCameraP.current, yCameraP.current, zCameraP.current);
+    // state.camera.position.copy(newCameraPosition);
+    // cameraShakeRef.current?.setIntensity(cameraShakeIntensity.current);
   });
 
   return (
     <>
       <CameraShake
-        ref={cameraShakeRef}
+        // ref={cameraShakeRef}
         maxPitch={0.25}
         maxRoll={0.15}
         maxYaw={0}
@@ -102,11 +102,11 @@ const Tormenta = ({ scrollYProgress }) => {
       />
       <color args={["#202020"]} attach="background" />
       <EffectComposer multisampling={8}>
-        <Fog
+        {/* <Fog
           ref={fogRef}
           u_resolution={new THREE.Vector2(1428, 520)}
           blendFunction={BlendFunction.OVERLAY}
-        />
+        /> */}
         <Rain
           ref={rainRef}
           u_resolution={new THREE.Vector2(2048, 1048)}
@@ -120,7 +120,7 @@ const Tormenta = ({ scrollYProgress }) => {
           <planeGeometry args={[30, 30, 512, 512]} />
           <seaMaterial ref={seaMaterial} />
         </mesh>
-        <FaroModel />
+        {/* <FaroModel /> */}
         <SpotLight
           ref={spotlightRef}
           position={[1.32, 0.2, -6.5]}

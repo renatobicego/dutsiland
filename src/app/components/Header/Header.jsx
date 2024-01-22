@@ -2,8 +2,10 @@
 import Image from "next/image";
 import { useDisclosure } from "@nextui-org/react";
 import CustomDrawer from "./Drawer";
+
 const Header = () => {
   const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure();
+
   const scrollToTop = () => {
     window?.scrollTo({
       top: 0,
@@ -14,27 +16,27 @@ const Header = () => {
   };
   return (
     <header
-      className="w-[93vw] flex items-center justify-between py-2 pr-3.5 h-16 md:h-[6.5rem] 
-        fixed top-0 left-1/2 -translate-x-1/2 z-50 bg-white"
+      className="w-screen px-[3.5vw] flex items-center justify-between py-2 h-16 md:h-20 
+        fixed top-0 left-0 z-30 bg-white"
     >
       <button onClick={scrollToTop} className="h-[90%]">
         <Image
           alt="logo"
           width={300}
           height={300}
-          className="h-full w-auto min-w-[18vw] lg:min-w-[129px]"
+          className="h-full w-auto"
           src={"/logo7-recortado.png"}
         />
       </button>
       <nav>
-        <ul className="hidden md:flex items-center gap-6 lg:gap-10 lg:text-lg uppercase">
-          <li>
-            <a href="/#quienesSomos">¿quienes somos?</a>
+        <ul className="hidden md:flex items-center gap-6 lg:gap-10 uppercase">
+          <li  className="link ">
+            <a  href="/#quienesSomos">¿quienes somos?</a>
           </li>
-          <li>
+          <li className="link">
             <a href="/#servicios">servicios</a>
           </li>
-          <li>
+          <li className="link">
             <a href="/#contacto">Contacto</a>
           </li>
         </ul>

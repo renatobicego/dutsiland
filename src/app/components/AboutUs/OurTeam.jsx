@@ -12,12 +12,12 @@ const team = [
   },
 ];
 
-const OurTeam = ({hidden}) => {
+const OurTeam = () => {
   return (
-    <div className={` ${hidden ? 'hidden w-full md:grid' : 'grid w-[90%] mx-auto py-14'} grid grid-cols-1 md:grid-cols-2 gap-6`}>
+    <div className={` w-[90%] md:w-full mx-auto pb-6 md:px-8 grid grid-cols-1 md:grid-cols-2 gap-6`}>
       {team.map((member, i) => (
         <div
-          className="w-full h-56 flex flex-col justify-end items-start rounded-lg overflow-hidden relative 
+          className="w-full h-56 2xl:h-72 flex flex-col justify-end items-start rounded-lg overflow-hidden relative 
                   lg:hover:scale-[1.02] transition-all duration-200"
           key={i}
         >

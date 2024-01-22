@@ -8,10 +8,14 @@ body {
   padding: 0 !important;
 }
 
+*{
+  user-select: none;
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 5px;
-  height: 30px;
+  height: 6px;
   border-radius: 40px;
   position: absolute;
   right: 10px;
@@ -41,7 +45,7 @@ body {
 
 @layer components {
   .title-size {
-    @apply text-3xl sm:text-4xl lg:text-5xl xl:text-6xl uppercase text-white font-thin;
+    @apply text-xl sm:text-2xl lg:text-3xl xl:text-4xl 3xl:text-5xl uppercase text-white font-thin;
   }
   .title-second-animation {
     @apply text-3xl md:text-4xl 2xl:text-5xl 3xl:text-6xl font-semibold
