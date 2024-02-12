@@ -8,7 +8,7 @@ body {
   padding: 0 !important;
 }
 
-*{
+* {
   user-select: none;
 }
 
@@ -31,7 +31,7 @@ body {
 ::-webkit-scrollbar-thumb {
   background: #888;
   border-radius: 40px;
-  transition: cubic-bezier(0.075, 0.82, 0.165, 1) all 500ms
+  transition: cubic-bezier(0.075, 0.82, 0.165, 1) all 500ms;
 }
 
 /* Handle on hover */
@@ -39,45 +39,45 @@ body {
   background: #666;
 }
 
-.services-container{
-    scrollbar-gutter: stable;
+.services-container {
+  scrollbar-gutter: stable;
 }
 
 @layer components {
   .title-size {
-    @apply text-4xl sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl 3xl:text-9xl;
+    @apply text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl 3xl:text-9xl;
   }
   .first-animation-text {
-    @apply text-xl sm:text-2xl lg:text-3xl xl:text-4xl 3xl:text-5xl uppercase text-white font-thin
+    @apply text-xl sm:text-2xl lg:text-3xl xl:text-4xl 3xl:text-5xl uppercase text-white font-thin;
   }
   .title-second-animation {
-    @apply text-3xl md:text-4xl 2xl:text-5xl 3xl:text-6xl font-semibold
+    @apply text-3xl md:text-4xl 2xl:text-5xl 3xl:text-6xl font-semibold;
   }
   .subtitle-size {
-    @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl 2xl:text-6xl 3xl:text-7xl font-semibold
+    @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl 2xl:text-6xl 3xl:text-7xl font-semibold;
   }
   .button {
-    @apply text-sm md:text-base 2xl:text-lg 3xl:text-xl pt-1 pb-1.5 px-6 rounded-2xl
+    @apply text-xs xs:text-sm md:text-base 2xl:text-lg 3xl:text-xl pt-1 pb-1.5 px-6 rounded-2xl;
   }
   .button-animation {
-    @apply hover:text-white hover:bg-negro hover:scale-[1.03] transition-all duration-300
+    @apply hover:text-white hover:bg-negro hover:scale-[1.03] transition-all duration-300;
   }
   .button-animation-red {
-    @apply button-animation hover:text-rojo hover:bg-white font-semibold
+    @apply button-animation hover:text-rojo hover:bg-white font-semibold;
   }
 }
 
 .hideLoader {
-    display: none;
-    animation: hide 1s;
+  display: none;
+  animation: hide 1s;
 }
 
 @keyframes hide {
-  0%{
+  0% {
     opacity: 1;
     display: flex;
   }
-  99%{
+  99% {
     opacity: 0.01;
     display: flex;
   }

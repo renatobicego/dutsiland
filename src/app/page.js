@@ -2,12 +2,16 @@
 import ExperienceFaro from "./animations/Faro/ExperienceFaro";
 import FirstAnimation from "./animations/FirstAnimation";
 import Footer from "./components/Footer/Footer";
-import { useEffect, useRef } from "react";
-import { useMotionValue, useMotionValueEvent, useScroll, useSpring } from "framer-motion";
-import Services from './components/Services/Services'
-import SelectedWorks from './components/Services/SelectedWorks'
-import AboutUs from './components/AboutUs/AboutUs'
-import Contact from './components/Contact'
+import Header from "./components/Header/Header";
+import { useRef } from "react";
+import {
+  useScroll,
+  useSpring,
+} from "framer-motion";
+import Services from "./components/Services/Services";
+import SelectedWorks from "./components/Services/SelectedWorks";
+import AboutUs from "./components/AboutUs/AboutUs";
+import Contact from "./components/Contact";
 const servicesList = [
   {
     ariaLabel: "Disenio Web",
@@ -66,27 +70,30 @@ export default function Home() {
   const scrollYProgress = useSpring(scrollToClamp, {
     stiffness: 500,
     damping: 25,
-  })
+  });
 
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    console.log(latest)
-  })
- 
+  // useMotionValueEvent(scrollYProgress, "change", (latest) => {
+  //   console.log(latest)
+  // })
+
   return (
-    <main
-      ref={containerRef}
-      className="w-full relative pt-20 md:pt-[15vh] h-screen overflow-x-hidden overflow-y-scroll snap-y  scroll-smooth"
-    >
-      {/* storm animation */}
-      <FirstAnimation />
-      <ExperienceFaro scrollYProgress={scrollYProgress} />
-      <AboutUs />
-      <Services />
-      <SelectedWorks />
-      <Contact />
-      {/* lighthouse animation */}
-      {/* <SecondAnimation /> */}
-      <Footer />
-    </main>
+    <>
+      <Header scrollYProgress={scrollYProgress}/>
+      <main
+        ref={containerRef}
+        className="w-full relative h-[100svh] overflow-x-hidden overflow-y-scroll snap-y  scroll-smooth"
+      >
+        {/* storm animation */}
+        <FirstAnimation />
+        <ExperienceFaro scrollYProgress={scrollYProgress} />
+        <AboutUs scrollYProgress={scrollYProgress} />
+        <Services />
+        <SelectedWorks />
+        <Contact />
+        {/* lighthouse animation */}
+        {/* <SecondAnimation /> */}
+        <Footer />
+      </main>
+    </>
   );
 }

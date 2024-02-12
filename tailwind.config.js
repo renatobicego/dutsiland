@@ -11,7 +11,8 @@ module.exports = {
   theme: {
     extend: {
       screens: {
-        '3xl': '1750px'
+        '3xl': '1750px',
+        'xs' : '360px'
       },
       colors: {
         'negro': '#202020',

@@ -114,8 +114,8 @@ const Tormenta = ({ scrollYProgress }) => {
           rainTexture={rainTexture}
         />
       </EffectComposer>
-      <Suspense fallback={null}>
         <ambientLight />
+      <Suspense fallback={null}>
         <mesh rotation={[-1.6, 0, 1.5]}>
           <planeGeometry args={[30, 30, 512, 512]} />
           <seaMaterial ref={seaMaterial} />

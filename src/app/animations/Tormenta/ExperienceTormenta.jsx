@@ -1,15 +1,19 @@
 "use client";
 
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import Tormenta from "./Tormenta";
 import R3FLoader from "../R3FLoader";
-
+import { useInView } from "framer-motion";
+import { useRef } from "react";
 const ExperienceTormenta = ({ scrollYProgress }) => {
+  const ref = useRef(null)
+  const isInView = useInView(ref)
   return (
-    <div className=" mx-auto !w-[93vw] h-[80svh] lg:h-[75vh] absolute top-0 ">
+    <div ref={ref} className=" mx-auto w-screen h-full absolute top-0">
       <Canvas
         key={1}
-        className="w-full h-full absolute right-0 rounded-[55px] md:rounded-[70px] lg:!rounded-[100px]"
+        className="w-full h-full absolute right-0"
+        frameloop={isInView ? 'always' : 'never'}
         camera={{
           fov: 45,
           near: 0.1,
@@ -17,7 +21,7 @@ const ExperienceTormenta = ({ scrollYProgress }) => {
           position: [3, 0.15, 0],
         }}
       >
-        <Tormenta  scrollYProgress={scrollYProgress} />
+        <Tormenta scrollYProgress={scrollYProgress} />
       </Canvas>
       <R3FLoader background={"bg-[#202020]"}/>
     </div>

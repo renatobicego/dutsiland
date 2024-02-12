@@ -47,14 +47,14 @@ const works = [
 const SelectedWorks = () => {
   return (
     <section
-      className="w-[93%] mx-auto snap-always scroll-mt-[10vh] lg:scroll-mt-[1vh] snap-start flex flex-col h-[90svh] lg:h-screen 
-      justify-start lg:justify-center gap-6 items-start relative text-white pt-32 lg:pt-12 2xl:pt-20 "
+      className="w-full mx-auto snap-always snap-start flex flex-col h-full
+      justify-center gap-6 items-start relative text-white"
     >
       <div
-        className="bg-negro rounded-[55px] md:rounded-[70px] lg:!rounded-[100px] 
-              w-full h-[90%] lg:h-5/6 absolute max-auto max-lg:top-10 lg:bottom-4 -z-10"
+        className="bg-negro
+              w-full h-full absolute top-0 -z-10"
       ></div>
-      <div className="ml-[8%] flex flex-col gap-4">
+      <div className="ml-[8%] flex flex-col gap-4 ">
         <h4 className="subtitle-size font-semibold ">
           Proyectos Destacados
         </h4>

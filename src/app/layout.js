@@ -1,7 +1,5 @@
 import { Piazzolla } from "next/font/google";
-import "./globals.css";
-import Header from "./components/Header/Header";
-import Footer from "./components/Footer/Footer";
+import "./globals.css";;
 import { Providers } from "./providers";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 const piazzolla = Piazzolla({
@@ -66,7 +64,6 @@ export default function RootLayout({ children }) {
         />
         
         <Providers>
-          <Header />
           {children}
         </Providers>
         <SpeedInsights />

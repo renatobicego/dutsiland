@@ -3,8 +3,8 @@ import ExperienceTormenta from "./Tormenta/ExperienceTormenta";
 const FirstAnimation = () => {
   return (
     <section
-      className="relative flex flex-col justify-end items-center gap-10 md:gap-20 lg:mb-20 
-      h-[90svh] lg:h-[90%] scroll-mt-[10vh] lg:scroll-mt-[15vh] snap-always snap-start"
+      className="relative flex flex-col justify-end items-center gap-10 md:gap-20 
+      h-full w-full snap-always snap-start text-white"
     >
       <div className="self-start z-10 ml-10 md:ml-20 lg:ml-28 mb-10">
         <h3 className="relative first-animation-text w-[80%] md:w-[60%]">
@@ -18,12 +18,12 @@ const FirstAnimation = () => {
       </div>
       <ExperienceTormenta />
       <div
-        className="animate-bounce text-negro font-normal mb-6 md:mb-16 lg:-mb-10
+        className="animate-bounce font-normal mb-6
         flex items-center gap-2 text-xs md:text-sm 2xl:text-base"
       >
         Deslizar para explorar
         <svg
-          className="w-6 h-6 text-negro"
+          className="w-6 h-6 text-white"
           fill="none"
           strokeLinecap="round"
           strokeLinejoin="round"

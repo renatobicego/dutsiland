@@ -2,37 +2,54 @@
 import Image from "next/image";
 import { useDisclosure } from "@nextui-org/react";
 import CustomDrawer from "./Drawer";
-
-const Header = () => {
+import { useTransform } from "framer-motion";
+import { motion } from "framer-motion";
+const Header = ({ scrollYProgress }) => {
   const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure();
-
+  // const scrollDirection = useScrollDirection()
   const scrollToTop = () => {
-    window?.scrollTo({
+    document.querySelector("main").scrollTo({
       top: 0,
       behavior: "smooth",
       /* you can also use 'auto' behaviour 
          in place of 'smooth' */
     });
   };
+
+  const color = useTransform(
+    scrollYProgress,
+    [0.93, 0.98],
+    ["#ffffff", "#202020"]
+  );
+  const invert = useTransform(scrollYProgress, [0.93, 0.98], ["invert(0%)", "invert(100%)"]);
+  const invertDrawer = useTransform(scrollYProgress, [0.93, 0.98], ["invert(100%)", "invert(0)"]);
+
   return (
-    <header
-      className="w-screen px-[3.5vw] flex items-center justify-between py-2 h-16 md:h-20 
-        fixed top-0 left-0 z-30 bg-white lg:text-sm 2xl:text-base
-        3xl:text-lg"
+    <motion.header
+      style={{ color }}
+      className={`w-screen px-[3.5vw] flex items-center justify-between py-2 h-16 md:h-20 
+        fixed left-0 z-30  lg:text-sm 2xl:text-base
+        3xl:text-lg 
+        transition-all duration-500`}
     >
-      <button onClick={scrollToTop} className="h-[90%]">
+      {/* <div className="bg-negro w-full absolute left-0 top-0 h-full -z-10 mix-blend-exclusion"></div> */}
+      <motion.button
+        style={{ filter: invert }}
+        onClick={scrollToTop}
+        className="h-[90%]"
+      >
         <Image
           alt="logo"
           width={300}
           height={300}
           className="h-full w-auto"
-          src={"/logo7-recortado.png"}
+          src={"/logoLineasBlancas.png"}
         />
-      </button>
-      <nav>
+      </motion.button>
+      <nav className="">
         <ul className="hidden md:flex items-center gap-6 lg:gap-10 uppercase">
-          <li  className="link ">
-            <a  href="/#quienesSomos">¿quienes somos?</a>
+          <li className="link">
+            <a href="/#quienesSomos">¿quienes somos?</a>
           </li>
           <li className="link">
             <a href="/#servicios">servicios</a>
@@ -42,14 +59,14 @@ const Header = () => {
           </li>
         </ul>
       </nav>
-      <button onClick={onOpen} className="md:hidden w-8">
+      <motion.button style={{filter: invertDrawer}} onClick={onOpen} className="md:hidden w-8">
         <Image
           width={64}
           height={64}
           src="/hamburger.png"
           alt="Menu desplegable"
         />
-      </button>
+      </motion.button>
       <CustomDrawer isOpen={isOpen} onOpenChange={onOpenChange}>
         <nav className="absolute w-full top-0 left-0">
           <ul className="flex flex-col items-start gap-6 text-white uppercase pt-16 p-10">
@@ -65,7 +82,7 @@ const Header = () => {
           </ul>
         </nav>
       </CustomDrawer>
-    </header>
+    </motion.header>
   );
 };
 

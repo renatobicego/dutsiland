@@ -1,11 +1,19 @@
-import React, { forwardRef} from "react";
+import React, { forwardRef, useRef} from "react";
 import { Float, useGLTF } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
 
-export default forwardRef(function Model(props, ref) {
+export default function Model(props) {
   const { nodes, materials } = useGLTF("/lighthouse_on_island.glb");
-  
+  const modelRef = useRef(null)
+  useFrame(() => {
+    if (modelRef.current) {
+      modelRef.current.scale.x = props.scaleModel.get();
+      modelRef.current.scale.y = props.scaleModel.get();
+      modelRef.current.scale.z = props.scaleModel.get();
+    }
+  });
   return (
-    <group {...props} dispose={null} ref={ref}>
+    <group {...props} dispose={null} ref={modelRef}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <group rotation={[Math.PI / 2, 0, 0]}>
           <group position={[0, -0.138, 0]} rotation={[-Math.PI / 2, 0, 0]}>
@@ -178,4 +186,4 @@ export default forwardRef(function Model(props, ref) {
       </group>
     </group>
   );
-})
+}
