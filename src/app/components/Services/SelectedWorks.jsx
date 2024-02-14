@@ -42,7 +42,6 @@ const works = [
     images: ["/2.png", "/1.png", "/3.png", "/4.png"],
     imagesRoot: "/works/ama",
   },
-
 ];
 const SelectedWorks = () => {
   return (
@@ -54,14 +53,16 @@ const SelectedWorks = () => {
         className="bg-negro
               w-full h-full absolute top-0 -z-10"
       ></div>
-      <div className="ml-[8%] flex flex-col gap-4 ">
-        <h4 className="subtitle-size font-semibold ">
-          Proyectos Destacados
-        </h4>
-        <p>Una selección de nuestros trabajos más apasionantes</p>
+      <div className="mx-[8%] flex flex-col gap-4 ">
+        <h4 className="subtitle-size font-semibold ">Proyectos Destacados</h4>
+        <p className="max-sm:text-sm md:text-xl 3xl:text-3xl">
+          Una selección de nuestros trabajos más apasionantes
+        </p>
       </div>
-      <div className="flex gap-4 w-5/6 mx-auto flex-shrink-0 overflow-y-auto overflow-x-hidden lg:overflow-x-auto 
-      lg:overflow-y-hidden px-2 py-4 max-lg:flex-col max-lg:max-h-[65%]">
+      <div
+        className="flex gap-4 w-5/6 mx-auto flex-shrink-0 overflow-y-auto overflow-x-hidden lg:overflow-x-auto 
+      lg:overflow-y-hidden px-2 py-4 max-lg:flex-col max-h-[55%] md:max-h-[65%] lg:max-h-none"
+      >
         {works.map((work, i) => (
           <WorkCard key={i} data={work} />
         ))}

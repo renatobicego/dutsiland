@@ -30,7 +30,6 @@ const AboutUs = ({ scrollYProgress }) => {
         <motion.path
           d="M1797.26 133.936L15.2139 931L1797.26 1775.5L15.2139 2406.5L1780.5 2758.5L15.2139 2118.5L1798.13 1981.5M1798.06 133.279L15.2139 594.231L1798.06 1031.5L15.2897 1881M1798.13 133.318L15.2897 291.77M1798.11 133.65L15.2702 4.00684M1798.13 1214L15.2139 1401.5L1797.26 2338L15.2139 2740"
           stroke="white"
-          stroke-width="2"
           style={{ pathLength, strokeWidth: "2px" }}
         />
       </motion.svg>
@@ -47,7 +46,7 @@ const AboutUs = ({ scrollYProgress }) => {
         <OurTeamModal />
       </div>
       <div
-        className="max-lg:mx-auto mt-4 md:mt-10 w-[90%] md:w-[88%] h-1/2 md:h-1/2 lg:absolute lg:left-[5%] lg:bottom-11 
+        className="max-lg:mx-auto mt-4 md:mt-10 w-[90%] md:w-[88%] h-[40svh] md:h-1/2 lg:absolute lg:left-[5%] lg:bottom-11 
       lg:w-[47%] lg:h-1/2 rounded-3xl overflow-hidden"
       >
         <faroExperienceTunnel.Out />

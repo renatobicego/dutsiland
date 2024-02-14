@@ -57,7 +57,7 @@ body {
     @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl 2xl:text-6xl 3xl:text-7xl font-semibold;
   }
   .button {
-    @apply text-xs xs:text-sm md:text-base 2xl:text-lg 3xl:text-xl pt-1 pb-1.5 px-6 rounded-2xl;
+    @apply text-xs xs:text-sm md:text-base 2xl:text-lg 3xl:text-xl pt-1 pb-1.5 px-6 rounded-2xl font-semibold;
   }
   .button-animation {
     @apply hover:text-white hover:bg-negro hover:scale-[1.03] transition-all duration-300;

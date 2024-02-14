@@ -6,7 +6,7 @@ const FirstAnimation = () => {
       className="relative flex flex-col justify-end items-center gap-10 md:gap-20 
       h-full w-full snap-always snap-start text-white"
     >
-      <div className="self-start z-10 ml-10 md:ml-20 lg:ml-28 mb-10">
+      <div className="self-start z-10 ml-5 sm:ml-10 md:ml-20 lg:ml-28 mb-10">
         <h3 className="relative first-animation-text w-[80%] md:w-[60%]">
           En el mar, la tempestad es un desafío para los{" "}
           <span className="font-medium">navegantes</span>

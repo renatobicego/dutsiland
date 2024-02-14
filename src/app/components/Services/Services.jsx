@@ -75,31 +75,32 @@ const Services = () => {
     <>
       <section
         className="w-full mx-auto snap-always snap-start flex flex-col h-full md:h-1/2
-        lg:h-full justify-center gap-10 items-start relative text-white"
+        lg:h-full justify-center gap-10 items-center lg:items-start relative text-white md:max-lg:pt-12"
       >
         <div
           className="bg-dorado
         w-full h-[200%] absolute mx-auto top-0 -z-10"
         ></div>
-        <h3 className="title-size md:max-lg:text-7xl md:ml-[10%] max-md:text-center max-sm:mx-auto drop-shadow-lg">
+        <h3 className="title-size md:max-lg:text-7xl lg:ml-[10%] max-lg:text-center max-sm:mx-auto drop-shadow-lg">
           Hagámoslo Juntos
         </h3>
-        <h6 className="max-sm:text-sm max-lg:text-center md:text-xl 3xl:text-3xl mx-[5%] lg:w-2/5 md:mx-[10%] lg:mb-6 2xl:mb-10 drop-shadow-lg">
+        <h6 className="max-sm:text-sm max-lg:text-center md:text-xl 3xl:text-3xl mx-[5%] lg:w-2/5 md:mx-[10%] lg:mb-6 2xl:mb-4 drop-shadow-lg">
           Estamos aquí para hacer realidad tus sueños. Ayudamos a convertir su
           idea inicial en una solución digital de vanguardia, donde el único
           límite es nuestra imaginación conjunta.
         </h6>
-        <div className="absolute left-[3.5%] md:top-[17%] lg:top-28 w-[93%] h-3/4 -z-[1] rounded-[60px] overflow-hidden">
+        <div className="absolute left-[3.5%] md:top-[20%] lg:top-28 w-[93%] h-3/4 -z-[1] 
+        rounded-[40px] md:rounded-[50px] lg:rounded-[60px] overflow-hidden">
           <faroExperienceTunnel.Out />
         </div>
       </section>
       <section
-        className="max-lg:px-[9vw] lg:ml-10 relative z-10
-      max-md:snap-start max-md:snap-always lg:snap-always lg:snap-start 
-      h-full md:h-1/2 lg:h-full w-full lg:w-3/5 lg:mx-[5vw] flex 
+        className=" relative z-10 max-md:snap-start max-md:snap-always lg:snap-always lg:snap-start
+       max-lg:px-[9vw] lg:mx-[5vw]
+      h-full md:h-1/2 lg:h-full w-full lg:w-3/5  flex 
       flex-col justify-center md:justify-start lg:justify-center lg:float-right text-white gap-6"
       >
-        <h4 className="subtitle-size">Nuestros Servicios</h4>
+        <h4 className="subtitle-size md:max-lg:mt-6">Nuestros Servicios</h4>
         <p className="max-sm:text-sm xl:text-lg 3xl:text-xl">
           La estrategia digital es un elemento clave de su transformación. Es
           este apoyo que te ofrecemos durante todo el proyecto para desarrollar
@@ -109,7 +110,7 @@ const Services = () => {
           {servicesList.map((service, i) => (
             <div
               key={i}
-              className="w-full md:w-[45%] p-6 md:p-8 lg:p-10 bg-white text-negro rounded-3xl button-animation"
+              className="w-full md:w-[45%] p-6 md:p-8 lg:p-10 bg-white/80 md:bg-white text-negro rounded-3xl button-animation"
             >
               <h6 className="font-semibold text-sm md:text-lg xl:text-xl 2xl:text-2xl 3xl:text-3xl mb-2">
                 {service.title}
@@ -122,7 +123,9 @@ const Services = () => {
             </div>
           ))}
         </div>
-        <div className="absolute -left-1/2 top-28 w-[40%] h-3/4 -z-10 rounded-[40px] overflow-hidden">
+        <div className="absolute md:max-lg:hidden lg:-left-1/2 lg:top-28 
+        w-full h-full top-0 left-0
+        lg:w-[40%] lg:h-3/4 -z-10 lg:rounded-[40px] overflow-hidden">
           <faroExperienceTunnel.Out />
         </div>
       </section>

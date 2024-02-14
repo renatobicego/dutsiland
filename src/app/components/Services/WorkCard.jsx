@@ -7,7 +7,7 @@ const WorkCard = ({ data }) => {
   return (
     <>
       <div
-        className={`w-full lg:w-2/5 md:h-52 2xl:h-64 rounded-lg hover:scale-[1.03]  transition-all duration-500 
+        className={`w-full lg:w-2/5 h-36 md:h-52 2xl:h-64 rounded-lg hover:scale-[1.03]  transition-all duration-500 
       relative outline-none ${data.bg} group shrink-0 scroll-m-2`}
       >
         <Image
@@ -28,7 +28,7 @@ const WorkCard = ({ data }) => {
             width={200}
             height={200}
             quality={50}
-            className="max-h-[60%] xl:max-h-[70%] object-contain"
+            className="max-h-[50%] max-w-[60%] md:max-h-[60%] xl:max-h-[70%] object-contain"
             src={data.imagesRoot + data.coverLogo}
             alt={"Logo: " + data.title}
           />
@@ -36,7 +36,7 @@ const WorkCard = ({ data }) => {
       </div>
       <Modal
         classNames={{
-          base: "max-w-[90%] md:max-w-[80%] lg:max-w-[90%] ",
+          base: "max-w-[90%] ",
           closeButton: "text-white hover:bg-white/5 active:bg-white/10",
           backdrop: "bg-[#202020]/90",
         }}

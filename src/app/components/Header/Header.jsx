@@ -34,15 +34,15 @@ const Header = ({ scrollYProgress }) => {
     >
       {/* <div className="bg-negro w-full absolute left-0 top-0 h-full -z-10 mix-blend-exclusion"></div> */}
       <motion.button
-        style={{ filter: invert }}
+      style={{filter: invert}}
         onClick={scrollToTop}
-        className="h-[90%]"
+        className="h-[90%] lg:!filter-none"
       >
         <Image
           alt="logo"
           width={300}
           height={300}
-          className="h-full w-auto"
+          className="h-full w-auto min-w-[43px]"
           src={"/logoLineasBlancas.png"}
         />
       </motion.button>

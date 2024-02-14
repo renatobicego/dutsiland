@@ -5,6 +5,7 @@ import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
 import { useRef } from "react";
 import {
+  useMotionValueEvent,
   useScroll,
   useSpring,
 } from "framer-motion";
@@ -72,9 +73,9 @@ export default function Home() {
     damping: 25,
   });
 
-  // useMotionValueEvent(scrollYProgress, "change", (latest) => {
-  //   console.log(latest)
-  // })
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    console.log(latest)
+  })
 
   return (
     <>
@@ -83,15 +84,12 @@ export default function Home() {
         ref={containerRef}
         className="w-full relative h-[100svh] overflow-x-hidden overflow-y-scroll snap-y  scroll-smooth"
       >
-        {/* storm animation */}
         <FirstAnimation />
         <ExperienceFaro scrollYProgress={scrollYProgress} />
         <AboutUs scrollYProgress={scrollYProgress} />
         <Services />
         <SelectedWorks />
         <Contact />
-        {/* lighthouse animation */}
-        {/* <SecondAnimation /> */}
         <Footer />
       </main>
     </>
