@@ -18,6 +18,7 @@ const Faro = ({ scrollYProgress }) => {
     sectionBreakpoints,
     [3, 4, 10, 2, 3]
   );
+  
 
   return (
     <>

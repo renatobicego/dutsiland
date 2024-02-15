@@ -26,7 +26,9 @@ const R3FLoader = ({ background }) => {
           initial="hidden"
           animate={progress === 100 ? "visible" : "hidden"}
           variants={containerVariants}
-        ></motion.div>
+        >
+          
+        </motion.div>
       </div>
     </div>
   );

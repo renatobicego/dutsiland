@@ -20,12 +20,11 @@ const AboutUs = ({ scrollYProgress }) => {
         w-full h-full absolute mx-auto top-0  -z-10"
       ></div>
       <motion.svg
-        width="1810"
         height="2763"
         viewBox="0 0 1810 2763"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="top-20 -left-60 absolute -z-[5]"
+        className="top-0 right-0 w-screen absolute -z-[5]"
       >
         <motion.path
           d="M1797.26 133.936L15.2139 931L1797.26 1775.5L15.2139 2406.5L1780.5 2758.5L15.2139 2118.5L1798.13 1981.5M1798.06 133.279L15.2139 594.231L1798.06 1031.5L15.2897 1881M1798.13 133.318L15.2897 291.77M1798.11 133.65L15.2702 4.00684M1798.13 1214L15.2139 1401.5L1797.26 2338L15.2139 2740"
