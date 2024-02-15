@@ -96,14 +96,14 @@ const Tormenta = () => {
         yawFrequency={0}
       />
       <color args={["#202020"]} attach="background" />
-      <EffectComposer disableNormalPass multisampling={0}>
+      {/* <EffectComposer disableNormalPass multisampling={0}>
         <Rain
           ref={rainRef}
           u_resolution={new THREE.Vector2(2048, 1048)}
           blendFunction={BlendFunction.LIGHTEN}
           rainTexture={rainTexture}
         />
-      </EffectComposer>
+      </EffectComposer> */}
       <ambientLight />
       <Suspense fallback={null}>
         <mesh rotation={[-1.6, 0, 1.5]}>
