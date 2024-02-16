@@ -20,7 +20,7 @@ const Contact = () => {
      relative text-white z-10 ">
       <div
         className="flex flex-col justify-center md:justify-start lg:justify-center gap-6 h-full lg:px-[9%] 2xl:px-[7%]
-        items-start w-full lg:w-3/5 bg-rojo/50 lg:bg-rojo/90 px-8 md:py-[25%] lg:py-20 rounded-none"
+        items-start w-full lg:w-3/5 bg-rojo/60 lg:bg-rojo/90 px-8 md:py-[25%] lg:py-20 rounded-none"
       >
         <h4 className="subtitle-size relative z-10 drop-shadow-lg">
           ¡Trabajemos Juntos!

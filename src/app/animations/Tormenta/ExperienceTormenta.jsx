@@ -13,7 +13,8 @@ const ExperienceTormenta = ({ scrollYProgress }) => {
       <Canvas
         key={1}
         className="w-full h-full absolute right-0"
-        frameloop={isInView ? 'always' : 'never'}
+        frameloop={isInView ? 'always' : 'demand'}
+        visible={isInView}
         camera={{
           fov: 45,
           near: 0.1,
@@ -21,7 +22,7 @@ const ExperienceTormenta = ({ scrollYProgress }) => {
           position: [3, 0.15, 0],
         }}
       >
-        <Tormenta scrollYProgress={scrollYProgress} />
+        <Tormenta isInView={isInView} scrollYProgress={scrollYProgress} />
       </Canvas>
       <R3FLoader background={"bg-[#202020]"}/>
     </div>

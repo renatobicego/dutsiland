@@ -16,14 +16,14 @@ export default function Home() {
   const containerRef = useRef(null);
 
   // Set up scroll animations
-  const { scrollYProgress: scrollToClamp } = useScroll({
+  const { scrollYProgress } = useScroll({
     container: containerRef,
   });
 
-  const scrollYProgress = useSpring(scrollToClamp, {
-    stiffness: 500,
-    damping: 25,
-  });
+  // const scrollYProgress = useSpring(scrollToClamp, {
+  //   stiffness: 500,
+  //   damping: 25,
+  // });
 
   // useMotionValueEvent(scrollYProgress, "change", (latest) => {
   //   console.log(latest)

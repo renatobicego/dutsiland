@@ -58,7 +58,7 @@ const SeaMaterial = shaderMaterial(
 
 extend({ SeaMaterial });
 
-const Tormenta = () => {
+const Tormenta = ({isInView}) => {
   const seaMaterial = useRef();
   const spotlightRef = useRef();
   const rainRef = useRef();
@@ -74,7 +74,7 @@ const Tormenta = () => {
 
   useFrame((state, delta) => {
     // Animate spotlight over lighthouse and update uniform
-    if (seaMaterial.current && spotlightRef.current) {
+    if (seaMaterial.current && spotlightRef.current && isInView) {
       seaMaterial.current.uTime += delta;
       spotlightRef.current.target.position.x =
         Math.sin(seaMaterial.current.uTime * Math.PI * 0.25 - Math.PI) + 1.32;
@@ -96,7 +96,7 @@ const Tormenta = () => {
         yawFrequency={0}
       />
       <color args={["#202020"]} attach="background" />
-      <EffectComposer disableNormalPass multisampling={0}>
+      <EffectComposer enabled={isInView} disableNormalPass multisampling={0}>
         <Rain
           ref={rainRef}
           u_resolution={new THREE.Vector2(2048, 1048)}

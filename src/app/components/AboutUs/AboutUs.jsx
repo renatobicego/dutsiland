@@ -3,16 +3,17 @@ import { faroExperienceTunnel } from "../../animations/Faro/ExperienceFaro";
 import { motion, useTransform } from "framer-motion";
 import useWindowSize from "../../utils/useWindowSize";
 const AboutUs = ({ scrollYProgress }) => {
+  const { width: widthScreen } = useWindowSize();
   const pathLength = useTransform(
     scrollYProgress,
-    [0, 0.1, 0.4, 0.8, 1],
-    [0, 0.015, 0.15, 0.3, 1]
+    widthScreen < 1020 && widthScreen > 768 ? [0, 0.07, 0.2, 0.25, 0.27] : [0, 0.05, 0.13, 0.16, 0.196],
+    [0, 0, 0.1, 0.5, 1] 
   );
 
-  return (
+  return ( 
     <section
       className="w-full mx-auto snap-always snap-start flex flex-col h-full
-      justify-center md:justify-start lg:justify-evenly
+      justify-center md:justify-start lg:justify-evenly overflow-hidden
       items-start relative text-white gap-3 xs:gap-4 sm::gap-6"
     >
       <div
@@ -20,16 +21,15 @@ const AboutUs = ({ scrollYProgress }) => {
         w-full h-full absolute mx-auto top-0  -z-10"
       ></div>
       <motion.svg
-        height="2763"
-        viewBox="0 0 1810 2763"
+        viewBox="0 0 1787 935"
         fill="none"
+        className="top-0 right-0 !w-[100vw] absolute -z-[5]"
         xmlns="http://www.w3.org/2000/svg"
-        className="top-0 right-0 w-screen absolute -z-[5]"
       >
         <motion.path
-          d="M1797.26 133.936L15.2139 931L1797.26 1775.5L15.2139 2406.5L1780.5 2758.5L15.2139 2118.5L1798.13 1981.5M1798.06 133.279L15.2139 594.231L1798.06 1031.5L15.2897 1881M1798.13 133.318L15.2897 291.77M1798.11 133.65L15.2702 4.00684M1798.13 1214L15.2139 1401.5L1797.26 2338L15.2139 2740"
+          d="M1784.26 133.936L2.21387 931M1785.06 133.279L1784.79 133.348M1784.79 133.348L1783.95 133.565M1784.79 133.348L1785.13 133.318M1784.79 133.348L1783.07 133.501M1783.95 133.565L2.21387 594.231M1783.95 133.565L1785.11 133.65M1783.95 133.565L1783.07 133.501M1783.07 133.501L2.28975 291.77M1783.07 133.501L2.27024 4.00684"
           stroke="white"
-          style={{ pathLength, strokeWidth: "2px" }}
+          style={{ pathLength, strokeWidth: "2px", width: "100%" }}
         />
       </motion.svg>
 

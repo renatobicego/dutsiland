@@ -21,22 +21,19 @@ const Header = ({ scrollYProgress }) => {
     [0.93, 0.98],
     ["#ffffff", "#202020"]
   );
-  const invert = useTransform(scrollYProgress, [0.93, 0.98], ["invert(0%)", "invert(100%)"]);
-  const invertDrawer = useTransform(scrollYProgress, [0.93, 0.98], ["invert(100%)", "invert(0)"]);
 
   return (
     <motion.header
       style={{ color }}
       className={`w-screen px-[3.5vw] flex items-center justify-between py-2 h-16 md:h-20 
-        fixed left-0 z-30  lg:text-sm 2xl:text-base
-        3xl:text-lg 
+        fixed left-0 z-30  lg:text-sm 2xl:text-base 
+        3xl:text-lg max-lg:!text-white
         transition-all duration-500`}
     >
       {/* <div className="bg-negro w-full absolute left-0 top-0 h-full -z-10 mix-blend-exclusion"></div> */}
-      <motion.button
-      style={{filter: invert}}
+      <button
         onClick={scrollToTop}
-        className="h-[90%] lg:!filter-none"
+        className="h-[90%]"
       >
         <Image
           alt="logo"
@@ -45,7 +42,7 @@ const Header = ({ scrollYProgress }) => {
           className="h-full w-auto min-w-[43px]"
           src={"/logoLineasBlancas.png"}
         />
-      </motion.button>
+      </button>
       <nav className="">
         <ul className="hidden md:flex items-center gap-6 lg:gap-10 uppercase">
           <li className="link">
@@ -59,14 +56,14 @@ const Header = ({ scrollYProgress }) => {
           </li>
         </ul>
       </nav>
-      <motion.button style={{filter: invertDrawer}} onClick={onOpen} className="md:hidden w-8">
+      <button onClick={onOpen} className="md:hidden w-8 invert">
         <Image
           width={64}
           height={64}
           src="/hamburger.png"
           alt="Menu desplegable"
         />
-      </motion.button>
+      </button>
       <CustomDrawer isOpen={isOpen} onOpenChange={onOpenChange}>
         <nav className="absolute w-full top-0 left-0">
           <ul className="flex flex-col items-start gap-6 text-white uppercase pt-16 p-10">
