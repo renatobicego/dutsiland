@@ -63,7 +63,7 @@ body {
     @apply hover:text-white hover:bg-negro hover:scale-[1.03] transition-all duration-300;
   }
   .button-animation-red {
-    @apply button-animation hover:text-rojo hover:bg-white font-semibold;
+    @apply button-animation hover:bg-rojo hover:text-white font-semibold;
   }
 }
 

@@ -26,17 +26,17 @@ const Header = ({ scrollYProgress }) => {
     <motion.header
       style={{ color }}
       className={`w-screen px-[3.5vw] flex items-center justify-between py-2 h-16 md:h-20 
-        fixed left-0 z-30  lg:text-sm 2xl:text-base 
+        fixed left-0 z-30 text-sm 2xl:text-base 
         3xl:text-lg max-lg:!text-white
         transition-all duration-500`}
     >
       {/* <div className="bg-negro w-full absolute left-0 top-0 h-full -z-10 mix-blend-exclusion"></div> */}
-      <button onClick={scrollToTop} className="h-[90%]">
+      <button onClick={scrollToTop} className="w-1/4 h-[90%] md:w-1/6 ">
         <Image
           alt="logo"
           width={300}
           height={300}
-          className="h-full w-auto min-w-[43px]"
+          className="w-full h-auto lg:h-full lg:w-auto sm:max-md:!max-h-[10vh] sm:max-md:w-auto"
           src={"/logoLineasBlancas.png"}
         />
       </button>

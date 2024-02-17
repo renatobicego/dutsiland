@@ -1,24 +1,22 @@
 import { LayoutOrthographicCamera } from "framer-motion-3d";
-import useMousePosition from "../../utils/useMousePos";
 import { useTransform } from "framer-motion";
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import useWindowSize from "../../utils/useWindowSize";
 const Camera = ({ sectionBreakpoints, scrollYProgress }) => {
-  const mousePos = useMousePosition();
   const { width: widthScreen } = useWindowSize();
   const cameraRef = useRef(null);
   // Camera positions
   const xCamPos = useTransform(
     scrollYProgress,
     sectionBreakpoints,
-    [0, widthScreen < 700 ? -0.5 : -1.3, -2.7, 4, 7]
+    [0, widthScreen < 700 ? -0.5 : -1.3, -1.3, 4, 7]
     //[1.5, -1.3, 0, 0, 0]
   );
   const yCamPos = useTransform(
     scrollYProgress,
     sectionBreakpoints,
-    [1, 3, 2, 0, widthScreen < 1020 ? 0.9 : 0.4]
+    [1, 3, 1.8, 0, widthScreen < 1020 ? 0.9 : 0.4]
     // [0.6, 3, 3, 0, 0.8]
   );
   const zCamPos = useTransform(scrollYProgress, sectionBreakpoints, [

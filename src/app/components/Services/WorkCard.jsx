@@ -7,11 +7,11 @@ const WorkCard = ({ data }) => {
   return (
     <>
       <div
-        className={`w-full lg:w-2/5 h-36 md:h-52 2xl:h-64 rounded-lg hover:scale-[1.03]  transition-all duration-500 
+        className={`w-full h-[22vh] md:h-[20vh] lg:h-[40vh] 2xl:h-[46vh] rounded-3xl hover:scale-[1.03]  transition-all duration-500 
       relative outline-none ${data.bg} group shrink-0 scroll-m-2`}
       >
         <Image
-          className="w-full object-cover h-full absolute left-0 top-0 rounded-lg opacity-0 group-hover:opacity-100 
+          className="w-full object-cover h-full absolute left-0 top-0 rounded-3xl opacity-0 group-hover:opacity-100 
           transition-all duration-500"
           width={400}
           height={400}
@@ -22,7 +22,7 @@ const WorkCard = ({ data }) => {
         <button
           onClick={onOpen}
           className="z-10 relative lg:backdrop-brightness-90 w-full h-full flex items-center
-        justify-center hover:backdrop-brightness-50 transition-all duration-500 rounded-lg"
+        justify-center hover:backdrop-brightness-50 transition-all duration-500 rounded-3xl"
         >
           <Image
             width={200}

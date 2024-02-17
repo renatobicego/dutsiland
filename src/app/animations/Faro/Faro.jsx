@@ -9,14 +9,14 @@ const Faro = ({ scrollYProgress }) => {
   // Breakpoints of the animation based in Scroll progress
   const { width: widthScreen } = useWindowSize();
   const sectionBreakpoints =
-    widthScreen < 1020 && widthScreen > 768
-      ? [0.27, 0.492, 0.617, 0.73, 0.98]
-      : [0.196, 0.392, 0.589, 0.785, 0.98];
+    widthScreen < 1020 && widthScreen > 767
+      ? [0.23, 0.46, 0.68, 0.73, 0.98]
+      : [0.176, 0.35, 0.53, 0.785, 0.98];
 
   const scale = useTransform(
     scrollYProgress,
     sectionBreakpoints,
-    [3, 4, 10, 2, 3]
+    [3, 4, 7, 2, 3]
   );
   
 

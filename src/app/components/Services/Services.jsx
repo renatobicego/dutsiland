@@ -98,7 +98,7 @@ const Services = () => {
       <section
         className=" relative z-10 max-md:snap-start max-md:snap-always lg:snap-always lg:snap-start
        max-lg:px-[9vw] lg:mx-[5vw]
-      h-full md:h-1/2 lg:h-full w-full lg:w-3/5  flex 
+      h-full md:h-1/2 lg:h-full w-full lg:w-[55%]  flex 
       flex-col justify-center md:justify-start lg:justify-center lg:float-right text-white gap-6"
       >
         <h4 className="subtitle-size md:max-lg:mt-6">Nuestros Servicios</h4>
@@ -124,9 +124,9 @@ const Services = () => {
             </div>
           ))}
         </div>
-        <div className="absolute md:max-lg:hidden lg:-left-1/2 lg:top-28 
-        w-full h-full top-0 left-0
-        lg:w-[40%] lg:h-3/4 -z-10 lg:rounded-[40px] overflow-hidden">
+        <div className="absolute md:max-lg:hidden  
+        w-full h-full top-0 left-0 lg:-left-2/3 lg:top-28
+        lg:w-3/5 lg:h-3/4 -z-10 lg:rounded-[40px] overflow-hidden">
           <faroExperienceTunnel.Out />
         </div>
       </section>

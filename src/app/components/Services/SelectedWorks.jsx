@@ -47,8 +47,8 @@ const SelectedWorks = () => {
   return (
     <section
       id="trabajos"
-      className="w-full mx-auto snap-always snap-start flex flex-col h-full
-      justify-center gap-6 items-start relative text-white"
+      className="w-full mx-auto snap-always snap-start flex flex-col min-h-full
+      justify-center gap-6 items-start relative text-white py-[15vh] lg:py-[20vh]"
     >
       <div
         className="bg-negro
@@ -60,13 +60,21 @@ const SelectedWorks = () => {
           Una selección de nuestros trabajos más apasionantes
         </p>
       </div>
-      <div
-        className="flex gap-4 w-5/6 mx-auto flex-shrink-0 overflow-y-auto overflow-x-hidden lg:overflow-x-auto 
-      lg:overflow-y-hidden px-2 py-4 max-lg:flex-col max-h-[55%] md:max-h-[65%] lg:max-h-none"
-      >
+      <div className="gap-4 w-5/6 md:gap-6 2xl:gap-8 mx-auto grid grid-cols-1 md:px-2 py-4 lg:grid-cols-2">
         {works.map((work, i) => (
           <WorkCard key={i} data={work} />
         ))}
+        <div
+          className={`w-full h-[22vh] md:h-[20vh] lg:h-[40vh] 2xl:h-[46vh] rounded-3xl hover:scale-[1.03]  transition-all duration-500 
+      relative border-dashed border-2 border-spacing-4 flex items-center justify-center flex-col gap-6`}
+        >
+          <h6 className="text-lg sm:text-xl md:text-2xl lg:text-3xl 2xl:text-4xl 3xl:text-5xl">
+            Tu Próximo Proyecto
+          </h6>
+          <button className="button button-animation-red bg-white text-negro">
+            <a href="/#contacto">Házlo Realidad</a>
+          </button>
+        </div>
       </div>
     </section>
   );

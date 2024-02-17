@@ -5,6 +5,7 @@ import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
 import { useRef } from "react";
 import {
+  useMotionValueEvent,
   useScroll, useSpring,
 } from "framer-motion";
 import Services from "./components/Services/Services";
@@ -25,9 +26,9 @@ export default function Home() {
   //   damping: 25,
   // });
 
-  // useMotionValueEvent(scrollYProgress, "change", (latest) => {
-  //   console.log(latest)
-  // })
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    console.log(latest)
+  })
 
   return (
     <>
@@ -42,7 +43,6 @@ export default function Home() {
         <Services />
         <SelectedWorks />
         <Contact />
-        <Footer />
       </main>
     </>
   );

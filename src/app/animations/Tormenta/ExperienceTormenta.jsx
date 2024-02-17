@@ -14,7 +14,6 @@ const ExperienceTormenta = ({ scrollYProgress }) => {
         key={1}
         className="w-full h-full absolute right-0"
         frameloop={isInView ? 'always' : 'demand'}
-        visible={isInView}
         camera={{
           fov: 45,
           near: 0.1,

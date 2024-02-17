@@ -106,12 +106,13 @@ const Tormenta = ({isInView}) => {
       </EffectComposer> */}
       <ambientLight />
       <Suspense fallback={null}>
-        <mesh rotation={[-1.6, 0, 1.5]}>
+        <mesh visible={isInView} rotation={[-1.6, 0, 1.5]}>
           <planeGeometry args={[30, 30, 512, 512]} />
           <seaMaterial ref={seaMaterial} />
         </mesh>
         <SpotLight
           ref={spotlightRef}
+          visible={isInView}
           position={[1.32, 0.2, -6.5]}
           intensity={100}
           angle={Math.PI / 4}

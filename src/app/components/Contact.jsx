@@ -3,6 +3,7 @@ import { Field, Form, Formik } from "formik";
 import Swal from "sweetalert2";
 import sendMail from "../utils/sendMail";
 import { faroExperienceTunnel } from "../animations/Faro/ExperienceFaro";
+import Footer from "./Footer/Footer";
 
 const contactSchema = object({
   name: string().required().min(3),
@@ -16,10 +17,10 @@ const Contact = () => {
     message: "",
   };
   return (
-    <section id="contacto" className="w-full snap-always snap-start h-full flex flex-col justify-center items-center lg:justify-end lg:items-start
+    <section id="contacto" className="w-full snap-always snap-start flex flex-col justify-center items-center lg:justify-end lg:items-start
      relative text-white z-10 ">
       <div
-        className="flex flex-col justify-center md:justify-start lg:justify-center gap-6 h-full lg:px-[9%] 2xl:px-[7%]
+        className="flex flex-col justify-center md:justify-start lg:justify-center gap-6 h-screen lg:px-[9%] 2xl:px-[7%]
         items-start w-full lg:w-3/5 bg-rojo/60 lg:bg-rojo/90 px-8 md:py-[25%] lg:py-20 rounded-none"
       >
         <h4 className="subtitle-size relative z-10 drop-shadow-lg">
@@ -117,7 +118,7 @@ const Contact = () => {
               <button
                 aria-disabled={isSubmitting}
                 type="submit"
-                className="button button-animation-red font-semibold text-rojo bg-white flex items-center gap-2 drop-shadow-lg"
+                className="button button-animation-red bg-white text-negro font-semibold flex items-center gap-2 drop-shadow-lg"
               >
                 <svg
                   className={`animate-spin -ml-1 mr-3 h-5 w-5 text-negro ${
@@ -147,9 +148,10 @@ const Contact = () => {
           )}
         </Formik>
       </div>
-      <div className="absolute left-0 top-0 w-screen h-screen -z-10">
+      <div className="absolute left-0 top-0 w-screen h-full -z-10">
         <faroExperienceTunnel.Out />
       </div>
+      <Footer />
     </section>
   );
 };
