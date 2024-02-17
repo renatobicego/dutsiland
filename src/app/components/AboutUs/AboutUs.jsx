@@ -12,6 +12,7 @@ const AboutUs = ({ scrollYProgress }) => {
 
   return ( 
     <section
+      id="quienesSomos"
       className="w-full mx-auto snap-always snap-start flex flex-col h-full
       justify-center md:justify-start lg:justify-evenly overflow-hidden
       items-start relative text-white gap-3 xs:gap-4 sm::gap-6"

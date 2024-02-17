@@ -46,6 +46,7 @@ const works = [
 const SelectedWorks = () => {
   return (
     <section
+      id="trabajos"
       className="w-full mx-auto snap-always snap-start flex flex-col h-full
       justify-center gap-6 items-start relative text-white"
     >

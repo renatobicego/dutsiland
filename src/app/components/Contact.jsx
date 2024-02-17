@@ -16,7 +16,7 @@ const Contact = () => {
     message: "",
   };
   return (
-    <section className="w-full snap-always snap-start h-full flex flex-col justify-center items-center lg:justify-end lg:items-start
+    <section id="contacto" className="w-full snap-always snap-start h-full flex flex-col justify-center items-center lg:justify-end lg:items-start
      relative text-white z-10 ">
       <div
         className="flex flex-col justify-center md:justify-start lg:justify-center gap-6 h-full lg:px-[9%] 2xl:px-[7%]

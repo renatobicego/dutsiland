@@ -31,10 +31,7 @@ const Header = ({ scrollYProgress }) => {
         transition-all duration-500`}
     >
       {/* <div className="bg-negro w-full absolute left-0 top-0 h-full -z-10 mix-blend-exclusion"></div> */}
-      <button
-        onClick={scrollToTop}
-        className="h-[90%]"
-      >
+      <button onClick={scrollToTop} className="h-[90%]">
         <Image
           alt="logo"
           width={300}
@@ -50,6 +47,9 @@ const Header = ({ scrollYProgress }) => {
           </li>
           <li className="link">
             <a href="/#servicios">servicios</a>
+          </li>
+          <li className="link">
+            <a href="/#trabajos">trabajos</a>
           </li>
           <li className="link">
             <a href="/#contacto">Contacto</a>
@@ -72,6 +72,9 @@ const Header = ({ scrollYProgress }) => {
             </li>
             <li onClick={onClose}>
               <a href="/#servicios">servicios</a>
+            </li>
+            <li onClick={onClose}>
+              <a href="/#trabajos">trabajos</a>
             </li>
             <li onClick={onClose}>
               <a href="/#contacto">Contacto</a>

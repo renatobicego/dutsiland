@@ -74,6 +74,7 @@ const Services = () => {
   return (
     <>
       <section
+        id="servicios"
         className="w-full mx-auto snap-always snap-start flex flex-col h-full md:h-1/2
         lg:h-full justify-center gap-10 items-center lg:items-start relative text-white md:max-lg:pt-12"
       >
