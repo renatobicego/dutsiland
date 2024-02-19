@@ -20,7 +20,7 @@ const ExperienceFaro = ({ eventSource, scrollYProgress, ref1, ref2, ref3, ref4 }
         eventSource={eventSource}
         flat
         dpr={[1, 2]}
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "100vw", height: "100vh" }}
         className="[&>canvas]:!h-full [&>canvas]:!object-cover !fixed left-0 top-0 overflow-hidden [&>canvas]:!pointer-events-none"
       >
         <View key={1} track={ref1}>
