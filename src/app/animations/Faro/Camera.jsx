@@ -16,13 +16,13 @@ const Camera = ({ sectionBreakpoints, scrollYProgress }) => {
   const yCamPos = useTransform(
     scrollYProgress,
     sectionBreakpoints,
-    [1, 3, 1.8, 0, widthScreen < 1020 ? 0.9 : 0.4]
+    [1, 3, 3.5, 0, widthScreen < 1020 ? 0.9 : 0.4]
     // [0.6, 3, 3, 0, 0.8]
   );
   const zCamPos = useTransform(scrollYProgress, sectionBreakpoints, [
     2,
     0.4,
-    0,
+    1.5,
     3,
     widthScreen < 1300 ?  (widthScreen > 1020 ? 5.7 : 4.3) : 6,
   ]);
@@ -45,26 +45,25 @@ const Camera = ({ sectionBreakpoints, scrollYProgress }) => {
     sectionBreakpoints,
     [0, 0, 0, 0, 0]
   );
-  useFrame((state, delta) => {
-    if (!cameraRef.current) {
-      return;
-    }
-    // if (mousePos && widthScreen > 1020) {
-    //   cameraRef.current.rotation.x = xCamRot.get() - mousePos.y * 0.1;
-    //   cameraRef.current.rotation.y = yCamRot.get() - mousePos.x * 0.1;
-    //   cameraRef.current.rotation.z = zCamRot.get();
-    // } else {
-      cameraRef.current.rotation.x = xCamRot.get();
-      cameraRef.current.rotation.y = yCamRot.get();
-      cameraRef.current.rotation.z = zCamRot.get();
-    // }
-  });
+  // useFrame((state, delta) => {
+  //   if (!cameraRef.current) {
+  //     return;
+  //   }
+  //   // if (mousePos && widthScreen > 1020) {
+  //   //   cameraRef.current.rotation.x = xCamRot.get() - mousePos.y * 0.1;
+  //   //   cameraRef.current.rotation.y = yCamRot.get() - mousePos.x * 0.1;
+  //   //   cameraRef.current.rotation.z = zCamRot.get();
+  //   // } else {
+  //     cameraRef.current.rotation.x = xCamRot.get();
+  //     cameraRef.current.rotation.y = yCamRot.get();
+  //     cameraRef.current.rotation.z = zCamRot.get();
+  //   // }
+  // });
   return (
     <LayoutOrthographicCamera
       ref={cameraRef}
       position={[xCamPos, yCamPos, zCamPos]}
-      rotation={[0, 0, 0]}
-      zoom={50}
+      rotation={[xCamRot, yCamRot, zCamRot]}
     />
   );
 };

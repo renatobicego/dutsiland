@@ -1,16 +1,22 @@
 import OurTeamModal from "./OurTeamModal";
-import { faroExperienceTunnel } from "../../animations/Faro/ExperienceFaro";
 import { motion, useTransform } from "framer-motion";
 import useWindowSize from "../../utils/useWindowSize";
-const AboutUs = ({ scrollYProgress }) => {
+import { View } from "@react-three/drei";
+import Faro from "../../animations/Faro/Faro";
+import Model from "../../animations/Faro/Model";
+import { forwardRef } from "react";
+import { ref } from "yup";
+const AboutUs = forwardRef(({ scrollYProgress }, ref) => {
   const { width: widthScreen } = useWindowSize();
   const pathLength = useTransform(
     scrollYProgress,
-    widthScreen < 1020 && widthScreen > 768 ? [0, 0.07, 0.2, 0.25, 0.27] : [0, 0.05, 0.13, 0.16, 0.196],
-    [0, 0, 0.1, 0.5, 1] 
-  );
+    widthScreen < 1020 && widthScreen > 768
+      ? [0, 0.07, 0.2, 0.25, 0.27]
+      : [0, 0.05, 0.13, 0.16, 0.196],
+    [0, 0, 0.1, 0.5, 1]
+  ); 
 
-  return ( 
+  return (
     <section
       id="quienesSomos"
       className="w-full mx-auto snap-always snap-start flex flex-col h-full
@@ -45,14 +51,12 @@ const AboutUs = ({ scrollYProgress }) => {
         </h6>
         <OurTeamModal />
       </div>
-      <div
-        className="max-lg:mx-auto mt-4 md:mt-10 w-[90%] md:w-[88%] h-[40svh] md:h-1/2 lg:absolute lg:left-[5%] lg:bottom-11 
-      lg:w-[47%] lg:h-1/2 rounded-3xl overflow-hidden"
-      >
-        <faroExperienceTunnel.Out />
+       <div className="max-lg:mx-auto mt-4 md:mt-10 w-[90%] md:w-[88%] h-[40svh] md:h-1/2 relative lg:absolute lg:left-[5%] lg:bottom-11 
+      lg:w-[47%] lg:h-1/2 rounded-3xl" ref={ref}>
+        <div className="w-full h-full rounded-3xl z-50 absolute -left-0.5 top-0 ring-[12px]  ring-rojo"></div>
       </div>
     </section>
   );
-};
+});
 
 export default AboutUs;

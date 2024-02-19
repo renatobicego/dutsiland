@@ -187,3 +187,4 @@ export default function Model(props) {
     </group>
   );
 }
+useGLTF.preload("/lighthouse_on_island.glb")

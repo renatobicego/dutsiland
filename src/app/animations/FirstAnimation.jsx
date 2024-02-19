@@ -16,7 +16,7 @@ const FirstAnimation = () => {
           una barca al cual iluminar
         </h3>
       </div>
-      <ExperienceTormenta />
+      <ExperienceTormenta /> 
       <div
         className="animate-bounce font-normal mb-6
         flex items-center gap-2 text-xs md:text-sm 2xl:text-base"

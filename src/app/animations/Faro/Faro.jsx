@@ -16,7 +16,7 @@ const Faro = ({ scrollYProgress }) => {
   const scale = useTransform(
     scrollYProgress,
     sectionBreakpoints,
-    [3, 4, 7, 2, 3]
+    [2, 4, 7, 2, 3]
   );
   
 

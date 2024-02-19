@@ -2,15 +2,16 @@ import { object, string } from "yup";
 import { Field, Form, Formik } from "formik";
 import Swal from "sweetalert2";
 import sendMail from "../utils/sendMail";
-import { faroExperienceTunnel } from "../animations/Faro/ExperienceFaro";
+// import { faroExperienceTunnel } from "../animations/Faro/ExperienceFaro";
 import Footer from "./Footer/Footer";
+import { forwardRef } from "react";
 
 const contactSchema = object({
   name: string().required().min(3),
   email: string().email().required(),
   message: string().required().min(3),
 });
-const Contact = () => {
+const Contact = forwardRef(({...props}, ref) => {
   const initialValues = {
     name: "",
     email: "",
@@ -148,12 +149,12 @@ const Contact = () => {
           )}
         </Formik>
       </div>
-      <div className="absolute left-0 top-0 w-screen h-full -z-10">
-        <faroExperienceTunnel.Out />
+      <div ref={ref} className="absolute left-0 top-0 w-screen h-full -z-10">
+        
       </div>
       <Footer />
     </section>
   );
-};
+});
 
 export default Contact;
