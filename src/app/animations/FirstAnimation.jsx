@@ -4,7 +4,7 @@ const FirstAnimation = () => {
   return (
     <section
       className="relative flex flex-col justify-end items-center gap-10 md:gap-20 
-      h-full w-full snap-always snap-start text-white"
+      h-full w-full snap-always snap-start text-white z-10"
     >
       <div className="self-start z-10 ml-5 sm:ml-10 md:ml-20 lg:ml-28 mb-10">
         <h3 className="relative first-animation-text w-[80%] md:w-[60%]">

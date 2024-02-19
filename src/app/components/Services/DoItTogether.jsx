@@ -25,7 +25,7 @@ const DoItTogether = forwardRef(({ ...props }, ref) => {
       >
         <div
           className="w-full h-full rounded-[40px] md:rounded-[50px] lg:rounded-[60px] 
-        z-50 absolute -left-0.5 top-0 ring-[25px]  ring-dorado"
+        z-20 absolute -left-0.5 top-0 ring-[25px]  ring-dorado"
         ></div>
       </div>
     </section>
