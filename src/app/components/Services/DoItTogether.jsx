@@ -24,7 +24,7 @@ const DoItTogether = forwardRef(({ ...props }, ref) => {
         className="absolute left-[3.5%] md:top-[20%] lg:top-28 w-[93%] h-3/4  "
       >
         <div
-          className="w-full h-full rounded-[40px] md:rounded-[50px] lg:rounded-[60px] 
+          className=" max-lg:hidden w-full h-full rounded-[40px] md:rounded-[50px] lg:rounded-[60px] 
         z-20 absolute -left-0.5 top-0 ring-[25px]  ring-dorado"
         ></div>
       </div>

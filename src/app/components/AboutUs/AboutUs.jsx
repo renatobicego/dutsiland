@@ -53,7 +53,7 @@ const AboutUs = forwardRef(({ scrollYProgress }, ref) => {
       </div>
        <div className="max-lg:mx-auto mt-4 md:mt-10 w-[90%] md:w-[88%] h-[40svh] md:h-1/2 relative lg:absolute lg:left-[5%] lg:bottom-11 
       lg:w-[47%] lg:h-1/2 rounded-3xl" ref={ref}>
-        <div className="w-full h-full rounded-3xl z-20 absolute -left-0.5 top-0 ring-[12px]  ring-rojo"></div>
+        <div className="max-lg:hidden w-full h-full rounded-3xl z-20 absolute -left-0.5 top-0 ring-[12px]  ring-rojo"></div>
       </div>
     </section>
   );
