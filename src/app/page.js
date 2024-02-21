@@ -2,7 +2,6 @@
 import ExperienceFaro from "./animations/Faro/ExperienceFaro";
 import FirstAnimation from "./animations/FirstAnimation";
 import Header from "./components/Header/Header";
-import { useRef } from "react";
 import { useMotionValueEvent, useScroll, useSpring } from "framer-motion";
 import Services from "./components/Services/Services";
 import SelectedWorks from "./components/Services/SelectedWorks";
@@ -12,12 +11,16 @@ import useRefs from "react-use-refs";
 import DoItTogether from "./components/Services/DoItTogether";
 
 export default function Home() {
-  const ref = useRef();
-  const [ref1, ref2, ref3, ref4] = useRefs();
+  const [ref, ref1, ref2, ref3, ref4] = useRefs();
 
   // Set up scroll animations
-  const { scrollYProgress } = useScroll({
+  const { scrollYProgress: scrollToClamp } = useScroll({
     container: ref,
+  });
+
+  const scrollYProgress = useSpring(scrollToClamp, {
+    stiffness: 500,
+    damping: 100,
   });
 
   // useMotionValueEvent(scrollYProgress, "change", (latest) => {
@@ -28,7 +31,7 @@ export default function Home() {
       <Header scrollYProgress={scrollYProgress} />
       <main
         ref={ref}
-        className="w-full relative h-[100svh] overflow-x-hidden overflow-y-scroll snap-y  scroll-smooth"
+        className="w-full relative h-[100svh] overflow-x-hidden overflow-y-scroll snap-y  scroll-smooth touch-auto"
       >
         <FirstAnimation />
         <ExperienceFaro

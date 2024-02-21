@@ -13,27 +13,6 @@ import { EffectComposer } from "@react-three/postprocessing";
 import Rain from "./Effects/Rain";
 
 // Shader material uniforms
-// const SeaMaterial = shaderMaterial(
-//   {
-//     uTime: 0,
-//     uColorStart: new THREE.Color("#ffffff"),
-//     uColorEnd: new THREE.Color("#000000"),
-//     uBigWavesElevation: 0.15,
-//     uBigWavesFrequency: new THREE.Vector2(6, 3),
-//     uBigWavesSpeed: 0.6,
-//     uSmallWavesElevation: 0.1,
-//     uSmallWavesFrequency: 7,
-//     uSmallWavesSpeed: 0.2,
-//     uSmallWavesIteration: 8,
-//     uDepthColor: new THREE.Color("#000000"),
-//     uSurfaceColor: new THREE.Color("#2e2e2e"),
-//     uColorOffset: 0.57,
-//     uColorMultiplier: 1,
-//   },
-//   seaVertexShader,
-//   seaFragmentShader
-// );
-
 const SeaMaterial = shaderMaterial(
   {
     uTime: 0,
@@ -46,14 +25,35 @@ const SeaMaterial = shaderMaterial(
     uSmallWavesFrequency: 7,
     uSmallWavesSpeed: 0.2,
     uSmallWavesIteration: 8,
-    uDepthColor: new THREE.Color("#2e2e2e"),
-    uSurfaceColor: new THREE.Color("#797979"),
+    uDepthColor: new THREE.Color("#000000"),
+    uSurfaceColor: new THREE.Color("#2e2e2e"),
     uColorOffset: 0.57,
     uColorMultiplier: 1,
   },
   seaVertexShader,
   seaFragmentShader
 );
+
+// const SeaMaterial = shaderMaterial(
+//   {
+//     uTime: 0,
+//     uColorStart: new THREE.Color("#ffffff"),
+//     uColorEnd: new THREE.Color("#000000"),
+//     uBigWavesElevation: 0.15,
+//     uBigWavesFrequency: new THREE.Vector2(6, 3),
+//     uBigWavesSpeed: 0.6,
+//     uSmallWavesElevation: 0.1,
+//     uSmallWavesFrequency: 7,
+//     uSmallWavesSpeed: 0.2,
+//     uSmallWavesIteration: 8,
+//     uDepthColor: new THREE.Color("#2e2e2e"),
+//     uSurfaceColor: new THREE.Color("#797979"),
+//     uColorOffset: 0.57,
+//     uColorMultiplier: 1,
+//   },
+//   seaVertexShader,
+//   seaFragmentShader
+// );
 
 
 extend({ SeaMaterial });
@@ -96,14 +96,14 @@ const Tormenta = ({isInView}) => {
         yawFrequency={0}
       />
       <color args={["#202020"]} attach="background" />
-      {/* <EffectComposer enabled={isInView} disableNormalPass multisampling={0}>
+      <EffectComposer enabled={isInView} disableNormalPass multisampling={0}>
         <Rain
           ref={rainRef}
           u_resolution={new THREE.Vector2(2048, 1048)}
           blendFunction={BlendFunction.LIGHTEN}
           rainTexture={rainTexture}
         />
-      </EffectComposer> */}
+      </EffectComposer>
       <ambientLight />
       <Suspense fallback={null}>
         <mesh visible={isInView} rotation={[-1.6, 0, 1.5]}>

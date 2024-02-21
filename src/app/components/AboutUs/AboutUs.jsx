@@ -6,6 +6,7 @@ import Faro from "../../animations/Faro/Faro";
 import Model from "../../animations/Faro/Model";
 import { forwardRef } from "react";
 import { ref } from "yup";
+import { BrowserView, isBrowser, isMobile, isTablet } from "react-device-detect";
 const AboutUs = forwardRef(({ scrollYProgress }, ref) => {
   const { width: widthScreen } = useWindowSize();
   const pathLength = useTransform(
@@ -14,14 +15,14 @@ const AboutUs = forwardRef(({ scrollYProgress }, ref) => {
       ? [0, 0.07, 0.2, 0.25, 0.27]
       : [0, 0.05, 0.13, 0.16, 0.196],
     [0, 0, 0.1, 0.5, 1]
-  ); 
+  );
 
   return (
     <section
       id="quienesSomos"
-      className="w-full mx-auto snap-always snap-start flex flex-col h-full
-      justify-center md:justify-start lg:justify-evenly overflow-hidden
-      items-start relative text-white gap-3 xs:gap-4 sm::gap-6"
+      className={`w-full mx-auto snap-always snap-start flex flex-col h-full
+      justify-center lg:justify-evenly overflow-hidden max-lg:pb-[40%] ${isMobile && 'bg-rojo/50'}
+      items-start relative text-white gap-2 xs:gap-3 sm::gap-6`}
     >
       <div
         className="bg-rojo 
@@ -40,7 +41,7 @@ const AboutUs = forwardRef(({ scrollYProgress }, ref) => {
         />
       </motion.svg>
 
-      <h3 className="title-size mx-5 xs:mx-6 sm:mx-8 md:ml-12 md:max-lg:mt-[20%] max-md:landscape:mt-0">
+      <h3 className="title-size mx-5 xs:mx-6 sm:mx-8 md:ml-12 max-md:landscape:mt-0">
         Bienvenido a Dutsiland
       </h3>
       <div className="lg:w-1/3 lg:self-end mx-5 xs:mx-6 sm:mx-8 md:mx-12 lg:mx-0 lg:mr-32 2xl:mr-40">
@@ -51,10 +52,15 @@ const AboutUs = forwardRef(({ scrollYProgress }, ref) => {
         </h6>
         <OurTeamModal />
       </div>
-       <div className="max-lg:mx-auto mt-4 md:mt-10 w-[90%] md:w-[88%] h-[40svh] md:h-1/2 relative lg:absolute lg:left-[5%] lg:bottom-11 
-      lg:w-[47%] lg:h-1/2 rounded-3xl" ref={ref}>
-        <div className="max-lg:hidden w-full h-full rounded-3xl z-20 absolute -left-0.5 top-0 ring-[12px]  ring-rojo"></div>
-      </div>
+      {(isBrowser && !isTablet) && (
+        <div
+          className="max-lg:mx-auto mt-4 md:mt-10 w-[90%] md:w-[88%] h-[45svh] md:h-1/2 relative lg:absolute lg:left-[5%] lg:bottom-11 
+      lg:w-[47%] lg:h-1/2 rounded-3xl"
+          ref={ref}
+        >
+          <div className="max-lg:hidden w-full h-full rounded-3xl z-20 absolute -left-0.5 top-0 ring-[12px]  ring-rojo"></div>
+        </div>
+      )}
     </section>
   );
 });

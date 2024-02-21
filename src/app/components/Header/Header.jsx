@@ -31,7 +31,7 @@ const Header = ({ scrollYProgress }) => {
         transition-all duration-500`}
     >
       {/* <div className="bg-negro w-full absolute left-0 top-0 h-full -z-10 mix-blend-exclusion"></div> */}
-      <button onClick={scrollToTop} className="w-1/4 h-[90%] md:w-1/6 ">
+      <button onClick={scrollToTop} className="w-1/5 h-[90%] md:w-1/6 ">
         <Image
           alt="logo"
           width={300}

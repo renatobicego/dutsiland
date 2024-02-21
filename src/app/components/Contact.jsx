@@ -5,21 +5,25 @@ import sendMail from "../utils/sendMail";
 // import { faroExperienceTunnel } from "../animations/Faro/ExperienceFaro";
 import Footer from "./Footer/Footer";
 import { forwardRef } from "react";
+import { isBrowser, isTablet } from "react-device-detect";
 
 const contactSchema = object({
   name: string().required().min(3),
   email: string().email().required(),
   message: string().required().min(3),
 });
-const Contact = forwardRef(({...props}, ref) => {
+const Contact = forwardRef(({ ...props }, ref) => {
   const initialValues = {
     name: "",
     email: "",
     message: "",
   };
   return (
-    <section id="contacto" className="w-full snap-always snap-start flex flex-col justify-center items-center lg:justify-end lg:items-start
-     relative text-white z-10 ">
+    <section
+      id="contacto"
+      className="w-full snap-always snap-start flex flex-col justify-center items-center lg:justify-end lg:items-start
+     relative text-white z-10 "
+    >
       <div
         className="flex flex-col justify-center md:justify-start lg:justify-center gap-6 h-screen lg:px-[9%] 2xl:px-[7%]
         items-start w-full lg:w-3/5 bg-rojo/60 lg:bg-rojo/90 px-8 md:py-[25%] lg:py-20 rounded-none"
@@ -67,10 +71,7 @@ const Contact = forwardRef(({...props}, ref) => {
                         relative z-10"
             >
               <div className="w-full">
-                <label
-                  className=" text-sm drop-shadow-lg"
-                  htmlFor="name"
-                >
+                <label className=" text-sm drop-shadow-lg" htmlFor="name">
                   Nombre y Apellido
                 </label>
                 <Field
@@ -83,10 +84,7 @@ const Contact = forwardRef(({...props}, ref) => {
                 />
               </div>
               <div className="w-full">
-                <label
-                  className=" text-sm drop-shadow-lg"
-                  htmlFor="email"
-                >
+                <label className=" text-sm drop-shadow-lg" htmlFor="email">
                   Correo Electrónico
                 </label>
                 <Field
@@ -99,10 +97,7 @@ const Contact = forwardRef(({...props}, ref) => {
                 />
               </div>
               <div className="w-full">
-                <label
-                  className=" text-sm drop-shadow-lg"
-                  htmlFor="message"
-                >
+                <label className=" text-sm drop-shadow-lg" htmlFor="message">
                   Mensaje
                 </label>
                 <Field
@@ -149,9 +144,11 @@ const Contact = forwardRef(({...props}, ref) => {
           )}
         </Formik>
       </div>
-      <div ref={ref} className="absolute left-0 top-0 w-screen h-full -z-10">
-        
-      </div>
+      {(isBrowser && !isTablet) && (
+        <div ref={ref} className="absolute left-0 top-0 w-screen h-full -z-10">
+          {" "}
+        </div>
+      )}
       <Footer />
     </section>
   );

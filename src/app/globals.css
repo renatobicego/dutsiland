@@ -12,6 +12,10 @@ body {
   user-select: none;
 }
 
+main {
+  overscroll-behavior-y: none;
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 5px;
@@ -85,4 +89,13 @@ body {
     display: none;
     opacity: 0;
   }
+}
+
+
+.view {
+  margin: 0.2em;
+  width: 400px;
+  height: 200px;
+  display: inline-block;
+  overflow: hidden;
 }

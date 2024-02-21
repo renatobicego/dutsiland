@@ -1,3 +1,4 @@
+import { isMobile } from "react-device-detect";
 import WorkCard from "./WorkCard";
 
 const works = [
@@ -47,8 +48,8 @@ const SelectedWorks = () => {
   return (
     <section
       id="trabajos"
-      className="w-full mx-auto snap-always snap-start flex flex-col min-h-full
-      justify-center gap-6 items-start relative text-white py-[15vh] lg:py-[20vh]"
+      className={`w-full mx-auto snap-always snap-start flex flex-col min-h-full
+      justify-center gap-6 items-start relative text-white py-[15vh] lg:py-[20vh] ${isMobile && 'bg-negro/50'}`}
     >
       <div
         className="bg-negro

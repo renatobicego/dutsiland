@@ -1,11 +1,12 @@
 import { forwardRef } from "react";
+import { BrowserView, isBrowser, isMobile, isTablet } from "react-device-detect";
 
 const DoItTogether = forwardRef(({ ...props }, ref) => {
   return (
     <section
       id="servicios"
-      className="w-full mx-auto snap-always snap-start flex flex-col h-full md:h-1/2
-        lg:h-full justify-center gap-10 items-center lg:items-start relative text-white md:max-lg:pt-12"
+      className={`w-full mx-auto snap-always snap-start flex flex-col h-full md:h-1/2 ${isMobile && 'bg-dorado/70'}
+        lg:h-full justify-center gap-10 items-center lg:items-start relative text-white md:max-lg:pt-12`}
     >
       <div
         className="bg-dorado
@@ -19,15 +20,17 @@ const DoItTogether = forwardRef(({ ...props }, ref) => {
         idea inicial en una solución digital de vanguardia, donde el único
         límite es nuestra imaginación conjunta.
       </h6>
-      <div
-        ref={ref}
-        className="absolute left-[3.5%] md:top-[20%] lg:top-28 w-[93%] h-3/4  "
-      >
+      {(isBrowser && !isTablet) && (
         <div
-          className=" max-lg:hidden w-full h-full rounded-[40px] md:rounded-[50px] lg:rounded-[60px] 
+          ref={ref}
+          className="absolute left-[3.5%] md:top-[20%] lg:top-28 w-[93%] h-3/4  "
+        >
+          <div
+            className=" max-lg:hidden w-full h-full rounded-[40px] md:rounded-[50px] lg:rounded-[60px] 
         z-20 absolute -left-0.5 top-0 ring-[25px]  ring-dorado"
-        ></div>
-      </div>
+          ></div>
+        </div>
+      )}
     </section>
   );
 });

@@ -1,4 +1,5 @@
 import { forwardRef } from "react";
+import { isBrowser, isMobile, isTablet } from "react-device-detect";
 
 // import { faroExperienceTunnel } from "../../animations/Faro/ExperienceFaro";
 const servicesList = [
@@ -75,10 +76,10 @@ const works = [
 const Services = forwardRef(({ ...props }, ref) => {
   return (
     <section
-      className=" relative z-10 max-md:snap-start max-md:snap-always lg:snap-always lg:snap-start
-       max-lg:px-[9vw] lg:mx-[5vw]
+      className={`relative z-10 max-md:snap-start max-md:snap-always lg:snap-always lg:snap-start
+       max-lg:px-[9vw] lg:mx-[5vw] ${isMobile && 'bg-dorado/70'}
       h-full md:h-1/2 lg:h-full w-full lg:w-[55%]  flex 
-      flex-col justify-center md:justify-start lg:justify-center lg:float-right text-white gap-6"
+      flex-col justify-center md:justify-start lg:justify-center lg:float-right text-white gap-6`}
     >
       <h4 className="subtitle-size md:max-lg:mt-6">Nuestros Servicios</h4>
       <p className="max-sm:text-sm xl:text-lg 3xl:text-xl">
@@ -103,17 +104,19 @@ const Services = forwardRef(({ ...props }, ref) => {
           </div>
         ))}
       </div>
-      <div
-        ref={ref}
-        className="absolute md:max-lg:hidden  
+      {(isBrowser && !isTablet) && (
+        <div
+          ref={ref}
+          className="absolute md:max-lg:hidden  
         w-full h-full top-0 left-0 lg:-left-2/3 lg:top-28
         lg:w-3/5 lg:h-3/4 -z-10 lg:rounded-[40px]"
-      >
-        <div
-          className="max-lg:hidden w-full h-full rounded-[40px] md:rounded-[50px] lg:rounded-[60px] 
+        >
+          <div
+            className="max-lg:hidden w-full h-full rounded-[40px] md:rounded-[50px] lg:rounded-[60px] 
         z-50 absolute -left-0.5 top-0 ring-[25px]  ring-dorado"
-        ></div>
-      </div>
+          ></div>
+        </div>
+      )}
     </section>
   );
 });
