@@ -13,7 +13,7 @@ const FirstAnimation = () => {
         </h3>
         <h3 className="relative first-animation-text w-[80%] md:w-[60%]">
           En la tierra, los <span className="font-medium">faros</span> buscan
-          una barca al cual iluminar
+          una barca a la cual iluminar
         </h3>
       </div>
       <ExperienceTormenta /> 

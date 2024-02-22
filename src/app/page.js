@@ -31,7 +31,7 @@ export default function Home() {
       <Header scrollYProgress={scrollYProgress} />
       <main
         ref={ref}
-        className="w-full relative h-[100svh] overflow-x-hidden overflow-y-scroll snap-y  scroll-smooth touch-auto"
+        className="w-full relative h-[100svh] overflow-x-hidden overflow-y-scroll snap-y scroll-smooth touch-auto"
       >
         <FirstAnimation />
         <ExperienceFaro
