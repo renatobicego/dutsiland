@@ -29,7 +29,7 @@ const Camera = ({ sectionBreakpoints, scrollYProgress }) => {
       3,
       widthScreen < 1020 ? 0.5 : 3.5,
       0,
-      widthScreen < 1020 ? 0.9 : 0.4,
+      widthScreen < 1020 ? 0.9 : 0.6,
     ]
     // [0.6, 3, 3, 0, 0.8]
   );
