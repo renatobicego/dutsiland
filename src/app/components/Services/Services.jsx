@@ -1,5 +1,6 @@
 import { forwardRef } from "react";
 import { isBrowser, isMobile, isTablet } from "react-device-detect";
+import useClient from "../../utils/useClient";
 
 // import { faroExperienceTunnel } from "../../animations/Faro/ExperienceFaro";
 const servicesList = [
@@ -74,51 +75,55 @@ const works = [
   },
 ];
 const Services = forwardRef(({ ...props }, ref) => {
-  return (
-    <section
-      className={`relative z-10 max-md:snap-start max-md:snap-always lg:snap-always lg:snap-start
-       max-lg:px-[9vw] lg:mx-[5vw] ${isMobile && 'bg-dorado/70'}
+  const isClient = useClient();
+  if (isClient) {
+    return (
+      <section
+        className={`relative z-10 max-md:snap-start max-md:snap-always lg:snap-always lg:snap-start
+       max-lg:px-[9vw] lg:mx-[5vw] ${isMobile && "bg-dorado/70"}
       h-full md:h-1/2 lg:h-full w-full lg:w-[55%]  flex 
       flex-col justify-center md:justify-start lg:justify-center lg:float-right text-white gap-6`}
-    >
-      <h4 className="subtitle-size md:max-lg:mt-6">Nuestros Servicios</h4>
-      <p className="max-sm:text-sm xl:text-lg 3xl:text-xl">
-        La estrategia digital es un elemento clave de su transformación. Es este
-        apoyo que te ofrecemos durante todo el proyecto para desarrollar su idea
-        inicial en una ambiciosa solución digital.
-      </p>
-      <div className="flex w-full flex-wrap gap-4 md:gap-10">
-        {servicesList.map((service, i) => (
+      >
+        <h4 className="subtitle-size md:max-lg:mt-6 max-lg:drop-shadow-lg">Nuestros Servicios</h4>
+        <p className="max-sm:text-sm xl:text-lg 3xl:text-xl max-lg:drop-shadow-lg">
+          La estrategia digital es un elemento clave de tu transformación. Es
+          este el apoyo que te ofrecemos durante todo el proyecto para desarrollar
+          tu idea inicial en una ambiciosa solución digital.
+        </p>
+        <div className="flex w-full flex-wrap gap-4 md:gap-10">
+          {servicesList.map((service, i) => (
+            <div
+              key={i}
+              className="w-full md:w-[45%] p-6 md:p-8 lg:p-10 bg-white/80 md:bg-white text-negro
+               rounded-3xl button-animation max-lg:drop-shadow-lg"
+            >
+              <h6 className="font-semibold text-sm md:text-lg xl:text-xl 2xl:text-2xl 3xl:text-3xl mb-2">
+                {service.title}
+              </h6>
+              <ul className="text-xs md:text-sm xl:text-base">
+                {service.list.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        {isBrowser && !isTablet && (
           <div
-            key={i}
-            className="w-full md:w-[45%] p-6 md:p-8 lg:p-10 bg-white/80 md:bg-white text-negro rounded-3xl button-animation"
-          >
-            <h6 className="font-semibold text-sm md:text-lg xl:text-xl 2xl:text-2xl 3xl:text-3xl mb-2">
-              {service.title}
-            </h6>
-            <ul className="text-xs md:text-sm xl:text-base">
-              {service.list.map((item, i) => (
-                <li key={i}>{item}</li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-      {(isBrowser && !isTablet) && (
-        <div
-          ref={ref}
-          className="absolute md:max-lg:hidden  
+            ref={ref}
+            className="absolute md:max-lg:hidden  
         w-full h-full top-0 left-0 lg:-left-2/3 lg:top-28
         lg:w-3/5 lg:h-3/4 -z-10 lg:rounded-[40px]"
-        >
-          <div
-            className="max-lg:hidden w-full h-full rounded-[40px] md:rounded-[50px] lg:rounded-[60px] 
+          >
+            <div
+              className="max-lg:hidden w-full h-full rounded-[40px] md:rounded-[50px] lg:rounded-[60px] 
         z-50 absolute -left-0.5 top-0 ring-[25px]  ring-dorado"
-          ></div>
-        </div>
-      )}
-    </section>
-  );
+            ></div>
+          </div>
+        )}
+      </section>
+    );
+  }
 });
 
 export default Services;

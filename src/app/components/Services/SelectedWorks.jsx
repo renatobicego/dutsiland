@@ -56,8 +56,8 @@ const SelectedWorks = () => {
               w-full h-full absolute top-0 -z-10"
       ></div>
       <div className="mx-[8%] flex flex-col gap-4 ">
-        <h4 className="subtitle-size font-semibold ">Proyectos Destacados</h4>
-        <p className="max-sm:text-sm md:text-xl 3xl:text-3xl">
+        <h4 className="subtitle-size font-semibold max-lg:drop-shadow-lg">Proyectos Destacados</h4>
+        <p className="max-sm:text-sm md:text-xl 3xl:text-3xl max-lg:drop-shadow-lg">
           Una selección de nuestros trabajos más apasionantes
         </p>
       </div>

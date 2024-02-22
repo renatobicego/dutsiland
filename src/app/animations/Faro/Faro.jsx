@@ -10,13 +10,13 @@ const Faro = ({ scrollYProgress }) => {
   const { width: widthScreen } = useWindowSize();
   const sectionBreakpoints =
     widthScreen < 1020 && widthScreen > 767
-      ? [0.23, 0.46, 0.68, 0.73, 0.98]
-      : [0.176, 0.35, 0.53, 0.785, 0.98];
+      ? [0, 0.23, 0.46, 0.68, 0.85, 0.98]
+      : [0, 0.176, 0.35, 0.53, 0.785, 0.98];
 
   const scale = useTransform(
     scrollYProgress,
     sectionBreakpoints,
-    [2, 4, 7, 2, 3]
+    [3, widthScreen < 1020 ? 5 : 3, 4, widthScreen < 1020 ? 12 : 9, 3, 3]
   );
   
 
