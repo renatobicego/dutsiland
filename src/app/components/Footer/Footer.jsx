@@ -16,7 +16,7 @@ const Footer = () => {
           className="w-6 xs:w-7 md:w-8"
         >
           <Image
-            src={"/icons/Linkedin.png"}
+            src={"/icons/LinkedIn.png"}
             width={100}
             height={100}
             alt="Perfil de linkedin"
