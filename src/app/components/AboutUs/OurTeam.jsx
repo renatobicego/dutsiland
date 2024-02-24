@@ -4,20 +4,24 @@ const team = [
     name: "Maximiliano Cattaneo Cvetic",
     image: "/aboutus/maxi.jpeg",
     area: ["Backend", "Infraestructura"],
+    linkedin: "https://www.linkedin.com/in/mcvetic/",
   },
   {
     name: "Renato Bicego",
     image: "/aboutus/pp2.jpg",
-    area: ["Frontend", `UX`, "WebGL"],
+    area: ["Backend", "Infraestructura"],
+    linkedin: "https://www.linkedin.com/in/renatobicego/",
   },
 ];
 
 const OurTeam = () => {
   return (
-    <div className={` w-[90%] md:w-full mx-auto pb-6 md:px-8 grid grid-cols-1 md:grid-cols-2 gap-6`}>
+    <div
+      className={` w-[90%] md:w-full mx-auto pb-6 md:px-8 grid grid-cols-1 md:grid-cols-2 gap-6`}
+    >
       {team.map((member, i) => (
         <div
-          className="w-full h-64 2xl:h-72 flex flex-col justify-end items-start rounded-lg overflow-hidden relative 
+          className="w-full h-64 2xl:h-72 3xl:h-[370px] flex flex-col justify-end items-start rounded-lg overflow-hidden relative 
                   lg:hover:scale-[1.02] transition-all duration-200"
           key={i}
         >
@@ -43,10 +47,13 @@ const OurTeam = () => {
               ))}
             </ul>
             <hr className="w-full opacity-30" />
-            <p className="md:text-lg 2xl:text-xl 3xl:text-2xl font-semibold">
+            <p className="md:text-lg 2xl:text-xl 3xl:text-2xl font-semibold md:max-w-[90%]">
               {member.name}
             </p>
           </div>
+          <a href={member.linkedin} target="_blank" className="absolute bottom-5 right-5 w-5 md:w-6 z-10">
+            <Image alt="linkedin perfil" width={100} height={100} src={"/icons/Linkedin.png"} />
+          </a>
         </div>
       ))}
     </div>

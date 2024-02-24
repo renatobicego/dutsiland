@@ -37,7 +37,7 @@ const Faro = ({ scrollYProgress }) => {
         <Model scaleModel={scale} position={[0.6, 0, 0.5]} />
         <pointLight intensity={2} position={[-1, 1, 0]} color={"#FFF9C5"} />
       </Suspense>
-    </>
+    </>   
   );
 };
 

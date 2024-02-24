@@ -12,7 +12,7 @@ const OurTeamModal = () => {
       </button>
       <Modal
         classNames={{
-          base: "max-w-[90%] md:max-w-[70%] 2xl:max-w-[60%]",
+          base: "max-w-[90%] lg:max-w-[70%] 2xl:max-w-[60%]",
           closeButton:
             "text-white hover:bg-white/5 active:bg-white/10 z-[1300]",
           header: "text-xl md:text-2xl 2xl:text-3xl text-white"

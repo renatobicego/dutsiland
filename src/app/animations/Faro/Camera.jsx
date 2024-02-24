@@ -61,25 +61,26 @@ const Camera = ({ sectionBreakpoints, scrollYProgress }) => {
     sectionBreakpoints,
     [0, 0, 0, 0, 0, 0]
   );
-  // useFrame((state, delta) => {
-  //   if (!cameraRef.current) {
-  //     return;
-  //   }
-  //   // if (mousePos && widthScreen > 1020) {
-  //   //   cameraRef.current.rotation.x = xCamRot.get() - mousePos.y * 0.1;
-  //   //   cameraRef.current.rotation.y = yCamRot.get() - mousePos.x * 0.1;
-  //   //   cameraRef.current.rotation.z = zCamRot.get();
-  //   // } else {
-  //     cameraRef.current.rotation.x = xCamRot.get();
-  //     cameraRef.current.rotation.y = yCamRot.get();
-  //     cameraRef.current.rotation.z = zCamRot.get();
-  //   // }
-  // });
+  useFrame((state, delta) => {
+    if (!cameraRef.current) {
+      return;
+    }
+    // if (mousePos && widthScreen > 1020) {
+    //   cameraRef.current.rotation.x = xCamRot.get() - mousePos.y * 0.1;
+    //   cameraRef.current.rotation.y = yCamRot.get() - mousePos.x * 0.1;
+    //   cameraRef.current.rotation.z = zCamRot.get();
+    // } else {
+      cameraRef.current.rotation.x = xCamRot.get();
+      cameraRef.current.rotation.y = yCamRot.get();
+      cameraRef.current.rotation.z = zCamRot.get();
+      cameraRef.current.position.x = xCamPos.get();
+      cameraRef.current.position.y = yCamPos.get();
+      cameraRef.current.position.z = zCamPos.get(); 
+    // }
+  });
   return (
     <LayoutOrthographicCamera
       ref={cameraRef}
-      position={[xCamPos, yCamPos, zCamPos]}
-      rotation={[xCamRot, yCamRot, zCamRot]}
     />
   );
 };

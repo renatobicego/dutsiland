@@ -1,5 +1,6 @@
 import { isMobile } from "react-device-detect";
 import WorkCard from "./WorkCard";
+import useClient from "../../utils/useClient";
 
 const works = [
   {
@@ -45,40 +46,44 @@ const works = [
   },
 ];
 const SelectedWorks = () => {
-  return (
-    <section
-      id="trabajos"
-      className={`w-full mx-auto snap-always snap-start flex flex-col min-h-full
-      justify-center gap-6 items-start relative text-white py-[15vh] lg:py-[20vh] ${isMobile && 'bg-negro/50'}`}
-    >
-      <div
-        className="bg-negro
-              w-full h-full absolute top-0 -z-10"
-      ></div>
-      <div className="mx-[8%] flex flex-col gap-4 ">
-        <h4 className="subtitle-size font-semibold max-lg:drop-shadow-lg">Proyectos Destacados</h4>
-        <p className="max-sm:text-sm md:text-xl 3xl:text-3xl max-lg:drop-shadow-lg">
-          Una selección de nuestros trabajos más apasionantes
-        </p>
-      </div>
-      <div className="gap-4 w-5/6 md:gap-6 2xl:gap-8 mx-auto grid grid-cols-1 md:px-2 py-4 lg:grid-cols-2">
-        {works.map((work, i) => (
-          <WorkCard key={i} data={work} />
-        ))}
+  const isClient = useClient();
+  if(isClient){
+
+    return (
+      <section
+        id="trabajos"
+        className={`w-full mx-auto snap-always snap-start flex flex-col min-h-full
+        justify-center gap-6 items-start relative text-white py-[15vh] lg:py-[20vh] ${isMobile && 'bg-negro/50'}`}
+      >
         <div
-          className={`w-full h-[22vh] md:h-[20vh] lg:h-[40vh] 2xl:h-[46vh] rounded-3xl hover:scale-[1.03]  transition-all duration-500 
-      relative border-dashed border-2 border-spacing-4 flex items-center justify-center flex-col gap-6`}
-        >
-          <h6 className="text-lg sm:text-xl md:text-2xl lg:text-3xl 2xl:text-4xl 3xl:text-5xl">
-            Tu Próximo Proyecto
-          </h6>
-          <button className="button button-animation-red bg-white text-negro">
-            <a href="/#contacto">Házlo Realidad</a>
-          </button>
+          className="bg-negro
+                w-full h-full absolute top-0 -z-10"
+        ></div>
+        <div className="mx-[8%] flex flex-col gap-4 ">
+          <h4 className="subtitle-size font-semibold max-lg:drop-shadow-lg">Proyectos Destacados</h4>
+          <p className="max-sm:text-sm md:text-xl 3xl:text-3xl max-lg:drop-shadow-lg">
+            Una selección de nuestros trabajos más apasionantes
+          </p>
         </div>
-      </div>
-    </section>
-  );
+        <div className="gap-4 w-5/6 md:gap-6 2xl:gap-8 mx-auto grid grid-cols-1 md:px-2 py-4 lg:grid-cols-2">
+          {works.map((work, i) => (
+            <WorkCard key={i} data={work} />
+          ))}
+          <div
+            className={`w-full h-[22vh] md:h-[20vh] lg:h-[40vh] 2xl:h-[46vh] rounded-3xl hover:scale-[1.03]  transition-all duration-500 
+        relative border-dashed border-2 border-spacing-4 flex items-center justify-center flex-col gap-6`}
+          >
+            <h6 className="text-lg sm:text-xl md:text-2xl lg:text-3xl 2xl:text-4xl 3xl:text-5xl">
+              Tu Próximo Proyecto
+            </h6>
+            <button className="button button-animation-red bg-white text-negro">
+              <a href="/#contacto">Házlo Realidad</a>
+            </button>
+          </div>
+        </div>
+      </section>
+    );
+  }
 };
 
 export default SelectedWorks;

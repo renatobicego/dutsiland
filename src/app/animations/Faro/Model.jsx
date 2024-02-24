@@ -12,6 +12,7 @@ export default function Model(props) {
       modelRef.current.scale.z = props.scaleModel.get();
     }
   });
+  console.log(props.scaleModel.get())
   return (
     <group {...props} dispose={null} ref={modelRef}>
       <group rotation={[-Math.PI / 2, 0, 0]}>

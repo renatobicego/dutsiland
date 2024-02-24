@@ -60,7 +60,7 @@ const Header = ({ scrollYProgress }) => {
         <Image
           width={64}
           height={64}
-          src="/hamburger.png"
+          src="/icons/hamburger.png"
           alt="Menu desplegable"
         />
       </button>
