@@ -18,7 +18,7 @@ const ExperienceFaro = ({
   ref4,
 }) => {
   useMemo(() => extend(THREE), []);
-  
+
   return (
     <MotionConfig transition={{ type: "spring", mass: 5 }}>
       <MotionCanvas
@@ -30,7 +30,7 @@ const ExperienceFaro = ({
         className=" !fixed !left-0 !top-0 !right-0 !bottom-0
          overflow-hidden [&>canvas]:!pointer-events-none"
       >
-        {(isMobile || isTablet) ? (
+        {isMobile || isTablet ? (
           <Faro scrollYProgress={scrollYProgress} />
         ) : (
           <>
@@ -42,7 +42,7 @@ const ExperienceFaro = ({
             </View>
             <View key={3} track={ref3}>
               <Faro scrollYProgress={scrollYProgress} />
-            </View> 
+            </View>
             <View key={4} track={ref4}>
               <Faro scrollYProgress={scrollYProgress} />
             </View>

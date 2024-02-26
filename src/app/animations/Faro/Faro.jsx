@@ -16,12 +16,12 @@ const Faro = ({ scrollYProgress }) => {
       : [0, 0.176, 0.35, 0.53, 0.785, 0.98];
 
   const scale = useTransform(scrollYProgress, sectionBreakpoints, [
-    widthScreen < 1020 ? 8 : 3,
-    widthScreen < 1020 ? 8 : 3,
+    widthScreen < 1020 ? 5 : 3,
+    widthScreen < 1020 ? 5 : 3,
     widthScreen < 1020 ? 6.5 : 4,
     widthScreen < 1020 ? 12 : 9,
     widthScreen < 1020 ? 8 : 3,
-    widthScreen < 1020 ? (widthScreen < 500 ? 12 : 8) : 3,
+    widthScreen < 1020 ? 5 : 3,
   ]);
 
   return (
