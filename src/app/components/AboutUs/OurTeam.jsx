@@ -52,7 +52,7 @@ const OurTeam = () => {
             </p>
           </div>
           <a href={member.linkedin} target="_blank" className="absolute bottom-5 right-5 w-5 md:w-6 z-10">
-            <Image alt="linkedin perfil" width={100} height={100} src={"/icons/Linkedin.png"} />
+            <Image alt="linkedin perfil" width={100} height={100} src={"/icons/LinkedIn.png"} />
           </a>
         </div>
       ))}
