@@ -1,21 +1,13 @@
 import React, { forwardRef, useRef} from "react";
 import { Float, useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-
+import {motion} from 'framer-motion-3d'
 export default function Model(props) {
   const { nodes, materials } = useGLTF("/lighthouse_on_island.glb");
-  const modelRef = useRef(null)
-  useFrame(() => {
-    if (modelRef.current) {
-      modelRef.current.scale.x = props.scaleModel.get();
-      modelRef.current.scale.y = props.scaleModel.get();
-      modelRef.current.scale.z = props.scaleModel.get();
-    }
-  });
-  console.log(props.scaleModel.get())
+
   return (
-    <group {...props} dispose={null} ref={modelRef}>
-      <group rotation={[-Math.PI / 2, 0, 0]}>
+    <motion.group {...props} dispose={null} scale={props.scaleModel}> 
+      <group rotation={[-Math.PI / 2, 0, 0]}> 
         <group rotation={[Math.PI / 2, 0, 0]}>
           <group position={[0, -0.138, 0]} rotation={[-Math.PI / 2, 0, 0]}>
             <mesh
@@ -185,7 +177,7 @@ export default function Model(props) {
           </group>
         </group>
       </group>
-    </group>
+    </motion.group>
   );
 }
 useGLTF.preload("/lighthouse_on_island.glb")

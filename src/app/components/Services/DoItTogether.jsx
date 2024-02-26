@@ -9,8 +9,8 @@ import useClient from "../../utils/useClient";
 
 const DoItTogether = forwardRef(({ ...props }, ref) => {
   const isClient = useClient();
-  if (isClient) {
-    return (
+  if (isClient) { //hf
+    return (  
       <section
         id="servicios"
         className={`w-full mx-auto snap-always snap-start flex flex-col h-full md:h-1/2 ${
@@ -23,7 +23,7 @@ const DoItTogether = forwardRef(({ ...props }, ref) => {
         w-full h-[200%] absolute mx-auto top-0 -z-10"
         ></div>
         <h3 className="title-size md:max-lg:text-7xl lg:ml-[10%] max-lg:text-center max-sm:mx-auto drop-shadow-lg">
-          Hagámoslo Juntos
+          Hagámoslo Juntos 
         </h3>
         <h6 className="max-sm:text-sm max-lg:text-center md:text-xl 3xl:text-3xl mx-[5%] lg:w-2/5 md:mx-[10%] lg:mb-6 2xl:mb-4 drop-shadow-lg">
           Estamos aquí para hacer realidad tus sueños. Ayudamos a convertir tu

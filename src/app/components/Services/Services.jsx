@@ -75,10 +75,10 @@ const works = [
   },
 ];
 const Services = forwardRef(({ ...props }, ref) => {
-  const isClient = useClient();
-  if (isClient) {
-    return (
-      <section
+  const isClient = useClient(); 
+  if (isClient) {   
+    return ( 
+      <section 
         className={`relative z-10 max-md:snap-start max-md:snap-always lg:snap-always lg:snap-start
        max-lg:px-[9vw] lg:mx-[5vw] ${isMobile && "bg-dorado/70"}
       h-full md:h-1/2 lg:h-full w-full lg:w-[55%]  flex 
@@ -108,7 +108,7 @@ const Services = forwardRef(({ ...props }, ref) => {
             </div>
           ))}
         </div>
-        {isBrowser && !isTablet && (
+        {isBrowser && !isTablet && (   
           <div
             ref={ref}
             className="absolute md:max-lg:hidden  

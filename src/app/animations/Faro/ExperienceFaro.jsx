@@ -42,7 +42,7 @@ const ExperienceFaro = ({
             </View>
             <View key={3} track={ref3}>
               <Faro scrollYProgress={scrollYProgress} />
-            </View>
+            </View> 
             <View key={4} track={ref4}>
               <Faro scrollYProgress={scrollYProgress} />
             </View>
