@@ -10,7 +10,7 @@ const Camera = ({ sectionBreakpoints, scrollYProgress }) => {
   const cameraRef = useRef(null);
 
   // Camera positions
-  const zoom = useTransform(scrollYProgress, [0, 1], [180, 180])
+  const zoom = useTransform(scrollYProgress, [0, 1], [widthScreen < 1020 ? 230 : 180, widthScreen < 1020 ? 230 : 180])
   const xCamPos = useTransform(
     scrollYProgress,
     sectionBreakpoints,
@@ -72,6 +72,10 @@ const Camera = ({ sectionBreakpoints, scrollYProgress }) => {
     if (mousePos && widthScreen > 1020) {
       cameraRef.current.rotation.x = xCamRot.get() - mousePos.y * 0.1;
       cameraRef.current.rotation.y = yCamRot.get() - mousePos.x * 0.1;
+      cameraRef.current.rotation.z = zCamRot.get();
+    }else{
+      cameraRef.current.rotation.x = xCamRot.get();
+      cameraRef.current.rotation.y = yCamRot.get();
       cameraRef.current.rotation.z = zCamRot.get();
     }
       // cameraRef.current.rotation.x = xCamRot.get();

@@ -20,8 +20,8 @@ const Faro = ({ scrollYProgress }) => {
     widthScreen < 1020 ? 5 : 3,
     widthScreen < 1020 ? 6.5 : 4,
     widthScreen < 1020 ? 12 : 9,
-    widthScreen < 1020 ? 8 : 3,
-    widthScreen < 1020 ? 5 : 3,
+    widthScreen < 1020 ? 8 : (widthScreen > 1700 ? 5 : 3),
+    widthScreen < 1020 ? 5 : (widthScreen > 1700 ? 5 : 3),
   ]);
 
   return (
