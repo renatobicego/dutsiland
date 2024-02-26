@@ -2,10 +2,15 @@ import { LayoutOrthographicCamera } from "framer-motion-3d";
 import { useTransform } from "framer-motion";
 import { useRef } from "react"; 
 import useWindowSize from "../../utils/useWindowSize";
+import useMousePos from "../../utils/useMousePos";
+import { useFrame } from "@react-three/fiber";
 const Camera = ({ sectionBreakpoints, scrollYProgress }) => {
   const { width: widthScreen } = useWindowSize();
+  const mousePos = useMousePos()
   const cameraRef = useRef(null);
+
   // Camera positions
+  const zoom = useTransform(scrollYProgress, [0, 1], [180, 180])
   const xCamPos = useTransform(
     scrollYProgress,
     sectionBreakpoints,
@@ -60,28 +65,31 @@ const Camera = ({ sectionBreakpoints, scrollYProgress }) => {
     sectionBreakpoints,
     [0, 0, 0, 0, 0, 0]
   );
-  // useFrame((state, delta) => {
-  //   if (!cameraRef.current) {
-  //     return;
-  //   }
-  //   // if (mousePos && widthScreen > 1020) {
-  //   //   cameraRef.current.rotation.x = xCamRot.get() - mousePos.y * 0.1;
-  //   //   cameraRef.current.rotation.y = yCamRot.get() - mousePos.x * 0.1;
-  //   //   cameraRef.current.rotation.z = zCamRot.get();
-  //   // } else {
-  //     cameraRef.current.rotation.x = xCamRot.get();
-  //     cameraRef.current.rotation.y = yCamRot.get();
-  //     cameraRef.current.rotation.z = zCamRot.get();
-  //     cameraRef.current.position.x = xCamPos.get();
-  //     cameraRef.current.position.y = yCamPos.get();
-  //     cameraRef.current.position.z = zCamPos.get();
-  //   // }
-  // });
+  useFrame((state, delta) => {
+    if (!cameraRef.current) {
+      return;
+    }
+    if (mousePos && widthScreen > 1020) {
+      cameraRef.current.rotation.x = xCamRot.get() - mousePos.y * 0.1;
+      cameraRef.current.rotation.y = yCamRot.get() - mousePos.x * 0.1;
+      cameraRef.current.rotation.z = zCamRot.get();
+    }
+      // cameraRef.current.rotation.x = xCamRot.get();
+      // cameraRef.current.rotation.y = yCamRot.get();
+      // cameraRef.current.rotation.z = zCamRot.get();
+      // cameraRef.current.position.x = xCamPos.get();
+      // cameraRef.current.position.y = yCamPos.get();
+      // cameraRef.current.position.z = zCamPos.get();
+    // }
+  });
+  console.log(cameraRef.current)
   return (
     <LayoutOrthographicCamera
       ref={cameraRef}
       position={[xCamPos, yCamPos, zCamPos]}
-      rotation={[xCamRot, yCamRot, zCamRot]}
+      // rotation={[xCamRot, yCamRot, zCamRot]}
+      zoom={zoom}
+      
     />
   );
 };
