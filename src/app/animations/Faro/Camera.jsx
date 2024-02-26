@@ -82,7 +82,7 @@ const Camera = ({ sectionBreakpoints, scrollYProgress }) => {
       // cameraRef.current.position.z = zCamPos.get();
     // }
   });
-  console.log(cameraRef.current)
+
   return (
     <LayoutOrthographicCamera
       ref={cameraRef}
