@@ -12,7 +12,6 @@ const servicesList = [
       "Arquitectura de la Información",
       "Prototipado de Aplicación Web",
       "Diseño de Interfaz de Usuario",
-      "Diseño de Identidad Visual",
       "Diseño Responsive",
     ],
   },
