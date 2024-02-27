@@ -8,6 +8,7 @@ import { View } from "@react-three/drei";
 import { ref } from "yup";
 import Faro from "./Faro";
 import { isMobile, isTablet } from "react-device-detect";
+import R3FLoader from "../R3FLoader";
 
 const ExperienceFaro = ({
   eventSource,
@@ -48,7 +49,9 @@ const ExperienceFaro = ({
             </View>
           </>
         )}
+        
       </MotionCanvas>
+      <R3FLoader background={"bg-[#202020]"}/>
     </MotionConfig>
   );
 };

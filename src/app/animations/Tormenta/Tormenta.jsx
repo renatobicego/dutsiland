@@ -2,6 +2,7 @@ import {
   CameraShake,
   SpotLight,
   shaderMaterial,
+  useTexture,
 } from "@react-three/drei";
 import { BlendFunction } from "postprocessing";
 import { extend, useFrame } from "@react-three/fiber";
@@ -64,13 +65,9 @@ const Tormenta = ({isInView}) => {
   const rainRef = useRef();
 
   // rain effect
-  const rainTexture = useMemo(() => {
-    const textureLoader = new THREE.TextureLoader();
-    const texture = textureLoader.load("/iChannel0.png");
-    texture.repeat.x = 2;
-    texture.wrapS = THREE.RepeatWrapping;
-    return texture;
-  }, []);
+  const rainTexture = useTexture("/iChannel0.png");
+  rainTexture.repeat.x = 2;
+  rainTexture.wrapS = THREE.RepeatWrapping;
 
   useFrame((state, delta) => {
     // Animate spotlight over lighthouse and update uniform
