@@ -9,13 +9,6 @@ import { useControls } from "leva";
 const Camera = ({ sectionBreakpoints, scrollYProgress }) => {
   const { width: widthScreen } = useWindowSize();
   const mousePos = useMousePos();
-  const {zoom: zoomPingo} = useControls({
-    zoom: {
-      value: 200,
-      min: 150,
-      max: 250
-    }
-  })
   // Camera positions
   const zoom = useTransform(
     scrollYProgress,
