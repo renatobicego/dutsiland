@@ -28,7 +28,7 @@ const WorkCard = ({ data }) => {
             width={200}
             height={200}
             quality={50}
-            className="max-h-[40%] max-w-[50%] md:max-h-[60%] xl:max-h-[70%] object-contain"
+            className="max-h-[40%] max-w-[50%] md:max-h-[60%] xl:max-h-[70%] 2xl:w-[45%] 3xl:w-[40%] 3xl:h-full object-contain"
             src={data.imagesRoot + data.coverLogo}
             alt={"Logo: " + data.title}
           />
