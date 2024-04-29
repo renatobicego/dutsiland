@@ -42,15 +42,15 @@ const AboutUs = forwardRef(({ scrollYProgress }, ref) => {
           />
         </motion.svg>
 
-        <h3 className="title-size mx-5 xs:mx-6 sm:mx-8 md:ml-12 max-md:landscape:mt-0 max-lg:drop-shadow-lg">
+        <h1 className="title-size mx-5 xs:mx-6 sm:mx-8 md:ml-12 max-md:landscape:mt-0 max-lg:drop-shadow-lg">
           Bienvenido a Dutsiland
-        </h3>
+        </h1>
         <div className="lg:w-1/3 lg:self-end mx-5 xs:mx-6 sm:mx-8 md:mx-12 lg:mx-0 lg:mr-32 2xl:mr-40">
-          <h6 className="text-xs xs:text-sm md:text-xl 3xl:text-3xl mb-6 max-lg:drop-shadow-lg">
+          <h2 className="text-xs xs:text-sm md:text-xl 3xl:text-3xl mb-6 max-lg:drop-shadow-lg">
             Somos un estudio de desarrollo que hace realidad tus ideas, construyendo
             experiencias web sobresalientes y empujando los límites de nuestra
             creatividad para resolver problemas de negocio.
-          </h6>
+          </h2>
           <OurTeamModal />
         </div>
         {isBrowser && !isTablet && (

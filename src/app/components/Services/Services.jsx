@@ -96,9 +96,9 @@ const Services = forwardRef(({ ...props }, ref) => {
               className="w-full md:w-[45%] p-6 md:p-8 lg:p-10 bg-white/80 md:bg-white text-negro
                rounded-3xl button-animation max-lg:drop-shadow-lg"
             >
-              <h6 className="font-semibold text-sm md:text-lg xl:text-xl 2xl:text-2xl 3xl:text-3xl mb-2">
+              <h3 className="font-semibold text-sm md:text-lg xl:text-xl 2xl:text-2xl 3xl:text-3xl mb-2">
                 {service.title}
-              </h6>
+              </h3>
               <ul className="text-xs md:text-sm xl:text-base">
                 {service.list.map((item, i) => (
                   <li key={i}>{item}</li>

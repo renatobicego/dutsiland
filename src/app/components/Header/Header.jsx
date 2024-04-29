@@ -33,7 +33,7 @@ const Header = ({ scrollYProgress }) => {
       {/* <div className="bg-negro w-full absolute left-0 top-0 h-full -z-10 mix-blend-exclusion"></div> */}
       <button onClick={scrollToTop} className="w-1/5 h-[90%] md:w-1/6 ">
         <Image
-          alt="logo"
+          alt="logo Estudio Dutsiland"
           width={300}
           height={300}
           className="w-full h-auto lg:h-full lg:w-auto sm:max-md:!max-h-[10vh] sm:max-md:w-auto"
