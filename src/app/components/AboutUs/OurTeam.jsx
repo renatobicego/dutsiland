@@ -9,7 +9,7 @@ const team = [
   {
     name: "Renato Bicego",
     image: "/aboutus/pp2.jpg",
-    area: ["Backend", "Infraestructura"],
+    area: ["Frontend", "WebGL","Diseño UI"],
     linkedin: "https://www.linkedin.com/in/renatobicego/",
   },
 ];
