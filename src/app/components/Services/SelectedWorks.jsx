@@ -4,17 +4,6 @@ import useClient from "../../utils/useClient";
 
 const works = [
   {
-    coverImage: "/cucha1.webp",
-    coverLogo: "/logo.png",
-    bg: "bg-[#046FD1]",
-    title: "Cucha repuestos",
-    fields: ["Diseño UI Responsive", "Desarrollo de Web App"],
-    text: `Cucha Repuestos, una destacada empresa en la venta de repuestos para camiones Iveco, optó por modernizar su operación mediante la digitalización. Nos enorgullece haber sido elegidos como su aliado en esta emocionante transformación. El resultado es un sitio web de última generación que refleja el compromiso y la excelencia de Cucha Repuestos con sus clientes. Con esta plataforma digital, la empresa está preparada para explorar nuevos horizontes y atender las necesidades de sus clientes de forma más eficiente que nunca.`,
-    link: "https://cucharepuestos.com/",
-    images: ["/1.png", "/1.jpeg", "/2.jpeg", "/3.jpeg", "/4.jpeg","/6.png"],
-    imagesRoot: "/works/cucha",
-  },
-  {
     coverImage: "/mimpronts.png",
     coverLogo: "/mimprontaLofo.png",
     bg: "bg-[#004282]",
@@ -54,6 +43,17 @@ const works = [
     link: "https://amamendoza.vercel.app/",
     images: ["/2.png", "/1.png", "/3.png", "/4.png"],
     imagesRoot: "/works/ama",
+  },
+    {
+    coverImage: "/cucha1.webp",
+    coverLogo: "/logo.png",
+    bg: "bg-[#046FD1]",
+    title: "Cucha repuestos",
+    fields: ["Diseño UI Responsive", "Desarrollo de Web App"],
+    text: `Cucha Repuestos, una destacada empresa en la venta de repuestos para camiones Iveco, optó por modernizar su operación mediante la digitalización. Nos enorgullece haber sido elegidos como su aliado en esta emocionante transformación. El resultado es un sitio web de última generación que refleja el compromiso y la excelencia de Cucha Repuestos con sus clientes. Con esta plataforma digital, la empresa está preparada para explorar nuevos horizontes y atender las necesidades de sus clientes de forma más eficiente que nunca.`,
+    link: "https://cucharepuestos.com/",
+    images: ["/1.png", "/1.jpeg", "/2.jpeg", "/3.jpeg", "/4.jpeg","/6.png"],
+    imagesRoot: "/works/cucha",
   },
 ];
 const SelectedWorks = () => {
