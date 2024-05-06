@@ -5,8 +5,8 @@ import useClient from "../../utils/useClient";
 const works = [
   {
     coverImage: "/cucha1.webp",
-    coverLogo: "/cuchaText.png",
-    bg: "bg-[#393e40]",
+    coverLogo: "/logo.png",
+    bg: "bg-[#046FD1]",
     title: "Cucha repuestos",
     fields: ["Diseño UI Responsive", "Desarrollo de Web App"],
     text: `Cucha Repuestos, una destacada empresa en la venta de repuestos para camiones Iveco, optó por modernizar su operación mediante la digitalización. Nos enorgullece haber sido elegidos como su aliado en esta emocionante transformación. El resultado es un sitio web de última generación que refleja el compromiso y la excelencia de Cucha Repuestos con sus clientes. Con esta plataforma digital, la empresa está preparada para explorar nuevos horizontes y atender las necesidades de sus clientes de forma más eficiente que nunca.`,
