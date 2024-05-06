@@ -4,6 +4,17 @@ import useClient from "../../utils/useClient";
 
 const works = [
   {
+    coverImage: "/cucha1.webp",
+    coverLogo: "/cuchaText.png",
+    bg: "bg-[#4747631]",
+    title: "Cucha repuestos",
+    fields: ["Diseño UI Responsive", "Desarrollo de Web App"],
+    text: `Cucha Repuestos, una destacada empresa en la venta de repuestos para camiones Iveco, optó por modernizar su operación mediante la digitalización. Nos enorgullece haber sido elegidos como su aliado en esta emocionante transformación. El resultado es un sitio web de última generación que refleja el compromiso y la excelencia de Cucha Repuestos con sus clientes. Con esta plataforma digital, la empresa está preparada para explorar nuevos horizontes y atender las necesidades de sus clientes de forma más eficiente que nunca.`,
+    link: "https://cucharepuestos.com/",
+    images: ["/1.png", "/1.jpeg", "/2.jpeg", "/3.jpeg", "/4.jpeg","/6.png"],
+    imagesRoot: "/works/cucha",
+  },
+  {
     coverImage: "/mimpronts.png",
     coverLogo: "/mimprontaLofo.png",
     bg: "bg-[#004282]",
@@ -47,20 +58,23 @@ const works = [
 ];
 const SelectedWorks = () => {
   const isClient = useClient();
-  if(isClient){
-
+  if (isClient) {
     return (
       <section
         id="trabajos"
         className={`w-full mx-auto snap-always snap-start flex flex-col min-h-full
-        justify-center gap-6 items-start relative text-white py-[15vh] lg:py-[20vh] ${isMobile && 'bg-negro/50'}`}
+        justify-center gap-6 items-start relative text-white py-[15vh] lg:py-[20vh] ${
+          isMobile && "bg-negro/50"
+        }`}
       >
         <div
           className="bg-negro
                 w-full h-full absolute top-0 -z-10"
         ></div>
         <div className="mx-[8%] flex flex-col gap-4 ">
-          <h4 className="subtitle-size font-semibold max-lg:drop-shadow-lg">Proyectos Destacados</h4>
+          <h4 className="subtitle-size font-semibold max-lg:drop-shadow-lg">
+            Proyectos Destacados
+          </h4>
           <p className="max-sm:text-sm md:text-xl 3xl:text-3xl max-lg:drop-shadow-lg">
             Una selección de nuestros trabajos más apasionantes
           </p>
