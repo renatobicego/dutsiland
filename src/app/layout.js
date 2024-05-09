@@ -68,7 +68,7 @@ export default function RootLayout({ children }) {
           {children}
         </Providers>
         <SpeedInsights />
-        <GoogleAnalytics gaId="G-STPCV730T3" />
+        <GoogleAnalytics gaId={process.env.GA_ID} />
       </body>
     </html>
   );
