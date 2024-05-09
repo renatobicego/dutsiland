@@ -7,6 +7,7 @@ import Footer from "./Footer/Footer";
 import { forwardRef } from "react";
 import { isBrowser, isTablet } from "react-device-detect";
 import useClient from "../utils/useClient";
+import { sendGAEvent } from "@next/third-parties/google";
 
 const contactSchema = object({
   name: string().required().min(3),
@@ -51,6 +52,7 @@ const Contact = forwardRef(({ ...props }, ref) => {
                   showConfirmButton: false,
                   timer: 2000,
                 });
+                sendGAEvent({event: 'generate_lead', value: 'contacto'})
 
                 actions.resetForm();
               } catch (error) {
