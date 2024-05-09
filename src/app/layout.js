@@ -2,6 +2,7 @@ import { Piazzolla } from "next/font/google";
 import "./globals.css";;
 import { Providers } from "./providers";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { GoogleAnalytics } from '@next/third-parties/google'
 const piazzolla = Piazzolla({
   subsets: ["latin"],
   display: "swap",
@@ -67,6 +68,7 @@ export default function RootLayout({ children }) {
           {children}
         </Providers>
         <SpeedInsights />
+        <GoogleAnalytics gaId="G-STPCV730T3" />
       </body>
     </html>
   );
