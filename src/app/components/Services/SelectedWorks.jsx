@@ -62,7 +62,7 @@ const works = [
     title: "Medialuna Medias",
     fields: ["Diseño UI Responsive", "Desarrollo de Web App"],
     text: `Medialuna Medias, un emprendimiento de venta de medias de distintos estilos, nos eligió para desarrollar su catálogo online con el objetivo de modernizar y organizar su negocio. El resultado final fue una plataforma enfocada en el diseño colorido e ilustrado, y una funcionalidad de búsqueda y categorización óptima para la catalogación de productos`,
-    link: "https://medialuna.vercel.app/",
+    link: "https://medialunamedias.vercel.app/",
     images: ["/mockup.png", "/figma.png", "/1.png", "/2.png"],
     imagesRoot: "/works/medialuna",
   },
