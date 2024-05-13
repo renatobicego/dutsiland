@@ -57,7 +57,7 @@ export default function RootLayout({ children }) {
       "Construimos experiencias web sobresalientes.",
   };
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="es" className="scroll-smooth">
       <body className={`${piazzolla.className} overflow-x-hidden scroll-smooth`}>
         <script
           type="application/ld+json"
