@@ -44,7 +44,7 @@ const works = [
     images: ["/2.png", "/1.png", "/3.png", "/4.png"],
     imagesRoot: "/works/ama",
   },
-    {
+  {
     coverImage: "/cucha1.webp",
     coverLogo: "/logo.png",
     bg: "bg-[#252B42]",
@@ -52,7 +52,7 @@ const works = [
     fields: ["Diseño UI Responsive", "Desarrollo de Web App"],
     text: `Cucha Repuestos, una destacada empresa en la venta de repuestos para camiones Iveco, optó por modernizar su operación mediante la digitalización. Nos enorgullece haber sido elegidos como su aliado en esta emocionante transformación. El resultado es un sitio web de última generación que refleja el compromiso y la excelencia de Cucha Repuestos con sus clientes. Con esta plataforma digital, la empresa está preparada para explorar nuevos horizontes y atender las necesidades de sus clientes de forma más eficiente que nunca.`,
     link: "https://cucharepuestos.com/",
-    images: ["/1.png", "/1.jpeg", "/2.jpeg", "/3.jpeg", "/4.jpeg","/6.png"],
+    images: ["/1.png", "/1.jpeg", "/2.jpeg", "/3.jpeg", "/4.jpeg", "/6.png"],
     imagesRoot: "/works/cucha",
   },
   {
@@ -65,6 +65,22 @@ const works = [
     link: "https://medialunamedias.vercel.app/",
     images: ["/mockup.png", "/figma.png", "/1.png", "/2.png"],
     imagesRoot: "/works/medialuna",
+  },
+  {
+    coverImage: "/mobile.png",
+    coverLogo: "/logo.png",
+    bg: "bg-[#F9C48E]",
+    title: "Mahatu Consultorios",
+    fields: ["Desarrollo de Web App"],
+    text: `Junto con Mahatu Consultorios, desarrollamos un sistema que le permitió evolucionar y agilizar sus procesos, incrementando el valor de la organización, la calidad de atención de sus profesionales y su comodidad.
+      El sistema es capaz de
+      👨‍💻 Gestión de turnos online.
+      📊 Análisis y control de facturación e información de obras sociales.
+      📆 Gestionar el calendario de cada profesional.
+      🗒️ Gestión de pacientes mediante su ficha informativa.
+      ✔ Registro de anotaciones por turno.`,
+    images: ["/desktop.png", "/mobile.png", "/tablet.png", "/desktop2.png"],
+    imagesRoot: "/works/mahatu",
   },
 ];
 const SelectedWorks = () => {
