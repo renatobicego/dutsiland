@@ -79,6 +79,7 @@ const works = [
       📆 Gestionar el calendario de cada profesional.
       🗒️ Gestión de pacientes mediante su ficha informativa.
       ✔ Registro de anotaciones por turno.`,
+    link:"https://mahatu.vercel.app/",
     images: ["/desktop.png", "/mobile.png", "/tablet.png", "/desktop2.png"],
     imagesRoot: "/works/mahatu",
   },
