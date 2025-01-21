@@ -3,7 +3,7 @@ const team = [
   {
     name: "Maximiliano Cattaneo Cvetic",
     image: "/aboutus/maxi.jpeg",
-    area: ["Backend", "Infraestructura"],
+    area: ["Backend", "Infraestructura","Bases de datos"],
     linkedin: "https://www.linkedin.com/in/mcvetic/",
   },
   {
