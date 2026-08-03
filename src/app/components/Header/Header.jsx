@@ -2,82 +2,122 @@
 import Image from "next/image";
 import { useDisclosure } from "@nextui-org/react";
 import CustomDrawer from "./Drawer";
-import { useTransform } from "framer-motion";
-import { motion } from "framer-motion";
+import { useTransform, motion } from "framer-motion";
+
 const Header = ({ scrollYProgress }) => {
   const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure();
-  // const scrollDirection = useScrollDirection()
+
   const scrollToTop = () => {
     document.querySelector("main").scrollTo({
       top: 0,
       behavior: "smooth",
-      /* you can also use 'auto' behaviour 
-         in place of 'smooth' */
     });
   };
 
-  const color = useTransform(
+  const headerBg = useTransform(
     scrollYProgress,
-    [0.93, 0.98],
-    ["#ffffff", "#202020"]
+    [0, 0.05],
+    ["rgba(10,10,10,0)", "rgba(10,10,10,0.85)"],
+  );
+
+  const headerBlur = useTransform(
+    scrollYProgress,
+    [0, 0.05],
+    ["blur(0px)", "blur(12px)"],
   );
 
   return (
     <motion.header
-      style={{ color }}
-      className={`w-screen px-[3.5vw] flex items-center justify-between py-2 h-16 md:h-20 
-        fixed left-0 z-30 text-sm 2xl:text-base 
-        3xl:text-lg max-lg:!text-white
-        transition-all duration-500`}
+      style={{ backgroundColor: headerBg, backdropFilter: headerBlur }}
+      className="top-0 left-0 z-50 fixed flex justify-between items-center px-5 sm:px-8 md:px-12 lg:px-16 w-screen h-14 sm:h-16 md:h-20 text-white"
     >
-      {/* <div className="bg-negro w-full absolute left-0 top-0 h-full -z-10 mix-blend-exclusion"></div> */}
-      <button onClick={scrollToTop} className="w-1/5 h-[90%] md:w-1/6 ">
+      <button
+        onClick={scrollToTop}
+        className="flex items-center h-[60%]"
+        aria-label="Volver al inicio"
+      >
         <Image
-          alt="logo Estudio Dutsiland"
-          width={300}
-          height={300}
-          className="w-full h-auto lg:h-full lg:w-auto sm:max-md:!max-h-[10vh] sm:max-md:w-auto"
-          src={"/logoLineasBlancas.png"}
+          alt="Logo Estudio Dutsiland"
+          width={200}
+          height={60}
+          className="w-auto h-full object-contain"
+          src="/logoLineasBlancas.png"
+          priority
         />
       </button>
-      <nav className="">
-        <ul className="hidden md:flex items-center gap-6 lg:gap-10 uppercase">
-          <li className="link">
-            <a href="/#quienesSomos">¿quienes somos?</a>
+
+      <nav aria-label="Navegación principal" className="hidden md:block">
+        <ul className="flex items-center gap-6 lg:gap-10 font-medium text-xs sm:text-sm uppercase tracking-wider">
+          <li>
+            <a
+              href="#nosotros"
+              className="py-2 text-white/80 hover:text-white transition-colors nav-link"
+            >
+              Nosotros
+            </a>
           </li>
-          <li className="link">
-            <a href="/#servicios">servicios</a>
+          <li>
+            <a
+              href="#servicios"
+              className="py-2 text-white/80 hover:text-white transition-colors nav-link"
+            >
+              Servicios
+            </a>
           </li>
-          <li className="link">
-            <a href="/#trabajos">trabajos</a>
+          <li>
+            <a
+              href="#trabajos"
+              className="py-2 text-white/80 hover:text-white transition-colors nav-link"
+            >
+              Trabajos
+            </a>
           </li>
-          <li className="link">
-            <a href="/#contacto">Contacto</a>
+          <li>
+            <a
+              href="#contacto"
+              className="bg-rojo/80 hover:bg-rojo !px-4 sm:!px-5 !py-2 !rounded-lg text-white !text-xs !uppercase !tracking-wider btn"
+            >
+              Contacto
+            </a>
           </li>
         </ul>
       </nav>
-      <button onClick={onOpen} className="md:hidden w-8 invert">
-        <Image
-          width={64}
-          height={64}
-          src="/icons/hamburger.png"
-          alt="Menu desplegable"
-        />
+
+      <button
+        onClick={onOpen}
+        className="md:hidden flex flex-col justify-center items-center gap-1.5 w-7 sm:w-8 h-7 sm:h-8"
+        aria-label="Abrir menú de navegación"
+      >
+        <span className="bg-white rounded-full w-5 sm:w-6 h-[1.5px]" />
+        <span className="bg-white rounded-full w-3.5 sm:w-4 h-[1.5px]" />
+        <span className="bg-white rounded-full w-5 sm:w-6 h-[1.5px]" />
       </button>
+
       <CustomDrawer isOpen={isOpen} onOpenChange={onOpenChange}>
-        <nav className="absolute w-full top-0 left-0">
-          <ul className="flex flex-col items-start gap-6 text-white uppercase pt-16 p-10">
+        <nav
+          className="top-0 left-0 absolute flex justify-center items-center bg-negro w-full h-screen"
+          aria-label="Menú móvil"
+        >
+          <ul className="flex flex-col items-center gap-8 text-white text-base sm:text-lg uppercase tracking-wider">
             <li onClick={onClose}>
-              <a href="/#quienesSomos">¿quienes somos?</a>
+              <a href="#nosotros" className="py-2 nav-link">
+                Nosotros
+              </a>
             </li>
             <li onClick={onClose}>
-              <a href="/#servicios">servicios</a>
+              <a href="#servicios" className="py-2 nav-link">
+                Servicios
+              </a>
             </li>
             <li onClick={onClose}>
-              <a href="/#trabajos">trabajos</a>
+              <a href="#trabajos" className="py-2 nav-link">
+                Trabajos
+              </a>
             </li>
             <li onClick={onClose}>
-              <a href="/#contacto">Contacto</a>
+              <a href="#contacto" className="mt-4 btn-accent">
+                Contacto
+              </a>
             </li>
           </ul>
         </nav>

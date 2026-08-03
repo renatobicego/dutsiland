@@ -1,15 +1,12 @@
-import { BakeShadows, Preload, Stage } from "@react-three/drei";
+import { Environment, Preload } from "@react-three/drei";
 import { Suspense } from "react";
 import { useTransform } from "framer-motion";
 import useWindowSize from "../../utils/useWindowSize";
 import Model from "./Model";
 import Camera from "./Camera";
-import { useFrame } from "@react-three/fiber";
-import * as THREE from "three";
 
 const Faro = ({ scrollYProgress }) => {
-  // Breakpoints of the animation based in Scroll progress
-  const { width: widthScreen } = useWindowSize();  
+  const { width: widthScreen } = useWindowSize();
   const sectionBreakpoints =
     widthScreen < 1020 && widthScreen > 767
       ? [0, 0.23, 0.46, 0.68, 0.85, 0.98]
@@ -20,28 +17,51 @@ const Faro = ({ scrollYProgress }) => {
     widthScreen < 1020 ? 5 : 3,
     widthScreen < 1020 ? 6.5 : 4,
     widthScreen < 1020 ? 12 : 9,
-    widthScreen < 1020 ? 8 : (widthScreen > 1700 ? 5 : 3),
-    widthScreen < 1020 ? 5 : (widthScreen > 1700 ? 5 : 3),
+    widthScreen < 1020 ? 8 : widthScreen > 1700 ? 5 : 3,
+    widthScreen < 1020 ? 5 : widthScreen > 1700 ? 5 : 3,
   ]);
 
   return (
     <>
-      <Stage
-        shadows={{ type: "contact", opacity: 0.2, blur: 3 }}
-        environment="city"
-        preset="rembrandt"
-        intensity={0.2}
+      {/* Warm environment so materials pick up sepia bounce light */}
+      <Environment preset="sunset" background={false} />
+
+      {/* Muted warm background, like the Sketchfab viewer */}
+      <color attach="background" args={["#C8B8C8"]} />
+
+      {/* Key light: warm, casts the defined shadows */}
+      <directionalLight
+        position={[5, 8, 3]}
+        intensity={2.2}
+        color="#FFF0D4"
+        castShadow
+        shadow-mapSize={[1024, 1024]}
+        shadow-camera-far={20}
+        shadow-camera-near={0.1}
+        shadow-camera-left={-5}
+        shadow-camera-right={5}
+        shadow-camera-top={5}
+        shadow-camera-bottom={-5}
+        shadow-bias={-0.0005}
       />
-      <color attach={"background"} args={["#D3ECFF"]} />
+
+      {/* Cool fill on the opposite side to keep shadows readable */}
+      <directionalLight
+        position={[-3, 2, -2]}
+        intensity={0.6}
+        color="#E8D8F0"
+      />
+
+      <pointLight intensity={1.2} position={[-1, 1.5, 0]} color="#FFE8B0" />
+      <ambientLight intensity={0.35} color="#E8E0F0" />
+
       <Camera
         sectionBreakpoints={sectionBreakpoints}
         scrollYProgress={scrollYProgress}
-      /> 
+      />
       <Suspense fallback={null}>
         <Model scaleModel={scale} position={[0.6, 0, 0.5]} />
-        <pointLight intensity={2} position={[-1, 1, 0]} color={"#FFF9C5"} />
         <Preload all />
-        <BakeShadows />
       </Suspense>
     </>
   );

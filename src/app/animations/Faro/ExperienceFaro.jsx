@@ -2,56 +2,41 @@
 import { MotionCanvas } from "framer-motion-3d";
 import { MotionConfig } from "framer-motion";
 import * as THREE from "three";
-import { forwardRef, useMemo } from "react";
+import { useMemo } from "react";
 import { extend } from "@react-three/fiber";
-import { View } from "@react-three/drei";
-import { ref } from "yup";
 import Faro from "./Faro";
+import PostEffects from "./PostEffects";
 import { isMobile, isTablet } from "react-device-detect";
 import R3FLoader from "../R3FLoader";
 
-const ExperienceFaro = ({
-  eventSource,
-  scrollYProgress,
-  ref1,
-  ref2,
-  ref3,
-  ref4,
-}) => {
+/**
+ * Canvas fijo full-viewport. Una sola instancia del faro + post-processing.
+ * La cámara y el modelo se mueven con scrollYProgress (ya manejado en Faro/Camera).
+ * Las secciones de la web tapan/revelan el canvas con sus propios fondos.
+ */
+const ExperienceFaro = ({ scrollYProgress, eventSource }) => {
   useMemo(() => extend(THREE), []);
 
   return (
     <MotionConfig transition={{ type: "spring", mass: 5 }}>
       <MotionCanvas
         shadows
-        key={2}
         eventSource={eventSource}
-        flat
+        dpr={[1, 1.5]}
+        gl={{
+          antialias: false,
+          powerPreference: "high-performance",
+          toneMapping: THREE.ACESFilmicToneMapping,
+          toneMappingExposure: 1.45,
+          outputColorSpace: THREE.SRGBColorSpace,
+        }}
         style={{ width: "100vw", height: "100vh" }}
-        className=" !fixed !left-0 !top-0 !right-0 !bottom-0
-         overflow-hidden [&>canvas]:!pointer-events-none"
+        className="!z-0 !fixed !inset-0 overflow-hidden [&>canvas]:!pointer-events-none"
       >
-        {isMobile || isTablet ? (
-          <Faro scrollYProgress={scrollYProgress} />
-        ) : (
-          <>
-            <View key={1} track={ref1}>
-              <Faro scrollYProgress={scrollYProgress} />
-            </View>
-            <View key={2} track={ref2}>
-              <Faro scrollYProgress={scrollYProgress} />
-            </View>
-            <View key={3} track={ref3}>
-              <Faro scrollYProgress={scrollYProgress} />
-            </View>
-            <View key={4} track={ref4}>
-              <Faro scrollYProgress={scrollYProgress} />
-            </View>
-          </>
-        )}
-        
+        <Faro scrollYProgress={scrollYProgress} />
+        {!(isMobile || isTablet) && <PostEffects />}
       </MotionCanvas>
-      <R3FLoader background={"bg-[#202020]"}/>
+      <R3FLoader background="bg-negro" />
     </MotionConfig>
   );
 };
