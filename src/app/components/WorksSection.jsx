@@ -16,10 +16,19 @@ const works = [
   {
     coverImage: "/works/ama/ama.webp",
     title: "Asociación Mendocina de Atletismo",
-    tags: ["UI/UX Research", "Desarrollo Web"],
+    tags: ["UI/UX Research", "Desarrollo App Web"],
     description:
-      "Plataforma web para gestión de inscripciones, federaciones y noticias deportivas.",
-    link: "https://amamendoza.vercel.app/",
+      "Plataforma web para gestión de inscripciones y resultados de torneos.",
+    link: "https://ama-resultados.vercel.app/",
+    color: "from-negro-mid to-negro",
+  },
+  {
+    coverImage: "/works/mimpronta/mimpronts.png",
+    title: "Uspallata Experience",
+    tags: ["Diseño UI", "Desarrollo Web"],
+    description:
+      "Landing page para agencia de impacto ambiental con enfoque en identidad visual y funcionalidad.",
+    link: "https://uspallataexperience.com/",
     color: "from-negro-mid to-negro",
   },
   {
@@ -46,15 +55,6 @@ const works = [
     description:
       "Sistema de gestión de turnos, facturación y pacientes para consultorios médicos.",
     link: null,
-    color: "from-negro-mid to-negro",
-  },
-  {
-    coverImage: "/works/wonder/bsas.avif",
-    title: "Wonder Ventures",
-    tags: ["Diseño UI", "Plataforma"],
-    description:
-      "Plataforma de reservas de experiencias turísticas con gestión de contenido.",
-    link: "http://wonderventures3.s3-website-us-east-1.amazonaws.com/",
     color: "from-negro-mid to-negro",
   },
 ];
@@ -149,15 +149,15 @@ const WorksSection = () => {
       className="relative bg-negro py-16 sm:py-20 lg:py-28 w-full text-white snap-always snap-start"
       aria-labelledby="works-heading"
     >
-      <div className="section-padding">
+      <div className="mx-auto max-w-screen-2xl">
         {/* Header */}
-        <div className="flex sm:flex-row flex-col sm:justify-between sm:items-end gap-3 sm:gap-4 mb-8 sm:mb-12 lg:mb-16">
+        <div className="flex flex-col gap-4 sm:gap-6 mb-8 sm:mb-12 lg:mb-16">
           <div>
             <motion.span
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="block mb-2 sm:mb-4 font-medium text-rojo text-xs sm:text-sm uppercase tracking-widest"
+              className="font-semibold text-rojo text-xs sm:text-sm uppercase tracking-widest"
             >
               Portfolio
             </motion.span>
@@ -165,7 +165,7 @@ const WorksSection = () => {
               Proyectos Destacados
             </h2>
           </div>
-          <p className="max-w-sm text-white/40 body-sm sm:body-md">
+          <p className="body-sm sm:body-md">
             Una selección de nuestros trabajos más apasionantes
           </p>
         </div>
@@ -181,9 +181,9 @@ const WorksSection = () => {
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="flex flex-col justify-center items-center gap-4 sm:gap-6 border border-white/10 hover:border-rojo/30 border-dashed rounded-2xl md:rounded-3xl w-full h-[240px] xs:h-[260px] sm:h-[280px] md:h-[320px] lg:h-[380px] 2xl:h-[420px] transition-colors duration-300"
+            className="flex flex-col justify-center items-center gap-4 sm:gap-6 border border-white/80 hover:border-rojo/80 border-dashed rounded-2xl md:rounded-3xl w-full h-[240px] xs:h-[260px] sm:h-[280px] md:h-[320px] lg:h-[380px] 2xl:h-[420px] transition-colors duration-300"
           >
-            <h3 className="font-semibold text-white/40 text-lg sm:text-xl md:text-2xl lg:text-3xl">
+            <h3 className="font-semibold text-white/90 text-lg sm:text-xl md:text-2xl lg:text-3xl">
               Tu Próximo Proyecto
             </h3>
             <a href="#contacto" className="btn-accent">

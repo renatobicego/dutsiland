@@ -34,7 +34,7 @@ const ExperienceFaro = ({ scrollYProgress, eventSource }) => {
         className="!z-0 !fixed !inset-0 overflow-hidden [&>canvas]:!pointer-events-none"
       >
         <Faro scrollYProgress={scrollYProgress} />
-        {!(isMobile || isTablet) && <PostEffects />}
+        <PostEffects />
       </MotionCanvas>
       <R3FLoader background="bg-negro" />
     </MotionConfig>

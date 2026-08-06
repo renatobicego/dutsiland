@@ -29,99 +29,101 @@ const Header = ({ scrollYProgress }) => {
   return (
     <motion.header
       style={{ backgroundColor: headerBg, backdropFilter: headerBlur }}
-      className="top-0 left-0 z-50 fixed flex justify-between items-center px-5 sm:px-8 md:px-12 lg:px-16 w-screen h-14 sm:h-16 md:h-20 text-white"
+      className="top-0 left-0 z-50 fixed px-5 sm:px-8 md:px-12 lg:px-16 w-screen h-14 sm:h-16 md:h-20 text-white"
     >
-      <button
-        onClick={scrollToTop}
-        className="flex items-center h-[60%]"
-        aria-label="Volver al inicio"
-      >
-        <Image
-          alt="Logo Estudio Dutsiland"
-          width={200}
-          height={60}
-          className="w-auto h-full object-contain"
-          src="/logoLineasBlancas.png"
-          priority
-        />
-      </button>
-
-      <nav aria-label="Navegación principal" className="hidden md:block">
-        <ul className="flex items-center gap-6 lg:gap-10 font-medium text-xs sm:text-sm uppercase tracking-wider">
-          <li>
-            <a
-              href="#nosotros"
-              className="py-2 text-white/80 hover:text-white transition-colors nav-link"
-            >
-              Nosotros
-            </a>
-          </li>
-          <li>
-            <a
-              href="#servicios"
-              className="py-2 text-white/80 hover:text-white transition-colors nav-link"
-            >
-              Servicios
-            </a>
-          </li>
-          <li>
-            <a
-              href="#trabajos"
-              className="py-2 text-white/80 hover:text-white transition-colors nav-link"
-            >
-              Trabajos
-            </a>
-          </li>
-          <li>
-            <a
-              href="#contacto"
-              className="bg-rojo/80 hover:bg-rojo !px-4 sm:!px-5 !py-2 !rounded-lg text-white !text-xs !uppercase !tracking-wider btn"
-            >
-              Contacto
-            </a>
-          </li>
-        </ul>
-      </nav>
-
-      <button
-        onClick={onOpen}
-        className="md:hidden flex flex-col justify-center items-center gap-1.5 w-7 sm:w-8 h-7 sm:h-8"
-        aria-label="Abrir menú de navegación"
-      >
-        <span className="bg-white rounded-full w-5 sm:w-6 h-[1.5px]" />
-        <span className="bg-white rounded-full w-3.5 sm:w-4 h-[1.5px]" />
-        <span className="bg-white rounded-full w-5 sm:w-6 h-[1.5px]" />
-      </button>
-
-      <CustomDrawer isOpen={isOpen} onOpenChange={onOpenChange}>
-        <nav
-          className="top-0 left-0 absolute flex justify-center items-center bg-negro w-full h-screen"
-          aria-label="Menú móvil"
+      <div className="flex justify-between items-center mx-auto max-w-screen-2xl h-full">
+        <button
+          onClick={scrollToTop}
+          className="flex items-center h-[80%]"
+          aria-label="Volver al inicio"
         >
-          <ul className="flex flex-col items-center gap-8 text-white text-base sm:text-lg uppercase tracking-wider">
-            <li onClick={onClose}>
-              <a href="#nosotros" className="py-2 nav-link">
+          <Image
+            alt="Logo Estudio Dutsiland"
+            width={200}
+            height={60}
+            className="w-auto h-full object-contain"
+            src="/logoLineasBlancas.png"
+            priority
+          />
+        </button>
+
+        <nav aria-label="Navegación principal" className="hidden md:block">
+          <ul className="flex items-center gap-6 lg:gap-10 font-medium text-xs sm:text-sm uppercase tracking-wider">
+            <li>
+              <a
+                href="#nosotros"
+                className="py-2 text-white/80 hover:text-white transition-colors nav-link"
+              >
                 Nosotros
               </a>
             </li>
-            <li onClick={onClose}>
-              <a href="#servicios" className="py-2 nav-link">
+            <li>
+              <a
+                href="#servicios"
+                className="py-2 text-white/80 hover:text-white transition-colors nav-link"
+              >
                 Servicios
               </a>
             </li>
-            <li onClick={onClose}>
-              <a href="#trabajos" className="py-2 nav-link">
+            <li>
+              <a
+                href="#trabajos"
+                className="py-2 text-white/80 hover:text-white transition-colors nav-link"
+              >
                 Trabajos
               </a>
             </li>
-            <li onClick={onClose}>
-              <a href="#contacto" className="mt-4 btn-accent">
+            <li>
+              <a
+                href="#contacto"
+                className="bg-rojo/80 hover:bg-rojo !px-4 sm:!px-5 !py-2 !rounded-lg text-white !text-xs !uppercase !tracking-wider btn"
+              >
                 Contacto
               </a>
             </li>
           </ul>
         </nav>
-      </CustomDrawer>
+
+        <button
+          onClick={onOpen}
+          className="md:hidden flex flex-col justify-center items-center gap-1.5 w-7 sm:w-8 h-7 sm:h-8"
+          aria-label="Abrir menú de navegación"
+        >
+          <span className="bg-white rounded-full w-5 sm:w-6 h-[1.5px]" />
+          <span className="bg-white rounded-full w-3.5 sm:w-4 h-[1.5px]" />
+          <span className="bg-white rounded-full w-5 sm:w-6 h-[1.5px]" />
+        </button>
+
+        <CustomDrawer isOpen={isOpen} onOpenChange={onOpenChange}>
+          <nav
+            className="top-0 left-0 absolute flex justify-center items-center bg-negro w-full h-screen"
+            aria-label="Menú móvil"
+          >
+            <ul className="flex flex-col items-center gap-8 text-white text-base sm:text-lg uppercase tracking-wider">
+              <li onClick={onClose}>
+                <a href="#nosotros" className="py-2 nav-link">
+                  Nosotros
+                </a>
+              </li>
+              <li onClick={onClose}>
+                <a href="#servicios" className="py-2 nav-link">
+                  Servicios
+                </a>
+              </li>
+              <li onClick={onClose}>
+                <a href="#trabajos" className="py-2 nav-link">
+                  Trabajos
+                </a>
+              </li>
+              <li onClick={onClose}>
+                <a href="#contacto" className="mt-4 btn-accent">
+                  Contacto
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </CustomDrawer>
+      </div>
     </motion.header>
   );
 };

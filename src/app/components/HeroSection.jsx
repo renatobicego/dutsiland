@@ -12,7 +12,7 @@ const HeroSection = () => {
       <ExperienceTormenta />
 
       {/* Content */}
-      <div className="z-10 relative pb-20 sm:pb-24 md:pb-32 lg:pb-40 w-full section-padding">
+      <div className="z-10 relative mx-auto sm:pb-24 md:pb-32 lg:pb-40 w-full max-w-screen-2xl">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
