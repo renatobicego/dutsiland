@@ -35,6 +35,35 @@ export function initFooterReveal(): gsap.core.Timeline {
   foot.to('.prev-section .prev-section__inner', { y: '14vh', ease: 'none' }, '<')
   // El fade arranca a mitad: si empieza junto con el footer, queda un hueco negro visible
   foot.to('.prev-section .prev-section__inner', { autoAlpha: 0, ease: 'power2.in' }, '<+0.5')
-  foot.to('#footer .footer-logo .letter', { y: 0, duration: 0.3, stagger: 0.04 }, '>-.2')
+  // El logotipo arranca cuando el panel ya terminó de subir, que es cuando de verdad
+  // se lo empieza a ver
+  const logo = buildFooterLogo()
+  if (logo) foot.add(() => logo.restart(), '>-0.15')
   return foot
+}
+
+/** El logotipo del footer se arma desde el centro hacia afuera, que es como está
+ *  construido el lockup: abre y cierra con una D. Cada letra sale de su propia máscara.
+ *
+ *  Corre en tiempo y no atado al scroll, y la dispara la timeline del footer. Las dos
+ *  alternativas no funcionan acá:
+ *  - Con scrub dentro de esa timeline terminaba mientras el logotipo todavía estaba
+ *    abajo del fondo de la pantalla: para cuando se lo veía, ya estaba armado.
+ *  - Con un ScrollTrigger propio tampoco: el logotipo está al fondo de todo y nunca
+ *    llega a subir, así que el rango se queda sin recorrido; y encima el panel del
+ *    footer se revela con un transform, que le corre la posición al cálculo. */
+function buildFooterLogo(): gsap.core.Tween | null {
+  const letters = gsap.utils.toArray<HTMLElement>('#footer .footer-logo .letter')
+  if (!letters.length) return null
+  // Las dos componentes (yPercent e y): si el punto de partida se lee del transform
+  // del CSS, GSAP lo pasa a píxeles y animar solo yPercent no mueve nada.
+  gsap.set(letters, { yPercent: 115, y: 0 })
+  return gsap.to(letters, {
+    yPercent: 0,
+    y: 0,
+    duration: 0.7,
+    ease: 'power3.out',
+    stagger: { each: 0.08, from: 'center' },
+    paused: true,
+  })
 }

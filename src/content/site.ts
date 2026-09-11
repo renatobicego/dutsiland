@@ -41,6 +41,8 @@ export type BuiltItem = {
 export type ProjectDetail = {
   /** Antetítulo de la ficha: el rubro o el tipo de producto */
   kicker: string
+  /** Logo del cliente, para la portada. Publicité no tiene. */
+  logo?: string
   /** Qué hicimos nosotros */
   role: string
   /** En qué estado está el producto */
@@ -193,6 +195,8 @@ export const site: Site = {
           'Aplicaciones web',
           'Integraciones y APIs',
           'Automatización de procesos',
+          'Implementación de IA en procesos',
+          'Agentes de IA y bots',
           'Paneles y reportes',
         ],
       },
@@ -394,11 +398,12 @@ export const site: Site = {
         ],
         stack: [],
         links: [{ label: 'Ver sitio', href: 'https://amamendoza.vercel.app/' }],
+        // La primera hace de portada en la ficha, por eso va el sitio y no la guía de estilos
         photos: [
-          { src: '/img/proyectos/ama/1.webp', alt: 'AMA — diseño', caption: 'La guía de estilos y el mapa de pantallas' },
           { src: '/img/proyectos/ama/2.webp', alt: 'AMA — portada', caption: 'La portada, con las noticias de la asociación' },
           { src: '/img/proyectos/ama/3.webp', alt: 'AMA — torneos', caption: 'El alta de un torneo, con sus pruebas y categorías' },
           { src: '/img/proyectos/ama/4.webp', alt: 'AMA — campeones', caption: 'Los campeones nacionales, en la portada' },
+          { src: '/img/proyectos/ama/1.webp', alt: 'AMA — diseño', caption: 'La guía de estilos y el mapa de pantallas' },
         ],
       },
     },

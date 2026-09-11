@@ -536,7 +536,9 @@ body.menu-active #header .social-list { pointer-events: auto; opacity: 1; transf
   .blob-left2 .services-shape { padding: min(13rem, 13vh) 0 min(7rem, 5vh); }
   .blob-left2 .services-title { font-size: min(7.2rem, 6.2vh); margin-top: min(3.4rem, 2.6vh); }
   .blob-left2 .services-intro { font-size: min(2.6rem, 2.3vh); margin-top: min(2.6rem, 2.2vh); }
-  .blob-left2 .services-stack { margin-top: min(6rem, 4.2vh); min-height: min(38rem, 34vh); }
+  /* El hueco lo marca el frente más alto: "software a medida" llegó a siete pastillas
+     y con 38rem se pasaba sobre el botón. */
+  .blob-left2 .services-stack { margin-top: min(6rem, 4.2vh); min-height: min(44rem, 39vh); }
   .blob-left2 .service { padding-top: min(5.5rem, 4vh); }
   .blob-left2 .service__title { font-size: min(5.6rem, 4.8vh); }
   .blob-left2 .service__lead { font-size: min(2.6rem, 2.3vh); margin-top: min(1.6rem, 1.4vh); }
@@ -660,9 +662,14 @@ body.menu-active #header .social-list { pointer-events: auto; opacity: 1; transf
 .footer-mail { display: inline-flex; align-items: center; }
 .footer-legal { display: flex; gap: 3rem; }
 .footer-logo-wrap { display: flex; justify-content: center; padding-top: 13.5rem; }
-.footer-logo { width: 57%; display: flex; justify-content: space-between; align-items: flex-end; overflow: hidden; }
-.footer-logo .letter { display: block; height: auto; }
-@media only screen and (min-width: 1025.1px) { .footer-logo .letter { transform: translateY(5rem); } }
+.footer-logo { width: 57%; display: flex; justify-content: space-between; align-items: flex-end; }
+.footer-logo .letter-mask { display: block; overflow: hidden; }
+.footer-logo .letter { display: block; height: auto; width: 100%; }
+/* Punto de partida, para que no haya un parpadeo antes de que corra GSAP.
+   El estado inicial lo vuelve a declarar initFooterReveal con las dos componentes
+   (yPercent e y): si lo lee de este transform, GSAP lo pasa a píxeles y animar solo
+   yPercent no mueve nada. */
+@media only screen and (min-width: 1025.1px) { .footer-logo .letter { transform: translateY(115%); } }
 @media only screen and (max-width: 1025px) {
   #footer { margin-top: 0; padding: 0 1.2rem 1.2rem; }
   .footer-panel { border-radius: 3rem; padding: 7rem 4rem 5rem; }
@@ -728,7 +735,8 @@ body.menu-active .scroll-top, body.menu-leave .scroll-top { opacity: 0; visibili
   clip-path: inset(0% var(--pr) 0% 0% round 0 var(--blob-radius) var(--blob-radius) 0);
 }
 .project-hero__shape:before { content: ''; position: absolute; top: 13rem; right: 13rem; bottom: 13rem; left: -20rem; border: 0.5rem solid var(--white-1); border-radius: 0 calc(var(--blob-radius) - 13rem) calc(var(--blob-radius) - 13rem) 0; pointer-events: none; }
-.project-hero__inner { position: relative; z-index: 1; width: 100%; padding: min(15rem, 15vh) 28rem min(8rem, 6vh) 21rem; }
+/* El padding derecho le deja el lugar a la captura de portada */
+.project-hero__inner { position: relative; z-index: 1; width: 100%; padding: min(15rem, 15vh) min(86rem, 50%) min(8rem, 6vh) 21rem; }
 /* --btn-color es lo que pinta el texto y el subrayado de .btn-underlined. Sin él
    cae al negro por defecto y queda negro sobre negro. */
 /* flex y no inline-flex: el antetítulo que va abajo también es inline-flex y los dos
@@ -742,6 +750,13 @@ body.menu-active .scroll-top, body.menu-leave .scroll-top { opacity: 0; visibili
 .project-meta__item dd { margin: 1.4rem 0 0; color: var(--white-1); font-size: min(2.4rem, 2.1vh); line-height: 1.3; font-weight: 600; }
 .project-links { display: flex; flex-wrap: wrap; gap: 2rem 4rem; margin-top: min(5rem, 4vh); }
 .project-link { --btn-color: var(--white-1); display: inline-flex; align-items: center; color: var(--white-1); font-size: min(2.4rem, 2.1vh); line-height: 1; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; }
+
+/* La captura de portada, al costado del texto: el lado derecho de la D era un vacío.
+   El contorno concéntrico termina en una semicircunferencia, así que a la altura de
+   las esquinas de la captura la curva ya volvió hacia adentro; por eso el margen
+   derecho se calcula contra esa curva y no contra el borde de la forma. */
+.project-hero__shot { position: absolute; z-index: 1; top: 50%; right: min(22rem, 12%); transform: translateY(-50%); width: min(54rem, 31%); }
+.project-hero__shot img { width: 100%; height: auto; display: block; border-radius: 2.4rem; box-shadow: 0 4rem 8rem rgba(0, 0, 0, 0.55); }
 
 /* ---------- el problema (sección clara) ---------- */
 .project-problem { position: relative; background: var(--white-1); color: var(--black-1); padding: 20rem 0 16rem; }
@@ -792,9 +807,13 @@ body.menu-active .scroll-top, body.menu-leave .scroll-top { opacity: 0; visibili
   .project-block, .project-gallery, .project-next__inner { padding-left: 8rem; padding-right: 8rem; }
   .project-block__title { font-size: 5rem; }
   .project-hero { padding: 0; }
-  .project-hero__shape { min-height: 0; clip-path: none; border-radius: 0 var(--blob-radius) var(--blob-radius) 0; }
+  /* block y no flex: en el ancho de un teléfono la captura va debajo del texto, y
+     como fila de flex quedaba espachurrada al costado. */
+  .project-hero__shape { display: block; min-height: 0; clip-path: none; border-radius: 0 var(--blob-radius) var(--blob-radius) 0; }
   .project-hero__shape:before { top: 6rem; right: 6rem; bottom: 6rem; border-width: 0.35rem; border-radius: 0 calc(var(--blob-radius) - 6rem) calc(var(--blob-radius) - 6rem) 0; }
+  /* En pantallas chicas la captura va debajo del texto, no al costado */
   .project-hero__inner { padding: calc(var(--header-height) + 10rem) 12rem 12rem 8rem; }
+  .project-hero__shot { position: static; transform: none; width: auto; margin: 0 12rem 12rem 8rem; }
   .project-title { font-size: 5.6rem; }
   .project-lead { font-size: 2.3rem; }
   .project-meta { gap: 3.4rem 6rem; }
@@ -822,6 +841,7 @@ body.menu-active .scroll-top, body.menu-leave .scroll-top { opacity: 0; visibili
 @media only screen and (max-width: 767.98px) {
   .project-block, .project-gallery, .project-next__inner { padding-left: 4rem; padding-right: 4rem; }
   .project-hero__inner { padding: calc(var(--header-height) + 8rem) 9rem 9rem 4rem; }
+  .project-hero__shot { margin: 0 9rem 9rem 4rem; }
   /* "CONSULTORIOS" es una palabra sola y no puede partirse: a 8.6vw se salía de su
      columna. Este tamaño la deja entrar en las pantallas angostas. */
   .project-title { font-size: 7.2vw; }

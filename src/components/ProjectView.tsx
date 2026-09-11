@@ -17,6 +17,8 @@ type ProjectViewProps = {
 export default function ProjectView({ project, next }: ProjectViewProps) {
   const { detail } = project
   const v = site.projectView
+  // La primera captura hace de imagen de portada
+  const portada = detail.photos[0]
 
   return (
     <main className="project">
@@ -64,6 +66,13 @@ export default function ProjectView({ project, next }: ProjectViewProps) {
               </div>
             ) : null}
           </div>
+
+          {/* La captura de portada: el lado derecho de la D era un vacío negro */}
+          {portada ? (
+            <div className="project-hero__shot" aria-hidden="true">
+              <img src={portada.src} alt="" />
+            </div>
+          ) : null}
         </div>
       </section>
 

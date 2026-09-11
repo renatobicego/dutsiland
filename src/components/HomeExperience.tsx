@@ -382,7 +382,7 @@ export default function HomeExperience() {
       })
       smoother.paused(true) // sin scroll hasta que termine la intro
       initSticky()
-      initFooterReveal()
+      initFooterReveal()
     } else {
       // En móvil no hay intro: el titular se muestra directo
       gsap.set('.hero-headline .word > span', { opacity: 1, yPercent: 0, y: 0 })

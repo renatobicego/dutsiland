@@ -69,8 +69,12 @@ export default function Footer({ base = '' }: FooterProps) {
 
         <div className="footer-logo-wrap">
           <div className="footer-logo" aria-label="Dutsiland">
+            {/* Cada letra va en su propia máscara: así todas salen desde su piso y no
+                desde un recorte común, donde las bajas casi no se movían. */}
             {LETTERS.map((l) => (
-              <img key={l.file} className="letter" src={`/brand/${l.file}`} alt="" style={{ width: `${(l.w / TOTAL) * 100}%` }} />
+              <span key={l.file} className="letter-mask" style={{ width: `${(l.w / TOTAL) * 100}%` }}>
+                <img className="letter" src={`/brand/${l.file}`} alt="" />
+              </span>
             ))}
           </div>
         </div>
