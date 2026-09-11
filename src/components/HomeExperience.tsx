@@ -13,6 +13,9 @@ import type { Cleanup } from '@/lib/marquee'
 import { initCursor } from '@/lib/cursor'
 import { runLoader } from '@/lib/loader'
 import { initScrollState, initSectionWatcher } from '@/lib/scrollState'
+import { initMenu, goToHash } from '@/lib/menu'
+import { initRevealOnEnter, initFooterReveal } from '@/lib/reveal'
+import type { Smoother } from '@/lib/menu'
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother, CustomEase)
 
@@ -29,7 +32,6 @@ if (typeof window !== 'undefined' && process.env.NODE_ENV !== 'production') {
   window.__ScrollTrigger = ScrollTrigger
 }
 
-type Smoother = ReturnType<typeof ScrollSmoother.create>
 type Animation = gsap.core.Timeline | gsap.core.Tween
 
 /* Estados de las "D" del hero: inset (%) + radios (vh).
@@ -209,25 +211,6 @@ function initHeroScroll(header: HTMLElement | null): gsap.core.Timeline {
   return t
 }
 
-/* ---------- Sin pin (móvil y tablet): cada bloque entra al aparecer ---------- */
-function initRevealOnEnter(selectors: string[]): gsap.core.Tween[] {
-  const tweens: gsap.core.Tween[] = []
-  selectors.forEach((sel) => {
-    gsap.utils.toArray<HTMLElement>(sel).forEach((el) => {
-      tweens.push(
-        gsap.from(el, {
-          y: '3rem',
-          autoAlpha: 0,
-          duration: 0.7,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: el, start: 'top 90%', once: true, invalidateOnRefresh: true },
-        })
-      )
-    })
-  })
-  return tweens
-}
-
 /* ---------- Nuestra historia (fijada): el revelado lo maneja el scroll ---------- */
 function initHistoryScroll(): gsap.core.Timeline | null {
   if (!document.querySelector('.home-history')) return null
@@ -362,90 +345,6 @@ function initProcess(pinned: boolean): gsap.core.Timeline | gsap.core.Timeline[]
   return tl
 }
 
-/* ---------- footer que se revela debajo de proyectos (como la referencia) ---------- */
-function initFooterReveal(): gsap.core.Timeline {
-  const foot = gsap.timeline({
-    scrollTrigger: { trigger: '#footer', endTrigger: '.wrapper', start: 'top bottom', end: 'bottom bottom', scrub: true, anticipatePin: 1, invalidateOnRefresh: true },
-  })
-  foot.fromTo('#footer .footer-panel', { y: '30vh' }, { y: 0, ease: 'none' })
-  foot.to('.prev-section .portfolio-inner', { y: '14vh', ease: 'none' }, '<')
-  // El fade arranca a mitad: si empieza junto con el footer, queda un hueco negro visible
-  foot.to('.prev-section .portfolio-inner', { autoAlpha: 0, ease: 'power2.in' }, '<+0.5')
-  foot.to('#footer .footer-logo .letter', { y: 0, duration: 0.3, stagger: 0.04 }, '>-.2')
-  return foot
-}
-
-/* ---------- menú ---------- */
-type MenuOptions = {
-  smoother: Smoother | null
-  menuMark: gsap.core.Timeline | null
-}
-
-function initMenu({ smoother, menuMark }: MenuOptions): Cleanup {
-  const body = document.body
-  const ACTIVE = 'menu-active'
-  const LEAVE = 'menu-leave'
-  const api = {
-    get isOpen() {
-      return body.classList.contains(ACTIVE)
-    },
-    open() {
-      body.classList.add(ACTIVE)
-      setTimeout(() => menuMark && menuMark.play(), 500)
-      smoother && smoother.paused(true)
-    },
-    close() {
-      if (!api.isOpen) return
-      smoother && smoother.paused(false)
-      body.classList.remove(ACTIVE)
-      body.classList.add(LEAVE)
-      setTimeout(() => {
-        body.classList.remove(LEAVE)
-        menuMark && menuMark.pause(0)
-      }, 800)
-    },
-  }
-
-  const bt = document.getElementById('bt-menu')
-  const onBt = () => (api.isOpen ? api.close() : api.open())
-  bt && bt.addEventListener('click', onBt)
-
-  const onAnchor = (e: Event) => {
-    const a = e.currentTarget
-    if (!(a instanceof HTMLAnchorElement)) return
-    const href = a.getAttribute('href') || ''
-    const wasOpen = api.isOpen
-    if (a.hasAttribute('data-menu-close')) api.close()
-    if (!href.startsWith('#')) return
-    e.preventDefault()
-    const target = href === '#top' ? 0 : document.querySelector(href)
-    if (target === null) return
-    const go = () => {
-      if (smoother) {
-        // Las anclas dentro del hero no tienen una posición propia: el hero está fijado
-        // y su contenido lo va mostrando el scroll. initHeroScroll deja en cada una un
-        // data-hero-progress con el punto del tramo fijado en el que se ve.
-        const hero = target === 0 ? null : target.closest('.home-hero')
-        if (hero instanceof HTMLElement && target instanceof HTMLElement) {
-          const p = parseFloat(target.dataset.heroProgress ?? '')
-          const span = Math.max(0, hero.offsetHeight - window.innerHeight)
-          smoother.scrollTo(hero.offsetTop + (Number.isFinite(p) ? p * span : window.innerHeight), true)
-        } else smoother.scrollTo(target, true, 'top top')
-      } else if (target === 0) window.scrollTo({ top: 0, behavior: 'smooth' })
-      else target.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }
-    setTimeout(go, wasOpen ? 450 : 0)
-  }
-  const anchors = Array.from(document.querySelectorAll('a[href^="#"], a[data-menu-close]'))
-  anchors.forEach((a) => a.addEventListener('click', onAnchor))
-
-  return () => {
-    bt && bt.removeEventListener('click', onBt)
-    anchors.forEach((a) => a.removeEventListener('click', onAnchor))
-    body.classList.remove(ACTIVE, LEAVE)
-  }
-}
-
 export default function HomeExperience() {
   useEffect(() => {
     const device = getDevice()
@@ -496,46 +395,64 @@ export default function HomeExperience() {
         marqueeCleanup = initMarquees()
       }, 600)
     }
-    cleanups.push(
-      runLoader({
-        onLeaving: () => {
-          document.dispatchEvent(new CustomEvent('load:leaving'))
-          loaderMark && loaderMark.pause()
-          gsap.to('#loader .d-mark__d', { scale: 1, duration: 0.35 })
-          startMarquees()
-        },
-        onDone: () => {
-          if (device.isDesktop) {
-            intro = playHeroIntro(() => {
-              initHeroScroll(header)
-              smoother && smoother.paused(false)
-              ScrollTrigger.refresh()
-              refreshAOS()
-            })
-            // "Qué hacemos" no lleva su propia timeline: la arma initHeroScroll
-            // porque vive dentro del panel izquierdo del hero
-            sections.push(initHistoryScroll())
-          } else {
-            refreshAOS()
-            // Sin pin: historia y servicios se revelan bloque por bloque
-            sections.push(
-              ...initRevealOnEnter([
-                '.history-kicker',
-                '.history-year',
-                '.history-title',
-                '.history-text p',
-                '.services-head > *',
-                '.services-stack .service',
-                '.services-cta',
-              ])
-            )
-          }
-          // Solo en desktop la sección se fija (ver .home-process en globals.css)
-          process = initProcess(device.isDesktop)
+    // Volver desde una ficha de proyecto es navegación dentro del sitio: el preloader
+    // ya se vio al entrar y repetirlo es tapar la página por gusto. Y si además se
+    // vuelve a un ancla, tampoco corresponde la intro: el usuario quiere ir a ese
+    // punto, no ver la presentación de nuevo, así que la timeline se salta al final.
+    const yaEntro = document.body.dataset.load === 'first-done'
+    const conAncla = Boolean(window.location.hash) && window.location.hash !== '#top'
+
+    const arrancar = () => {
+      if (device.isDesktop) {
+        intro = playHeroIntro(() => {
+          initHeroScroll(header)
+          smoother && smoother.paused(false)
           ScrollTrigger.refresh()
-        },
-      })
-    )
+          refreshAOS()
+          // El hash recién se puede resolver acá: antes el hero está fijado y las
+          // posiciones de su contenido todavía no existen.
+          goToHash(smoother)
+        })
+        if (yaEntro && conAncla) intro.progress(1)
+        // "Qué hacemos" no lleva su propia timeline: la arma initHeroScroll
+        // porque vive dentro del panel izquierdo del hero
+        sections.push(initHistoryScroll())
+      } else {
+        refreshAOS()
+        // Sin pin: historia y servicios se revelan bloque por bloque
+        sections.push(
+          ...initRevealOnEnter([
+            '.history-kicker',
+            '.history-year',
+            '.history-title',
+            '.history-text p',
+            '.services-head > *',
+            '.services-stack .service',
+            '.services-cta',
+          ])
+        )
+      }
+      // Solo en desktop la sección se fija (ver .home-process en globals.css)
+      process = initProcess(device.isDesktop)
+      ScrollTrigger.refresh()
+    }
+
+    if (yaEntro) {
+      startMarquees()
+      arrancar()
+    } else {
+      cleanups.push(
+        runLoader({
+          onLeaving: () => {
+            document.dispatchEvent(new CustomEvent('load:leaving'))
+            loaderMark && loaderMark.pause()
+            gsap.to('#loader .d-mark__d', { scale: 1, duration: 0.35 })
+            startMarquees()
+          },
+          onDone: arrancar,
+        })
+      )
+    }
 
     const onLoad = () => ScrollTrigger.refresh()
     window.addEventListener('load', onLoad)

@@ -706,3 +706,132 @@ body.menu-active .scroll-top, body.menu-leave .scroll-top { opacity: 0; visibili
 @media only screen and (max-width: 1025px) { .container-cookies .utilizamos-cookies { padding: 2.5rem; right: var(--padding); left: auto; top: auto; bottom: 3.8rem; } }
 @media only screen and (max-width: 767.98px) { .container-cookies .utilizamos-cookies { left: 50%; right: auto; width: calc(100% - var(--padding-fluid) * 2); transform: translate(-50%); } }
 .container-cookies .utilizamos-cookies .btn-cookies { padding: 0.3rem 0; margin-top: 1rem; }
+
+/* =========================================================
+   FICHA DE PROYECTO (/proyectos/<slug>)
+   Mismo vocabulario que la landing: la D negra como contenedor, el antetítulo con
+   la D roja, las pastillas crema y el botón. Acá no se fija nada: es un documento
+   que scrollea y cada bloque entra al aparecer (ver ProjectExperience).
+   ========================================================= */
+.project-block { padding-left: 21rem; padding-right: 21rem; }
+.project-block__title { margin: 3rem 0 0; color: var(--black-1); font-size: 7.2rem; line-height: 1.08; font-weight: 800; text-transform: uppercase; }
+.project-block__title--light { color: var(--white-1); }
+
+/* ---------- portada ---------- */
+.project-hero { position: relative; background: var(--white-1); padding: 2rem 0; }
+/* El recorte va por variable, igual que las "D" del hero: animar el string del
+   clip-path o escribirlo desde un onUpdate se rompe cuando ScrollTrigger refresca. */
+.project-hero__shape {
+  --pr: 0%;
+  position: relative; min-height: calc(100vh - 4rem); display: flex; align-items: center;
+  background: var(--black-1); overflow: hidden;
+  clip-path: inset(0% var(--pr) 0% 0% round 0 var(--blob-radius) var(--blob-radius) 0);
+}
+.project-hero__shape:before { content: ''; position: absolute; top: 13rem; right: 13rem; bottom: 13rem; left: -20rem; border: 0.5rem solid var(--white-1); border-radius: 0 calc(var(--blob-radius) - 13rem) calc(var(--blob-radius) - 13rem) 0; pointer-events: none; }
+.project-hero__inner { position: relative; z-index: 1; width: 100%; padding: min(15rem, 15vh) 28rem min(8rem, 6vh) 21rem; }
+/* --btn-color es lo que pinta el texto y el subrayado de .btn-underlined. Sin él
+   cae al negro por defecto y queda negro sobre negro. */
+/* flex y no inline-flex: el antetítulo que va abajo también es inline-flex y los dos
+   terminarían en la misma línea, encimados. */
+.project-back { --btn-color: var(--white-1); display: flex; width: fit-content; align-items: center; margin-bottom: min(5rem, 4vh); color: var(--white-1); font-size: 1.9rem; line-height: 1; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.75; }
+.project-back:hover { opacity: 1; }
+.project-title { margin: min(3rem, 2.4vh) 0 0; color: var(--white-1); font-size: min(9.6rem, 8.4vh); line-height: 1.05; font-weight: 800; text-transform: uppercase; }
+.project-lead { margin-top: min(2.6rem, 2.2vh); max-width: 96rem; color: var(--white-1); font-size: min(2.8rem, 2.4vh); line-height: 1.45; opacity: 0.86; }
+.project-meta { display: flex; flex-wrap: wrap; gap: min(6rem, 5vh) 9rem; margin: min(5rem, 4vh) 0 0; }
+.project-meta__item dt { color: var(--red-1); font-size: 1.7rem; line-height: 1; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+.project-meta__item dd { margin: 1.4rem 0 0; color: var(--white-1); font-size: min(2.4rem, 2.1vh); line-height: 1.3; font-weight: 600; }
+.project-links { display: flex; flex-wrap: wrap; gap: 2rem 4rem; margin-top: min(5rem, 4vh); }
+.project-link { --btn-color: var(--white-1); display: inline-flex; align-items: center; color: var(--white-1); font-size: min(2.4rem, 2.1vh); line-height: 1; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; }
+
+/* ---------- el problema (sección clara) ---------- */
+.project-problem { position: relative; background: var(--white-1); color: var(--black-1); padding: 20rem 0 16rem; }
+.project-problem__text { margin-top: 6rem; max-width: 118rem; }
+.project-problem__text p { font-size: 3rem; line-height: 1.5; }
+.project-problem__text p + p { margin-top: 3.4rem; }
+
+/* ---------- qué construimos (D negra) ---------- */
+.project-built { position: relative; background: var(--white-1); padding: 0 0 4rem; }
+.project-built__shape { position: relative; background: var(--black-1); border-radius: 0 var(--blob-radius) var(--blob-radius) 0; overflow: hidden; padding: 18rem 0 18rem; }
+.project-built__shape:before { content: ''; position: absolute; top: 10rem; right: 10rem; bottom: 10rem; left: -20rem; border: 0.5rem solid var(--white-1); border-radius: 0 calc(var(--blob-radius) - 10rem) calc(var(--blob-radius) - 10rem) 0; pointer-events: none; }
+.project-built .project-block { position: relative; z-index: 1; padding-right: 28rem; }
+.project-built__list { margin: 8rem 0 0; }
+.built-item { display: grid; grid-template-columns: 10rem minmax(0, 1fr); gap: 0 5rem; padding-top: 4.4rem; border-top: 2px solid rgba(246, 240, 225, 0.24); }
+.built-item + .built-item { margin-top: 4.4rem; }
+.built-item__n { font-size: 2.8rem; line-height: 1; font-weight: 800; color: var(--red-1); letter-spacing: 0.02em; }
+.built-item__title { margin: 0; color: var(--white-1); font-size: 3.8rem; line-height: 1.1; font-weight: 800; text-transform: uppercase; }
+.built-item__text { margin-top: 1.4rem; max-width: 86rem; color: var(--white-1); font-size: 2.4rem; line-height: 1.45; opacity: 0.82; }
+.project-stack { margin-top: 9rem; }
+.project-stack__title { margin: 0 0 3rem; color: var(--red-1); font-size: 1.9rem; line-height: 1; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+
+/* ---------- el producto (galería) ---------- */
+.project-photos { position: relative; background: var(--white-1); color: var(--black-1); padding: 18rem 0 16rem; }
+.project-gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5rem; margin-top: 8rem; padding-left: 21rem; padding-right: 21rem; }
+/* Con una sola captura ocupa el ancho completo, así no queda un hueco al costado */
+.project-gallery .shot:only-child { grid-column: 1 / -1; }
+.shot { margin: 0; }
+.shot img { width: 100%; height: auto; display: block; border-radius: 2.4rem; background: var(--gray-2); border: 1px solid rgba(10, 10, 10, 0.12); }
+.shot figcaption { margin-top: 1.8rem; font-size: 2rem; line-height: 1.35; font-weight: 600; opacity: 0.7; }
+
+/* ---------- siguiente proyecto ---------- */
+.project-next { position: relative; background: var(--black-1); padding: 18rem 0 20rem; z-index: 2; overflow: hidden; }
+/* Al menos un alto de pantalla: el footer se revela por encima de esta sección y le
+   va bajando la opacidad (initFooterReveal). Si la sección es más corta que la
+   ventana, el footer arranca antes de que se llegue a leer el siguiente proyecto. */
+@media only screen and (min-width: 1025.1px) {
+  .project-next { min-height: 100vh; display: flex; align-items: center; }
+}
+.project-next__inner { width: 100%; padding-left: 21rem; padding-right: 21rem; }
+/* flex y no inline-flex, por lo mismo que .project-back: el antetítulo de arriba es
+   inline-flex y los dos caerían en la misma línea. */
+.project-next__link { display: flex; width: fit-content; align-items: center; gap: 2.4rem; margin-top: 3rem; color: var(--white-1); font-size: 7.2rem; line-height: 1.1; font-weight: 800; text-transform: uppercase; }
+.project-next__link .icon-arrow-diagonal { width: 4rem; height: 4rem; flex: none; }
+.project-next__link:hover { color: var(--red-1); }
+.project-next__cta { margin-top: 8rem; }
+
+@media only screen and (max-width: 1025px) {
+  .project-block, .project-gallery, .project-next__inner { padding-left: 8rem; padding-right: 8rem; }
+  .project-block__title { font-size: 5rem; }
+  .project-hero { padding: 0; }
+  .project-hero__shape { min-height: 0; clip-path: none; border-radius: 0 var(--blob-radius) var(--blob-radius) 0; }
+  .project-hero__shape:before { top: 6rem; right: 6rem; bottom: 6rem; border-width: 0.35rem; border-radius: 0 calc(var(--blob-radius) - 6rem) calc(var(--blob-radius) - 6rem) 0; }
+  .project-hero__inner { padding: calc(var(--header-height) + 10rem) 12rem 12rem 8rem; }
+  .project-title { font-size: 5.6rem; }
+  .project-lead { font-size: 2.3rem; }
+  .project-meta { gap: 3.4rem 6rem; }
+  .project-problem { padding: 12rem 0 10rem; }
+  .project-problem__text { margin-top: 4rem; }
+  .project-problem__text p { font-size: 2.3rem; }
+  .project-problem__text p + p { margin-top: 2.4rem; }
+  .project-built__shape { padding: 12rem 0 12rem; }
+  .project-built__shape:before { top: 5rem; right: 5rem; bottom: 5rem; border-width: 0.35rem; border-radius: 0 calc(var(--blob-radius) - 5rem) calc(var(--blob-radius) - 5rem) 0; }
+  .project-built .project-block { padding-right: 12rem; }
+  .project-built__list { margin-top: 5rem; }
+  .built-item { grid-template-columns: 1fr; gap: 1.2rem; padding-top: 3rem; }
+  .built-item + .built-item { margin-top: 3rem; }
+  .built-item__title { font-size: 3rem; }
+  .built-item__text { font-size: 2.2rem; }
+  .project-stack { margin-top: 6rem; }
+  .project-photos { padding: 12rem 0 10rem; }
+  .project-gallery { grid-template-columns: minmax(0, 1fr); gap: 4rem; margin-top: 5rem; }
+  .shot figcaption { font-size: 1.9rem; }
+  .project-next { padding: 12rem 0 14rem; }
+  .project-next__link { font-size: 4.4rem; gap: 1.6rem; }
+  .project-next__link .icon-arrow-diagonal { width: 3rem; height: 3rem; }
+  .project-next__cta { margin-top: 5rem; }
+}
+@media only screen and (max-width: 767.98px) {
+  .project-block, .project-gallery, .project-next__inner { padding-left: 4rem; padding-right: 4rem; }
+  .project-hero__inner { padding: calc(var(--header-height) + 8rem) 9rem 9rem 4rem; }
+  /* "CONSULTORIOS" es una palabra sola y no puede partirse: a 8.6vw se salía de su
+     columna. Este tamaño la deja entrar en las pantallas angostas. */
+  .project-title { font-size: 7.2vw; }
+  .project-block__title { font-size: 7.6vw; }
+  .project-next__link { font-size: 7.6vw; }
+  .project-built .project-block { padding-right: 9rem; }
+}
+
+/* ---------- la tarjeta del proyecto, cuando linkea a su ficha ---------- */
+.card__name { display: block; }
+.card__case { display: inline-flex; align-items: center; gap: 0.8rem; margin-top: 0.8rem; font-size: 1.7rem; font-weight: 700; letter-spacing: 0.06em; color: var(--red-1); opacity: 0; transform: translateY(0.8rem); transition: opacity 0.45s cubic-bezier(0.215, 0.61, 0.355, 1), transform 0.45s cubic-bezier(0.215, 0.61, 0.355, 1); }
+.card__case .icon-arrow-diagonal { width: 1.4rem; height: 1.4rem; }
+.card--link:hover .card__case { opacity: 1; transform: translateY(0); }

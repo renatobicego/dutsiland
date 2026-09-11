@@ -1,15 +1,22 @@
 /* eslint-disable @next/next/no-img-element */
+import Link from 'next/link'
 import { site } from '@/content/site'
 import DMark from './DMark'
 import { ArrowDiagonal } from './Button'
 
-export default function Header() {
+export type HeaderProps = {
+  /** Vacío en la home. En una ficha de proyecto es "/", así los links del menú
+   *  vuelven a la home en lugar de buscar anclas que no existen en esta página. */
+  base?: string
+}
+
+export default function Header({ base = '' }: HeaderProps) {
   return (
     <header id="header" data-get-section="">
       <div className="container-fluid">
         <div className="row">
           <div className="col-lg-2 col-tablet-3 col-3 column-logo">
-            <a href="#top" className="logo" aria-label={site.name} data-menu-close data-cursor-style="off">
+            <Link href={base || '#top'} className="logo" aria-label={site.name} data-menu-close data-cursor-style="off">
               <span className="hide">{site.name}</span>
               <div className="container-logo">
                 {/* Desktop: D + UTSILAND (la palabra se pliega al scrollear) */}
@@ -26,7 +33,7 @@ export default function Header() {
                   <img className="is-dark" src="/brand/logo-dark.png" alt="" />
                 </div>
               </div>
-            </a>
+            </Link>
           </div>
 
           <div className="col-lg-2 offset-lg-6 col-tablet-5 col-6 column-slogan">
@@ -50,9 +57,9 @@ export default function Header() {
                 <ul className="menu--list fs--header">
                   {site.menu.map((item) => (
                     <li key={item.href}>
-                      <a href={item.href} data-menu-close data-cursor-style="hovered">
+                      <Link href={base + item.href} data-menu-close data-cursor-style="hovered">
                         <span data-letter={item.label}>{item.label}</span>
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>

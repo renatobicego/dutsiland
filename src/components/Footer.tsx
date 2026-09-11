@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import Link from 'next/link'
 import { site } from '@/content/site'
 import { ArrowDiagonal, DIcon } from './Button'
 
@@ -23,23 +24,28 @@ const LETTERS: Letter[] = [
 ]
 const TOTAL = 969
 
+export type FooterProps = {
+  /** Vacío en la home; "/" en una ficha de proyecto (ver Header) */
+  base?: string
+}
+
 // Cuadro 12: panel crema redondeado sobre fondo negro, links con la D roja y el logotipo centrado.
-export default function Footer() {
+export default function Footer({ base = '' }: FooterProps) {
   return (
     <footer id="footer">
       <div className="footer-panel" id="contacto">
         <div className="footer-row footer-row--map row-opacity">
-          <a href="#top" className="footer-brand btn-underline" data-cursor-style="hovered-small">
+          <Link href={base || '#top'} className="footer-brand btn-underline" data-cursor-style="hovered-small">
             <span>{site.name}</span>
-          </a>
+          </Link>
           <span className="footer-slogan">{site.slogan}</span>
           <ul className="footer-site-map">
             {site.menu.map((item) => (
               <li key={item.href}>
-                <a href={item.href} className="footer-link btn-underlined" data-cursor-style="hovered-small">
+                <Link href={base + item.href} className="footer-link btn-underlined" data-cursor-style="hovered-small">
                   <DIcon />
                   <span>{item.label}</span>
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

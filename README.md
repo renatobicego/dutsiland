@@ -81,6 +81,32 @@ Dos cosas a tener en cuenta al tocar estas secciones:
 
 En móvil y tablet nada se fija: los bloques se revelan al entrar en pantalla.
 
+## Fichas de proyecto (`/proyectos/<slug>`)
+
+Cada caso tiene su propia URL, así se puede mandar un link a un cliente y cada caso se
+indexa por separado. La ficha cuenta **el problema que había que resolver**, qué
+construimos, con qué, y las capturas del producto.
+
+A diferencia de la home, acá **no se fija ninguna sección**: es un documento que
+scrollea y cada bloque entra al aparecer (`[data-reveal]`). Solo la portada tiene
+entrada propia, la misma apertura en D del hero. Por eso la ficha es de bajo riesgo:
+no toca el sistema de pins.
+
+Las fichas salen de `site.projects`. Un proyecto **sin `detail` no tiene página**: se
+muestra en la marquesina como tarjeta y nada más, y su URL da 404 (`generateStaticParams`
+solo genera los que tienen ficha). Para publicar un caso nuevo alcanza con escribirle
+el `detail`.
+
+Dos cosas a tener en cuenta:
+
+- **La navegación interna va con `next/link`**, no con `<a>`. Con un `<a>` la página se
+  recarga entera y el preloader vuelve a aparecer. Las dos experiencias (`HomeExperience`
+  y `ProjectExperience`) saltean el preloader si `body[data-load]` ya está en
+  `first-done`, y la home además saltea la intro cuando se vuelve a un ancla: quien
+  toca "volver a proyectos" quiere ir ahí, no ver la presentación otra vez.
+- **`--btn-color` es lo que pinta `.btn-underlined`.** Si no se define, el texto cae al
+  negro por defecto; sobre fondo negro queda invisible.
+
 ## Dónde está cada cosa
 
 | Qué                                                      | Dónde                               |
@@ -88,6 +114,9 @@ En móvil y tablet nada se fija: los bloques se revelan al entrar en pantalla.
 | Todos los textos, links, servicios, pasos y proyectos    | `src/content/site.ts`               |
 | Secciones                                                | `src/components/*.tsx`              |
 | Qué hacemos (panel izquierdo del hero, no una sección)   | `src/components/Services.tsx`       |
+| Fichas de proyecto                                       | `src/app/proyectos/[slug]/page.tsx` |
+| Layout y animación de la ficha                           | `ProjectView.tsx` + `ProjectExperience.tsx` |
+| Capturas de los casos                                    | `public/img/proyectos/<slug>/`      |
 | Intro, animaciones de scroll, loader, menú               | `src/components/HomeExperience.tsx` |
 | Utilidades (reveals, marquesina, cursor, split de texto) | `src/lib/*.ts`                      |
 | Estilos (todo el sistema visual)                         | `src/app/globals.css`               |
@@ -107,3 +136,7 @@ campo o cambia la estructura salta en el chequeo de tipos y no en pantalla. Las 
   Los dos párrafos actuales están redactados con lo que se sabe y marcados con `TODO` en el archivo.
 - **Destinos de "Política de privacidad" y "Términos y condiciones"** (`site.footer.legal`): hoy apuntan
   al contacto del sitio actual.
+- **Cómo contamos el problema en las dos fichas escritas** (Publicité y Mahatu): está redactado a partir
+  de lo que hace cada producto, no de un brief del cliente. Los dos `problem` están marcados con `TODO`.
+- **Las otras cinco fichas**: falta el problema, qué construimos y las capturas de Mimpronta, Wonder,
+  AMA, Medialuna y Cucha. Hasta que tengan `detail`, esas tarjetas no linkean a ninguna parte.
