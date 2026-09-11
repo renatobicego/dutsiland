@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Dutsiland — landing
 
-## Getting Started
+Landing de [Estudio Dutsiland](https://dutsiland.com) construida con Next.js 13 (App Router) y GSAP.
+El foco es la software factory: desarrollo de software a medida, además de diseño de producto y web.
 
-First, run the development server:
+Sigue el storyboard `v2.pdf` (dos "D" negras que se transforman, la D como contenedor, pastillas,
+botón con la D roja) sobre el sistema de animación de la referencia [defprojetos.com](https://www.defprojetos.com/):
+preloader, scroll suave, sección fijada, texto partido, marquesina, cursor y menú.
+
+## Correr el proyecto
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abrir <http://localhost:3000>.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+> Importante: no correr `next build` mientras el servidor de desarrollo está activo. El build
+> sobrescribe la carpeta `.next` que usa el modo desarrollo y la página queda sin estilos ni scripts.
+> Si pasa, parar el servidor, borrar `.next` y volver a levantarlo.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Secciones, en orden
 
-## Learn More
+| Sección          | Qué muestra                                                                  |
+| ---------------- | ---------------------------------------------------------------------------- |
+| Hero             | Intro animada: la D del loader se abre, sale "UTSILAND", entra el titular    |
+| Nuestra historia | Año de arranque y cómo empezó el estudio                                      |
+| Qué hacemos      | Tres frentes numerados: software a medida, diseño de producto, web/ecommerce  |
+| Cómo trabajamos  | Los seis pasos de la software factory, de la primera reunión al soporte       |
+| Proyectos        | Marquesina con los seis trabajos publicados                                   |
+| Footer           | Panel claro con navegación, mail, legales y el logotipo                       |
 
-To learn more about Next.js, take a look at the following resources:
+En el scroll del hero la D izquierda sale de escena, la derecha ocupa todo con la frase y su botón,
+y después se parte en dos D (cuadros 7 y 8 del storyboard).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Secciones fijadas (solo desktop)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Hero, historia, qué hacemos y cómo trabajamos se **fijan** mientras el scroll alimenta su animación,
+para que no se pasen de largo en dos ruedazos. En qué hacemos los tres frentes se intercambian en el
+mismo lugar; en cómo trabajamos el scroll traza un paso por vez, de 01 a 06.
 
-## Deploy on Vercel
+Dos cosas a tener en cuenta al tocar estas secciones:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **El fijado va con `data-sticky`, no con `position: sticky`.** El scroll suave desplaza el contenido
+  con una transformación, y dentro de un elemento transformado el sticky de CSS no retiene nada.
+- **Las medidas usan `min(rem, vh)`.** El `rem` de este proyecto escala con el ANCHO de la pantalla, así
+  que en pantallas anchas y bajas el contenido no entraba en una pantalla y se cortaba por arriba,
+  encimándose con el header. El tope en `vh` hace que cada pieza ceda cuando falta alto. Esos bloques
+  van al final de cada sección en `globals.css` para ganarle por orden a las reglas de base.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+En móvil y tablet nada se fija: los bloques se revelan al entrar en pantalla.
+
+## Dónde está cada cosa
+
+| Qué                                                      | Dónde                              |
+| -------------------------------------------------------- | ---------------------------------- |
+| Todos los textos, links, servicios, pasos y proyectos    | `src/content/site.js`              |
+| Secciones                                                | `src/components/*.js`              |
+| Intro, animaciones de scroll, loader, menú               | `src/components/HomeExperience.js` |
+| Utilidades (reveals, marquesina, cursor, split de texto) | `src/lib/*.js`                     |
+| Estilos (todo el sistema visual)                         | `src/app/globals.css`              |
+| Logos (D, UTSILAND, letras del logotipo)                 | `public/brand/`                    |
+| Imágenes de los proyectos                                | `public/img/`                       |
+| Tipografía (Montserrat, OFL)                             | `src/fonts/` + `src/app/layout.js` |
+
+## Pendientes de confirmar con el estudio
+
+- **Año de arranque** (`site.history.year`, hoy `2023`): es el número grande de la sección de historia.
+- **Historia**: falta la ciudad de origen y algún hito concreto (primer cliente, primer sistema propio).
+  Los dos párrafos actuales están redactados con lo que se sabe y marcados con `TODO` en el archivo.
+- **Destinos de "Política de privacidad" y "Términos y condiciones"** (`site.footer.legal`): hoy apuntan
+  al contacto del sitio actual.
