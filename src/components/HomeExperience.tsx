@@ -32,10 +32,16 @@ if (typeof window !== 'undefined' && process.env.NODE_ENV !== 'production') {
 type Smoother = ReturnType<typeof ScrollSmoother.create>
 type Animation = gsap.core.Timeline | gsap.core.Tween
 
-/* Estados de las dos "D" del hero: inset (%) + radios (vh).
-   Se animan sobre un objeto y se escriben como clip-path en cada frame, porque el
-   navegador re-serializa el string (colapsa valores iguales) y GSAP perdería la
-   correspondencia de números al interpolar. */
+/* Estados de las "D" del hero: inset (%) + radios (vh).
+   Cada número viaja en su propia variable CSS y el clip-path se compone en la hoja
+   de estilos (ver .blob en globals.css). Dos motivos:
+   - Animar el string completo no sirve: el navegador lo re-serializa y GSAP pierde
+     la correspondencia de números al interpolar.
+   - Escribirlo a mano desde un onUpdate tampoco: en cada refresh ScrollTrigger
+     re-renderiza con los eventos suprimidos, el onUpdate no se dispara y la silueta
+     se queda con lo último que alguien alcanzó a escribir —a mitad de camino— mientras
+     el contenido sigue de largo. Animando variables, el estilo del elemento ES el
+     objetivo y cualquier render lo deja bien. */
 type ClipState = { r: number; l: number; tl: number; tr: number; br: number; bl: number }
 
 const CLIP = {
@@ -52,30 +58,20 @@ const CLIP = {
   left2Full: { r: 0, l: 0, tl: 0, tr: 50, br: 50, bl: 0 }, // el panel se abre para "qué hacemos"
 } satisfies Record<string, ClipState>
 
-const clipState = new Map<HTMLElement, ClipState>()
-
-function applyClip(el: HTMLElement, s: ClipState) {
-  el.style.clipPath = `inset(0% ${s.r}% 0% ${s.l}% round ${s.tl}vh ${s.tr}vh ${s.br}vh ${s.bl}vh)`
+function clipVars(s: ClipState): gsap.TweenVars {
+  return { '--cr': `${s.r}%`, '--cl': `${s.l}%`, '--ctl': `${s.tl}vh`, '--ctr': `${s.tr}vh`, '--cbr': `${s.br}vh`, '--cbl': `${s.bl}vh` }
 }
 
 function setClip(selector: string, state: ClipState) {
-  const el = document.querySelector<HTMLElement>(selector)
-  if (!el) return
-  const s: ClipState = { ...state }
-  clipState.set(el, s)
-  applyClip(el, s)
+  gsap.set(selector, clipVars(state))
 }
 
-function clipTo(selector: string, state: ClipState, vars: gsap.TweenVars = {}): gsap.core.Tween {
-  const el = document.querySelector<HTMLElement>(selector)
-  if (!el) return gsap.to({}, { duration: 0 })
-  let stored = clipState.get(el)
-  if (!stored) {
-    stored = { ...state }
-    clipState.set(el, stored)
-  }
-  const s = stored
-  return gsap.to(s, { ...state, ...vars, onUpdate: () => applyClip(el, s) })
+/* Cada fase declara sus dos extremos. Es importante que los declare: si solo dijera
+   "hasta acá", GSAP tomaría como punto de partida lo que dejó otra fase, y una "D"
+   con varias fases (el panel izquierdo tiene dos, la D derecha tres) termina
+   arrancando desde donde no debe en cuanto algo invalida la timeline. */
+function clipTween(selector: string, from: ClipState, to: ClipState, vars: gsap.TweenVars = {}): gsap.core.Tween {
+  return gsap.fromTo(selector, clipVars(from), { ...clipVars(to), ...vars, immediateRender: false })
 }
 
 /* ---------- "D" del loader y del menú: pulso suave ---------- */
@@ -126,13 +122,13 @@ function playHeroIntro(onComplete: () => void): gsap.core.Timeline {
   const headline = document.querySelector('.hero-headline')
   const tl = gsap.timeline({ onComplete })
   // 1. el fondo negro del loader se vuelve una D gigante
-  tl.add(clipTo('.blob-left', CLIP.leftRounded, { duration: 0.8, ease: 'power2.inOut' }), 0)
+  tl.add(clipTween('.blob-left', CLIP.leftFull, CLIP.leftRounded, { duration: 0.8, ease: 'power2.inOut' }), 0)
   // 2. "UTSILAND" sale de atrás de la D
   tl.to(mask, { width: restWidth, marginLeft: '2.2vh', duration: 0.9, ease: 'power3.out' }, 0.55)
   // 3. la D se achica a la izquierda, entra la D derecha con el titular
-  tl.add(clipTo('.blob-left', CLIP.leftHero, { duration: 1.1, ease: 'power3.inOut' }), 1.5)
+  tl.add(clipTween('.blob-left', CLIP.leftRounded, CLIP.leftHero, { duration: 1.1, ease: 'power3.inOut' }), 1.5)
   tl.to('.hero-logo', { left: '22%', duration: 1.1, ease: 'power3.inOut' }, 1.5)
-  tl.add(clipTo('.blob-right', CLIP.rightHero, { duration: 1.1, ease: 'power3.inOut' }), 1.6)
+  tl.add(clipTween('.blob-right', CLIP.rightHidden, CLIP.rightHero, { duration: 1.1, ease: 'power3.inOut' }), 1.6)
   tl.add(() => headline && headline.classList.add('is-revealed'), 2.2)
   tl.to('.hero-mail', { autoAlpha: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 2.5)
   tl.to('#header', { autoAlpha: 1, duration: 0.7, ease: 'power2.out' }, 2.4)
@@ -173,21 +169,21 @@ function initHeroScroll(header: HTMLElement | null): gsap.core.Timeline {
   // Se va desplazándose (no contrayéndose): contraerla dejaba una franja con forma rara
   // pegada al borde izquierdo.
   t.to('.blob-left', { xPercent: -60, duration: 1, ease: 'none' }, 0)
-  t.add(clipTo('.blob-right', CLIP.rightClaim, { duration: 1, ease: 'none' }), 0)
+  t.add(clipTween('.blob-right', CLIP.rightHero, CLIP.rightClaim, { duration: 1, ease: 'none' }), 0)
   t.to('.hero-headline', { autoAlpha: 0, duration: 0.35, ease: 'none' }, 0)
   t.to('.hero-mail', { autoAlpha: 0, duration: 0.3, ease: 'none' }, 0)
   t.fromTo('.hero-claim', { autoAlpha: 0, y: '6rem' }, { autoAlpha: 1, y: 0, duration: 0.45, ease: 'none', immediateRender: false }, 0.55)
   // Fase B: la frase se parte en dos D. El texto queda recortado por las siluetas,
   // nítido y sin desvanecer, como en el cuadro 8 del storyboard.
-  t.add(clipTo('.blob-right', CLIP.rightSplit, { duration: 1, ease: 'none' }), 1)
-  t.add(clipTo('.blob-left2', CLIP.left2Split, { duration: 1, ease: 'none' }), 1)
+  t.add(clipTween('.blob-right', CLIP.rightClaim, CLIP.rightSplit, { duration: 1, ease: 'none' }), 1)
+  t.add(clipTween('.blob-left2', CLIP.left2Hidden, CLIP.left2Split, { duration: 1, ease: 'none' }), 1)
 
   // Fase C: la frase termina de irse por la derecha y, mientras tanto, el panel negro
   // de la izquierda se abre a todo el ancho. Ese panel es el contenedor de "qué
   // hacemos": una vez abierto, los tres frentes se muestran adentro.
   const OPEN = 0.85
-  t.add(clipTo('.blob-right', CLIP.rightGone, { duration: OPEN, ease: 'power2.inOut' }), 2)
-  t.add(clipTo('.blob-left2', CLIP.left2Full, { duration: OPEN, ease: 'power2.inOut' }), 2)
+  t.add(clipTween('.blob-right', CLIP.rightSplit, CLIP.rightGone, { duration: OPEN, ease: 'power2.inOut' }), 2)
+  t.add(clipTween('.blob-left2', CLIP.left2Split, CLIP.left2Full, { duration: OPEN, ease: 'power2.inOut' }), 2)
 
   const servicesAt = 2 + OPEN + 0.05
   const services = buildServicesSequence()

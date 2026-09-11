@@ -358,10 +358,16 @@ body.menu-active #header .social-list { pointer-events: auto; opacity: 1; transf
 .home-hero .container-sticky { position: sticky; top: 0; left: 0; }
 .hero-stage { position: relative; width: 100%; height: 100vh; overflow: hidden; background: var(--white-1); }
 
-.blob { position: absolute; inset: 0; background: var(--black-1); overflow: hidden; will-change: clip-path; }
-.blob-left { clip-path: inset(0% 56% 0% 0% round 0vh 50vh 50vh 0vh); z-index: 2; }
-.blob-right { clip-path: inset(0% 0% 0% 46% round 50vh 0vh 0vh 50vh); z-index: 1; }
-.blob-left2 { clip-path: inset(0% 100% 0% 0% round 0vh 50vh 50vh 0vh); z-index: 3; }
+/* La silueta se compone con variables, una por número: así GSAP anima escalares y
+   no un string que el navegador re-serializa (ver clipTween en HomeExperience). */
+.blob {
+  position: absolute; inset: 0; background: var(--black-1); overflow: hidden; will-change: clip-path;
+  --cr: 0%; --cl: 0%; --ctl: 0vh; --ctr: 0vh; --cbr: 0vh; --cbl: 0vh;
+  clip-path: inset(0% var(--cr) 0% var(--cl) round var(--ctl) var(--ctr) var(--cbr) var(--cbl));
+}
+.blob-left { --cr: 56%; --ctr: 50vh; --cbr: 50vh; z-index: 2; }
+.blob-right { --cl: 46%; --ctl: 50vh; --cbl: 50vh; z-index: 1; }
+.blob-left2 { --cr: 100%; --ctr: 50vh; --cbr: 50vh; z-index: 3; }
 
 .hero-logo { position: absolute; left: 22%; top: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; }
 .hero-logo__d { height: 35vh; width: auto; display: block; }
