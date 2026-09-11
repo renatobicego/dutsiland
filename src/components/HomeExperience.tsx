@@ -253,8 +253,8 @@ function buildServicesSequence(): gsap.core.Timeline | null {
     const title = first.querySelector<HTMLElement>('.service__title')
     const pad = parseFloat(getComputedStyle(first).paddingTop) || 0
     const natural = pad + (title ? title.offsetHeight : 0) + 2 + stack.offsetHeight * 0.05
-    // Nunca más de un tercio del hueco: así las tres filas entran siempre
-    return Math.min(natural, stack.offsetHeight / 3)
+    // Repartido entre los frentes que haya: así las filas entran siempre, sean tres o cuatro
+    return Math.min(natural, stack.offsetHeight / services.length)
   }
 
   // Estado inicial explícito, por el mismo motivo que en initHistoryScroll
@@ -382,7 +382,7 @@ export default function HomeExperience() {
       })
       smoother.paused(true) // sin scroll hasta que termine la intro
       initSticky()
-      initFooterReveal()
+      initFooterReveal()
     } else {
       // En móvil no hay intro: el titular se muestra directo
       gsap.set('.hero-headline .word > span', { opacity: 1, yPercent: 0, y: 0 })

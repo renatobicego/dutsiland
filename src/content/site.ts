@@ -182,7 +182,7 @@ export const site: Site = {
   // ---------- Qué hacemos (tres frentes diferenciados) ----------
   services: {
     kicker: 'QUÉ HACEMOS',
-    title: 'Tres frentes, un mismo equipo',
+    title: 'Cuatro frentes, un mismo equipo',
     intro:
       'No vendemos horas de diseño y horas de código por separado. Definimos cómo se usa el producto y lo construimos nosotros mismos.',
     groups: [
@@ -190,15 +190,7 @@ export const site: Site = {
         n: '01',
         title: 'SOFTWARE A MEDIDA',
         lead: 'El sistema que tu operación necesita, escrito desde cero.',
-        items: [
-          'Sistemas de gestión',
-          'Aplicaciones web',
-          'Integraciones y APIs',
-          'Automatización de procesos',
-          'Implementación de IA en procesos',
-          'Agentes de IA y bots',
-          'Paneles y reportes',
-        ],
+        items: ['Sistemas de gestión', 'Aplicaciones web', 'Integraciones y APIs', 'Paneles y reportes'],
       },
       {
         n: '02',
@@ -216,6 +208,18 @@ export const site: Site = {
         title: 'WEB Y ECOMMERCE',
         lead: 'Tu presencia online, rápida y hecha a medida.',
         items: ['Diseño y desarrollo web', 'Landing pages', 'Tiendas online', 'Web interactiva 3D · WebGL'],
+      },
+      {
+        n: '04',
+        title: 'IA Y AUTOMATIZACIÓN',
+        lead: 'Que el sistema resuelva solo lo que hoy resuelve alguien a mano.',
+        items: [
+          'Implementación de IA en procesos',
+          'Agentes de IA',
+          'Bots y asistentes',
+          'Automatización de procesos',
+          'Integración con modelos',
+        ],
       },
     ],
     cta: { label: 'Hablá con nosotros', href: '#contacto' },

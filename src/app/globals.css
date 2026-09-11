@@ -352,9 +352,10 @@ body.menu-active #header .social-list { pointer-events: auto; opacity: 1; transf
    HERO (cuadros 3–8): dos "D" negras
    ========================================================= */
 .home-hero { position: relative; background: var(--white-1); }
-/* 775vh: la intro, la frase, la partida en dos D, la apertura del panel y los tres
-   frentes adentro. Todo eso lo alimenta un solo tramo fijado. */
-@media only screen and (min-width: 1025.1px) { .home-hero { height: 775vh; } }
+/* 840vh: la intro, la frase, la partida en dos D, la apertura del panel y los cuatro
+   frentes adentro. Todo eso lo alimenta un solo tramo fijado; si se suma o se saca un
+   frente hay que mover este alto, o cambia el ritmo de todas las fases. */
+@media only screen and (min-width: 1025.1px) { .home-hero { height: 840vh; } }
 .home-hero .container-sticky { position: sticky; top: 0; left: 0; }
 .hero-stage { position: relative; width: 100%; height: 100vh; overflow: hidden; background: var(--white-1); }
 
@@ -534,17 +535,23 @@ body.menu-active #header .social-list { pointer-events: auto; opacity: 1; transf
 @media only screen and (min-width: 1025.1px) {
   /* El padding superior reserva el lugar del header fijo */
   .blob-left2 .services-shape { padding: min(13rem, 13vh) 0 min(7rem, 5vh); }
-  .blob-left2 .services-title { font-size: min(7.2rem, 6.2vh); margin-top: min(3.4rem, 2.6vh); }
-  .blob-left2 .services-intro { font-size: min(2.6rem, 2.3vh); margin-top: min(2.6rem, 2.2vh); }
-  /* El hueco lo marca el frente más alto: "software a medida" llegó a siete pastillas
-     y con 38rem se pasaba sobre el botón. */
-  .blob-left2 .services-stack { margin-top: min(6rem, 4.2vh); min-height: min(44rem, 39vh); }
+  /* El contorno tiene que ceder con el mismo tope que el padding que ubica el
+     contenido. Si queda en 13rem fijo, en pantallas anchas y bajas el contenido
+     arranca más arriba que la línea y el antetítulo la termina pisando. */
+  .blob-left2 .services-shape:before { top: min(13rem, 13vh); bottom: min(13rem, 13vh); }
+  .blob-left2 .services-title { font-size: min(6.6rem, 5.5vh); margin-top: min(2.8rem, 2.2vh); }
+  .blob-left2 .services-intro { font-size: min(2.5rem, 2.2vh); margin-top: min(2rem, 1.8vh); }
+  /* El hueco tiene que aguantar dos cosas: el frente más alto, y el índice del cierre,
+     que ahora son cuatro filas en vez de tres. */
+  .blob-left2 .services-stack { margin-top: min(3.5rem, 2.6vh); min-height: min(46rem, 38.5vh); }
   .blob-left2 .service { padding-top: min(5.5rem, 4vh); }
   .blob-left2 .service__title { font-size: min(5.6rem, 4.8vh); }
   .blob-left2 .service__lead { font-size: min(2.6rem, 2.3vh); margin-top: min(1.6rem, 1.4vh); }
   .blob-left2 .services-pills { gap: min(1.8rem, 1.6vh) 2rem; margin-top: min(4rem, 3vh); }
   .blob-left2 .pill { height: min(6.4rem, 5.4vh); padding: 0 min(3.4rem, 3vh); font-size: min(2.3rem, 2vh); }
-  .blob-left2 .services-cta { margin-top: min(6rem, 4vh); }
+  /* El bloque va centrado: todo lo que crece el contenido le sube el techo, y el
+     antetítulo termina pisando el contorno. Con cuatro frentes hay que ser más cortito. */
+  .blob-left2 .services-cta { margin-top: min(4.5rem, 3.2vh); }
   .blob-left2 .services-cta .btn-d { height: min(8.7rem, 7.4vh); }
   .blob-left2 .services-cta .btn-d__label { font-size: min(3.6rem, 3.1vh); }
 }
