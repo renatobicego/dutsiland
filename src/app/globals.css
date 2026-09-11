@@ -352,7 +352,9 @@ body.menu-active #header .social-list { pointer-events: auto; opacity: 1; transf
    HERO (cuadros 3–8): dos "D" negras
    ========================================================= */
 .home-hero { position: relative; background: var(--white-1); }
-@media only screen and (min-width: 1025.1px) { .home-hero { height: 300vh; } }
+/* 775vh: la intro, la frase, la partida en dos D, la apertura del panel y los tres
+   frentes adentro. Todo eso lo alimenta un solo tramo fijado. */
+@media only screen and (min-width: 1025.1px) { .home-hero { height: 775vh; } }
 .home-hero .container-sticky { position: sticky; top: 0; left: 0; }
 .hero-stage { position: relative; width: 100%; height: 100vh; overflow: hidden; background: var(--white-1); }
 
@@ -387,7 +389,6 @@ body.menu-active #header .social-list { pointer-events: auto; opacity: 1; transf
   .blob { position: relative; inset: auto; clip-path: none !important; will-change: auto; }
   .blob-left { border-radius: 0 var(--blob-radius) var(--blob-radius) 0; min-height: 62vh; }
   .blob-right { border-radius: var(--blob-radius) 0 0 var(--blob-radius); padding: 8rem 5rem 8rem 7rem; }
-  .blob-left2 { display: none; }
   .hero-logo { position: relative; left: auto; top: auto; transform: none; padding: 8rem 5rem 15rem; }
   .hero-logo__d { height: 30vw; flex: none; }
   .hero-logo__rest-mask { height: 31.7vw; width: 28.1vw; margin-left: 2vw; flex: none; }
@@ -459,19 +460,21 @@ body.menu-active #header .social-list { pointer-events: auto; opacity: 1; transf
 /* =========================================================
    QUÉ HACEMOS (cuadros 9–10): D negra con contorno concéntrico
    ========================================================= */
-.home-services { position: relative; background: var(--white-1); padding: 8rem 0 8rem; }
-/* Igual que historia: se fija y los tres frentes se intercambian con el scroll */
+/* No es una sección: va dentro del panel izquierdo del hero (.blob-left2).
+   En desktop el negro y el recorte los pone el propio panel, que el scroll abre
+   a todo el ancho; acá solo queda el contorno concéntrico y el contenido. */
 @media only screen and (min-width: 1025.1px) {
-  /* Alcanza para los tres frentes de a uno, el índice de cierre y un tramo quieto */
-  .home-services { height: 480vh; padding: 0; }
-  .home-services .container-sticky { position: sticky; top: 0; height: 100vh; padding: 2rem 0; display: flex; }
-  .services-shape { flex: 1; display: flex; align-items: center; }
+  /* Sin align-items: la forma se estira a todo el alto del panel (igual que cuando
+     era una sección con su propio container-sticky) y centra el contenido adentro.
+     El padding sólo mueve contorno y contenido: el negro lo pinta el panel completo. */
+  .blob-left2 { display: flex; padding: 2rem 0; }
+  .blob-left2 .services-shape { flex: 1; display: flex; align-items: center; background: none; border-radius: 0; overflow: visible; }
 }
 .services-shape { position: relative; background: var(--black-1); border-radius: 0 var(--blob-radius) var(--blob-radius) 0; overflow: hidden; padding: 22rem 0 24rem; }
 .services-shape:before { content: ''; position: absolute; top: 13rem; right: 13rem; bottom: 13rem; left: -20rem; border: 0.5rem solid var(--white-1); border-radius: 0 calc(var(--blob-radius) - 13rem) calc(var(--blob-radius) - 13rem) 0; pointer-events: none; }
 .services-inner { position: relative; z-index: 1; width: 100%; padding-left: 21rem; padding-right: 28rem; }
 .services-head { max-width: 128rem; }
-/* Los tres frentes comparten lugar: el scroll los intercambia (initServicesScroll) */
+/* Los tres frentes comparten lugar: el scroll los intercambia (addServicesSequence) */
 @media only screen and (min-width: 1025.1px) {
   .services-stack { position: relative; min-height: 34rem; margin-top: 9rem; }
   .services-stack .service { position: absolute; top: 0; left: 0; width: 100%; margin-top: 0 !important; }
@@ -489,7 +492,9 @@ body.menu-active #header .social-list { pointer-events: auto; opacity: 1; transf
 .pill { display: inline-flex; align-items: center; justify-content: center; height: 6.4rem; padding: 0 3.4rem; border-radius: 10rem; background: var(--white-1); color: var(--black-1); font-size: 2.3rem; line-height: 1; font-weight: 700; text-transform: uppercase; white-space: nowrap; }
 .services-cta { margin-top: 9rem; }
 @media only screen and (max-width: 1025px) {
-  .home-services { padding: 4rem 0; }
+  /* El panel deja de ser silueta y pasa a ser un bloque más de la pila del hero:
+     el negro y el radio los pone .services-shape que va adentro. */
+  .blob-left2 { display: block; background: none; margin: 6rem -2rem 0; }
   .services-shape { padding: 13rem 0 14rem; }
   .services-shape:before { top: 6rem; right: 6rem; bottom: 6rem; border-width: 0.35rem; border-radius: 0 calc(var(--blob-radius) - 6rem) calc(var(--blob-radius) - 6rem) 0; }
   .services-inner { padding-left: 8rem; padding-right: 12rem; }
@@ -512,25 +517,25 @@ body.menu-active #header .social-list { pointer-events: auto; opacity: 1; transf
   .pill { white-space: normal; text-align: center; height: auto; min-height: 5rem; padding: 1.1rem 2.2rem; font-size: 1.9rem; line-height: 1.15; }
 }
 
-/* Ajuste a la ALTURA de la pantalla, para la sección fijada.
+/* Ajuste a la ALTURA de la pantalla, para el panel de "qué hacemos".
    Va al final para ganarle por orden a las reglas de arriba.
    El rem de este proyecto escala con el ANCHO, así que en pantallas anchas y
    bajas el contenido no entraba y se cortaba por arriba, encimándose con el
    header. Con min(rem, vh) cada pieza cede cuando falta alto. */
 @media only screen and (min-width: 1025.1px) {
   /* El padding superior reserva el lugar del header fijo */
-  .home-services .services-shape { padding: min(13rem, 13vh) 0 min(7rem, 5vh); }
-  .home-services .services-title { font-size: min(7.2rem, 6.2vh); margin-top: min(3.4rem, 2.6vh); }
-  .home-services .services-intro { font-size: min(2.6rem, 2.3vh); margin-top: min(2.6rem, 2.2vh); }
-  .home-services .services-stack { margin-top: min(6rem, 4.2vh); min-height: min(38rem, 34vh); }
-  .home-services .service { padding-top: min(5.5rem, 4vh); }
-  .home-services .service__title { font-size: min(5.6rem, 4.8vh); }
-  .home-services .service__lead { font-size: min(2.6rem, 2.3vh); margin-top: min(1.6rem, 1.4vh); }
-  .home-services .services-pills { gap: min(1.8rem, 1.6vh) 2rem; margin-top: min(4rem, 3vh); }
-  .home-services .pill { height: min(6.4rem, 5.4vh); padding: 0 min(3.4rem, 3vh); font-size: min(2.3rem, 2vh); }
-  .home-services .services-cta { margin-top: min(6rem, 4vh); }
-  .home-services .services-cta .btn-d { height: min(8.7rem, 7.4vh); }
-  .home-services .services-cta .btn-d__label { font-size: min(3.6rem, 3.1vh); }
+  .blob-left2 .services-shape { padding: min(13rem, 13vh) 0 min(7rem, 5vh); }
+  .blob-left2 .services-title { font-size: min(7.2rem, 6.2vh); margin-top: min(3.4rem, 2.6vh); }
+  .blob-left2 .services-intro { font-size: min(2.6rem, 2.3vh); margin-top: min(2.6rem, 2.2vh); }
+  .blob-left2 .services-stack { margin-top: min(6rem, 4.2vh); min-height: min(38rem, 34vh); }
+  .blob-left2 .service { padding-top: min(5.5rem, 4vh); }
+  .blob-left2 .service__title { font-size: min(5.6rem, 4.8vh); }
+  .blob-left2 .service__lead { font-size: min(2.6rem, 2.3vh); margin-top: min(1.6rem, 1.4vh); }
+  .blob-left2 .services-pills { gap: min(1.8rem, 1.6vh) 2rem; margin-top: min(4rem, 3vh); }
+  .blob-left2 .pill { height: min(6.4rem, 5.4vh); padding: 0 min(3.4rem, 3vh); font-size: min(2.3rem, 2vh); }
+  .blob-left2 .services-cta { margin-top: min(6rem, 4vh); }
+  .blob-left2 .services-cta .btn-d { height: min(8.7rem, 7.4vh); }
+  .blob-left2 .services-cta .btn-d__label { font-size: min(3.6rem, 3.1vh); }
 }
 
 /* =========================================================

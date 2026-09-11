@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { site } from '@/content/site'
 import Button, { ArrowDiagonal } from './Button'
+import Services from './Services'
 
 // Cuadros 3 a 8 del storyboard: dos "D" negras que se transforman.
 //  - Intro (tiempo): la D del loader abre sus esquinas, "UTSILAND" sale de atrás de la D,
@@ -43,8 +44,12 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Blob izquierdo secundario: aparece cuando la frase se parte en dos */}
-          <div className="blob blob-left2" aria-hidden="true" />
+          {/* Panel izquierdo: la sombra negra que entra cuando la frase se va a la
+              derecha. No es decorativa: es el contenedor de "Qué hacemos". Se abre a
+              todo el ancho y los tres frentes se muestran acá adentro. */}
+          <div className="blob blob-left2" data-cursor-style="default-white">
+            <Services />
+          </div>
         </div>
       </div>
     </section>

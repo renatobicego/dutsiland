@@ -46,8 +46,10 @@ const CLIP = {
   rightHero: { r: 0, l: 46, tl: 50, tr: 0, br: 0, bl: 50 }, // cuadro 5
   rightClaim: { r: 0, l: 0, tl: 50, tr: 0, br: 0, bl: 50 }, // cuadro 7
   rightSplit: { r: 0, l: 52, tl: 50, tr: 0, br: 0, bl: 50 }, // cuadro 8
+  rightGone: { r: 0, l: 100, tl: 50, tr: 0, br: 0, bl: 50 }, // la frase termina de irse a la derecha
   left2Hidden: { r: 100, l: 0, tl: 0, tr: 0, br: 0, bl: 0 },
   left2Split: { r: 51, l: 0, tl: 0, tr: 50, br: 50, bl: 0 }, // cuadro 8
+  left2Full: { r: 0, l: 0, tl: 0, tr: 50, br: 50, bl: 0 }, // el panel se abre para "qué hacemos"
 } satisfies Record<string, ClipState>
 
 const clipState = new Map<HTMLElement, ClipState>()
@@ -137,7 +139,22 @@ function playHeroIntro(onComplete: () => void): gsap.core.Timeline {
   return tl
 }
 
-/* ---------- scroll del hero (cuadros 5 → 8), fijado y atado al scroll ---------- */
+/* La secuencia de "qué hacemos" se escribió con su propio ritmo de scroll (~485px por
+   unidad). Metida en la timeline del hero, que corre a ~900px por unidad, hay que
+   comprimirla con timeScale para que cada paso cueste el mismo scroll que antes. */
+const SERVICES_TIMESCALE = 1.85
+
+/* Posición en la timeline del hero desde la que cada ancla tiene sentido: el menú las
+   lee de data-hero-progress para saber a qué altura del tramo fijado saltar. */
+function markHeroAnchor(selector: string, position: number, total: number) {
+  const el = document.querySelector<HTMLElement>(selector)
+  if (el) el.dataset.heroProgress = (position / total).toFixed(4)
+}
+
+/* ---------- scroll del hero (cuadros 5 → 8 + qué hacemos), fijado al scroll ----------
+   Fase A: la frase entra. Fase B: se parte en dos D. Fase C: la frase termina de irse
+   a la derecha y, mientras tanto, el panel negro de la izquierda se abre a todo el
+   ancho y muestra adentro los tres frentes. Después sigue nuestra historia. */
 function initHeroScroll(header: HTMLElement | null): gsap.core.Timeline {
   const base = { markers: false, anticipatePin: 1, invalidateOnRefresh: true }
   const t = gsap.timeline({
@@ -164,6 +181,24 @@ function initHeroScroll(header: HTMLElement | null): gsap.core.Timeline {
   // nítido y sin desvanecer, como en el cuadro 8 del storyboard.
   t.add(clipTo('.blob-right', CLIP.rightSplit, { duration: 1, ease: 'none' }), 1)
   t.add(clipTo('.blob-left2', CLIP.left2Split, { duration: 1, ease: 'none' }), 1)
+
+  // Fase C: la frase termina de irse por la derecha y, mientras tanto, el panel negro
+  // de la izquierda se abre a todo el ancho. Ese panel es el contenedor de "qué
+  // hacemos": una vez abierto, los tres frentes se muestran adentro.
+  const OPEN = 0.85
+  t.add(clipTo('.blob-right', CLIP.rightGone, { duration: OPEN, ease: 'power2.inOut' }), 2)
+  t.add(clipTo('.blob-left2', CLIP.left2Full, { duration: OPEN, ease: 'power2.inOut' }), 2)
+
+  const servicesAt = 2 + OPEN + 0.05
+  const services = buildServicesSequence()
+  if (services) {
+    services.timeScale(SERVICES_TIMESCALE)
+    t.add(services, servicesAt)
+  }
+
+  const total = t.duration()
+  markHeroAnchor('.hero-claim', 1, total)
+  markHeroAnchor('#servicios', servicesAt, total)
   return t
 }
 
@@ -210,8 +245,11 @@ function initHistoryScroll(): gsap.core.Timeline | null {
   return t
 }
 
-/* ---------- Qué hacemos (fijada): los tres frentes se intercambian ---------- */
-function initServicesScroll(): gsap.core.Timeline | null {
+/* ---------- Qué hacemos: los tres frentes se intercambian dentro del panel ----------
+   No tiene scrollTrigger propio: devuelve una timeline suelta que initHeroScroll
+   engancha a la del hero, porque "qué hacemos" vive dentro del panel izquierdo y
+   comparte el mismo tramo fijado. */
+function buildServicesSequence(): gsap.core.Timeline | null {
   const services = gsap.utils.toArray<HTMLElement>('.services-stack .service')
   if (!services.length) return null
   const stack = document.querySelector<HTMLElement>('.services-stack')
@@ -237,9 +275,7 @@ function initServicesScroll(): gsap.core.Timeline | null {
   gsap.set(services, { autoAlpha: 0, y: '6rem' })
   gsap.set('.services-stack .pill', { autoAlpha: 0, y: '2rem' })
 
-  const t = gsap.timeline({
-    scrollTrigger: { trigger: '.home-services', start: 'top top', end: 'bottom bottom', scrub: 1, invalidateOnRefresh: true },
-  })
+  const t = gsap.timeline()
 
   // Primero el encabezado
   t.to('.services-head .section-kicker', { autoAlpha: 1, y: 0, duration: 0.3, ease: 'none' }, 0)
@@ -266,7 +302,7 @@ function initServicesScroll(): gsap.core.Timeline | null {
     t.to(service, { autoAlpha: 1, y: () => i * rowStep(), duration: 0.7, ease: 'power3.out' }, recap + 0.1 + i * 0.08)
   })
   t.to('.services-cta', { autoAlpha: 1, y: 0, duration: 0.45, ease: 'power2.out' }, recap + 0.95)
-  // Tramo final quieto: deja leer los tres frentes antes de soltar la sección
+  // Tramo final quieto: deja leer los tres frentes antes de soltar el pin
   t.to({}, { duration: 0.8 })
   return t
 }
@@ -379,10 +415,15 @@ function initMenu({ smoother, menuMark }: MenuOptions): Cleanup {
     if (target === null) return
     const go = () => {
       if (smoother) {
-        // Las anclas dentro del hero fijado necesitan un desplazamiento extra (la frase vive en el segundo tramo)
-        const hero = target !== 0 ? target.closest('.home-hero') : null
-        if (hero instanceof HTMLElement) smoother.scrollTo(hero.offsetTop + window.innerHeight, true)
-        else smoother.scrollTo(target, true, 'top top')
+        // Las anclas dentro del hero no tienen una posición propia: el hero está fijado
+        // y su contenido lo va mostrando el scroll. initHeroScroll deja en cada una un
+        // data-hero-progress con el punto del tramo fijado en el que se ve.
+        const hero = target === 0 ? null : target.closest('.home-hero')
+        if (hero instanceof HTMLElement && target instanceof HTMLElement) {
+          const p = parseFloat(target.dataset.heroProgress ?? '')
+          const span = Math.max(0, hero.offsetHeight - window.innerHeight)
+          smoother.scrollTo(hero.offsetTop + (Number.isFinite(p) ? p * span : window.innerHeight), true)
+        } else smoother.scrollTo(target, true, 'top top')
       } else if (target === 0) window.scrollTo({ top: 0, behavior: 'smooth' })
       else target.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
@@ -465,7 +506,9 @@ export default function HomeExperience() {
               ScrollTrigger.refresh()
               refreshAOS()
             })
-            sections.push(initHistoryScroll(), initServicesScroll())
+            // "Qué hacemos" no lleva su propia timeline: la arma initHeroScroll
+            // porque vive dentro del panel izquierdo del hero
+            sections.push(initHistoryScroll())
           } else {
             refreshAOS()
             // Sin pin: historia y servicios se revelan bloque por bloque

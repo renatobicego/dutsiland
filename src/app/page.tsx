@@ -1,7 +1,6 @@
 import Header from '@/components/Header'
 import Hero from '@/components/Hero'
 import History from '@/components/History'
-import Services from '@/components/Services'
 import Process from '@/components/Process'
 import Portfolio from '@/components/Portfolio'
 import Footer from '@/components/Footer'
@@ -30,10 +29,11 @@ export default function Home() {
       <div id="main-transition">
         <div id="smooth-wrapper" className="container-wrapper">
           <div className="wrapper" id="pg-home" data-scroll-container>
+            {/* "Qué hacemos" no es una sección propia: va dentro del panel izquierdo
+                del hero, que es la sombra negra que entra cuando la frase se va. */}
             <main>
               <Hero />
               <History />
-              <Services />
               <Process />
               <Portfolio />
             </main>
