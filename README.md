@@ -136,7 +136,9 @@ campo o cambia la estructura salta en el chequeo de tipos y no en pantalla. Las 
   Los dos párrafos actuales están redactados con lo que se sabe y marcados con `TODO` en el archivo.
 - **Destinos de "Política de privacidad" y "Términos y condiciones"** (`site.footer.legal`): hoy apuntan
   al contacto del sitio actual.
-- **Cómo contamos el problema en las dos fichas escritas** (Publicité y Mahatu): está redactado a partir
-  de lo que hace cada producto, no de un brief del cliente. Los dos `problem` están marcados con `TODO`.
-- **Las otras cinco fichas**: falta el problema, qué construimos y las capturas de Mimpronta, Wonder,
-  AMA, Medialuna y Cucha. Hasta que tengan `detail`, esas tarjetas no linkean a ninguna parte.
+- **Cómo contamos el problema en cada ficha**: está redactado a partir de lo que hace el producto y de
+  lo que decía el sitio actual, no de un brief del cliente. Publicité y Mahatu están marcados con `TODO`;
+  los otros cinco salen de las fichas de `dutsiland.com/#trabajos`, que cuentan el trabajo pero no el
+  problema previo.
+- **El stack de cinco proyectos** (AMA, Cucha, Medialuna, Mimpronta y Wonder): el sitio actual solo
+  listaba servicios, no tecnologías. Mientras `stack` esté vacío, la ficha no muestra ese bloque.
