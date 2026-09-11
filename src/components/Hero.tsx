@@ -29,7 +29,7 @@ export default function Hero() {
 
           {/* Blob derecho: titular y, más abajo en el scroll, la frase */}
           <div className="blob blob-right" data-cursor-style="default-white">
-            {/* El reveal lo maneja la clase .is-revealed que agrega la intro, no data-aos */}
+            {/* El reveal palabra por palabra lo anima la intro con GSAP, no data-aos */}
             <h1 className="hero-headline">
               {site.hero.headline.map((line, i) => (
                 <span className="hero-headline__line split-words" key={i}>

@@ -119,7 +119,6 @@ function playHeroIntro(onComplete: () => void): gsap.core.Timeline {
   const mask = document.querySelector('.hero-logo__rest-mask')
   const rest = document.querySelector('.hero-logo__rest')
   const restWidth = rest ? rest.getBoundingClientRect().width : 0
-  const headline = document.querySelector('.hero-headline')
   const tl = gsap.timeline({ onComplete })
   // 1. el fondo negro del loader se vuelve una D gigante
   tl.add(clipTween('.blob-left', CLIP.leftFull, CLIP.leftRounded, { duration: 0.8, ease: 'power2.inOut' }), 0)
@@ -129,7 +128,14 @@ function playHeroIntro(onComplete: () => void): gsap.core.Timeline {
   tl.add(clipTween('.blob-left', CLIP.leftRounded, CLIP.leftHero, { duration: 1.1, ease: 'power3.inOut' }), 1.5)
   tl.to('.hero-logo', { left: '22%', duration: 1.1, ease: 'power3.inOut' }, 1.5)
   tl.add(clipTween('.blob-right', CLIP.rightHidden, CLIP.rightHero, { duration: 1.1, ease: 'power3.inOut' }), 1.6)
-  tl.add(() => headline && headline.classList.add('is-revealed'), 2.2)
+  // Mismo movimiento que tenía la animación CSS slide-up (1s, la misma curva y 70ms
+  // de stagger), pero con GSAP: escribe estilos inline y no se reinicia cuando
+  // ScrollTrigger re-inserta el hero fijado en cada refresh.
+  tl.to(
+    '.hero-headline .word > span',
+    { opacity: 1, yPercent: 0, duration: 1, stagger: 0.07, ease: CustomEase.create('headline-ease', 'M0,0 C0.645,0.045 0.355,1 1,1') },
+    2.2
+  )
   tl.to('.hero-mail', { autoAlpha: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 2.5)
   tl.to('#header', { autoAlpha: 1, duration: 0.7, ease: 'power2.out' }, 2.4)
   return tl
@@ -474,9 +480,8 @@ export default function HomeExperience() {
       initSticky()
       initFooterReveal()
     } else {
-      // En móvil el titular se muestra directo
-      const headline = document.querySelector('.hero-headline')
-      headline && headline.classList.add('is-revealed')
+      // En móvil no hay intro: el titular se muestra directo
+      gsap.set('.hero-headline .word > span', { opacity: 1, yPercent: 0 })
     }
     cleanups.push(initSectionWatcher())
     cleanups.push(initMenu({ smoother, menuMark }))

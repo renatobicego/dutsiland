@@ -377,8 +377,11 @@ body.menu-active #header .social-list { pointer-events: auto; opacity: 1; transf
 
 .hero-headline { position: absolute; left: calc(46% + 8rem); top: 50%; transform: translateY(-50%); margin: 0; color: var(--white-1); font-size: 10.6rem; line-height: 1.22; font-weight: 800; text-transform: uppercase; letter-spacing: 0; }
 .hero-headline__line { display: block; }
+/* Estado de partida nada más: el reveal lo anima GSAP dentro de la intro.
+   Con una animación CSS se reiniciaba solo, porque ScrollTrigger re-inserta en el
+   DOM el elemento fijado en cada refresh y re-parentar un nodo vuelve a arrancar las
+   animaciones CSS de sus descendientes (el titular vive dentro del hero fijado). */
 .hero-headline .word > span { opacity: 0; transform: translateY(100%); }
-.hero-headline.is-revealed .word > span { animation: slide-up 1s cubic-bezier(0.645, 0.045, 0.355, 1) both; animation-delay: calc(var(--word-index) * 70ms); }
 
 /* Centrado con flex, sin transform: GSAP anima `y` acá y un translateY(-50%)
    sería sobreescrito, descolocando el bloque y sacando el botón de la vista. */
