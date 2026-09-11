@@ -214,6 +214,20 @@ function initHistoryScroll(): gsap.core.Timeline | null {
 function initServicesScroll(): gsap.core.Timeline | null {
   const services = gsap.utils.toArray<HTMLElement>('.services-stack .service')
   if (!services.length) return null
+  const stack = document.querySelector<HTMLElement>('.services-stack')
+
+  // Alto de una fila del índice del cierre: con el detalle oculto, de cada frente
+  // solo queda el número y el título. Se mide en vivo (y se recalcula en cada
+  // refresh) porque el rem escala con el ancho de la ventana.
+  const rowStep = () => {
+    if (!stack) return 0
+    const first = services[0]
+    const title = first.querySelector<HTMLElement>('.service__title')
+    const pad = parseFloat(getComputedStyle(first).paddingTop) || 0
+    const natural = pad + (title ? title.offsetHeight : 0) + 2 + stack.offsetHeight * 0.05
+    // Nunca más de un tercio del hueco: así las tres filas entran siempre
+    return Math.min(natural, stack.offsetHeight / 3)
+  }
 
   // Estado inicial explícito, por el mismo motivo que en initHistoryScroll
   gsap.set('.services-head .section-kicker', { autoAlpha: 0, y: '2rem' })
@@ -233,8 +247,8 @@ function initServicesScroll(): gsap.core.Timeline | null {
   t.to('.services-intro', { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power2.out' }, 0.6)
 
   // Después los frentes: entran de a uno y siempre en el mismo lugar
-  const start = 1.15
-  const hold = 1.15
+  const start = 1.3
+  const hold = 1.1
   services.forEach((service, i) => {
     const at = start + i * hold
     t.to(service, { autoAlpha: 1, y: 0, duration: 0.45, ease: 'power3.out' }, at)
@@ -244,7 +258,16 @@ function initServicesScroll(): gsap.core.Timeline | null {
     }
   })
 
-  t.to('.services-cta', { autoAlpha: 1, y: 0, duration: 0.4, ease: 'power2.out' }, start + services.length * hold - 0.45)
+  // Cierre: el detalle se repliega y los tres frentes se alinean como índice, así
+  // la sección se ve completa (los tres juntos) y no suelta el pin a mitad de camino.
+  const recap = start + services.length * hold + 0.25
+  t.to('.services-stack .service__lead, .services-stack .services-pills', { autoAlpha: 0, duration: 0.35, ease: 'power2.in' }, recap)
+  services.forEach((service, i) => {
+    t.to(service, { autoAlpha: 1, y: () => i * rowStep(), duration: 0.7, ease: 'power3.out' }, recap + 0.1 + i * 0.08)
+  })
+  t.to('.services-cta', { autoAlpha: 1, y: 0, duration: 0.45, ease: 'power2.out' }, recap + 0.95)
+  // Tramo final quieto: deja leer los tres frentes antes de soltar la sección
+  t.to({}, { duration: 0.8 })
   return t
 }
 

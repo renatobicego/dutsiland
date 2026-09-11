@@ -22,7 +22,7 @@
   --padding: 1.6rem;
   --header-height: 15rem;
   --blob-radius: 50vh;
-  /* --font-grotesk la define next/font en <html> (ver layout.js) */
+  /* --font-grotesk la define next/font en <html> (ver layout.tsx) */
 }
 @media only screen and (min-width: 1025.1px) {
   :root { --scrollbar: 7.5px; --w-100vw: calc(100vw - var(--scrollbar)); }
@@ -462,7 +462,8 @@ body.menu-active #header .social-list { pointer-events: auto; opacity: 1; transf
 .home-services { position: relative; background: var(--white-1); padding: 8rem 0 8rem; }
 /* Igual que historia: se fija y los tres frentes se intercambian con el scroll */
 @media only screen and (min-width: 1025.1px) {
-  .home-services { height: 340vh; padding: 0; }
+  /* Alcanza para los tres frentes de a uno, el índice de cierre y un tramo quieto */
+  .home-services { height: 480vh; padding: 0; }
   .home-services .container-sticky { position: sticky; top: 0; height: 100vh; padding: 2rem 0; display: flex; }
   .services-shape { flex: 1; display: flex; align-items: center; }
 }

@@ -45,7 +45,13 @@ y después se parte en dos D (cuadros 7 y 8 del storyboard).
 
 Hero, historia, qué hacemos y cómo trabajamos se **fijan** mientras el scroll alimenta su animación,
 para que no se pasen de largo en dos ruedazos. En qué hacemos los tres frentes se intercambian en el
-mismo lugar; en cómo trabajamos el scroll traza un paso por vez, de 01 a 06.
+mismo lugar y al final se alinean como índice —número y título de los tres juntos— antes de soltar el
+pin; en cómo trabajamos el scroll traza un paso por vez, de 01 a 06.
+
+Cada sección fijada cierra con un tramo quieto: si la última pieza de la animación aterriza justo en el
+último píxel del pin, la sección se suelta antes de que se termine de leer y la animación queda colgada.
+El alto en `vh` de la sección (`globals.css`) es lo que compra ese margen, así que al sumar pasos a una
+animación fijada hay que subirlo también.
 
 Dos cosas a tener en cuenta al tocar estas secciones:
 
