@@ -11,7 +11,8 @@ export default function Cookies() {
   useEffect(() => {
     try {
       if (!localStorage.getItem(KEY)) setVisible(true)
-    } catch (e) {
+    } catch {
+      // localStorage puede estar bloqueado (ventana privada, cookies deshabilitadas)
       setVisible(true)
     }
   }, [])
@@ -19,12 +20,18 @@ export default function Cookies() {
   const accept = () => {
     try {
       localStorage.setItem(KEY, '1')
-    } catch (e) {}
+    } catch {
+      // Si no se puede guardar, al menos se oculta en esta visita
+    }
     setVisible(false)
   }
 
   return (
-    <div className={`container-cookies ${visible ? '' : 'd-none'}`} data-aos="reveal-up .8s ease-out-cubic 1s" data-cursor-style="default">
+    <div
+      className={`container-cookies ${visible ? '' : 'd-none'}`}
+      data-aos="reveal-up .8s ease-out-cubic 1s"
+      data-cursor-style="default"
+    >
       <div className="utilizamos-cookies">
         <p className="font-1 fs--13 text-cookies lh-150">
           {site.cookies.text}{' '}
@@ -34,7 +41,12 @@ export default function Cookies() {
           y el uso de cookies.
         </p>
         <div className="container-btn">
-          <button type="button" className="btn-cookies accept font-1 fs--12 black-1 btn-underline text-uppercase" onClick={accept} data-cursor-style="hovered-small">
+          <button
+            type="button"
+            className="btn-cookies accept font-1 fs--12 black-1 btn-underline text-uppercase"
+            onClick={accept}
+            data-cursor-style="hovered-small"
+          >
             <span>{site.cookies.accept}</span>
           </button>
         </div>

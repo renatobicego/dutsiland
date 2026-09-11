@@ -9,21 +9,35 @@ import { getDevice } from '@/lib/device'
 import { runSplitting } from '@/lib/splitting'
 import { refreshAOS, destroyAOS } from '@/lib/aos'
 import { initMarquees } from '@/lib/marquee'
+import type { Cleanup } from '@/lib/marquee'
 import { initCursor } from '@/lib/cursor'
 import { runLoader } from '@/lib/loader'
 import { initScrollState, initSectionWatcher } from '@/lib/scrollState'
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother, CustomEase)
+
+declare global {
+  interface Window {
+    __gsap?: typeof gsap
+    __ScrollTrigger?: typeof ScrollTrigger
+  }
+}
+
 if (typeof window !== 'undefined' && process.env.NODE_ENV !== 'production') {
   // Acceso desde la consola para depurar los triggers de scroll
   window.__gsap = gsap
   window.__ScrollTrigger = ScrollTrigger
 }
 
+type Smoother = ReturnType<typeof ScrollSmoother.create>
+type Animation = gsap.core.Timeline | gsap.core.Tween
+
 /* Estados de las dos "D" del hero: inset (%) + radios (vh).
    Se animan sobre un objeto y se escriben como clip-path en cada frame, porque el
    navegador re-serializa el string (colapsa valores iguales) y GSAP perdería la
    correspondencia de números al interpolar. */
+type ClipState = { r: number; l: number; tl: number; tr: number; br: number; bl: number }
+
 const CLIP = {
   leftFull: { r: 0, l: 0, tl: 0, tr: 0, br: 0, bl: 0 }, // rectángulo = fondo del loader
   leftRounded: { r: 0, l: 0, tl: 0, tr: 50, br: 50, bl: 0 }, // cuadro 3
@@ -34,28 +48,36 @@ const CLIP = {
   rightSplit: { r: 0, l: 52, tl: 50, tr: 0, br: 0, bl: 50 }, // cuadro 8
   left2Hidden: { r: 100, l: 0, tl: 0, tr: 0, br: 0, bl: 0 },
   left2Split: { r: 51, l: 0, tl: 0, tr: 50, br: 50, bl: 0 }, // cuadro 8
-}
-const clipState = new Map()
-function applyClip(el, s) {
+} satisfies Record<string, ClipState>
+
+const clipState = new Map<HTMLElement, ClipState>()
+
+function applyClip(el: HTMLElement, s: ClipState) {
   el.style.clipPath = `inset(0% ${s.r}% 0% ${s.l}% round ${s.tl}vh ${s.tr}vh ${s.br}vh ${s.bl}vh)`
 }
-function setClip(selector, state) {
-  const el = document.querySelector(selector)
+
+function setClip(selector: string, state: ClipState) {
+  const el = document.querySelector<HTMLElement>(selector)
   if (!el) return
-  const s = { ...state }
+  const s: ClipState = { ...state }
   clipState.set(el, s)
   applyClip(el, s)
 }
-function clipTo(selector, state, vars = {}) {
-  const el = document.querySelector(selector)
+
+function clipTo(selector: string, state: ClipState, vars: gsap.TweenVars = {}): gsap.core.Tween {
+  const el = document.querySelector<HTMLElement>(selector)
   if (!el) return gsap.to({}, { duration: 0 })
-  if (!clipState.has(el)) clipState.set(el, { ...state })
-  const s = clipState.get(el)
+  let stored = clipState.get(el)
+  if (!stored) {
+    stored = { ...state }
+    clipState.set(el, stored)
+  }
+  const s = stored
   return gsap.to(s, { ...state, ...vars, onUpdate: () => applyClip(el, s) })
 }
 
 /* ---------- "D" del loader y del menú: pulso suave ---------- */
-function animateDMark(root, timeScale = 1) {
+function animateDMark(root: Element | null, timeScale = 1): gsap.core.Timeline | null {
   if (!root) return null
   const d = root.querySelector('.d-mark__d')
   const hole = root.querySelector('.d-mark__hole')
@@ -69,17 +91,17 @@ function animateDMark(root, timeScale = 1) {
 
 /* ---------- secciones "pegadas" (pin) ---------- */
 function initSticky() {
-  document.querySelectorAll('[data-sticky]').forEach((el) => {
-    let start = el.dataset.start || 'top top'
-    let end = el.dataset.end || 'bottom top'
-    let trigger = el.dataset.trigger ? document.querySelector(el.dataset.trigger) : el
+  document.querySelectorAll<HTMLElement>('[data-sticky]').forEach((el) => {
+    let start: string | (() => string) = el.dataset.start || 'top top'
+    let end: string | (() => string) = el.dataset.end || 'bottom top'
+    let trigger: Element | null = el.dataset.trigger ? document.querySelector(el.dataset.trigger) : el
     if (el.dataset.trigger === 'parent') trigger = el.parentElement
     const endTrigger = el.dataset.endTrigger ? document.querySelector(el.dataset.endTrigger) : trigger
     if (el.dataset.trigger === 'parent') {
       start = () => 'top top'
       end = () => `bottom-=${el.offsetHeight} top`
     }
-    ScrollTrigger.create({ trigger, endTrigger, start, end, pin: el, pinSpacing: false, scrub: true, anticipatePin: true, invalidateOnRefresh: true })
+    ScrollTrigger.create({ trigger, endTrigger, start, end, pin: el, pinSpacing: false, scrub: true, anticipatePin: 1, invalidateOnRefresh: true })
   })
 }
 
@@ -95,7 +117,7 @@ function setHeroInitialState() {
   gsap.set('#header', { autoAlpha: 0 })
 }
 
-function playHeroIntro(onComplete) {
+function playHeroIntro(onComplete: () => void): gsap.core.Timeline {
   const mask = document.querySelector('.hero-logo__rest-mask')
   const rest = document.querySelector('.hero-logo__rest')
   const restWidth = rest ? rest.getBoundingClientRect().width : 0
@@ -116,8 +138,8 @@ function playHeroIntro(onComplete) {
 }
 
 /* ---------- scroll del hero (cuadros 5 → 8), fijado y atado al scroll ---------- */
-function initHeroScroll(header) {
-  const base = { markers: false, anticipatePin: true, invalidateOnRefresh: true }
+function initHeroScroll(header: HTMLElement | null): gsap.core.Timeline {
+  const base = { markers: false, anticipatePin: 1, invalidateOnRefresh: true }
   const t = gsap.timeline({
     scrollTrigger: {
       trigger: '.home-hero',
@@ -146,10 +168,10 @@ function initHeroScroll(header) {
 }
 
 /* ---------- Sin pin (móvil y tablet): cada bloque entra al aparecer ---------- */
-function initRevealOnEnter(selectors) {
-  const tweens = []
+function initRevealOnEnter(selectors: string[]): gsap.core.Tween[] {
+  const tweens: gsap.core.Tween[] = []
   selectors.forEach((sel) => {
-    gsap.utils.toArray(sel).forEach((el) => {
+    gsap.utils.toArray<HTMLElement>(sel).forEach((el) => {
       tweens.push(
         gsap.from(el, {
           y: '3rem',
@@ -165,7 +187,7 @@ function initRevealOnEnter(selectors) {
 }
 
 /* ---------- Nuestra historia (fijada): el revelado lo maneja el scroll ---------- */
-function initHistoryScroll() {
+function initHistoryScroll(): gsap.core.Timeline | null {
   if (!document.querySelector('.home-history')) return null
 
   // Estado inicial explícito (no `from`): con stagger dentro de una timeline
@@ -189,8 +211,8 @@ function initHistoryScroll() {
 }
 
 /* ---------- Qué hacemos (fijada): los tres frentes se intercambian ---------- */
-function initServicesScroll() {
-  const services = gsap.utils.toArray('.services-stack .service')
+function initServicesScroll(): gsap.core.Timeline | null {
+  const services = gsap.utils.toArray<HTMLElement>('.services-stack .service')
   if (!services.length) return null
 
   // Estado inicial explícito, por el mismo motivo que en initHistoryScroll
@@ -230,8 +252,8 @@ function initServicesScroll() {
    Cada paso traza su línea de izquierda a derecha y recién entonces sube su
    contenido, así se lee como un recorrido que avanza y no como seis bloques
    que aparecen juntos. */
-function initProcess(pinned) {
-  const steps = gsap.utils.toArray('.home-process .step')
+function initProcess(pinned: boolean): gsap.core.Timeline | gsap.core.Timeline[] | null {
+  const steps = gsap.utils.toArray<HTMLElement>('.home-process .step')
   if (!steps.length) return null
 
   // Estado inicial explícito: dentro de una timeline un fromTo en posición > 0 no
@@ -239,7 +261,7 @@ function initProcess(pinned) {
   const contents = steps.map((s) => s.querySelectorAll('.step__n, .step__title, .step__text'))
   contents.forEach((c) => gsap.set(c, { y: '3.2rem', autoAlpha: 0 }))
 
-  const draw = (step, content, tl, at, dur) => {
+  const draw = (step: HTMLElement, content: NodeListOf<Element>, tl: gsap.core.Timeline, at: number, dur: number) => {
     tl.to(step.querySelector('.step__line'), { scaleX: 1, duration: dur * 0.55, ease: 'power2.inOut' }, at)
     tl.to(content, { y: 0, autoAlpha: 1, duration: dur * 0.6, ease: 'power3.out', stagger: dur * 0.06 }, at + dur * 0.18)
   }
@@ -275,9 +297,9 @@ function initProcess(pinned) {
 }
 
 /* ---------- footer que se revela debajo de proyectos (como la referencia) ---------- */
-function initFooterReveal() {
+function initFooterReveal(): gsap.core.Timeline {
   const foot = gsap.timeline({
-    scrollTrigger: { trigger: '#footer', endTrigger: '.wrapper', start: 'top bottom', end: 'bottom bottom', scrub: true, anticipatePin: true, invalidateOnRefresh: true },
+    scrollTrigger: { trigger: '#footer', endTrigger: '.wrapper', start: 'top bottom', end: 'bottom bottom', scrub: true, anticipatePin: 1, invalidateOnRefresh: true },
   })
   foot.fromTo('#footer .footer-panel', { y: '30vh' }, { y: 0, ease: 'none' })
   foot.to('.prev-section .portfolio-inner', { y: '14vh', ease: 'none' }, '<')
@@ -288,7 +310,12 @@ function initFooterReveal() {
 }
 
 /* ---------- menú ---------- */
-function initMenu({ smoother, menuMark }) {
+type MenuOptions = {
+  smoother: Smoother | null
+  menuMark: gsap.core.Timeline | null
+}
+
+function initMenu({ smoother, menuMark }: MenuOptions): Cleanup {
   const body = document.body
   const ACTIVE = 'menu-active'
   const LEAVE = 'menu-leave'
@@ -317,8 +344,9 @@ function initMenu({ smoother, menuMark }) {
   const onBt = () => (api.isOpen ? api.close() : api.open())
   bt && bt.addEventListener('click', onBt)
 
-  const onAnchor = (e) => {
+  const onAnchor = (e: Event) => {
     const a = e.currentTarget
+    if (!(a instanceof HTMLAnchorElement)) return
     const href = a.getAttribute('href') || ''
     const wasOpen = api.isOpen
     if (a.hasAttribute('data-menu-close')) api.close()
@@ -329,10 +357,9 @@ function initMenu({ smoother, menuMark }) {
     const go = () => {
       if (smoother) {
         // Las anclas dentro del hero fijado necesitan un desplazamiento extra (la frase vive en el segundo tramo)
-        if (target !== 0 && target.closest && target.closest('.home-hero')) {
-          const hero = document.querySelector('.home-hero')
-          smoother.scrollTo(hero.offsetTop + window.innerHeight, true)
-        } else smoother.scrollTo(target, true, 'top top')
+        const hero = target !== 0 ? target.closest('.home-hero') : null
+        if (hero instanceof HTMLElement) smoother.scrollTo(hero.offsetTop + window.innerHeight, true)
+        else smoother.scrollTo(target, true, 'top top')
       } else if (target === 0) window.scrollTo({ top: 0, behavior: 'smooth' })
       else target.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
@@ -351,13 +378,13 @@ function initMenu({ smoother, menuMark }) {
 export default function HomeExperience() {
   useEffect(() => {
     const device = getDevice()
-    const cleanups = []
-    let smoother = null
-    let marqueeCleanup = null
-    let intro = null
-    let process = null
-    const sections = []
-    const header = document.querySelector('#header')
+    const cleanups: Cleanup[] = []
+    let smoother: Smoother | null = null
+    let marqueeCleanup: Cleanup | null = null
+    let intro: gsap.core.Timeline | null = null
+    let process: gsap.core.Timeline | gsap.core.Timeline[] | null = null
+    const sections: (Animation | null)[] = []
+    const header = document.querySelector<HTMLElement>('#header')
 
     if (device.isMobile) {
       const setVh = () => document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`)
@@ -443,7 +470,7 @@ export default function HomeExperience() {
 
     return () => {
       window.removeEventListener('load', onLoad)
-      cleanups.forEach((fn) => typeof fn === 'function' && fn())
+      cleanups.forEach((fn) => fn())
       marqueeCleanup && marqueeCleanup()
       destroyAOS()
       intro && intro.kill()

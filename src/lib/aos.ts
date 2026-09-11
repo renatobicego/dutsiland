@@ -7,7 +7,9 @@
 //   - "trigger:selector": observa otro elemento (closest o querySelector) en lugar de sí mismo
 //   - data-aos="" (vacío): sólo agrega la clase .aos-animate
 
-const EASES = {
+import type { DeviceSize } from './device'
+
+const EASES: Record<string, string> = {
   ease: 'ease',
   linear: 'linear',
   'ease-in': 'ease-in',
@@ -26,14 +28,24 @@ const EASES = {
   'ease-in-out-sine': 'cubic-bezier(.445,.05,.55,.95)',
 }
 
-function currentSize() {
+type Entry = {
+  el: HTMLElement
+  trigger: Element
+  loop: Record<DeviceSize, boolean>
+  animated: boolean
+  desktop: string | null
+  tablet: string | null
+  phone: string | null
+}
+
+function currentSize(): DeviceSize {
   const w = window.innerWidth
   if (w < 768) return 'phone'
   if (w <= 1200) return 'tablet'
   return 'desktop'
 }
 
-function buildAnimation(tokens) {
+function buildAnimation(tokens: string[]): string {
   // tokens: [name, duration?, easing?, delay?]
   const name = tokens[0]
   let duration = '.8s'
@@ -42,16 +54,23 @@ function buildAnimation(tokens) {
   tokens.slice(1).forEach((t, i) => {
     if (EASES[t]) easing = EASES[t]
     else if (/^-?[\d.]+m?s$/.test(t)) {
-      if (i === 0 && !delay && duration === '.8s' && tokens.slice(1).filter((x) => /^-?[\d.]+m?s$/.test(x)).length >= 1 && t === tokens[1]) duration = t
-      else delay = t
+      if (
+        i === 0 &&
+        !delay &&
+        duration === '.8s' &&
+        tokens.slice(1).filter((x) => /^-?[\d.]+m?s$/.test(x)).length >= 1 &&
+        t === tokens[1]
+      ) {
+        duration = t
+      } else delay = t
     }
   })
   return `${name} ${duration} ${easing}${delay ? ' ' + delay : ''} both`
 }
 
-function parse(el) {
+function parse(el: HTMLElement): Entry {
   const raw = (el.getAttribute('data-aos') || '').trim()
-  const entry = {
+  const entry: Entry = {
     el,
     trigger: el,
     loop: { desktop: false, tablet: false, phone: false },
@@ -61,47 +80,50 @@ function parse(el) {
     phone: null,
   }
   if (!raw) return entry
-  raw.split(',').map((s) => s.trim()).filter(Boolean).forEach((part) => {
-    const m = part.match(/^([a-z]{1,3}):\s*(.+)$/i)
-    let key = null
-    let value = part
-    if (m && !/^\d/.test(m[2])) {
-      key = m[1]
-      value = m[2].trim()
-    }
-    if (key === 'trigger') {
-      const sel = value
-      let t = el.closest(sel)
-      if (!t) t = document.querySelector(sel)
-      if (t) entry.trigger = t
-      return
-    }
-    if (value === 'loop') {
-      if (key) {
-        if (key.includes('d')) entry.loop.desktop = true
-        if (key.includes('t')) entry.loop.tablet = true
-        if (key.includes('p')) entry.loop.phone = true
-      } else {
-        entry.loop.desktop = entry.loop.tablet = entry.loop.phone = true
+  raw
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .forEach((part) => {
+      const m = part.match(/^([a-z]{1,3}):\s*(.+)$/i)
+      let key: string | null = null
+      let value = part
+      if (m && !/^\d/.test(m[2])) {
+        key = m[1]
+        value = m[2].trim()
       }
-      return
-    }
-    const anim = buildAnimation(value.split(/\s+/))
-    if (!key) {
-      entry.desktop = entry.tablet = entry.phone = anim
-    } else {
-      if (key.includes('d')) entry.desktop = anim
-      if (key.includes('t')) entry.tablet = anim
-      if (key.includes('p')) entry.phone = anim
-    }
-  })
+      if (key === 'trigger') {
+        const sel = value
+        const t = el.closest(sel) ?? document.querySelector(sel)
+        if (t) entry.trigger = t
+        return
+      }
+      if (value === 'loop') {
+        if (key) {
+          if (key.includes('d')) entry.loop.desktop = true
+          if (key.includes('t')) entry.loop.tablet = true
+          if (key.includes('p')) entry.loop.phone = true
+        } else {
+          entry.loop.desktop = entry.loop.tablet = entry.loop.phone = true
+        }
+        return
+      }
+      const anim = buildAnimation(value.split(/\s+/))
+      if (!key) {
+        entry.desktop = entry.tablet = entry.phone = anim
+      } else {
+        if (key.includes('d')) entry.desktop = anim
+        if (key.includes('t')) entry.tablet = anim
+        if (key.includes('p')) entry.phone = anim
+      }
+    })
   return entry
 }
 
-let entries = []
-let observer = null
+let entries: Entry[] = []
+let observer: IntersectionObserver | null = null
 
-function animate(entry, size) {
+function animate(entry: Entry, size: DeviceSize): void {
   entry.animated = true
   entry.el.classList.add('aos-animate')
   const anim = entry[size]
@@ -111,7 +133,7 @@ function animate(entry, size) {
   }
 }
 
-function reset(entry, size) {
+function reset(entry: Entry, size: DeviceSize): void {
   const anim = entry[size]
   if (anim) {
     entry.el.style.animation = ''
@@ -120,7 +142,7 @@ function reset(entry, size) {
   entry.el.classList.remove('aos-animate')
 }
 
-function onIntersect(records) {
+function onIntersect(records: IntersectionObserverEntry[]): void {
   const size = currentSize()
   records.forEach((rec) => {
     const matches = entries.filter((e) => e.trigger === rec.target)
@@ -138,18 +160,18 @@ function onIntersect(records) {
   })
 }
 
-export function refreshAOS(root = document) {
+export function refreshAOS(root: Document | HTMLElement = document): void {
   entries = []
   if (observer) observer.disconnect()
   observer = new IntersectionObserver(onIntersect, { rootMargin: '0px', threshold: 0 })
-  root.querySelectorAll('[data-aos]').forEach((el) => {
+  root.querySelectorAll<HTMLElement>('[data-aos]').forEach((el) => {
     const entry = parse(el)
     entries.push(entry)
-    observer.observe(entry.trigger)
+    observer?.observe(entry.trigger)
   })
 }
 
-export function destroyAOS() {
+export function destroyAOS(): void {
   if (observer) observer.disconnect()
   observer = null
   entries = []

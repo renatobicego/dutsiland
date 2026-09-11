@@ -1,6 +1,13 @@
+import type { Cleanup } from './marquee'
+
+export type CursorOptions = {
+  baseElement?: HTMLElement | null
+  defaultCursor?: string
+}
+
 // Cursor personalizado (punto negro que crece sobre los elementos con data-cursor-style).
-export function initCursor({ baseElement, defaultCursor = 'default' } = {}) {
-  const el = baseElement || document.getElementById('wrapper-cursor')
+export function initCursor({ baseElement, defaultCursor = 'default' }: CursorOptions = {}): Cleanup {
+  const el = baseElement ?? document.getElementById('wrapper-cursor')
   if (!el) return () => {}
 
   let x = 0
@@ -11,7 +18,9 @@ export function initCursor({ baseElement, defaultCursor = 'default' } = {}) {
   let title = ''
   let last = performance.now()
 
-  function resolve() {
+  // Función flecha y no declaración: así TypeScript conserva dentro del cierre
+  // el estrechamiento de `el` que hace el guard de arriba.
+  const resolve = (): void => {
     const stack = document.elementsFromPoint(x, y)
     let foundStyle = false
     let foundTitle = false
@@ -20,12 +29,13 @@ export function initCursor({ baseElement, defaultCursor = 'default' } = {}) {
       .reverse()
       .forEach((node) => {
         if (node.nodeName === 'IFRAME') inside = false
+        if (!(node instanceof HTMLElement)) return
         if ('cursorTitle' in node.dataset) {
-          title = node.dataset.cursorTitle
+          title = node.dataset.cursorTitle ?? ''
           foundTitle = true
         }
         if ('cursorStyle' in node.dataset) {
-          style = node.dataset.cursorStyle
+          style = node.dataset.cursorStyle ?? defaultCursor
           foundStyle = true
         }
       })
@@ -43,7 +53,7 @@ export function initCursor({ baseElement, defaultCursor = 'default' } = {}) {
     }
   }
 
-  const onMove = (e) => {
+  const onMove = (e: MouseEvent) => {
     x = e.clientX
     y = e.clientY
     inside = true
@@ -57,13 +67,13 @@ export function initCursor({ baseElement, defaultCursor = 'default' } = {}) {
     }
   }
   const onClick = () => {
-    el.dataset.clicked = true
+    el.dataset.clicked = 'true'
     setTimeout(() => {
-      el.dataset.clicked = false
+      el.dataset.clicked = 'false'
     }, 350)
     resolve()
   }
-  const onOut = (e) => {
+  const onOut = (e: MouseEvent) => {
     if (e.relatedTarget === null) inside = false
   }
 

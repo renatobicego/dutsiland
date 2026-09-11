@@ -1,14 +1,17 @@
 import gsap from 'gsap'
 
+/** Función para desmontar lo que la utilidad haya enganchado */
+export type Cleanup = () => void
+
 // Marquesina infinita idéntica a la de la referencia: clona el item hasta cubrir
 // 1.5 pantallas, avanza en rAF, invierte el sentido con la dirección del scroll
 // y cambia de velocidad al pasar el mouse.
-export function initMarquees(root = document) {
-  const cleanups = []
-  root.querySelectorAll('.marquee-trigger:not(.js-running)').forEach((trigger) => {
+export function initMarquees(root: Document | HTMLElement = document): Cleanup {
+  const cleanups: Cleanup[] = []
+  root.querySelectorAll<HTMLElement>('.marquee-trigger:not(.js-running)').forEach((trigger) => {
     trigger.classList.add('js-running')
-    const track = trigger.querySelector('.marquee')
-    const item = trigger.querySelector('.marquee-item')
+    const track = trigger.querySelector<HTMLElement>('.marquee')
+    const item = trigger.querySelector<HTMLElement>('.marquee-item')
     if (!track || !item) return
 
     const copies = Math.ceil((window.innerWidth * 1.5) / item.getBoundingClientRect().width)
@@ -20,7 +23,7 @@ export function initMarquees(root = document) {
     const state = { speed: baseSpeed }
 
     let x = 0
-    let raf = null
+    let raf: number | null = null
     let lastY = window.scrollY
     let dir = 1
 

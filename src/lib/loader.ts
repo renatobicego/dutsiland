@@ -1,3 +1,5 @@
+import type { Cleanup } from './marquee'
+
 // Preloader: replica la máquina de estados del sitio de referencia.
 // body[data-load] pasa por: first-loading -> first-leaving -> first-done
 // El progreso combina imágenes precargadas + un tiempo mínimo de "script ready".
@@ -7,23 +9,39 @@ const FAKE_PROGRESS_MAX = 10000
 const TIMEOUT = 10000
 const SCRIPT_READY_DELAY = 2300
 
-export function runLoader({ onLeaving, onDone } = {}) {
-  const body = document.body
-  const state = { startedAt: performance.now(), leavingAt: 0, progress: 0, scriptReady: false, imgTotal: 0, imgRemaining: 0 }
-  let raf = null
-  let status = 'loading'
+type LoadStatus = 'loading' | 'leaving' | 'done'
 
-  const setLoad = (v) => {
+export type LoaderOptions = {
+  onLeaving?: () => void
+  onDone?: () => void
+}
+
+export function runLoader({ onLeaving, onDone }: LoaderOptions = {}): Cleanup {
+  const body = document.body
+  const state = {
+    startedAt: performance.now(),
+    leavingAt: 0,
+    progress: 0,
+    scriptReady: false,
+    imgTotal: 0,
+    imgRemaining: 0,
+  }
+  let raf: number | null = null
+  let status: LoadStatus = 'loading'
+
+  const setLoad = (v: LoadStatus) => {
     status = v
     body.dataset.load = 'first-' + v
   }
-  const setProgress = (p) => {
+  const setProgress = (p: number) => {
     state.progress = p
-    body.style.setProperty('--percentage', p / 100)
+    body.style.setProperty('--percentage', String(p / 100))
     body.style.setProperty('--percentage2', p + '%')
   }
 
-  const imgs = Array.from(document.querySelectorAll('img[data-preload]')).filter((i) => !i.complete)
+  const imgs = Array.from(document.querySelectorAll<HTMLImageElement>('img[data-preload]')).filter(
+    (i) => !i.complete
+  )
   state.imgTotal = imgs.length
   state.imgRemaining = imgs.length
   imgs.forEach((img) => {
@@ -31,7 +49,7 @@ export function runLoader({ onLeaving, onDone } = {}) {
     const mark = () => {
       if (!done) state.imgRemaining--
       done = true
-      img.dataset.loaded = true
+      img.dataset.loaded = 'true'
     }
     img.addEventListener('load', mark, { once: true })
     img.addEventListener('error', mark, { once: true })
@@ -40,9 +58,10 @@ export function runLoader({ onLeaving, onDone } = {}) {
     state.scriptReady = true
   }, SCRIPT_READY_DELAY)
 
-  const isComplete = (now) => (state.scriptReady && state.imgRemaining <= 0) || now > state.startedAt + TIMEOUT
+  const isComplete = (now: number) =>
+    (state.scriptReady && state.imgRemaining <= 0) || now > state.startedAt + TIMEOUT
 
-  const animate = (now) => {
+  const animate = (now: number): void => {
     const complete = isComplete(now)
     raf = requestAnimationFrame(animate)
     if (!complete) {
@@ -61,13 +80,13 @@ export function runLoader({ onLeaving, onDone } = {}) {
     if (status === 'loading') {
       setLoad('leaving')
       state.leavingAt = now
-      onLeaving && onLeaving()
+      onLeaving?.()
       return
     }
     if (now < state.leavingAt + LEAVING_DURATION) return
-    cancelAnimationFrame(raf)
+    if (raf) cancelAnimationFrame(raf)
     setLoad('done')
-    onDone && onDone()
+    onDone?.()
   }
 
   setLoad('loading')
@@ -80,10 +99,10 @@ export function runLoader({ onLeaving, onDone } = {}) {
     if (raf) cancelAnimationFrame(raf)
     setProgress(100)
     setLoad('leaving')
-    onLeaving && onLeaving()
+    onLeaving?.()
     setTimeout(() => {
       setLoad('done')
-      onDone && onDone()
+      onDone?.()
     }, LEAVING_DURATION)
   }, TIMEOUT + LEAVING_DURATION)
 

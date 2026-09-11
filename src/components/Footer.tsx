@@ -2,8 +2,15 @@
 import { site } from '@/content/site'
 import { ArrowDiagonal, DIcon } from './Button'
 
+type Letter = {
+  /** Nombre del recorte dentro de /public/brand */
+  file: string
+  /** Ancho en px dentro de Dutsiland-wide-dark.png, relativo a TOTAL */
+  w: number
+}
+
 // Letras del logotipo horizontal con su ancho relativo (recortadas de Dutsiland-wide-dark.png)
-const LETTERS = [
+const LETTERS: Letter[] = [
   { file: 'letter-0-D-dark.png', w: 81 },
   { file: 'letter-1-U-dark.png', w: 85 },
   { file: 'letter-2-T-dark.png', w: 85 },

@@ -1,6 +1,6 @@
 # Dutsiland — landing
 
-Landing de [Estudio Dutsiland](https://dutsiland.com) construida con Next.js 13 (App Router) y GSAP.
+Landing de [Estudio Dutsiland](https://dutsiland.com) construida con Next.js 13 (App Router), TypeScript y GSAP.
 El foco es la software factory: desarrollo de software a medida, además de diseño de producto y web.
 
 Sigue el storyboard `v2.pdf` (dos "D" negras que se transforman, la D como contenedor, pastillas,
@@ -15,6 +15,13 @@ npm run dev
 ```
 
 Abrir <http://localhost:3000>.
+
+Chequeo de tipos y de lint (todo el proyecto es TypeScript en modo `strict`):
+
+```bash
+npm run typecheck
+npm run lint
+```
 
 > Importante: no correr `next build` mientras el servidor de desarrollo está activo. El build
 > sobrescribe la carpeta `.next` que usa el modo desarrollo y la página queda sin estilos ni scripts.
@@ -53,16 +60,21 @@ En móvil y tablet nada se fija: los bloques se revelan al entrar en pantalla.
 
 ## Dónde está cada cosa
 
-| Qué                                                      | Dónde                              |
-| -------------------------------------------------------- | ---------------------------------- |
-| Todos los textos, links, servicios, pasos y proyectos    | `src/content/site.js`              |
-| Secciones                                                | `src/components/*.js`              |
-| Intro, animaciones de scroll, loader, menú               | `src/components/HomeExperience.js` |
-| Utilidades (reveals, marquesina, cursor, split de texto) | `src/lib/*.js`                     |
-| Estilos (todo el sistema visual)                         | `src/app/globals.css`              |
-| Logos (D, UTSILAND, letras del logotipo)                 | `public/brand/`                    |
-| Imágenes de los proyectos                                | `public/img/`                       |
-| Tipografía (Montserrat, OFL)                             | `src/fonts/` + `src/app/layout.js` |
+| Qué                                                      | Dónde                               |
+| -------------------------------------------------------- | ----------------------------------- |
+| Todos los textos, links, servicios, pasos y proyectos    | `src/content/site.ts`               |
+| Secciones                                                | `src/components/*.tsx`              |
+| Intro, animaciones de scroll, loader, menú               | `src/components/HomeExperience.tsx` |
+| Utilidades (reveals, marquesina, cursor, split de texto) | `src/lib/*.ts`                      |
+| Estilos (todo el sistema visual)                         | `src/app/globals.css`               |
+| Logos (D, UTSILAND, letras del logotipo)                 | `public/brand/`                     |
+| Imágenes de los proyectos                                | `public/img/`                        |
+| Tipografía (Montserrat, OFL)                             | `src/fonts/` + `src/app/layout.tsx` |
+
+El tipo `Site` en `src/content/site.ts` describe la forma de todo el contenido, así que si falta un
+campo o cambia la estructura salta en el chequeo de tipos y no en pantalla. Las utilidades de
+`src/lib/` exportan `Cleanup` (`() => void`): toda función de init devuelve su propia limpieza y
+`HomeExperience` las junta para desmontar todo en el `useEffect`.
 
 ## Pendientes de confirmar con el estudio
 

@@ -3,7 +3,86 @@
 // Proyectos y servicios tomados del sitio actual (https://dutsiland.com).
 // Todo el texto visible vive acá para poder ajustarlo sin tocar componentes.
 
-export const site = {
+export type Link = {
+  label: string
+  href: string
+}
+
+export type ServiceGroup = {
+  /** Número que se muestra al costado: '01', '02', '03' */
+  n: string
+  title: string
+  /** La línea que diferencia este frente de los otros dos */
+  lead: string
+  items: string[]
+}
+
+export type ProcessStep = {
+  n: string
+  title: string
+  text: string
+}
+
+export type ProjectCard = {
+  src: string
+  alt: string
+  /** Se muestra sobre la tarjeta y como título del cursor */
+  name: string
+}
+
+export type Site = {
+  name: string
+  shortName: string
+  url: string
+  description: string
+  slogan: string
+  email: string
+  social: Link[]
+  menu: Link[]
+  hero: {
+    /** Una línea del titular por elemento */
+    headline: string[]
+  }
+  claim: {
+    text: string
+    cta: Link
+  }
+  history: {
+    kicker: string
+    year: string
+    title: string
+    text: string[]
+  }
+  services: {
+    kicker: string
+    title: string
+    intro: string
+    groups: ServiceGroup[]
+    cta: Link
+  }
+  process: {
+    kicker: string
+    title: string
+    steps: ProcessStep[]
+    cta: Link
+  }
+  portfolio: {
+    titleLines: string[]
+    subtitle: string
+    cta: Link
+    cards: ProjectCard[]
+  }
+  footer: {
+    legal: Link[]
+  }
+  cookies: {
+    text: string
+    linkLabel: string
+    accept: string
+  }
+}
+
+export const site: Site = {
   name: 'Estudio Dutsiland',
   shortName: 'Dutsiland',
   url: 'https://dutsiland.com',
@@ -26,7 +105,6 @@ export const site = {
   ],
 
   hero: {
-    // Titular del blob derecho (una línea por elemento)
     headline: ['DESARROLLO', 'DE SOFTWARE', 'A MEDIDA'],
   },
 

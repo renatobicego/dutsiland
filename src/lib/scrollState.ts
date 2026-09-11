@@ -1,6 +1,8 @@
+import type { Cleanup } from './marquee'
+
 // Mantiene body[data-scroll-direction] (initial | up | down) y
 // body[data-scroll-position] (top | center | bottom), como en la referencia.
-export function initScrollState() {
+export function initScrollState(): Cleanup {
   let lastY = 0
   let dirState = 0
   let posState = 0
@@ -41,7 +43,7 @@ export function initScrollState() {
     sh = document.body.scrollHeight
   })
   mo.observe(document.body, { childList: true, subtree: true })
-  const iv = setInterval(() => {
+  const iv = window.setInterval(() => {
     sh = document.body.scrollHeight
   }, 100)
   window.addEventListener('scroll', update, { passive: true })
@@ -54,11 +56,18 @@ export function initScrollState() {
   }
 }
 
+type SectionRect = {
+  el: HTMLElement
+  top: number
+  bottom: number
+  middle: number
+}
+
 // header[data-get-section] toma el valor del [data-set-section] que tenga debajo.
-export function initSectionWatcher() {
-  const getters = () => Array.from(document.querySelectorAll('[data-get-section]'))
-  const setters = () => Array.from(document.querySelectorAll('[data-set-section]'))
-  const measure = (els) =>
+export function initSectionWatcher(): Cleanup {
+  const getters = () => Array.from(document.querySelectorAll<HTMLElement>('[data-get-section]'))
+  const setters = () => Array.from(document.querySelectorAll<HTMLElement>('[data-set-section]'))
+  const measure = (els: HTMLElement[]): SectionRect[] =>
     els.map((el) => {
       const r = el.getBoundingClientRect()
       return { el, top: r.top, bottom: r.bottom, middle: r.bottom - (r.bottom - r.top) / 2 }
@@ -78,7 +87,7 @@ export function initSectionWatcher() {
     })
   }
   getters().forEach((g) => (g.dataset.getSection = ''))
-  const t = setTimeout(() => {
+  const t = window.setTimeout(() => {
     update()
     document.addEventListener('scroll', update, { passive: true })
   }, 100)

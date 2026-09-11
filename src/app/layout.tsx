@@ -1,3 +1,5 @@
+import type { Metadata } from 'next'
+import type { ReactNode } from 'react'
 import localFont from 'next/font/local'
 import './globals.css'
 import { site } from '@/content/site'
@@ -13,7 +15,7 @@ const montserrat = localFont({
   adjustFontFallback: false,
 })
 
-export const metadata = {
+export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: site.name,
   description: site.description,
@@ -27,7 +29,7 @@ export const metadata = {
   },
 }
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="es" className={montserrat.variable}>
       <body data-load="first-loading" data-scroll-direction="initial" data-scroll-position="top">

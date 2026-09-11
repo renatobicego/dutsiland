@@ -2,7 +2,17 @@
 export const THRESHOLD_PHONE = 768
 export const THRESHOLD_TABLET = 1025
 
-export function getDevice() {
+export type DeviceSize = 'phone' | 'tablet' | 'desktop'
+
+export type Device = {
+  isPhone: boolean
+  isTablet: boolean
+  isMobile: boolean
+  isDesktop: boolean
+  size: DeviceSize
+}
+
+export function getDevice(): Device {
   if (typeof window === 'undefined') {
     return { isPhone: false, isTablet: false, isMobile: false, isDesktop: true, size: 'desktop' }
   }
