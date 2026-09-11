@@ -113,6 +113,11 @@ function setHeroInitialState() {
   gsap.set('.hero-logo__rest-mask', { width: 0, marginLeft: 0 })
   gsap.set('.hero-mail', { autoAlpha: 0, y: '2rem' })
   gsap.set('#header', { autoAlpha: 0 })
+  // El punto de partida del titular se declara acá con las dos componentes (yPercent
+  // e y). Si se lo deja al `transform: translateY(100%)` del CSS, GSAP lo convierte a
+  // píxeles y lo guarda en `y`: animar solo yPercent no mueve nada y las palabras
+  // quedan abajo, tapadas por la máscara de .word.
+  gsap.set('.hero-headline .word > span', { opacity: 0, yPercent: 100, y: 0 })
 }
 
 function playHeroIntro(onComplete: () => void): gsap.core.Timeline {
@@ -133,7 +138,7 @@ function playHeroIntro(onComplete: () => void): gsap.core.Timeline {
   // ScrollTrigger re-inserta el hero fijado en cada refresh.
   tl.to(
     '.hero-headline .word > span',
-    { opacity: 1, yPercent: 0, duration: 1, stagger: 0.07, ease: CustomEase.create('headline-ease', 'M0,0 C0.645,0.045 0.355,1 1,1') },
+    { opacity: 1, yPercent: 0, y: 0, duration: 1, stagger: 0.07, ease: CustomEase.create('headline-ease', 'M0,0 C0.645,0.045 0.355,1 1,1') },
     2.2
   )
   tl.to('.hero-mail', { autoAlpha: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 2.5)
@@ -481,7 +486,7 @@ export default function HomeExperience() {
       initFooterReveal()
     } else {
       // En móvil no hay intro: el titular se muestra directo
-      gsap.set('.hero-headline .word > span', { opacity: 1, yPercent: 0 })
+      gsap.set('.hero-headline .word > span', { opacity: 1, yPercent: 0, y: 0 })
     }
     cleanups.push(initSectionWatcher())
     cleanups.push(initMenu({ smoother, menuMark }))
