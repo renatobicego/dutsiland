@@ -30,10 +30,12 @@ export default function Home() {
       <div id="main-transition">
         <div id="smooth-wrapper" className="container-wrapper">
           <div className="wrapper" id="pg-home" data-scroll-container>
+            {/* La partida en dos D del hero entrega directo los tres frentes;
+                la historia va después, ya con el estudio presentado. */}
             <main>
               <Hero />
-              <History />
               <Services />
+              <History />
               <Process />
               <Portfolio />
             </main>

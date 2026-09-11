@@ -164,6 +164,9 @@ function initHeroScroll(header: HTMLElement | null): gsap.core.Timeline {
   // nítido y sin desvanecer, como en el cuadro 8 del storyboard.
   t.add(clipTo('.blob-right', CLIP.rightSplit, { duration: 1, ease: 'none' }), 1)
   t.add(clipTo('.blob-left2', CLIP.left2Split, { duration: 1, ease: 'none' }), 1)
+  // Tramo final quieto: sin él la partida terminaba justo en el último píxel del pin
+  // y el hero soltaba antes de que el movimiento se leyera como terminado.
+  t.to({}, { duration: 0.55 })
   return t
 }
 

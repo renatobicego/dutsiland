@@ -96,9 +96,10 @@ export const site: Site = {
     { label: 'LinkedIn', href: 'https://www.linkedin.com/company/dutsiland' },
   ],
 
+  // Mismo orden que las secciones en la página: qué hacemos abre, la historia va después
   menu: [
-    { label: 'Nuestra historia', href: '#historia' },
     { label: 'Qué hacemos', href: '#servicios' },
+    { label: 'Nuestra historia', href: '#historia' },
     { label: 'Cómo trabajamos', href: '#proceso' },
     { label: 'Proyectos', href: '#proyectos' },
     { label: 'Contacto', href: '#contacto' },
