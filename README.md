@@ -32,30 +32,26 @@ npm run lint
 | Sección          | Qué muestra                                                                  |
 | ---------------- | ---------------------------------------------------------------------------- |
 | Hero             | Intro animada: la D del loader se abre, sale "UTSILAND", entra el titular    |
-| Qué hacemos      | Tres frentes numerados: software a medida, diseño de producto, web/ecommerce  |
 | Nuestra historia | Año de arranque y cómo empezó el estudio                                      |
+| Qué hacemos      | Tres frentes numerados: software a medida, diseño de producto, web/ecommerce  |
 | Cómo trabajamos  | Los seis pasos de la software factory, de la primera reunión al soporte       |
 | Proyectos        | Marquesina con los seis trabajos publicados                                   |
 | Footer           | Panel claro con navegación, mail, legales y el logotipo                       |
 
 En el scroll del hero la D izquierda sale de escena, la derecha ocupa todo con la frase y su botón,
-y después se parte en dos D (cuadros 7 y 8 del storyboard). Esa partida se queda quieta un tramo y
-entrega directo los tres frentes: la D negra del hero pasa a ser la D de "Qué hacemos", que es a
-donde apunta el botón "Conocé qué hacemos". La historia va después, ya con el estudio presentado.
-El orden del menú (`site.menu`) sigue el mismo orden que las secciones en `page.tsx`.
+y después se parte en dos D (cuadros 7 y 8 del storyboard).
 
 ### Secciones fijadas (solo desktop)
 
-Hero, qué hacemos, historia y cómo trabajamos se **fijan** mientras el scroll alimenta su animación,
+Hero, historia, qué hacemos y cómo trabajamos se **fijan** mientras el scroll alimenta su animación,
 para que no se pasen de largo en dos ruedazos. En qué hacemos los tres frentes se intercambian en el
 mismo lugar y al final se alinean como índice —número y título de los tres juntos— antes de soltar el
 pin; en cómo trabajamos el scroll traza un paso por vez, de 01 a 06.
 
-Las cuatro cierran con un tramo quieto: si la última pieza de la animación aterriza justo en el último
-píxel del pin, la sección se suelta antes de que se termine de leer y el movimiento queda colgado. El
-alto en `vh` de la sección (`globals.css`) es lo que compra ese margen, así que al sumar pasos a una
-animación fijada hay que subirlo también. Hoy la última pieza de cada una cae cerca del 80–90% del
-recorrido, no del 100%.
+Cada sección fijada cierra con un tramo quieto: si la última pieza de la animación aterriza justo en el
+último píxel del pin, la sección se suelta antes de que se termine de leer y la animación queda colgada.
+El alto en `vh` de la sección (`globals.css`) es lo que compra ese margen, así que al sumar pasos a una
+animación fijada hay que subirlo también.
 
 Dos cosas a tener en cuenta al tocar estas secciones:
 
