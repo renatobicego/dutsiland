@@ -323,15 +323,20 @@ body.menu-active #header .social-list { pointer-events: auto; opacity: 1; transf
 .btn-underline span { display: inline; color: var(--btn-color, var(--black-1)); background-image: linear-gradient(to right, var(--btn-color, var(--black-1)) 100%, var(--btn-color, var(--black-1)) 0%); background-position: 100% 100%; background-size: 0 0.12em; background-repeat: no-repeat; transition: background-size 1s cubic-bezier(0.19, 1, 0.155, 1.01) 0s; pointer-events: none; }
 .btn-underline:hover span, .btn-underline.active span { background-image: linear-gradient(to right, var(--btn-color, var(--black-1)) 0%, var(--btn-color, var(--black-1)) 100%); background-size: 100% 0.12em; background-position: 0 100%; }
 .btn-underline.white-1 { --btn-color: var(--white-1); }
-.btn-underlined span { display: inline; color: var(--btn-color, var(--black-1)); background-image: linear-gradient(to right, var(--btn-color, var(--black-1)) 100%, var(--btn-color, var(--black-1)) 0%); background-size: 100% 0.12em; background-position: 0% 100%; background-repeat: no-repeat; transition: background-size 1s cubic-bezier(0.19, 1, 0.155, 1.01) 0s; pointer-events: none; }
-.btn-underlined:hover span, .btn-underlined.active span { background-image: linear-gradient(to right, var(--btn-color, var(--black-1)) 0%, var(--btn-color, var(--black-1)) 100%); background-size: 0 0.12em; background-position: 100% 100%; }
+/* Subrayado en reposo: va en Montserrat Subrayada, que trae la línea en los propios
+   glifos (lo pide el diseñador para todo botón con tipografía subrayada). Por eso acá
+   no se dibuja ninguna línea, y el hover —que antes era la línea retirándose— pasa a
+   ser un cambio de opacidad. */
+.btn-underlined span { display: inline; font-family: var(--font-subrayada, 'Montserrat Subrayada', var(--font-grotesk, sans-serif)); color: var(--btn-color, var(--black-1)); transition: opacity 0.45s cubic-bezier(0.19, 1, 0.155, 1.01) 0s; pointer-events: none; }
+.btn-underlined:hover span, .btn-underlined.active span { opacity: 0.55; }
 .btn-underlined.white-1 { --btn-color: var(--white-1); }
 
 /* ---------- botón "D" (storyboard) ---------- */
 .btn-d { display: inline-flex; position: relative; height: 8.7rem; border-radius: 10rem; background: var(--white-1); overflow: hidden; white-space: nowrap; box-shadow: 0 0 2.6rem rgba(246, 240, 225, 0.28); }
 .btn-d__content { display: flex; align-items: center; gap: 1.1rem; height: 100%; padding: 0 2.8rem; }
 .btn-d__content .d-icon { width: 2.9rem; height: 3.7rem; flex: none; fill: var(--red-1); }
-.btn-d__label { font-size: 3.6rem; line-height: 1; font-weight: 700; text-transform: uppercase; color: var(--red-1); padding-top: 0.25em; background-image: linear-gradient(currentColor, currentColor); background-repeat: no-repeat; background-size: 100% 0.09em; background-position: 0 92%; }
+/* La etiqueta en Montserrat Subrayada: la línea viene en los glifos, no se dibuja */
+.btn-d__label { font-family: var(--font-subrayada, 'Montserrat Subrayada', var(--font-grotesk, sans-serif)); font-size: 3.6rem; line-height: 1; font-weight: 700; text-transform: uppercase; color: var(--red-1); padding-top: 0.25em; }
 .btn-d__content--hover { position: absolute; inset: 0; background: var(--red-1); clip-path: ellipse(0% 150% at 50% 50%); transition: clip-path 0.45s cubic-bezier(0.645, 0.045, 0.355, 1); }
 .btn-d__content--hover .d-icon { fill: var(--white-1); }
 .btn-d__content--hover .btn-d__label { color: var(--white-1); }

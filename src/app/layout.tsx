@@ -15,6 +15,19 @@ const montserrat = localFont({
   adjustFontFallback: false,
 })
 
+// Montserrat Subrayada (OFL, solo 400 y 700): la pide el diseñador para todo botón con
+// tipografía subrayada. El subrayado viene en los glifos, así que donde se aplica no
+// se dibuja ninguna línea aparte (ver .btn-underlined y .btn-d__label en globals.css).
+const subrayada = localFont({
+  src: [
+    { path: '../fonts/MontserratSubrayada-Regular.ttf', weight: '400', style: 'normal' },
+    { path: '../fonts/MontserratSubrayada-Bold.ttf', weight: '700', style: 'normal' },
+  ],
+  display: 'swap',
+  variable: '--font-subrayada',
+  adjustFontFallback: false,
+})
+
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: site.name,
@@ -31,7 +44,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="es" className={montserrat.variable}>
+    <html lang="es" className={`${montserrat.variable} ${subrayada.variable}`}>
       <body data-load="first-loading" data-scroll-direction="initial" data-scroll-position="top">
         {children}
       </body>
