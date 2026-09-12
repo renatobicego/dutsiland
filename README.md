@@ -59,7 +59,7 @@ Dos consecuencias al tocar esto:
   punto del tramo en el que se ve, y el menú lo usa para saber a qué altura saltar. Si movés una fase,
   las anclas se reacomodan solas.
 
-### Secciones fijadas (solo desktop)
+### Secciones fijadas
 
 Hero (con qué hacemos adentro), historia y cómo trabajamos se **fijan** mientras el scroll alimenta su
 animación, para que no se pasen de largo en dos ruedazos. En cómo trabajamos el scroll traza un paso
@@ -79,7 +79,37 @@ Dos cosas a tener en cuenta al tocar estas secciones:
   encimándose con el header. El tope en `vh` hace que cada pieza ceda cuando falta alto. Esos bloques
   van al final de cada sección en `globals.css` para ganarle por orden a las reglas de base.
 
-En móvil y tablet nada se fija: los bloques se revelan al entrar en pantalla.
+### Vertical (teléfono y tablet)
+
+Sigue la referencia móvil del diseñador: **la misma secuencia del hero, en vertical**. La D del
+logo ocupa el 58% de arriba con el lockup y el mail; el titular va debajo, negro sobre el crema;
+la frase entra desde abajo como una tarjeta redondeada a la derecha; la partida en dos, el panel
+que se abre y los cuatro frentes son iguales que en apaisado. Sólo el hero se fija en vertical:
+historia y proceso siguen revelándose al entrar, que en un teléfono se lee mejor.
+
+Lo que cambia por debajo, y conviene saber al tocarlo:
+
+- **Sin scroll suave en táctil** (no está pensado para eso). El hero se fija sobre el scroll
+  nativo con `ScrollTrigger.normalizeScroll(true)`, que evita el tirón de la barra de direcciones,
+  y `ignoreMobileResize`, porque esa barra al aparecer y desaparecer cambia el alto de la ventana
+  y cada cambio dispararía un refresh que re-fija el hero a los saltos. El alto del escenario lo
+  fija `--vh` una sola vez al arrancar, por el mismo motivo.
+- **Mientras corre la intro no hay scroll** (`html.intro-running`): el trigger del hero recién se
+  crea al terminar, y si el usuario scrollea antes el tramo fijado arranca a mitad.
+- **Las siluetas son las mismas variables CSS, con otro juego de estados** (`MCLIP` contra `CLIP`
+  en `HomeExperience`): insets arriba/abajo, que en apaisado no hacen falta, y radios en `vw`,
+  porque en vertical el ancho es lo que manda. Dentro de una misma D todas las fases usan la misma
+  unidad: GSAP no convierte unidades en una variable CSS.
+- **El hero mide 500vh en vertical contra 840vh en apaisado** — a propósito. En un teléfono se
+  scrollea a flicks y un tramo fijado largo se siente trabado; el ritmo queda en ~460px por unidad
+  de timeline contra ~900px en desktop.
+- **El hueco donde se intercambian los frentes lo dimensiona JS** con el frente más alto
+  (`fitServicesStack`), y se vuelve a medir con un `ResizeObserver` cada vez que el hueco cambia de
+  ancho: cuántas filas ocupan las pastillas depende del ancho, y ese ancho cambia sin avisar (la
+  barra de scroll que aparece al terminar la intro, la barra de direcciones, un giro de pantalla).
+  El CSS sólo pone el piso.
+- En teléfonos (≤ 767px) la bajada de "qué hacemos" no se muestra dentro del panel: no hay alto
+  para ella, y el título ya dice lo mismo. En tablet sí entra.
 
 ## Fichas de proyecto (`/proyectos/<slug>`)
 
@@ -122,7 +152,12 @@ Dos cosas a tener en cuenta:
 | Estilos (todo el sistema visual)                         | `src/app/globals.css`               |
 | Logos (D, UTSILAND, letras del logotipo)                 | `public/brand/`                     |
 | Imágenes de los proyectos                                | `public/img/`                        |
-| Tipografía (Montserrat, OFL)                             | `src/fonts/` + `src/app/layout.tsx` |
+| Tipografía (Montserrat y Montserrat Subrayada, OFL)      | `src/fonts/` + `src/app/layout.tsx` |
+
+Montserrat Subrayada la pide el diseñador para todo botón con tipografía subrayada: la etiqueta del
+botón con la D y los links `.btn-underlined`. Trae el subrayado en los propios glifos, así que ahí no
+se dibuja ninguna línea aparte y el hover es un cambio de opacidad. Los `.btn-underline`, que sólo
+se subrayan al pasar el mouse, siguen en Montserrat.
 
 El tipo `Site` en `src/content/site.ts` describe la forma de todo el contenido, así que si falta un
 campo o cambia la estructura salta en el chequeo de tipos y no en pantalla. Las utilidades de

@@ -18,17 +18,24 @@ export type MenuOptions = {
  *  hero está fijado y su contenido lo va mostrando el scroll, así que initHeroScroll
  *  deja en cada una un data-hero-progress con el punto del tramo en el que se ve. */
 export function scrollToTarget(target: Element | 0, smoother: Smoother | null): void {
-  if (!smoother) {
-    if (target === 0) window.scrollTo({ top: 0, behavior: 'smooth' })
-    else target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  if (target === 0) {
+    if (smoother) smoother.scrollTo(0, true)
+    else window.scrollTo({ top: 0, behavior: 'smooth' })
     return
   }
-  const hero = target === 0 ? null : target.closest('.home-hero')
+  // El hero está fijado en los dos layouts (con scroll suave en apaisado, con scroll
+  // nativo en vertical), así que la altura de sus anclas se calcula igual en ambos.
+  const hero = target.closest('.home-hero')
   if (hero instanceof HTMLElement && target instanceof HTMLElement) {
     const p = parseFloat(target.dataset.heroProgress ?? '')
     const span = Math.max(0, hero.offsetHeight - window.innerHeight)
-    smoother.scrollTo(hero.offsetTop + (Number.isFinite(p) ? p * span : window.innerHeight), true)
-  } else smoother.scrollTo(target, true, 'top top')
+    const y = hero.offsetTop + (Number.isFinite(p) ? p * span : window.innerHeight)
+    if (smoother) smoother.scrollTo(y, true)
+    else window.scrollTo({ top: y, behavior: 'smooth' })
+    return
+  }
+  if (smoother) smoother.scrollTo(target, true, 'top top')
+  else target.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
 /** Resuelve el hash con el que se llegó a la página (por ejemplo al volver desde una

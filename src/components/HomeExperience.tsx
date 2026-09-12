@@ -44,9 +44,27 @@ type Animation = gsap.core.Timeline | gsap.core.Tween
      se queda con lo último que alguien alcanzó a escribir —a mitad de camino— mientras
      el contenido sigue de largo. Animando variables, el estilo del elemento ES el
      objetivo y cualquier render lo deja bien. */
-type ClipState = { r: number; l: number; tl: number; tr: number; br: number; bl: number }
+/* t/b son los insets de arriba y abajo (en vertical hacen falta: la D del logo ocupa
+   la parte alta de la pantalla). `u` es la unidad de los radios: vh en apaisado, vw en
+   vertical, donde el ancho es lo que manda. Dentro de una misma D todas las fases usan
+   la misma unidad: GSAP no convierte unidades en una variable CSS. */
+type ClipState = { t?: number; r: number; b?: number; l: number; tl: number; tr: number; br: number; bl: number; u?: 'vh' | 'vw' }
 
-const CLIP = {
+type ClipName =
+  | 'leftFull'
+  | 'leftRounded'
+  | 'leftHero'
+  | 'rightHidden'
+  | 'rightHero'
+  | 'rightClaim'
+  | 'rightSplit'
+  | 'rightGone'
+  | 'left2Hidden'
+  | 'left2Split'
+  | 'left2Full'
+
+/* Apaisado (desktop): las dos D se reparten el ancho. */
+const CLIP: Record<ClipName, ClipState> = {
   leftFull: { r: 0, l: 0, tl: 0, tr: 0, br: 0, bl: 0 }, // rectángulo = fondo del loader
   leftRounded: { r: 0, l: 0, tl: 0, tr: 50, br: 50, bl: 0 }, // cuadro 3
   leftHero: { r: 56, l: 0, tl: 0, tr: 50, br: 50, bl: 0 }, // cuadro 5
@@ -58,10 +76,71 @@ const CLIP = {
   left2Hidden: { r: 100, l: 0, tl: 0, tr: 0, br: 0, bl: 0 },
   left2Split: { r: 51, l: 0, tl: 0, tr: 50, br: 50, bl: 0 }, // cuadro 8
   left2Full: { r: 0, l: 0, tl: 0, tr: 50, br: 50, bl: 0 }, // el panel se abre para "qué hacemos"
-} satisfies Record<string, ClipState>
+}
+
+/* Vertical (teléfono y tablet), según la referencia móvil del diseñador: la D del logo
+   ocupa la parte alta y el titular va abajo, sobre el crema; la frase entra desde abajo
+   como una tarjeta redondeada a la derecha; la partida y el panel son las mismas que
+   en apaisado. Radios en vw: 50vw es una semicircunferencia en el ancho del teléfono,
+   29vw equivale al --blob-radius de móvil (12rem). */
+const MCLIP: Record<ClipName, ClipState> = {
+  leftFull: { t: 0, r: 0, b: 0, l: 0, tl: 0, tr: 0, br: 0, bl: 0, u: 'vw' },
+  leftRounded: { t: 0, r: 0, b: 0, l: 0, tl: 0, tr: 50, br: 50, bl: 0, u: 'vw' },
+  leftHero: { t: 0, r: 0, b: 42, l: 0, tl: 0, tr: 50, br: 50, bl: 0, u: 'vw' }, // la D arriba, el 58% del alto
+  rightHidden: { t: 100, r: 5, b: 7, l: 0, tl: 0, tr: 29, br: 29, bl: 0, u: 'vw' }, // abajo de todo, sin alto
+  rightHero: { t: 100, r: 5, b: 7, l: 0, tl: 0, tr: 29, br: 29, bl: 0, u: 'vw' }, // en vertical la D derecha no participa de la intro
+  rightClaim: { t: 7, r: 5, b: 7, l: 0, tl: 0, tr: 29, br: 29, bl: 0, u: 'vw' }, // la tarjeta con la frase
+  rightSplit: { t: 7, r: 5, b: 7, l: 48, tl: 0, tr: 29, br: 29, bl: 0, u: 'vw' },
+  rightGone: { t: 7, r: 5, b: 7, l: 100, tl: 0, tr: 29, br: 29, bl: 0, u: 'vw' },
+  left2Hidden: { t: 0, r: 100, b: 0, l: 0, tl: 0, tr: 29, br: 29, bl: 0, u: 'vw' },
+  left2Split: { t: 0, r: 55, b: 0, l: 0, tl: 0, tr: 29, br: 29, bl: 0, u: 'vw' },
+  left2Full: { t: 0, r: 0, b: 0, l: 0, tl: 0, tr: 29, br: 29, bl: 0, u: 'vw' },
+}
+
+/* Todo lo que cambia entre apaisado y vertical, junto. El resto de la secuencia
+   —fases, tiempos, la secuencia de qué hacemos— es la misma. */
+type Layout = {
+  clip: Record<ClipName, ClipState>
+  /** Cómo sale de escena la D del logo cuando arranca el scroll */
+  leftExit: gsap.TweenVars
+  /** De dónde a dónde se mueve el lockup durante la intro */
+  logoFrom: gsap.TweenVars
+  logoTo: gsap.TweenVars
+  /** En apaisado la D derecha entra en la intro llevando el titular; en vertical el
+   *  titular vive sobre el crema y la D derecha recién aparece con el scroll */
+  rightEntersInIntro: boolean
+}
+
+const DESKTOP: Layout = {
+  clip: CLIP,
+  // Se va desplazándose (no contrayéndose): contraerla dejaba una franja con forma
+  // rara pegada al borde izquierdo.
+  leftExit: { xPercent: -60 },
+  logoFrom: { left: '50%' },
+  logoTo: { left: '22%' },
+  rightEntersInIntro: true,
+}
+
+const MOBILE: Layout = {
+  clip: MCLIP,
+  leftExit: { yPercent: -75 },
+  logoFrom: { top: '50%' },
+  logoTo: { top: '29%' },
+  rightEntersInIntro: false,
+}
 
 function clipVars(s: ClipState): gsap.TweenVars {
-  return { '--cr': `${s.r}%`, '--cl': `${s.l}%`, '--ctl': `${s.tl}vh`, '--ctr': `${s.tr}vh`, '--cbr': `${s.br}vh`, '--cbl': `${s.bl}vh` }
+  const u = s.u ?? 'vh'
+  return {
+    '--ct': `${s.t ?? 0}%`,
+    '--cr': `${s.r}%`,
+    '--cb': `${s.b ?? 0}%`,
+    '--cl': `${s.l}%`,
+    '--ctl': `${s.tl}${u}`,
+    '--ctr': `${s.tr}${u}`,
+    '--cbr': `${s.br}${u}`,
+    '--cbl': `${s.bl}${u}`,
+  }
 }
 
 function setClip(selector: string, state: ClipState) {
@@ -89,9 +168,11 @@ function animateDMark(root: Element | null, timeScale = 1): gsap.core.Timeline |
   return tl
 }
 
-/* ---------- secciones "pegadas" (pin) ---------- */
-function initSticky() {
-  document.querySelectorAll<HTMLElement>('[data-sticky]').forEach((el) => {
+/* ---------- secciones "pegadas" (pin) ----------
+   `root` acota qué se fija: en vertical sólo el hero. Historia y proceso siguen
+   revelándose al entrar, que en un teléfono se lee mejor que otro tramo fijado. */
+function initSticky(root: ParentNode = document) {
+  root.querySelectorAll<HTMLElement>('[data-sticky]').forEach((el) => {
     let start: string | (() => string) = el.dataset.start || 'top top'
     let end: string | (() => string) = el.dataset.end || 'bottom top'
     let trigger: Element | null = el.dataset.trigger ? document.querySelector(el.dataset.trigger) : el
@@ -106,12 +187,13 @@ function initSticky() {
 }
 
 /* ---------- intro del hero (cuadros 2 → 5), en tiempo, tras el loader ---------- */
-function setHeroInitialState() {
-  setClip('.blob-left', CLIP.leftFull)
-  setClip('.blob-right', CLIP.rightHidden)
-  setClip('.blob-left2', CLIP.left2Hidden)
-  gsap.set('.blob-left', { xPercent: 0 })
-  gsap.set('.hero-logo', { left: '50%' })
+function setHeroInitialState(layout: Layout) {
+  const S = layout.clip
+  setClip('.blob-left', S.leftFull)
+  setClip('.blob-right', S.rightHidden)
+  setClip('.blob-left2', S.left2Hidden)
+  gsap.set('.blob-left', { xPercent: 0, yPercent: 0 })
+  gsap.set('.hero-logo', layout.logoFrom)
   gsap.set('.hero-logo__rest-mask', { width: 0, marginLeft: 0 })
   gsap.set('.hero-mail', { autoAlpha: 0, y: '2rem' })
   gsap.set('#header', { autoAlpha: 0 })
@@ -120,21 +202,28 @@ function setHeroInitialState() {
   // píxeles y lo guarda en `y`: animar solo yPercent no mueve nada y las palabras
   // quedan abajo, tapadas por la máscara de .word.
   gsap.set('.hero-headline .word > span', { opacity: 0, yPercent: 100, y: 0 })
+  // La frase arranca oculta en los dos layouts. En apaisado además lo dice el CSS; en
+  // vertical no, y sin esto se vería dentro de la tarjeta apenas la tarjeta asoma.
+  gsap.set('.hero-claim', { autoAlpha: 0, y: '6rem' })
 }
 
-function playHeroIntro(onComplete: () => void): gsap.core.Timeline {
+function playHeroIntro(layout: Layout, onComplete: () => void): gsap.core.Timeline {
+  const S = layout.clip
   const mask = document.querySelector('.hero-logo__rest-mask')
   const rest = document.querySelector('.hero-logo__rest')
   const restWidth = rest ? rest.getBoundingClientRect().width : 0
   const tl = gsap.timeline({ onComplete })
   // 1. el fondo negro del loader se vuelve una D gigante
-  tl.add(clipTween('.blob-left', CLIP.leftFull, CLIP.leftRounded, { duration: 0.8, ease: 'power2.inOut' }), 0)
+  tl.add(clipTween('.blob-left', S.leftFull, S.leftRounded, { duration: 0.8, ease: 'power2.inOut' }), 0)
   // 2. "UTSILAND" sale de atrás de la D
   tl.to(mask, { width: restWidth, marginLeft: '2.2vh', duration: 0.9, ease: 'power3.out' }, 0.55)
-  // 3. la D se achica a la izquierda, entra la D derecha con el titular
-  tl.add(clipTween('.blob-left', CLIP.leftRounded, CLIP.leftHero, { duration: 1.1, ease: 'power3.inOut' }), 1.5)
-  tl.to('.hero-logo', { left: '22%', duration: 1.1, ease: 'power3.inOut' }, 1.5)
-  tl.add(clipTween('.blob-right', CLIP.rightHidden, CLIP.rightHero, { duration: 1.1, ease: 'power3.inOut' }), 1.6)
+  // 3. la D se achica (a la izquierda en apaisado, hacia arriba en vertical) y, en
+  //    apaisado, entra la D derecha con el titular
+  tl.add(clipTween('.blob-left', S.leftRounded, S.leftHero, { duration: 1.1, ease: 'power3.inOut' }), 1.5)
+  tl.to('.hero-logo', { ...layout.logoTo, duration: 1.1, ease: 'power3.inOut' }, 1.5)
+  if (layout.rightEntersInIntro) {
+    tl.add(clipTween('.blob-right', S.rightHidden, S.rightHero, { duration: 1.1, ease: 'power3.inOut' }), 1.6)
+  }
   // Mismo movimiento que tenía la animación CSS slide-up (1s, la misma curva y 70ms
   // de stagger), pero con GSAP: escribe estilos inline y no se reinicia cuando
   // ScrollTrigger re-inserta el hero fijado en cada refresh.
@@ -164,7 +253,8 @@ function markHeroAnchor(selector: string, position: number, total: number) {
    Fase A: la frase entra. Fase B: se parte en dos D. Fase C: la frase termina de irse
    a la derecha y, mientras tanto, el panel negro de la izquierda se abre a todo el
    ancho y muestra adentro los tres frentes. Después sigue nuestra historia. */
-function initHeroScroll(header: HTMLElement | null): gsap.core.Timeline {
+function initHeroScroll(header: HTMLElement | null, layout: Layout): gsap.core.Timeline {
+  const S = layout.clip
   const base = { markers: false, anticipatePin: 1, invalidateOnRefresh: true }
   const t = gsap.timeline({
     scrollTrigger: {
@@ -178,25 +268,24 @@ function initHeroScroll(header: HTMLElement | null): gsap.core.Timeline {
       },
     },
   })
-  // Fase A: la D izquierda sale de escena, la derecha ocupa todo y muestra la frase.
-  // Se va desplazándose (no contrayéndose): contraerla dejaba una franja con forma rara
-  // pegada al borde izquierdo.
-  t.to('.blob-left', { xPercent: -60, duration: 1, ease: 'none' }, 0)
-  t.add(clipTween('.blob-right', CLIP.rightHero, CLIP.rightClaim, { duration: 1, ease: 'none' }), 0)
+  // Fase A: la D del logo sale de escena (hacia la izquierda en apaisado, hacia arriba
+  // en vertical) y la D derecha ocupa el lugar y muestra la frase.
+  t.to('.blob-left', { ...layout.leftExit, duration: 1, ease: 'none' }, 0)
+  t.add(clipTween('.blob-right', layout.rightEntersInIntro ? S.rightHero : S.rightHidden, S.rightClaim, { duration: 1, ease: 'none' }), 0)
   t.to('.hero-headline', { autoAlpha: 0, duration: 0.35, ease: 'none' }, 0)
   t.to('.hero-mail', { autoAlpha: 0, duration: 0.3, ease: 'none' }, 0)
   t.fromTo('.hero-claim', { autoAlpha: 0, y: '6rem' }, { autoAlpha: 1, y: 0, duration: 0.45, ease: 'none', immediateRender: false }, 0.55)
   // Fase B: la frase se parte en dos D. El texto queda recortado por las siluetas,
   // nítido y sin desvanecer, como en el cuadro 8 del storyboard.
-  t.add(clipTween('.blob-right', CLIP.rightClaim, CLIP.rightSplit, { duration: 1, ease: 'none' }), 1)
-  t.add(clipTween('.blob-left2', CLIP.left2Hidden, CLIP.left2Split, { duration: 1, ease: 'none' }), 1)
+  t.add(clipTween('.blob-right', S.rightClaim, S.rightSplit, { duration: 1, ease: 'none' }), 1)
+  t.add(clipTween('.blob-left2', S.left2Hidden, S.left2Split, { duration: 1, ease: 'none' }), 1)
 
   // Fase C: la frase termina de irse por la derecha y, mientras tanto, el panel negro
   // de la izquierda se abre a todo el ancho. Ese panel es el contenedor de "qué
-  // hacemos": una vez abierto, los tres frentes se muestran adentro.
+  // hacemos": una vez abierto, los cuatro frentes se muestran adentro.
   const OPEN = 0.85
-  t.add(clipTween('.blob-right', CLIP.rightSplit, CLIP.rightGone, { duration: OPEN, ease: 'power2.inOut' }), 2)
-  t.add(clipTween('.blob-left2', CLIP.left2Split, CLIP.left2Full, { duration: OPEN, ease: 'power2.inOut' }), 2)
+  t.add(clipTween('.blob-right', S.rightSplit, S.rightGone, { duration: OPEN, ease: 'power2.inOut' }), 2)
+  t.add(clipTween('.blob-left2', S.left2Split, S.left2Full, { duration: OPEN, ease: 'power2.inOut' }), 2)
 
   const servicesAt = 2 + OPEN + 0.05
   const services = buildServicesSequence()
@@ -239,10 +328,43 @@ function initHistoryScroll(): gsap.core.Timeline | null {
    No tiene scrollTrigger propio: devuelve una timeline suelta que initHeroScroll
    engancha a la del hero, porque "qué hacemos" vive dentro del panel izquierdo y
    comparte el mismo tramo fijado. */
+/* El hueco donde se intercambian los frentes tiene que aguantar al más alto, y eso
+   depende del ancho, del alto de la pantalla y de cuántas pastillas tenga cada uno:
+   se mide en vivo y se vuelve a medir antes de cada refresh. El CSS sólo pone el piso
+   (que en apaisado también cubre las cuatro filas del índice del cierre). */
+let fitServicesStack: (() => number) | null = null
+let stackObserver: ResizeObserver | null = null
+
 function buildServicesSequence(): gsap.core.Timeline | null {
   const services = gsap.utils.toArray<HTMLElement>('.services-stack .service')
   if (!services.length) return null
   const stack = document.querySelector<HTMLElement>('.services-stack')
+  if (stack) {
+    fitServicesStack = () => {
+      stack.style.minHeight = ''
+      const piso = parseFloat(getComputedStyle(stack).minHeight) || 0
+      const masAlto = Math.max(...services.map((s) => s.offsetHeight))
+      const alto = Math.max(piso, masAlto)
+      stack.style.minHeight = `${alto}px`
+      return alto
+    }
+    let ultimo = fitServicesStack()
+    ScrollTrigger.addEventListener('refreshInit', fitServicesStack)
+    // Cuántas filas ocupan las pastillas depende del ancho del hueco, y ese ancho
+    // cambia sin que nadie avise: la barra de scroll que aparece al terminar la intro,
+    // la barra de direcciones del teléfono, un giro de pantalla. Cada vez que el hueco
+    // cambia de tamaño se vuelve a medir; y si el alto resultante cambió, se refresca
+    // ScrollTrigger para que el índice del cierre recalcule sus filas.
+    stackObserver = new ResizeObserver(() => {
+      if (!fitServicesStack) return
+      const alto = fitServicesStack()
+      if (Math.abs(alto - ultimo) > 1) {
+        ultimo = alto
+        ScrollTrigger.refresh()
+      }
+    })
+    stackObserver.observe(stack)
+  }
 
   // Alto de una fila del índice del cierre: con el detalle oculto, de cada frente
   // solo queda el número y el título. Se mide en vivo (y se recalcula en cada
@@ -370,8 +492,9 @@ export default function HomeExperience() {
     const menuMark = animateDMark(document.querySelector('.menu .d-mark'), 1)
     loaderMark && loaderMark.play()
 
+    const layout = device.isDesktop ? DESKTOP : MOBILE
+    setHeroInitialState(layout)
     if (device.isDesktop) {
-      setHeroInitialState()
       smoother = ScrollSmoother.create({
         wrapper: '#smooth-wrapper',
         content: '#pg-home',
@@ -384,8 +507,15 @@ export default function HomeExperience() {
       initSticky()
       initFooterReveal()
     } else {
-      // En móvil no hay intro: el titular se muestra directo
-      gsap.set('.hero-headline .word > span', { opacity: 1, yPercent: 0, y: 0 })
+      // Vertical: la misma secuencia, con el hero fijado sobre el scroll nativo. Sin
+      // scroll suave, que no está pensado para táctil. ignoreMobileResize: la barra de
+      // direcciones que aparece y desaparece cambia el alto de la ventana, y sin esto
+      // cada cambio dispara un refresh que re-fija el hero a los saltos.
+      ScrollTrigger.config({ ignoreMobileResize: true })
+      initSticky(document.querySelector('.home-hero') ?? document)
+      // Sin scroll mientras corre la intro: el trigger del hero recién se crea al
+      // terminar, y si el usuario scrollea antes el tramo fijado arranca a mitad.
+      document.documentElement.classList.add('intro-running')
     }
     cleanups.push(initSectionWatcher())
     cleanups.push(initMenu({ smoother, menuMark }))
@@ -403,35 +533,27 @@ export default function HomeExperience() {
     const conAncla = Boolean(window.location.hash) && window.location.hash !== '#top'
 
     const arrancar = () => {
-      if (device.isDesktop) {
-        intro = playHeroIntro(() => {
-          initHeroScroll(header)
-          smoother && smoother.paused(false)
-          ScrollTrigger.refresh()
-          refreshAOS()
-          // El hash recién se puede resolver acá: antes el hero está fijado y las
-          // posiciones de su contenido todavía no existen.
-          goToHash(smoother)
-        })
-        if (yaEntro && conAncla) intro.progress(1)
-        // "Qué hacemos" no lleva su propia timeline: la arma initHeroScroll
-        // porque vive dentro del panel izquierdo del hero
-        sections.push(initHistoryScroll())
-      } else {
+      intro = playHeroIntro(layout, () => {
+        initHeroScroll(header, layout)
+        if (smoother) smoother.paused(false)
+        else {
+          document.documentElement.classList.remove('intro-running')
+          // Toma el control del scroll táctil: evita el tirón de la barra de
+          // direcciones y mantiene el pin estable mientras se arrastra con el dedo.
+          ScrollTrigger.normalizeScroll(true)
+        }
+        ScrollTrigger.refresh()
         refreshAOS()
-        // Sin pin: historia y servicios se revelan bloque por bloque
-        sections.push(
-          ...initRevealOnEnter([
-            '.history-kicker',
-            '.history-year',
-            '.history-title',
-            '.history-text p',
-            '.services-head > *',
-            '.services-stack .service',
-            '.services-cta',
-          ])
-        )
-      }
+        // El hash recién se puede resolver acá: antes el hero está fijado y las
+        // posiciones de su contenido todavía no existen.
+        goToHash(smoother)
+      })
+      if (yaEntro && conAncla) intro.progress(1)
+      // "Qué hacemos" no lleva su propia timeline: la arma initHeroScroll porque vive
+      // dentro del panel izquierdo del hero, en los dos layouts.
+      if (device.isDesktop) sections.push(initHistoryScroll())
+      // En vertical la historia no se fija: se revela bloque por bloque
+      else sections.push(...initRevealOnEnter(['.history-kicker', '.history-year', '.history-title', '.history-text p']))
       // Solo en desktop la sección se fija (ver .home-process en globals.css)
       process = initProcess(device.isDesktop)
       ScrollTrigger.refresh()
@@ -456,8 +578,16 @@ export default function HomeExperience() {
 
     const onLoad = () => ScrollTrigger.refresh()
     window.addEventListener('load', onLoad)
+    // Las fuentes pueden llegar después del load: cambian las métricas del texto y con
+    // ellas cuántas filas ocupan las pastillas, o sea el alto del frente más alto, que
+    // es lo que dimensiona el hueco del panel. `fonts.ready` no alcanza: resuelve al
+    // instante si todavía no se pidió ninguna fuente. `loadingdone` avisa cada vez que
+    // termina de cargar una tanda, llegue cuando llegue.
+    const onFonts = () => ScrollTrigger.refresh()
+    document.fonts?.addEventListener('loadingdone', onFonts)
 
     return () => {
+      document.fonts?.removeEventListener('loadingdone', onFonts)
       window.removeEventListener('load', onLoad)
       cleanups.forEach((fn) => fn())
       marqueeCleanup && marqueeCleanup()
@@ -470,6 +600,18 @@ export default function HomeExperience() {
       loaderMark && loaderMark.kill()
       menuMark && menuMark.kill()
       if (smoother) smoother.kill()
+      else {
+        ScrollTrigger.normalizeScroll(false)
+        document.documentElement.classList.remove('intro-running')
+      }
+      if (fitServicesStack) {
+        ScrollTrigger.removeEventListener('refreshInit', fitServicesStack)
+        fitServicesStack = null
+      }
+      if (stackObserver) {
+        stackObserver.disconnect()
+        stackObserver = null
+      }
     }
   }, [])
 

@@ -368,8 +368,8 @@ body.menu-active #header .social-list { pointer-events: auto; opacity: 1; transf
    no un string que el navegador re-serializa (ver clipTween en HomeExperience). */
 .blob {
   position: absolute; inset: 0; background: var(--black-1); overflow: hidden; will-change: clip-path;
-  --cr: 0%; --cl: 0%; --ctl: 0vh; --ctr: 0vh; --cbr: 0vh; --cbl: 0vh;
-  clip-path: inset(0% var(--cr) 0% var(--cl) round var(--ctl) var(--ctr) var(--cbr) var(--cbl));
+  --ct: 0%; --cr: 0%; --cb: 0%; --cl: 0%; --ctl: 0vh; --ctr: 0vh; --cbr: 0vh; --cbl: 0vh;
+  clip-path: inset(var(--ct) var(--cr) var(--cb) var(--cl) round var(--ctl) var(--ctr) var(--cbr) var(--cbl));
 }
 .blob-left { --cr: 56%; --ctr: 50vh; --cbr: 50vh; z-index: 2; }
 .blob-right { --cl: 46%; --ctl: 50vh; --cbl: 50vh; z-index: 1; }
@@ -381,7 +381,9 @@ body.menu-active #header .social-list { pointer-events: auto; opacity: 1; transf
 .hero-logo__rest { position: absolute; right: 0; top: 0; height: 100%; width: auto; max-width: none; }
 .hero-mail { position: absolute; left: 7.6rem; bottom: 8rem; display: inline-flex; align-items: center; color: var(--white-1); font-size: 2.65rem; line-height: 1; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; }
 
-.hero-headline { position: absolute; left: calc(46% + 8rem); top: 50%; transform: translateY(-50%); margin: 0; color: var(--white-1); font-size: 10.6rem; line-height: 1.22; font-weight: 800; text-transform: uppercase; letter-spacing: 0; }
+/* Va por fuera de las D (z-index por encima) y sin eventos: así el cursor y los clicks
+   los sigue resolviendo la D que tiene debajo. */
+.hero-headline { position: absolute; z-index: 4; pointer-events: none; left: calc(46% + 8rem); top: 50%; transform: translateY(-50%); margin: 0; color: var(--white-1); font-size: 10.6rem; line-height: 1.22; font-weight: 800; text-transform: uppercase; letter-spacing: 0; }
 .hero-headline__line { display: block; }
 /* Estado de partida nada más: el reveal lo anima GSAP dentro de la intro.
    Con una animación CSS se reiniciaba solo, porque ScrollTrigger re-inserta en el
@@ -396,31 +398,43 @@ body.menu-active #header .social-list { pointer-events: auto; opacity: 1; transf
 .hero-claim .btn-d { margin-top: 3.6rem; }
 @media only screen and (min-width: 1025.1px) { .hero-claim { opacity: 0; visibility: hidden; } }
 
-/* Móvil / tablet: sin morphing, bloques apilados */
+/* Sin scroll mientras corre la intro en vertical (ver HomeExperience) */
+html.intro-running { overflow: hidden; }
+html.intro-running body { touch-action: none; }
+
+/* Móvil / tablet: la misma secuencia que en apaisado, en vertical (referencia móvil del
+   diseñador). El hero se fija igual, sobre el scroll nativo y con un tramo más corto
+   que en desktop: en un teléfono se scrollea a flicks y un pin largo se siente trabado.
+   Las siluetas usan radios en vw y sus estados salen de MCLIP (HomeExperience). */
 @media only screen and (max-width: 1025px) {
-  .home-hero { height: auto; }
-  .home-hero .container-sticky { position: static; }
-  .hero-stage { height: auto; padding: calc(var(--header-height) + 2rem) 2rem 2rem; display: flex; flex-direction: column; gap: 2rem; }
-  .blob { position: relative; inset: auto; clip-path: none !important; will-change: auto; }
-  .blob-left { border-radius: 0 var(--blob-radius) var(--blob-radius) 0; min-height: 62vh; }
-  .blob-right { border-radius: var(--blob-radius) 0 0 var(--blob-radius); padding: 8rem 5rem 8rem 7rem; }
-  .hero-logo { position: relative; left: auto; top: auto; transform: none; padding: 8rem 5rem 15rem; }
-  .hero-logo__d { height: 30vw; flex: none; }
-  .hero-logo__rest-mask { height: 31.7vw; width: 28.1vw; margin-left: 2vw; flex: none; }
-  .hero-mail { left: 5rem; bottom: 6rem; font-size: 2.2rem; }
-  .hero-headline { position: relative; left: auto; top: auto; transform: none; font-size: 6rem; }
-  .hero-headline .word > span { opacity: 1; transform: none; }
-  .hero-claim { position: relative; left: auto; top: auto; bottom: auto; transform: none; width: auto; max-width: none; margin-top: 8rem; opacity: 1; visibility: visible; }
-  .hero-claim__text { font-size: 4.6rem; max-width: none; }
+  .home-hero { height: 500vh; }
+  /* El alto lo fija --vh al arrancar y no se toca más: si siguiera a la barra de
+     direcciones, el escenario fijado cambiaría de alto a mitad del scroll. */
+  .hero-stage { height: calc(var(--vh, 1vh) * 100); }
+  .blob-left { --cr: 0%; --cb: 42%; --ctr: 50vw; --cbr: 50vw; }
+  .blob-right { --ct: 100%; --cr: 5%; --cb: 7%; --cl: 0%; --ctl: 0vw; --ctr: 29vw; --cbr: 29vw; --cbl: 0vw; }
+  .blob-left2 { --cr: 100%; --ctr: 29vw; --cbr: 29vw; }
+  /* El lockup, centrado en la D de arriba (la intro lo lleva del 50% al 29%).
+     width: max-content porque un absoluto con left: 50% encoge al espacio que le queda
+     a la derecha, y al ser flex la máscara de "UTSILAND" se achicaba a nada. */
+  .hero-logo { left: 50%; top: 29%; width: max-content; transform: translate(-50%, -50%); }
+  .hero-logo__d { height: 20vh; }
+  .hero-logo__rest-mask { height: 21.1vh; width: 18.7vh; margin-left: 1.3vh; }
+  .hero-mail { left: 2.4rem; bottom: auto; top: calc(58% - 6.5rem); font-size: 1.8rem; }
+  /* El titular, debajo de la D, negro sobre el crema */
+  .hero-headline { left: 2.4rem; right: 2.4rem; top: 63%; transform: none; color: var(--black-1); font-size: 5.6rem; line-height: 1.08; }
+  /* La frase, dentro de la tarjeta (que tiene 7% arriba y abajo y 5% a la derecha) */
+  .hero-claim { left: 2.4rem; right: 9rem; top: 7%; bottom: 7%; width: auto; max-width: none; }
+  .hero-claim__text { font-size: 3.8rem; line-height: 1.2; max-width: none; }
+  .hero-claim .btn-d { margin-top: 2.6rem; }
   /* El botón deja de ser una pastilla de una línea: a este ancho el texto no entra */
   .btn-d { height: auto; min-height: 8rem; white-space: normal; }
   .btn-d__content { padding: 1.5rem 2.6rem; }
   .btn-d__label { font-size: 2.7rem; line-height: 1.15; text-align: left; padding-top: 0.15em; }
 }
 @media only screen and (max-width: 767.98px) {
-  .hero-mail { left: 4rem; bottom: 9rem; font-size: 1.55rem; }
-  .blob-right { padding: 7rem 3rem 7rem 5rem; }
-  .hero-headline { font-size: 3.9rem; }
+  .hero-mail { font-size: 1.55rem; }
+  .hero-headline { font-size: 5.2rem; }
   .hero-claim__text { font-size: 3.4rem; }
   .btn-d { min-height: 7rem; }
   .btn-d__content { padding: 1.6rem 2.4rem; }
@@ -507,29 +521,36 @@ body.menu-active #header .social-list { pointer-events: auto; opacity: 1; transf
 .pill { display: inline-flex; align-items: center; justify-content: center; height: 6.4rem; padding: 0 3.4rem; border-radius: 10rem; background: var(--white-1); color: var(--black-1); font-size: 2.3rem; line-height: 1; font-weight: 700; text-transform: uppercase; white-space: nowrap; }
 .services-cta { margin-top: 9rem; }
 @media only screen and (max-width: 1025px) {
-  /* El panel deja de ser silueta y pasa a ser un bloque más de la pila del hero:
-     el negro y el radio los pone .services-shape que va adentro. */
-  .blob-left2 { display: block; background: none; margin: 6rem -2rem 0; }
-  .services-shape { padding: 13rem 0 14rem; }
-  .services-shape:before { top: 6rem; right: 6rem; bottom: 6rem; border-width: 0.35rem; border-radius: 0 calc(var(--blob-radius) - 6rem) calc(var(--blob-radius) - 6rem) 0; }
-  .services-inner { padding-left: 8rem; padding-right: 12rem; }
-  .services-title { font-size: 5.4rem; margin-top: 3rem; }
-  .services-intro { font-size: 2.3rem; margin-top: 2.2rem; }
-  .services-stack { margin-top: 8rem; }
-  .service { grid-template-columns: 1fr; gap: 1.4rem; padding-top: 4rem; }
-  .service + .service { margin-top: 5rem; }
-  .service__title { font-size: 4rem; }
-  .service__lead { font-size: 2.2rem; margin-top: 1.2rem; }
-  .services-pills { gap: 1.4rem 1.6rem; margin-top: 3rem; }
-  .pill { height: 5.4rem; padding: 0 2.6rem; font-size: 2rem; }
-  .services-cta { margin-top: 6rem; }
+  /* En vertical el panel es el mismo escenario fijado que en apaisado, a todo el alto
+     del teléfono, y los frentes pasan de a uno en el mismo lugar. El padding de arriba
+     le hace lugar al header fijo. */
+  .blob-left2 { display: flex; padding: 0; margin: 0; }
+  .blob-left2 .services-shape { flex: 1; display: flex; align-items: center; background: none; border-radius: 0; overflow: visible; padding: calc(var(--header-height) + 1rem) 0 2.4rem; }
+  .services-shape:before { top: calc(var(--header-height) - 1.5rem); right: 3rem; bottom: 2.4rem; border-width: 0.35rem; border-radius: 0 calc(var(--blob-radius) - 3rem) calc(var(--blob-radius) - 3rem) 0; }
+  .services-inner { padding-left: 2.4rem; padding-right: 5rem; }
+  /* Todo con tope en vh: en un teléfono bajo el panel tiene que entrar igual */
+  .services-title { font-size: min(3.6rem, 4vh); line-height: 1.06; margin-top: min(1.4rem, 1.5vh); }
+  .services-intro { font-size: min(1.9rem, 2.1vh); line-height: 1.4; margin-top: min(1.2rem, 1.3vh); }
+  /* El alto real del hueco lo fija JS con el frente más alto (fitServicesStack); esto
+     es sólo el piso */
+  .services-stack { position: relative; min-height: 32vh; margin-top: min(2rem, 2.2vh); }
+  .services-stack .service { position: absolute; top: 0; left: 0; width: 100%; margin-top: 0 !important; }
+  .service { grid-template-columns: 1fr; gap: 0.6rem; padding-top: min(2rem, 2.2vh); }
+  .service__n { font-size: min(2rem, 2.2vh); }
+  .service__title { font-size: min(3.2rem, 3.6vh); }
+  .service__lead { font-size: min(1.9rem, 2.1vh); margin-top: 0.6rem; }
+  .services-pills { gap: min(0.9rem, 1vh) 1rem; margin-top: min(1.6rem, 1.8vh); }
+  .pill { white-space: normal; text-align: center; height: auto; min-height: min(4rem, 4.4vh); padding: min(0.8rem, 0.9vh) 1.6rem; font-size: min(1.5rem, 1.65vh); line-height: 1.15; }
+  .services-cta { margin-top: min(2rem, 2.2vh); }
+  .services-cta .btn-d { min-height: min(7rem, 7.6vh); }
 }
 @media only screen and (max-width: 767.98px) {
-  .services-shape:before { top: 4rem; right: 3rem; bottom: 4rem; }
-  .services-inner { padding-left: 4rem; padding-right: 9rem; }
-  .services-title { font-size: 6.6vw; }
-  .service__title { font-size: 5.6vw; }
-  .pill { white-space: normal; text-align: center; height: auto; min-height: 5rem; padding: 1.1rem 2.2rem; font-size: 1.9rem; line-height: 1.15; }
+  /* En un teléfono el panel no tiene alto para la bajada: el título ya lo dice y los
+     frentes son lo que importa. En tablet sí entra. */
+  .blob-left2 .services-intro { display: none; }
+  /* Que cada título entre en una línea: en el índice del cierre son cuatro filas y a
+     dos líneas cada una no hay alto que alcance */
+  .blob-left2 .service__title { font-size: min(2.4rem, 2.8vh); }
 }
 
 /* Ajuste a la ALTURA de la pantalla, para el panel de "qué hacemos".

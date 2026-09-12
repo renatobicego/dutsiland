@@ -27,17 +27,20 @@ export default function Hero() {
             </a>
           </div>
 
-          {/* Blob derecho: titular y, más abajo en el scroll, la frase */}
-          <div className="blob blob-right" data-cursor-style="default-white">
-            {/* El reveal palabra por palabra lo anima la intro con GSAP, no data-aos */}
-            <h1 className="hero-headline">
-              {site.hero.headline.map((line, i) => (
-                <span className="hero-headline__line split-words" key={i}>
-                  {line}
-                </span>
-              ))}
-            </h1>
+          {/* El titular va por fuera de las D: en apaisado cae sobre la D derecha (texto
+              crema sobre negro) y en vertical sobre el crema, abajo de la D del logo
+              (texto negro), como en la referencia móvil. El reveal palabra por palabra
+              lo anima la intro con GSAP, no data-aos. */}
+          <h1 className="hero-headline">
+            {site.hero.headline.map((line, i) => (
+              <span className="hero-headline__line split-words" key={i}>
+                {line}
+              </span>
+            ))}
+          </h1>
 
+          {/* Blob derecho: la frase, que entra con el scroll */}
+          <div className="blob blob-right" data-cursor-style="default-white">
             <div className="hero-claim" id="sobre-nosotros">
               <p className="hero-claim__text">{site.claim.text}</p>
               <Button href={site.claim.cta.href}>{site.claim.cta.label}</Button>
