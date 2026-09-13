@@ -703,15 +703,22 @@ html.intro-running body { touch-action: none; }
 @media only screen and (min-width: 1025.1px) { .footer-logo .letter { transform: translateY(115%); } }
 @media only screen and (max-width: 1025px) {
   #footer { margin-top: 0; padding: 0 1.2rem 1.2rem; }
-  .footer-panel { border-radius: 3rem; padding: 7rem 4rem 5rem; }
-  .footer-row--map { gap: 2.4rem 3rem; }
-  .footer-slogan { margin-left: 0; }
-  .footer-site-map { margin-left: 0; width: 100%; gap: 2.4rem; flex-wrap: wrap; }
+  .footer-panel { border-radius: 3rem; padding: 6rem 3.4rem 4.4rem; }
+  /* En vertical no entran dos cosas en una fila: cada bloque va uno abajo del otro y
+     todo alineado a la izquierda. En fila, el mapa del sitio heredaba el
+     justify-content: flex-end del layout apaisado y, al caer cada link en su propia
+     línea, quedaban en escalera contra el borde derecho. */
+  .footer-row { display: block; }
   .footer-brand, .footer-slogan, .footer-link { font-size: 1.95rem; }
-  .footer-rule { margin: 4rem 0 3rem; }
+  /* La marca y el eslogan son una unidad: pegados entre sí y separados de lo que sigue */
+  .footer-brand { display: inline-flex; }
+  .footer-slogan { display: block; margin-left: 0; margin-top: 0.9rem; opacity: 0.62; }
+  .footer-site-map { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; width: 100%; margin: 3.4rem 0 0; gap: 1.7rem; }
+  .footer-rule { margin: 3.4rem 0 3rem; }
   .footer-row--legal { font-size: 1.7rem; }
-  .footer-legal { gap: 2rem; flex-wrap: wrap; }
-  .footer-logo-wrap { padding-top: 7rem; }
+  .footer-mail { display: flex; }
+  .footer-legal { flex-direction: column; align-items: flex-start; gap: 1.3rem; margin-top: 2.2rem; }
+  .footer-logo-wrap { padding-top: 6rem; }
   .footer-logo { width: 92%; }
 }
 
