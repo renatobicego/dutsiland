@@ -660,7 +660,6 @@ html.intro-running body { touch-action: none; }
 .portfolio-heading { position: absolute; left: 50%; top: 26.4rem; transform: translate(-50%, -50%); width: 100%; padding: 0 4rem; z-index: 2; pointer-events: none; text-align: center; }
 .portfolio-title { margin: 0; color: var(--white-1); font-size: 10.6rem; line-height: 1.1; font-weight: 800; text-transform: uppercase; }
 .portfolio-subtitle { margin-top: 2.4rem; color: var(--white-1); font-size: 2.8rem; line-height: 1.3; font-weight: 500; opacity: 0.92; }
-.portfolio-cta { display: flex; justify-content: center; margin-top: 10.4rem; }
 @media only screen and (max-width: 1025px) {
   .home-portfolio { padding: 14rem 0 10rem; }
   .cards-marquee .marquee-trigger { height: 36rem; }
@@ -670,7 +669,6 @@ html.intro-running body { touch-action: none; }
   .portfolio-heading { top: 18rem; }
   .portfolio-title { font-size: 5.6rem; }
   .portfolio-subtitle { margin-top: 1.6rem; font-size: 2.2rem; }
-  .portfolio-cta { margin-top: 6rem; padding: 0 3rem; }
 }
 @media only screen and (max-width: 767.98px) {
   .portfolio-title { font-size: 8.5vw; }

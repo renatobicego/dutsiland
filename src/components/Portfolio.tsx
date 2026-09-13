@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link'
 import { site } from '@/content/site'
-import Button, { ArrowDiagonal } from './Button'
+import { ArrowDiagonal } from './Button'
 
 // Cuadro 11: sección negra con una fila de tarjetas de proyectos que corre sola
 // (misma marquesina de la referencia), la frase encima y el botón al portfolio.
@@ -68,12 +68,6 @@ export default function Portfolio() {
           <p className="portfolio-subtitle" data-aos="fadeIn .8s ease-in-out-cubic .2s, d:loop">
             {site.portfolio.subtitle}
           </p>
-        </div>
-
-        <div className="portfolio-cta">
-          <Button href={site.portfolio.cta.href} target="_blank" rel="noopener noreferrer">
-            {site.portfolio.cta.label}
-          </Button>
         </div>
       </div>
     </section>

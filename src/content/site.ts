@@ -107,7 +107,6 @@ export type Site = {
   portfolio: {
     titleLines: string[]
     subtitle: string
-    cta: Link
     /** Lo que dice la tarjeta cuando el proyecto sí tiene ficha */
     caseLabel: string
   }
@@ -240,10 +239,11 @@ export const site: Site = {
     cta: { label: 'Empecemos tu proyecto', href: '#contacto' },
   },
 
+  // Sin botón al portfolio: apuntaba al sitio viejo. Los proyectos se ven acá, en las
+  // tarjetas que linkean a su ficha.
   portfolio: {
     titleLines: ['PROYECTOS', 'DESTACADOS'],
     subtitle: 'Una selección de nuestros trabajos más apasionantes',
-    cta: { label: 'Conocé nuestro portfolio', href: 'https://dutsiland.com/#trabajos' },
     caseLabel: 'Ver el caso',
   },
 
