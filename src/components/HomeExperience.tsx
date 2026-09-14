@@ -15,7 +15,7 @@ import { runLoader } from '@/lib/loader'
 import { anclarArriba, revelarEntrada } from '@/lib/entrada'
 import { initScrollState, initSectionWatcher } from '@/lib/scrollState'
 import { initMenu } from '@/lib/menu'
-import { initRevealOnEnter, initFooterReveal } from '@/lib/reveal'
+import { initRevealOnEnter, initFooterReveal, protegerRevelados, refrescarAlCargarMedios } from '@/lib/reveal'
 import type { Smoother } from '@/lib/menu'
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother, CustomEase)
@@ -386,7 +386,12 @@ function buildServicesSequence(): gsap.core.Timeline | null {
   gsap.set('.services-title .word > span', { autoAlpha: 0, yPercent: 110 })
   gsap.set('.services-intro', { autoAlpha: 0, y: '3rem' })
   gsap.set('.services-cta', { autoAlpha: 0, y: '3rem' })
-  gsap.set(services, { autoAlpha: 0, y: '6rem' })
+  // El que aparece y desaparece es el CONTENIDO de cada frente, no el frente entero: la
+  // línea es hermana suya y se anima aparte. Si se desvaneciera con él, su trazado
+  // quedaría tapado por el propio fundido y no se vería (ver más abajo).
+  const contenido = (s: HTMLElement) => s.querySelectorAll('.service__n, .service__body')
+  services.forEach((s) => gsap.set(contenido(s), { autoAlpha: 0, y: '6rem' }))
+  gsap.set(services, { y: 0 })
   gsap.set('.services-stack .pill', { autoAlpha: 0, y: '2rem' })
   // Estado inicial explícito también para la línea: un fromTo en posición > 0 dentro de
   // una timeline con scrub no aplica su "from" hasta que la playhead llega.
@@ -399,27 +404,41 @@ function buildServicesSequence(): gsap.core.Timeline | null {
   t.to('.services-title .word > span', { autoAlpha: 1, yPercent: 0, duration: 0.7, stagger: 0.05, ease: 'power3.out' }, 0.15)
   t.to('.services-intro', { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power2.out' }, 0.6)
 
-  // Después los frentes: entran de a uno y siempre en el mismo lugar
+  // Después los frentes: entran de a uno y siempre en el mismo lugar.
+  //
+  // La línea abre cada frente: se traza sola de izquierda a derecha y el texto llega
+  // atrás. Los cuatro frentes comparten lugar, así que sus cuatro líneas caen en el
+  // mismo píxel: si la de uno se quedara dibujada, la del siguiente se trazaría encima
+  // de una línea ya hecha y no se vería ningún trazado. Por eso cada una se retrae
+  // cuando su frente se va, y la de al lado arranca de cero sobre el panel limpio.
   const start = 1.3
   const hold = 1.1
   services.forEach((service, i) => {
     const at = start + i * hold
-    t.to(service, { autoAlpha: 1, y: 0, duration: 0.45, ease: 'power3.out' }, at)
-    // La línea se traza de izquierda a derecha mientras el frente entra, igual que los
-    // pasos de "cómo trabajamos"
-    t.to(service.querySelector('.service__line'), { scaleX: 1, duration: 0.55, ease: 'power2.inOut' }, at)
-    t.to(service.querySelectorAll('.pill'), { autoAlpha: 1, y: 0, duration: 0.4, stagger: 0.05, ease: 'power2.out' }, at + 0.12)
+    const linea = service.querySelector('.service__line')
+    t.to(linea, { scaleX: 1, duration: 0.6, ease: 'power2.out' }, at)
+    t.to(contenido(service), { autoAlpha: 1, y: 0, duration: 0.45, ease: 'power3.out' }, at + 0.2)
+    t.to(service.querySelectorAll('.pill'), { autoAlpha: 1, y: 0, duration: 0.4, stagger: 0.05, ease: 'power2.out' }, at + 0.32)
     if (i < services.length - 1) {
-      t.to(service, { autoAlpha: 0, y: '-5rem', duration: 0.4, ease: 'power2.in' }, at + hold - 0.35)
+      t.to(contenido(service), { autoAlpha: 0, y: '-5rem', duration: 0.4, ease: 'power2.in' }, at + hold - 0.35)
+      t.to(linea, { scaleX: 0, duration: 0.4, ease: 'power2.in' }, at + hold - 0.35)
     }
   })
 
-  // Cierre: el detalle se repliega y los tres frentes se alinean como índice, así
-  // la sección se ve completa (los tres juntos) y no suelta el pin a mitad de camino.
+  // Cierre: el detalle se repliega y los cuatro frentes se alinean como índice, así
+  // la sección se ve completa (los cuatro juntos) y no suelta el pin a mitad de camino.
+  // Acá cada fila llega con su línea trazándose: es el momento en que el índice se
+  // arma, y es donde el trazado se lee mejor porque las cuatro quedan a la vista.
   const recap = start + services.length * hold + 0.25
   t.to('.services-stack .service__lead, .services-stack .services-pills', { autoAlpha: 0, duration: 0.35, ease: 'power2.in' }, recap)
   services.forEach((service, i) => {
-    t.to(service, { autoAlpha: 1, y: () => i * rowStep(), duration: 0.7, ease: 'power3.out' }, recap + 0.1 + i * 0.08)
+    const cuando = recap + 0.1 + i * 0.08
+    t.to(service, { y: () => i * rowStep(), duration: 0.7, ease: 'power3.out' }, cuando)
+    t.to(contenido(service), { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power3.out' }, cuando)
+    // El último ya tiene la suya dibujada: es el frente que estaba en pantalla
+    if (i < services.length - 1) {
+      t.to(service.querySelector('.service__line'), { scaleX: 1, duration: 0.6, ease: 'power2.out' }, cuando)
+    }
   })
   t.to('.services-cta', { autoAlpha: 1, y: 0, duration: 0.45, ease: 'power2.out' }, recap + 0.95)
   // Tramo final quieto: deja leer los tres frentes antes de soltar el pin
@@ -561,7 +580,9 @@ export default function HomeExperience() {
       // dentro del panel izquierdo del hero, en los dos layouts.
       // "Sobre Dutsiland" en el home es sólo el anuncio (título, subtítulo y el botón a
       // /sobre): no se fija, se revela al entrar, en los dos layouts.
-      sections.push(...initRevealOnEnter(['.history-kicker', '.history-title', '.history-subtitle', '.history-cta']))
+      const revelados = initRevealOnEnter(['.history-kicker', '.history-title', '.history-subtitle', '.history-cta'])
+      sections.push(...revelados)
+      cleanups.push(protegerRevelados(revelados))
       // Solo en desktop la sección se fija (ver .home-process en globals.css)
       process = initProcess(device.isDesktop)
       ScrollTrigger.refresh()
@@ -589,16 +610,12 @@ export default function HomeExperience() {
 
     const onLoad = () => ScrollTrigger.refresh()
     window.addEventListener('load', onLoad)
-    // Las fuentes pueden llegar después del load: cambian las métricas del texto y con
-    // ellas cuántas filas ocupan las pastillas, o sea el alto del frente más alto, que
-    // es lo que dimensiona el hueco del panel. `fonts.ready` no alcanza: resuelve al
-    // instante si todavía no se pidió ninguna fuente. `loadingdone` avisa cada vez que
-    // termina de cargar una tanda, llegue cuando llegue.
-    const onFonts = () => ScrollTrigger.refresh()
-    document.fonts?.addEventListener('loadingdone', onFonts)
+    // Las fuentes y las imágenes pueden llegar después del load: las fuentes cambian las
+    // métricas del texto y con ellas cuántas filas ocupan las pastillas, o sea el alto
+    // del frente más alto, que es lo que dimensiona el hueco del panel.
+    cleanups.push(refrescarAlCargarMedios())
 
     return () => {
-      document.fonts?.removeEventListener('loadingdone', onFonts)
       window.removeEventListener('load', onLoad)
       cleanups.forEach((fn) => fn())
       if (marqueeCleanup) marqueeCleanup()
