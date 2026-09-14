@@ -30,7 +30,8 @@ export default function Home() {
         <div id="smooth-wrapper" className="container-wrapper">
           <div className="wrapper" id="pg-home" data-scroll-container>
             {/* "Qué hacemos" no es una sección propia: va dentro del panel izquierdo
-                del hero, que es la sombra negra que entra cuando la frase se va. */}
+                del hero, que es la sombra negra que entra cuando la frase se va.
+                "Sobre Dutsiland" acá es sólo el anuncio; el contenido está en /sobre. */}
             <main>
               <Hero />
               <History />

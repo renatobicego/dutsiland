@@ -1,32 +1,26 @@
 import { site } from '@/content/site'
-import { DIcon } from './Button'
+import Button, { DIcon } from './Button'
 
-// Nuestra historia. En desktop la sección se fija y el contenido se revela con el
-// scroll (ver initHistoryScroll), para que no se pase de largo en dos ruedazos.
+// En el home "Sobre Dutsiland" es sólo un anuncio: título, subtítulo y el botón que
+// lleva a /sobre, que es donde está el contenido entero. Por eso no se fija: se revela
+// al entrar, como cualquier bloque corto (ver initRevealOnEnter en HomeExperience).
 export default function History() {
-  const { kicker, year, title, text } = site.history
+  const { kicker, title, subtitle, cta } = site.about
   return (
-    <section className="home-history" data-set-section="" id="historia">
-      {/* data-sticky lo pinea con GSAP: position:sticky no retiene dentro del scroll suave */}
-      <div className="container-sticky" data-sticky data-trigger="parent">
-        <div className="history-inner">
-          <p className="section-kicker history-kicker">
-            <DIcon />
-            <span>{kicker}</span>
-          </p>
+    <section className="home-history" data-set-section="">
+      <div className="history-inner">
+        <p className="section-kicker history-kicker">
+          <DIcon />
+          <span>{kicker}</span>
+        </p>
 
-          <div className="history-top">
-            <span className="history-year" aria-label={`Desde ${year}`}>
-              {year}
-            </span>
-            <h2 className="history-title split-words">{title}</h2>
-          </div>
+        <h2 className="history-title split-words">{title}</h2>
+        <p className="history-subtitle">{subtitle}</p>
 
-          <div className="history-text">
-            {text.map((p, i) => (
-              <p key={i}>{p}</p>
-            ))}
-          </div>
+        <div className="history-cta">
+          <Button href={cta.href} className="btn-d--dark">
+            {cta.label}
+          </Button>
         </div>
       </div>
     </section>

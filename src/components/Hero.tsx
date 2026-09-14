@@ -10,7 +10,7 @@ import Services from './Services'
 //    muestra la frase + botón; después se parte en dos otra vez.
 export default function Hero() {
   return (
-    <section className="home-hero" data-set-section="dark" id="top">
+    <section className="home-hero" data-set-section="dark">
       <div className="container-sticky" data-sticky data-trigger="parent">
         <div className="hero-stage">
           {/* Blob izquierdo: logo + mail */}
@@ -41,7 +41,7 @@ export default function Hero() {
 
           {/* Blob derecho: la frase, que entra con el scroll */}
           <div className="blob blob-right" data-cursor-style="default-white">
-            <div className="hero-claim" id="sobre-nosotros">
+            <div className="hero-claim">
               <p className="hero-claim__text">{site.claim.text}</p>
               <Button href={site.claim.cta.href}>{site.claim.cta.label}</Button>
             </div>

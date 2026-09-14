@@ -13,7 +13,7 @@ type ProjectViewProps = {
 // Ficha de proyecto. Usa el mismo vocabulario que la landing: la D negra como
 // contenedor, el antetítulo con la D roja, las pastillas crema y el botón.
 // A diferencia de la home, acá no se fija nada: es un documento que scrollea y
-// cada bloque se revela al entrar (ver ProjectExperience).
+// cada bloque se revela al entrar (ver PageExperience).
 export default function ProjectView({ project, next }: ProjectViewProps) {
   const { detail } = project
   const v = site.projectView
@@ -23,10 +23,10 @@ export default function ProjectView({ project, next }: ProjectViewProps) {
   return (
     <main className="project">
       {/* Portada: la D negra con el nombre, como el hero de la home */}
-      <section className="project-hero" data-set-section="dark" id="top">
+      <section className="project-hero" data-set-section="dark" >
         <div className="project-hero__shape">
           <div className="project-hero__inner">
-            <Link href="/#proyectos" className="project-back btn-underlined" data-cursor-style="hovered" data-menu-close>
+            <Link href="/proyectos" className="project-back btn-underlined" data-cursor-style="hovered" data-menu-close>
               <span>← {v.back}</span>
             </Link>
 
@@ -166,7 +166,7 @@ export default function ProjectView({ project, next }: ProjectViewProps) {
             <span>{v.nextKicker}</span>
           </p>
           <Link
-            href={next.detail ? `/proyectos/${next.slug}` : '/#proyectos'}
+            href={next.detail ? `/proyectos/${next.slug}` : "/proyectos"}
             className="project-next__link"
             data-cursor-style="hovered"
             data-reveal

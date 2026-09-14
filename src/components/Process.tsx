@@ -7,7 +7,7 @@ import Button, { DIcon } from './Button'
 export default function Process() {
   const { kicker, title, steps, cta } = site.process
   return (
-    <section className="home-process" data-set-section="" id="proceso">
+    <section className="home-process" data-set-section="">
       {/* data-sticky la fija con GSAP: position:sticky no retiene dentro del scroll suave */}
       <div className="container-sticky" data-sticky data-trigger="parent">
         <div className="process-inner">

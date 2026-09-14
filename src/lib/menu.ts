@@ -38,20 +38,6 @@ export function scrollToTarget(target: Element | 0, smoother: Smoother | null): 
   else target.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
-/** Resuelve el hash con el que se llegó a la página (por ejemplo al volver desde una
- *  ficha con /#servicios), usando la misma lógica que los clicks del menú. */
-export function goToHash(smoother: Smoother | null): void {
-  const hash = window.location.hash
-  if (!hash || hash === '#top') return
-  let target: Element | null = null
-  try {
-    target = document.querySelector(hash)
-  } catch {
-    // Un hash que no es un selector válido: no hay nada que hacer
-  }
-  if (target) scrollToTarget(target, smoother)
-}
-
 export function initMenu({ smoother, menuMark }: MenuOptions): Cleanup {
   const body = document.body
   const ACTIVE = 'menu-active'
@@ -87,8 +73,7 @@ export function initMenu({ smoother, menuMark }: MenuOptions): Cleanup {
     const href = a.getAttribute('href') || ''
     const wasOpen = api.isOpen
     if (a.hasAttribute('data-menu-close')) api.close()
-    // Los href que empiezan con "/" (por ejemplo "/#servicios" desde una ficha) son
-    // navegación de verdad: los deja pasar y el hash lo resuelve goToHash al llegar.
+    // Los href que empiezan con "/" son rutas: los deja pasar para que navegue Next.
     if (!href.startsWith('#')) return
     e.preventDefault()
     const target = href === '#top' ? 0 : document.querySelector(href)

@@ -24,11 +24,17 @@ if (typeof window !== 'undefined' && process.env.NODE_ENV !== 'production') {
   window.__ScrollTrigger = ScrollTrigger
 }
 
-// La ficha de proyecto no fija ninguna sección: es un documento que scrollea y cada
-// bloque entra al aparecer. Solo la portada tiene una entrada propia, la misma
-// apertura en D del hero, para que la llegada no se sienta un corte.
+// La coreografía de cualquier página que no sea la home: la ficha de proyecto, /sobre,
+// /proyectos y /contacto. Ninguna fija secciones —son documentos que scrollean y cada
+// bloque entra al aparecer—, y todas abren con la misma apertura en D de la portada,
+// para que la llegada no se sienta un corte.
 
 const REVEALS = ['[data-reveal]']
+
+export type PageExperienceProps = {
+  /** El contenido que mueve el scroll suave, por id */
+  content: string
+}
 
 function playCoverIntro(): gsap.core.Timeline {
   const tl = gsap.timeline()
@@ -40,7 +46,7 @@ function playCoverIntro(): gsap.core.Timeline {
   return tl
 }
 
-export default function ProjectExperience() {
+export default function PageExperience({ content }: PageExperienceProps) {
   useEffect(() => {
     const device = getDevice()
     const cleanups: Cleanup[] = []
@@ -62,7 +68,7 @@ export default function ProjectExperience() {
     if (device.isDesktop) {
       smoother = ScrollSmoother.create({
         wrapper: '#smooth-wrapper',
-        content: '#pg-project',
+        content,
         smooth: 2,
         normalizeScroll: true,
         ignoreMobileResize: true,
@@ -98,7 +104,7 @@ export default function ProjectExperience() {
       ScrollTrigger.getAll().forEach((st) => st.kill())
       if (smoother) smoother.kill()
     }
-  }, [])
+  }, [content])
 
   return null
 }

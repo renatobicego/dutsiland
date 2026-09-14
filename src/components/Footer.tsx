@@ -24,25 +24,20 @@ const LETTERS: Letter[] = [
 ]
 const TOTAL = 969
 
-export type FooterProps = {
-  /** Vacío en la home; "/" en una ficha de proyecto (ver Header) */
-  base?: string
-}
-
 // Cuadro 12: panel crema redondeado sobre fondo negro, links con la D roja y el logotipo centrado.
-export default function Footer({ base = '' }: FooterProps) {
+export default function Footer() {
   return (
     <footer id="footer">
-      <div className="footer-panel" id="contacto">
+      <div className="footer-panel">
         <div className="footer-row footer-row--map row-opacity">
-          <Link href={base || '#top'} className="footer-brand btn-underline" data-cursor-style="hovered-small">
+          <Link href="/" className="footer-brand btn-underline" data-cursor-style="hovered-small">
             <span>{site.name}</span>
           </Link>
           <span className="footer-slogan">{site.slogan}</span>
           <ul className="footer-site-map">
             {site.menu.map((item) => (
               <li key={item.href}>
-                <Link href={base + item.href} className="footer-link btn-underlined" data-cursor-style="hovered-small">
+                <Link href={item.href} className="footer-link btn-underlined" data-cursor-style="hovered-small">
                   <DIcon />
                   <span>{item.label}</span>
                 </Link>

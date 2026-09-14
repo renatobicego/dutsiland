@@ -23,6 +23,14 @@ export type ProcessStep = {
   text: string
 }
 
+export type TeamPhoto = {
+  src: string
+  alt: string
+  /** Nombre y rol, debajo de la foto */
+  name: string
+  role: string
+}
+
 export type ProjectPhoto = {
   src: string
   alt: string
@@ -85,12 +93,6 @@ export type Site = {
     text: string
     cta: Link
   }
-  history: {
-    kicker: string
-    year: string
-    title: string
-    text: string[]
-  }
   services: {
     kicker: string
     title: string
@@ -109,6 +111,42 @@ export type Site = {
     subtitle: string
     /** Lo que dice la tarjeta cuando el proyecto sí tiene ficha */
     caseLabel: string
+    /** Botón del home que lleva a /proyectos */
+    cta: Link
+  }
+  /** Índice de /proyectos */
+  projectsIndex: {
+    kicker: string
+    title: string
+    intro: string
+    /** Lo que dice una tarjeta que todavía no tiene ficha */
+    sinFicha: string
+  }
+  /** Página /sobre, y el bloque reducido que la anuncia en el home */
+  about: {
+    kicker: string
+    title: string
+    subtitle: string
+    /** Botón del home hacia /sobre */
+    cta: Link
+    /** Cuerpo de /sobre */
+    year: string
+    text: string[]
+    teamKicker: string
+    teamTitle: string
+    team: TeamPhoto[]
+    ctaFinal: Link
+  }
+  /** Página /contacto */
+  contact: {
+    kicker: string
+    title: string
+    intro: string
+    fields: { name: string; email: string; message: string }
+    submit: string
+    sending: string
+    success: string
+    error: string
   }
   projects: Project[]
   /** Copys fijos de la ficha de proyecto */
@@ -148,12 +186,12 @@ export const site: Site = {
     { label: 'LinkedIn', href: 'https://www.linkedin.com/company/dutsiland' },
   ],
 
+  // Tres rutas. "Qué hacemos" y "Cómo trabajamos" siguen siendo secciones del home,
+  // pero no tienen entrada en el menú ni URL propia.
   menu: [
-    { label: 'Nuestra historia', href: '#historia' },
-    { label: 'Qué hacemos', href: '#servicios' },
-    { label: 'Cómo trabajamos', href: '#proceso' },
-    { label: 'Proyectos', href: '#proyectos' },
-    { label: 'Contacto', href: '#contacto' },
+    { label: 'Sobre Dutsiland', href: '/sobre' },
+    { label: 'Proyectos', href: '/proyectos' },
+    { label: 'Contacto', href: '/contacto' },
   ],
 
   hero: {
@@ -163,19 +201,6 @@ export const site: Site = {
   claim: {
     text: 'Tu idea merece algo mejor que una plantilla. Nosotros la construimos de cero',
     cta: { label: 'Conocé qué hacemos', href: '#servicios' },
-  },
-
-  // ---------- Nuestra historia ----------
-  history: {
-    kicker: 'NUESTRA HISTORIA',
-    // TODO(Dutsiland): confirmar el año exacto de arranque del estudio.
-    year: '2023',
-    title: 'Empezamos resolviendo un problema concreto, y no paramos.',
-    text: [
-      'Dutsiland arrancó como un equipo chico de desarrolladores al que le pedían siempre lo mismo: un sistema que las herramientas de siempre no podían dar. En vez de forzar una plantilla, escribimos el software desde cero.',
-      // TODO(Dutsiland): sumar la ciudad de origen y algún hito concreto (primer cliente, primer sistema propio).
-      'Ese primer sistema se convirtió en la forma de trabajar del estudio. Hoy somos una software factory: diseñamos y desarrollamos productos digitales completos, desde el relevamiento hasta el mantenimiento, para empresas que necesitan que el software se adapte a su operación y no al revés.',
-    ],
   },
 
   // ---------- Qué hacemos (tres frentes diferenciados) ----------
@@ -221,30 +246,78 @@ export const site: Site = {
         ],
       },
     ],
-    cta: { label: 'Hablá con nosotros', href: '#contacto' },
+    cta: { label: 'Hablá con nosotros', href: '/contacto' },
   },
 
   // ---------- Cómo trabajamos ----------
   process: {
     kicker: 'CÓMO TRABAJAMOS',
-    title: 'Ves el producto antes de invertir en él',
+    // El título anterior era "Ves el producto antes de invertir en él", y se apoyaba en
+    // el paso de la demo, que se eliminó porque no es algo que el estudio haga. Lo que
+    // sí pasa antes de presupuestar es que el alcance queda documentado.
+    // TODO(Dutsiland): validar este título.
+    title: 'Sabés qué se construye antes de empezar',
     steps: [
       { n: '01', title: 'Nos reunimos', text: 'Nos sentamos con vos a escuchar el problema, sin fórmulas armadas de antes.' },
       { n: '02', title: 'Entendemos la necesidad', text: 'Analizamos cómo funciona tu operación hoy y dónde el software puede sacarte trabajo.' },
       { n: '03', title: 'Definimos requerimientos', text: 'Documentamos juntos el alcance: qué entra, qué queda para después y con qué prioridad.' },
-      { n: '04', title: 'Construimos una demo', text: 'Armamos una versión navegable para que veas y uses el producto antes de decidir.' },
-      { n: '05', title: 'Presupuestamos', text: 'Con el alcance validado, pasamos precio y plazos claros. Sin sorpresas a mitad de camino.' },
-      { n: '06', title: 'Desarrollamos', text: 'Construimos, entregamos por etapas y acompañamos el sistema una vez en producción.' },
+      { n: '04', title: 'Presupuestamos', text: 'Con el alcance validado, pasamos precio y plazos claros. Sin sorpresas a mitad de camino.' },
+      { n: '05', title: 'Desarrollamos', text: 'Construimos, entregamos por etapas y acompañamos el sistema una vez en producción.' },
     ],
-    cta: { label: 'Empecemos tu proyecto', href: '#contacto' },
+    cta: { label: 'Empecemos tu proyecto', href: '/contacto' },
   },
 
-  // Sin botón al portfolio: apuntaba al sitio viejo. Los proyectos se ven acá, en las
-  // tarjetas que linkean a su ficha.
+  // En el home las tarjetas son decorado: no navegan. El que quiere ver los proyectos
+  // va por el botón, a /proyectos.
   portfolio: {
     titleLines: ['PROYECTOS', 'DESTACADOS'],
     subtitle: 'Una selección de nuestros trabajos más apasionantes',
     caseLabel: 'Ver el caso',
+    cta: { label: 'Ver todos los proyectos', href: '/proyectos' },
+  },
+
+  projectsIndex: {
+    kicker: 'PROYECTOS',
+    title: 'Lo que construimos',
+    intro:
+      'Sistemas de gestión, plataformas y sitios para empresas que necesitaban algo que una plantilla no resolvía.',
+    sinFicha: 'Ficha en preparación',
+  },
+
+  // ---------- Sobre Dutsiland ----------
+  about: {
+    kicker: 'SOBRE DUTSILAND',
+    title: 'Empezamos resolviendo un problema concreto, y no paramos.',
+    subtitle: 'Un equipo chico que escribe software a medida, del relevamiento al mantenimiento.',
+    cta: { label: 'Conocé más', href: '/sobre' },
+    // TODO(Dutsiland): confirmar el año exacto de arranque del estudio.
+    year: '2023',
+    text: [
+      'Dutsiland arrancó como un equipo chico de desarrolladores al que le pedían siempre lo mismo: un sistema que las herramientas de siempre no podían dar. En vez de forzar una plantilla, escribimos el software desde cero.',
+      // TODO(Dutsiland): sumar la ciudad de origen y algún hito concreto (primer cliente, primer sistema propio).
+      'Ese primer sistema se convirtió en la forma de trabajar del estudio. Hoy somos una software factory: diseñamos y desarrollamos productos digitales completos, desde el relevamiento hasta el mantenimiento, para empresas que necesitan que el software se adapte a su operación y no al revés.',
+      // TODO(Dutsiland): este párrafo es un borrador. Contar cómo trabaja el equipo hoy:
+      // cuántos son, cómo se reparten diseño y desarrollo, qué los diferencia.
+      'Trabajamos de a pocos proyectos por vez y siempre con el mismo equipo de punta a punta: el que releva es el que diseña y el que desarrolla. Esa continuidad es lo que hace que el producto salga parecido a lo que se habló en la primera reunión.',
+    ],
+    teamKicker: 'EL EQUIPO',
+    teamTitle: 'Quiénes lo hacemos',
+    // TODO(Dutsiland): faltan las fotos reales del equipo (van en public/img/equipo/)
+    // y los nombres y roles de cada uno.
+    team: [],
+    ctaFinal: { label: 'Trabajemos juntos', href: '/contacto' },
+  },
+
+  // ---------- Contacto ----------
+  contact: {
+    kicker: 'CONTACTO',
+    title: 'Contanos qué necesitás',
+    intro: 'Escribinos y coordinamos una primera reunión para entender el problema.',
+    fields: { name: 'Nombre y apellido', email: 'Correo electrónico', message: 'Mensaje' },
+    submit: 'Enviar',
+    sending: 'Enviando…',
+    success: '¡Solicitud de contacto enviada! Te respondemos a la brevedad.',
+    error: 'No pudimos enviar el mensaje. Escribinos directo a',
   },
 
   projectView: {
@@ -257,7 +330,7 @@ export const site: Site = {
     photosTitle: 'Así se ve',
     stackTitle: 'Con qué lo construimos',
     nextKicker: 'SIGUIENTE PROYECTO',
-    cta: { label: 'Queremos hacer el tuyo', href: '/#contacto' },
+    cta: { label: 'Queremos hacer el tuyo', href: '/contacto' },
   },
 
   // ---------- Proyectos ----------

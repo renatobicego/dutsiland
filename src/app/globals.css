@@ -454,36 +454,29 @@ html.intro-running body { touch-action: none; }
 .btn-d--dark .btn-d__content--hover .d-icon { fill: var(--white-1); }
 
 /* =========================================================
-   NUESTRA HISTORIA: sección clara, corta el ritmo de las negras
+   SOBRE DUTSILAND en el home: sección clara, corta el ritmo de las negras.
+   Es sólo el anuncio —título, subtítulo y el botón—; el contenido está en /sobre,
+   así que no se fija: entra al aparecer como cualquier bloque corto.
    ========================================================= */
-/* Altura extra + sticky: el scroll alimenta el revelado en lugar de pasar de largo */
-.home-history { position: relative; background: var(--white-1); color: var(--black-1); }
-@media only screen and (min-width: 1025.1px) {
-  .home-history { height: 200vh; }
-  .home-history .container-sticky { position: sticky; top: 0; height: 100vh; display: flex; align-items: center; }
-}
-.history-inner { width: 100%; padding-left: 21rem; padding-right: 21rem; }
+.home-history { position: relative; background: var(--white-1); color: var(--black-1); padding: 16rem 0; }
+.history-inner { width: 100%; padding-left: 21rem; padding-right: 21rem; max-width: 168rem; }
 .history-kicker { margin-bottom: 5rem; }
-.history-top { display: grid; grid-template-columns: minmax(0, 52rem) minmax(0, 1fr); gap: 6rem 9rem; align-items: end; }
-.history-year { display: block; font-size: 19rem; line-height: 0.82; font-weight: 800; letter-spacing: -0.05em; color: var(--black-1); }
-.history-title { margin: 0; font-size: 5.6rem; line-height: 1.15; font-weight: 800; }
-.history-text { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4rem 8rem; margin-top: 9rem; }
-.history-text p { font-size: 2.6rem; line-height: 1.5; font-weight: 400; }
+.history-title { margin: 0; font-size: 7.2rem; line-height: 1.12; font-weight: 800; max-width: 124rem; }
+.history-subtitle { margin-top: 3rem; font-size: 2.8rem; line-height: 1.5; max-width: 96rem; opacity: 0.72; }
+.history-cta { margin-top: 6rem; }
 @media only screen and (max-width: 1025px) {
-  .home-history { padding: 12rem 0 8rem; }
+  .home-history { padding: 10rem 0; }
   .history-inner { padding-left: 8rem; padding-right: 8rem; }
-  .history-kicker { margin-bottom: 4rem; }
-  .history-top { grid-template-columns: 1fr; gap: 3rem; align-items: start; }
-  .history-year { font-size: 15rem; }
-  .history-title { font-size: 4.4rem; }
-  .history-text { grid-template-columns: 1fr; gap: 2.6rem; margin-top: 6rem; }
-  .history-text p { font-size: 2.3rem; }
+  .history-kicker { margin-bottom: 3.4rem; }
+  .history-title { font-size: 4.6rem; }
+  .history-subtitle { font-size: 2.3rem; margin-top: 2.2rem; }
+  .history-cta { margin-top: 4rem; }
 }
 @media only screen and (max-width: 767.98px) {
-  .history-inner { padding-left: 4rem; padding-right: 4rem; }
-  .history-year { font-size: 26vw; }
+  .home-history { padding: 8rem 0; }
+  .history-inner { padding-left: 2.4rem; padding-right: 2.4rem; }
   .history-title { font-size: 3.6rem; }
-  .history-text p { font-size: 2rem; }
+  .history-subtitle { font-size: 2rem; }
 }
 
 /* =========================================================
@@ -756,7 +749,7 @@ body.menu-active .scroll-top, body.menu-leave .scroll-top { opacity: 0; visibili
    FICHA DE PROYECTO (/proyectos/<slug>)
    Mismo vocabulario que la landing: la D negra como contenedor, el antetítulo con
    la D roja, las pastillas crema y el botón. Acá no se fija nada: es un documento
-   que scrollea y cada bloque entra al aparecer (ver ProjectExperience).
+   que scrollea y cada bloque entra al aparecer (ver PageExperience).
    ========================================================= */
 .project-block { padding-left: 21rem; padding-right: 21rem; }
 .project-block__title { margin: 3rem 0 0; color: var(--black-1); font-size: 7.2rem; line-height: 1.08; font-weight: 800; text-transform: uppercase; }
@@ -893,3 +886,80 @@ body.menu-active .scroll-top, body.menu-leave .scroll-top { opacity: 0; visibili
 .card__case { display: inline-flex; align-items: center; gap: 0.8rem; margin-top: 0.8rem; font-size: 1.7rem; font-weight: 700; letter-spacing: 0.06em; color: var(--red-1); opacity: 0; transform: translateY(0.8rem); transition: opacity 0.45s cubic-bezier(0.215, 0.61, 0.355, 1), transform 0.45s cubic-bezier(0.215, 0.61, 0.355, 1); }
 .card__case .icon-arrow-diagonal { width: 1.4rem; height: 1.4rem; }
 .card--link:hover .card__case { opacity: 1; transform: translateY(0); }
+
+/* =========================================================
+   ÍNDICE DE PROYECTOS (/proyectos)
+   ========================================================= */
+.projects-index { position: relative; background: var(--white-1); color: var(--black-1); padding: 14rem 0 16rem; }
+.projects-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7rem 5rem; width: 100%; padding: 0 12rem; }
+.project-card__link { display: flex; flex-direction: column; height: 100%; color: inherit; }
+/* Sin ficha todavía: se ve igual pero no navega */
+.project-card__link--off { cursor: default; }
+.project-card__img { display: block; position: relative; overflow: hidden; border-radius: 3.4rem; background: var(--gray-2); aspect-ratio: 4 / 3; }
+.project-card__img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.8s cubic-bezier(0.215, 0.61, 0.355, 1); }
+.project-card__link:not(.project-card__link--off):hover .project-card__img img { transform: scale(1.05); }
+.project-card__body { display: block; padding-top: 2.6rem; }
+.project-card__name { display: block; font-size: 3rem; line-height: 1.15; font-weight: 800; text-transform: uppercase; }
+.project-card__lead { display: block; margin-top: 1.2rem; font-size: 2rem; line-height: 1.45; opacity: 0.7; }
+.project-card__case { display: inline-flex; align-items: center; margin-top: 1.8rem; color: var(--red-1); font-size: 1.8rem; line-height: 1; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+.project-card__link--off .project-card__case { color: var(--black-1); opacity: 0.4; }
+@media only screen and (max-width: 1025px) {
+  .projects-index { padding: 9rem 0 11rem; }
+  .projects-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5rem 3rem; padding: 0 6rem; }
+  .project-card__name { font-size: 2.6rem; }
+  .project-card__lead { font-size: 1.9rem; }
+}
+@media only screen and (max-width: 767.98px) {
+  .projects-grid { grid-template-columns: 1fr; gap: 4.4rem; padding: 0 2.4rem; }
+  .project-card__img { border-radius: 2.4rem; }
+  .project-card__name { font-size: 2.8rem; }
+}
+
+/* =========================================================
+   EL EQUIPO (/sobre)
+   ========================================================= */
+.about-team { position: relative; background: var(--white-1); }
+.about-team__shape { position: relative; background: var(--black-1); color: var(--white-1); border-radius: 0 var(--blob-radius) var(--blob-radius) 0; overflow: hidden; padding: 14rem 0 16rem; }
+.team-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6rem 5rem; margin-top: 8rem; }
+.team-member img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 3rem; background: var(--gray-1); display: block; }
+.team-member__name { margin-top: 2.2rem; font-size: 2.4rem; line-height: 1.2; font-weight: 800; text-transform: uppercase; }
+.team-member__role { margin-top: 0.6rem; font-size: 1.9rem; line-height: 1.3; opacity: 0.72; }
+@media only screen and (max-width: 1025px) {
+  .about-team__shape { padding: 9rem 0 11rem; }
+  .team-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4rem 3rem; margin-top: 5rem; }
+}
+@media only screen and (max-width: 767.98px) {
+  .team-grid { grid-template-columns: 1fr; gap: 3.4rem; }
+}
+
+/* =========================================================
+   FORMULARIO DE CONTACTO (/contacto)
+   ========================================================= */
+.contact-section { position: relative; background: var(--white-1); color: var(--black-1); padding: 12rem 0 16rem; }
+.contact-form { display: grid; gap: 4rem; max-width: 104rem; }
+.contact-field { display: grid; gap: 1.2rem; }
+.contact-field label { font-size: 1.9rem; line-height: 1; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--red-1); }
+.contact-field input, .contact-field textarea {
+  width: 100%; padding: 2rem 0; border: 0; border-bottom: 2px solid rgba(10, 10, 10, 0.24);
+  background: none; color: var(--black-1); font: inherit; font-size: 2.4rem; line-height: 1.4; border-radius: 0;
+  transition: border-color 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+.contact-field textarea { resize: vertical; min-height: 14rem; }
+.contact-field input:focus, .contact-field textarea:focus { outline: none; border-bottom-color: var(--red-1); }
+/* :user-invalid y no :invalid: marca en rojo recién cuando el usuario ya interactuó,
+   no apenas carga la página con los campos vacíos. */
+.contact-field input:user-invalid, .contact-field textarea:user-invalid { border-bottom-color: var(--red-1); }
+.contact-actions { display: flex; align-items: center; gap: 3rem; flex-wrap: wrap; margin-top: 2rem; }
+.contact-form .btn-d:disabled { opacity: 0.6; cursor: default; }
+.contact-status { font-size: 2rem; line-height: 1.4; max-width: 52rem; }
+@media only screen and (max-width: 1025px) {
+  .contact-section { padding: 8rem 0 11rem; }
+  .contact-form { gap: 3rem; }
+  .contact-field input, .contact-field textarea { font-size: 2.1rem; padding: 1.6rem 0; }
+  .contact-status { font-size: 1.8rem; }
+}
+@media only screen and (max-width: 767.98px) {
+  .contact-field label { font-size: 1.6rem; }
+  .contact-field input, .contact-field textarea { font-size: 1.9rem; }
+  .contact-actions { gap: 2rem; }
+}

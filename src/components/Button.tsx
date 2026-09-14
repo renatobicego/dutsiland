@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import type { AnchorHTMLAttributes, ReactNode } from 'react'
 
 // Botón del storyboard: pastilla crema con la "D" y el texto en rojo ladrillo, subrayado.
@@ -17,8 +18,8 @@ export type ButtonProps = {
 } & Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href' | 'children' | 'className'>
 
 export default function Button({ href, children, className = '', ...rest }: ButtonProps) {
-  return (
-    <a href={href} className={`btn-d ${className}`} data-cursor-style="hovered" {...rest}>
+  const contenido = (
+    <>
       <span className="btn-d__content">
         <DIcon />
         <span className="btn-d__label">{children}</span>
@@ -27,6 +28,20 @@ export default function Button({ href, children, className = '', ...rest }: Butt
         <DIcon />
         <span className="btn-d__label">{children}</span>
       </span>
+    </>
+  )
+  const props = { className: `btn-d ${className}`, 'data-cursor-style': 'hovered', ...rest }
+
+  // Las rutas internas van con Link: la navegación es del lado del cliente y así no se
+  // recarga el sitio ni vuelve a aparecer el preloader. Un mailto, un link externo o un
+  // ancla siguen siendo un <a> común.
+  return href.startsWith('/') ? (
+    <Link href={href} {...props}>
+      {contenido}
+    </Link>
+  ) : (
+    <a href={href} {...props}>
+      {contenido}
     </a>
   )
 }

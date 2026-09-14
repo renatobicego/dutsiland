@@ -13,7 +13,7 @@ import type { Cleanup } from '@/lib/marquee'
 import { initCursor } from '@/lib/cursor'
 import { runLoader } from '@/lib/loader'
 import { initScrollState, initSectionWatcher } from '@/lib/scrollState'
-import { initMenu, goToHash } from '@/lib/menu'
+import { initMenu } from '@/lib/menu'
 import { initRevealOnEnter, initFooterReveal } from '@/lib/reveal'
 import type { Smoother } from '@/lib/menu'
 
@@ -295,32 +295,7 @@ function initHeroScroll(header: HTMLElement | null, layout: Layout): gsap.core.T
   }
 
   const total = t.duration()
-  markHeroAnchor('.hero-claim', 1, total)
   markHeroAnchor('#servicios', servicesAt, total)
-  return t
-}
-
-/* ---------- Nuestra historia (fijada): el revelado lo maneja el scroll ---------- */
-function initHistoryScroll(): gsap.core.Timeline | null {
-  if (!document.querySelector('.home-history')) return null
-
-  // Estado inicial explícito (no `from`): con stagger dentro de una timeline
-  // posicionada, el estado inicial no se aplica parejo y algún bloque arranca visible.
-  gsap.set('.history-kicker', { autoAlpha: 0, y: '2rem' })
-  gsap.set('.history-year', { autoAlpha: 0, xPercent: -18, scale: 1.14, transformOrigin: 'left center' })
-  gsap.set('.history-title .word > span', { autoAlpha: 0, yPercent: 110 })
-  gsap.set('.history-text p', { autoAlpha: 0, y: '5rem' })
-
-  const t = gsap.timeline({
-    scrollTrigger: { trigger: '.home-history', start: 'top top', end: 'bottom bottom', scrub: 1, invalidateOnRefresh: true },
-  })
-  t.to('.history-kicker', { autoAlpha: 1, y: 0, duration: 0.3, ease: 'none' }, 0)
-  // El año entra desde la izquierda y se asienta: es el ancla visual de la sección
-  t.to('.history-year', { autoAlpha: 1, xPercent: 0, scale: 1, duration: 0.9, ease: 'power2.out' }, 0.1)
-  t.to('.history-title .word > span', { autoAlpha: 1, yPercent: 0, duration: 0.8, stagger: 0.05, ease: 'power3.out' }, 0.35)
-  t.to('.history-text p', { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.25, ease: 'power3.out' }, 1.1)
-  // Tramo final quieto: deja leer antes de soltar la sección
-  t.to({}, { duration: 0.6 })
   return t
 }
 
@@ -544,16 +519,13 @@ export default function HomeExperience() {
         }
         ScrollTrigger.refresh()
         refreshAOS()
-        // El hash recién se puede resolver acá: antes el hero está fijado y las
-        // posiciones de su contenido todavía no existen.
-        goToHash(smoother)
       })
       if (yaEntro && conAncla) intro.progress(1)
       // "Qué hacemos" no lleva su propia timeline: la arma initHeroScroll porque vive
       // dentro del panel izquierdo del hero, en los dos layouts.
-      if (device.isDesktop) sections.push(initHistoryScroll())
-      // En vertical la historia no se fija: se revela bloque por bloque
-      else sections.push(...initRevealOnEnter(['.history-kicker', '.history-year', '.history-title', '.history-text p']))
+      // "Sobre Dutsiland" en el home es sólo el anuncio (título, subtítulo y el botón a
+      // /sobre): no se fija, se revela al entrar, en los dos layouts.
+      sections.push(...initRevealOnEnter(['.history-kicker', '.history-title', '.history-subtitle', '.history-cta']))
       // Solo en desktop la sección se fija (ver .home-process en globals.css)
       process = initProcess(device.isDesktop)
       ScrollTrigger.refresh()
