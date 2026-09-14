@@ -209,7 +209,9 @@ body.menu-active [data-cursor='default-white'] > div { background: var(--black-1
   z-index: 99; position: fixed; top: 0; left: 0;
   color: var(--color);
 }
-@media only screen and (max-width: 1025px) { #header { padding-top: 2.5rem; padding-bottom: 2.5rem; background: var(--black-1); --color: var(--white-1); } }
+/* Sin fondo propio, igual que en apaisado: el header es transparente y las secciones
+   pasan por detrás. El color del logo y del botón lo decide data-get-section. */
+@media only screen and (max-width: 1025px) { #header { padding-top: 2.5rem; padding-bottom: 2.5rem; } }
 #header > .container-fluid, #header > .container-fluid > .row { height: 100%; }
 body:not([data-scroll-direction='initial']) #header { padding-top: 3rem; transition-duration: 0.8s, 0.6s, 0.3s; }
 body[data-scroll-position='bottom'] #header { transform: translateY(-101%); }
@@ -220,8 +222,7 @@ body[data-scroll-position='bottom'] #header { transform: translateY(-101%); }
 }
 body.menu-active #header:before { opacity: 1; }
 body.menu-leave #header:before { transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1); transition-delay: 0.3s; }
-.column-slogan, .column-logo { position: relative; z-index: 99; }
-.column-slogan { display: flex; }
+.column-logo { position: relative; z-index: 99; }
 .column-bt { display: flex; justify-content: flex-end; align-items: center; align-content: center; flex-wrap: wrap; flex-direction: row; }
 
 .logo { display: flex; align-items: center; width: auto; height: 3.4rem; }
@@ -233,30 +234,21 @@ body.menu-leave #header:before { transition: all 0.5s cubic-bezier(0.645, 0.045,
 .logo .logo-piece img.is-light { position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86); }
 .logo .logo-piece img.is-dark { transition: opacity 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86); }
 .logo .logo-rest { margin-left: 0.85rem; transition: opacity 0.3s ease-in-out 0s, transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1) 0s; }
-.logo .logo-lockup { display: none; }
 body:not([data-scroll-direction='initial']) #header .logo .logo-rest { transform: translateX(-35%); opacity: 0; pointer-events: none; transition: opacity 0.3s ease-in-out 0s, transform 0.3s cubic-bezier(0.55, 0.085, 0.68, 0.53) 0.05s; }
+/* En vertical queda sólo la D: "UTSILAND" no entra al lado del botón de menú */
 @media only screen and (max-width: 1025px) {
-  .logo .logo-d, .logo .logo-rest { display: none; }
-  .logo .logo-lockup { display: block; }
-  .logo .logo-lockup img.is-dark { opacity: 0; }
-  .logo .logo-lockup img.is-light { opacity: 1; }
-  body.menu-active .logo .logo-lockup img.is-dark { opacity: 1; }
-  body.menu-active .logo .logo-lockup img.is-light { opacity: 0; }
+  .logo .logo-rest { display: none; }
 }
-@media only screen and (min-width: 1025.1px) {
-  body:not(.menu-active):not(.menu-leave) #header[data-get-section='dark'] { --color: var(--white-1); }
-  body:not(.menu-active):not(.menu-leave) #header[data-get-section='dark'] .logo img.is-dark { opacity: 0; }
-  body:not(.menu-active):not(.menu-leave) #header[data-get-section='dark'] .logo img.is-light { opacity: 1; }
-}
-@media only screen and (max-width: 1025px) {
-  body.menu-active #header { --color: var(--black-1); background: transparent; }
-}
+/* El logo y el botón de menú toman su color del fondo que el header tiene debajo:
+   crema sobre las secciones oscuras, negro sobre las claras. Vale en los dos layouts
+   (initSectionWatcher marca data-get-section en todos). Con el menú abierto manda el
+   fondo del propio menú, que es claro, así que estas reglas se apagan. */
+body:not(.menu-active):not(.menu-leave) #header[data-get-section='dark'] { --color: var(--white-1); }
+body:not(.menu-active):not(.menu-leave) #header[data-get-section='dark'] .logo img.is-dark { opacity: 0; }
+body:not(.menu-active):not(.menu-leave) #header[data-get-section='dark'] .logo img.is-light { opacity: 1; }
+body.menu-active #header { --color: var(--black-1); }
 body.menu-active .logo { opacity: 1; pointer-events: auto; }
 
-.slogan-img { margin-top: auto; margin-bottom: auto; height: 1.4rem; display: flex; align-items: center; }
-@media only screen and (max-width: 1025px) { .slogan-img { margin-left: auto; margin-right: auto; } }
-.slogan-img span { font-size: 1.45rem; line-height: 1; letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; color: var(--color); font-weight: 600; transition: color 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86); }
-@media only screen and (max-width: 767.98px) { .slogan-img span { font-size: 1.2rem; } }
 
 #bt-menu { display: flex; align-items: center; flex-wrap: wrap; flex-direction: row; position: relative; z-index: 99; outline: none; text-transform: uppercase; margin: auto 0; }
 #bt-menu:before { content: ''; width: 1.5rem; height: 1.5rem; display: block; border-radius: 50%; margin-right: 0.8rem; background: var(--color); transition: all 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86); }
@@ -411,9 +403,9 @@ html.intro-running body { touch-action: none; }
   /* El alto lo fija --vh al arrancar y no se toca más: si siguiera a la barra de
      direcciones, el escenario fijado cambiaría de alto a mitad del scroll. */
   .hero-stage { height: calc(var(--vh, 1vh) * 100); }
-  .blob-left { --cr: 0%; --cb: 42%; --ctr: 50vw; --cbr: 50vw; }
-  .blob-right { --ct: 100%; --cr: 5%; --cb: 7%; --cl: 0%; --ctl: 0vw; --ctr: 29vw; --cbr: 29vw; --cbl: 0vw; }
-  .blob-left2 { --cr: 100%; --ctr: 29vw; --cbr: 29vw; }
+  .blob-left { --cr: 0%; --cb: 42%; --ctr: 0vw; --cbr: 50vw; }
+  .blob-right { --ct: 100%; --cr: 5%; --cb: 7%; --cl: 0%; --ctl: 0vw; --ctr: 0vw; --cbr: 29vw; --cbl: 0vw; }
+  .blob-left2 { --cr: 100%; --ctr: 0vw; --cbr: 29vw; }
   /* El lockup, centrado en la D de arriba (la intro lo lleva del 50% al 29%).
      width: max-content porque un absoluto con left: 50% encoge al espacio que le queda
      a la derecha, y al ser flex la máscara de "UTSILAND" se achicaba a nada. */

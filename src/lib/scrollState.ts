@@ -1,3 +1,5 @@
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
 import type { Cleanup } from './marquee'
 
 // Mantiene body[data-scroll-direction] (initial | up | down) y
@@ -56,43 +58,36 @@ export function initScrollState(): Cleanup {
   }
 }
 
-type SectionRect = {
-  el: HTMLElement
-  top: number
-  bottom: number
-  middle: number
-}
-
-// header[data-get-section] toma el valor del [data-set-section] que tenga debajo.
+/** header[data-get-section] toma el valor del [data-set-section] que tenga debajo, y de
+ *  ahí salen el color del logo y el del botón de menú.
+ *
+ *  Un ScrollTrigger por sección y no un listener de scroll: con el scroll suave la
+ *  posición VISUAL sigue cambiando después del evento de scroll (el smoother interpola
+ *  la transformación del contenido durante un par de segundos, sin disparar más
+ *  eventos). Un listener mide a mitad de ese recorrido y se queda con una lectura
+ *  vieja: el header terminaba en claro sobre una sección oscura y al revés.
+ *  ScrollTrigger, en cambio, va atado al render. */
 export function initSectionWatcher(): Cleanup {
-  const getters = () => Array.from(document.querySelectorAll<HTMLElement>('[data-get-section]'))
-  const setters = () => Array.from(document.querySelectorAll<HTMLElement>('[data-set-section]'))
-  const measure = (els: HTMLElement[]): SectionRect[] =>
-    els.map((el) => {
-      const r = el.getBoundingClientRect()
-      return { el, top: r.top, bottom: r.bottom, middle: r.bottom - (r.bottom - r.top) / 2 }
+  const header = document.querySelector<HTMLElement>('[data-get-section]')
+  if (!header) return () => {}
+
+  // La línea que decide es la mitad del header, igual que antes
+  const mitad = () => header.getBoundingClientRect().height / 2
+
+  header.dataset.getSection = ''
+  const triggers = Array.from(document.querySelectorAll<HTMLElement>('[data-set-section]')).map((seccion) => {
+    const aplicar = () => {
+      header.dataset.getSection = seccion.dataset.setSection || ''
+    }
+    return ScrollTrigger.create({
+      trigger: seccion,
+      start: () => `top top+=${mitad()}`,
+      end: () => `bottom top+=${mitad()}`,
+      onEnter: aplicar,
+      onEnterBack: aplicar,
+      invalidateOnRefresh: true,
     })
-  const update = () => {
-    const g = measure(getters())
-    const s = measure(setters())
-    g.forEach((getter) => {
-      for (let i = 0; i < s.length; i++) {
-        const sec = s[i]
-        if (getter.middle > sec.top && getter.middle < sec.bottom) {
-          const v = sec.el.dataset.setSection || ''
-          if (getter.el.dataset.getSection !== v) getter.el.dataset.getSection = v
-          return
-        }
-      }
-    })
-  }
-  getters().forEach((g) => (g.dataset.getSection = ''))
-  const t = window.setTimeout(() => {
-    update()
-    document.addEventListener('scroll', update, { passive: true })
-  }, 100)
-  return () => {
-    clearTimeout(t)
-    document.removeEventListener('scroll', update)
-  }
+  })
+
+  return () => triggers.forEach((t) => t.kill())
 }

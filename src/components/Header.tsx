@@ -9,11 +9,14 @@ export default function Header() {
     <header id="header" data-get-section="">
       <div className="container-fluid">
         <div className="row">
-          <div className="col-lg-2 col-tablet-3 col-3 column-logo">
+          <div className="col-lg-6 col-tablet-6 col-6 column-logo">
             <Link href="/" className="logo" aria-label={site.name} data-menu-close data-cursor-style="off">
               <span className="hide">{site.name}</span>
+              {/* La D está siempre; "UTSILAND" se pliega al scrollear y, en vertical,
+                  directamente no entra al lado del botón de menú. Cada pieza trae su
+                  versión clara y su versión oscura: cuál se ve lo decide el fondo de la
+                  sección que el header tiene debajo (ver data-get-section). */}
               <div className="container-logo">
-                {/* Desktop: D + UTSILAND (la palabra se pliega al scrollear) */}
                 <div className="logo-piece logo-d">
                   <img className="is-dark" src="/brand/wide-D-dark.png" alt="" />
                   <img className="is-light" src="/brand/wide-D-light.png" alt="" />
@@ -22,21 +25,11 @@ export default function Header() {
                   <img className="is-dark" src="/brand/wide-UTSILAND-dark.png" alt="" />
                   <img className="is-light" src="/brand/wide-UTSILAND-light.png" alt="" />
                 </div>
-                {/* Tablet / móvil: isologo compacto */}
-                <div className="logo-piece logo-lockup">
-                  <img className="is-dark" src="/brand/logo-dark.png" alt="" />
-                </div>
               </div>
             </Link>
           </div>
 
-          <div className="col-lg-2 offset-lg-6 col-tablet-5 col-6 column-slogan">
-            <div className="slogan-img">
-              <span>{site.slogan}</span>
-            </div>
-          </div>
-
-          <div className="col-lg-2 col-tablet-4 col-3 column-bt">
+          <div className="col-lg-6 col-tablet-6 col-6 column-bt">
             <button type="button" id="bt-menu" aria-label="Menú" data-cursor-style="hovered">
               <span className="close-text">cerrar</span>
               <span className="menu-text">menu</span>

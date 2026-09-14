@@ -85,16 +85,23 @@ const CLIP: Record<ClipName, ClipState> = {
    29vw equivale al --blob-radius de móvil (12rem). */
 const MCLIP: Record<ClipName, ClipState> = {
   leftFull: { t: 0, r: 0, b: 0, l: 0, tl: 0, tr: 0, br: 0, bl: 0, u: 'vw' },
-  leftRounded: { t: 0, r: 0, b: 0, l: 0, tl: 0, tr: 50, br: 50, bl: 0, u: 'vw' },
-  leftHero: { t: 0, r: 0, b: 42, l: 0, tl: 0, tr: 50, br: 50, bl: 0, u: 'vw' }, // la D arriba, el 58% del alto
-  rightHidden: { t: 100, r: 5, b: 7, l: 0, tl: 0, tr: 29, br: 29, bl: 0, u: 'vw' }, // abajo de todo, sin alto
-  rightHero: { t: 100, r: 5, b: 7, l: 0, tl: 0, tr: 29, br: 29, bl: 0, u: 'vw' }, // en vertical la D derecha no participa de la intro
-  rightClaim: { t: 7, r: 5, b: 7, l: 0, tl: 0, tr: 29, br: 29, bl: 0, u: 'vw' }, // la tarjeta con la frase
-  rightSplit: { t: 7, r: 5, b: 7, l: 48, tl: 0, tr: 29, br: 29, bl: 0, u: 'vw' },
-  rightGone: { t: 7, r: 5, b: 7, l: 100, tl: 0, tr: 29, br: 29, bl: 0, u: 'vw' },
-  left2Hidden: { t: 0, r: 100, b: 0, l: 0, tl: 0, tr: 29, br: 29, bl: 0, u: 'vw' },
-  left2Split: { t: 0, r: 55, b: 0, l: 0, tl: 0, tr: 29, br: 29, bl: 0, u: 'vw' },
-  left2Full: { t: 0, r: 0, b: 0, l: 0, tl: 0, tr: 29, br: 29, bl: 0, u: 'vw' },
+  // Sin radio arriba a la derecha: el negro tiene que llegar al borde superior de la
+  // pantalla, como en la referencia. Si esa esquina queda crema, el botón de menú
+  // —que se pinta claro porque la sección es oscura— queda invisible encima.
+  leftRounded: { t: 0, r: 0, b: 0, l: 0, tl: 0, tr: 0, br: 50, bl: 0, u: 'vw' },
+  leftHero: { t: 0, r: 0, b: 42, l: 0, tl: 0, tr: 0, br: 50, bl: 0, u: 'vw' }, // la D arriba, el 58% del alto
+  // La tarjeta llega al borde superior (t: 0) y sin radio arriba a la derecha, por lo
+  // mismo que la D: si ese ángulo queda crema, el botón de menú se pierde encima. El
+  // aire de tarjeta lo dan el margen derecho y el ángulo inferior redondeado.
+  rightHidden: { t: 100, r: 5, b: 7, l: 0, tl: 0, tr: 0, br: 29, bl: 0, u: 'vw' }, // abajo de todo, sin alto
+  rightHero: { t: 100, r: 5, b: 7, l: 0, tl: 0, tr: 0, br: 29, bl: 0, u: 'vw' }, // en vertical la D derecha no participa de la intro
+  rightClaim: { t: 0, r: 5, b: 7, l: 0, tl: 0, tr: 0, br: 29, bl: 0, u: 'vw' }, // la tarjeta con la frase
+  rightSplit: { t: 0, r: 5, b: 7, l: 48, tl: 0, tr: 0, br: 29, bl: 0, u: 'vw' },
+  rightGone: { t: 0, r: 5, b: 7, l: 100, tl: 0, tr: 0, br: 29, bl: 0, u: 'vw' },
+  // Mismo motivo que arriba: el panel abierto tiene que cubrir el borde superior
+  left2Hidden: { t: 0, r: 100, b: 0, l: 0, tl: 0, tr: 0, br: 29, bl: 0, u: 'vw' },
+  left2Split: { t: 0, r: 55, b: 0, l: 0, tl: 0, tr: 0, br: 29, bl: 0, u: 'vw' },
+  left2Full: { t: 0, r: 0, b: 0, l: 0, tl: 0, tr: 0, br: 29, bl: 0, u: 'vw' },
 }
 
 /* Todo lo que cambia entre apaisado y vertical, junto. El resto de la secuencia
@@ -109,6 +116,9 @@ type Layout = {
   /** En apaisado la D derecha entra en la intro llevando el titular; en vertical el
    *  titular vive sobre el crema y la D derecha recién aparece con el scroll */
   rightEntersInIntro: boolean
+  /** Cómo sale la D del logo y cómo entra la tarjeta en la fase A (ver initHeroScroll) */
+  exitEase: string
+  enterEase: string
 }
 
 const DESKTOP: Layout = {
@@ -119,6 +129,8 @@ const DESKTOP: Layout = {
   logoFrom: { left: '50%' },
   logoTo: { left: '22%' },
   rightEntersInIntro: true,
+  exitEase: 'none',
+  enterEase: 'none',
 }
 
 const MOBILE: Layout = {
@@ -127,6 +139,8 @@ const MOBILE: Layout = {
   logoFrom: { top: '50%' },
   logoTo: { top: '29%' },
   rightEntersInIntro: false,
+  exitEase: 'power2.in',
+  enterEase: 'power2.out',
 }
 
 function clipVars(s: ClipState): gsap.TweenVars {
@@ -270,8 +284,19 @@ function initHeroScroll(header: HTMLElement | null, layout: Layout): gsap.core.T
   })
   // Fase A: la D del logo sale de escena (hacia la izquierda en apaisado, hacia arriba
   // en vertical) y la D derecha ocupa el lugar y muestra la frase.
-  t.to('.blob-left', { ...layout.leftExit, duration: 1, ease: 'none' }, 0)
-  t.add(clipTween('.blob-right', layout.rightEntersInIntro ? S.rightHero : S.rightHidden, S.rightClaim, { duration: 1, ease: 'none' }), 0)
+  // Las curvas no son decorativas en vertical: la tarjeta tiene que llegar al borde de
+  // arriba ANTES de que la D termine de destaparlo, o queda una ventana en la que la
+  // franja del header es crema de un lado y negra del otro, y el logo o el botón —que
+  // se pintan de un solo tono— se pierden encima. La tarjeta entra apurada y la D se
+  // toma su tiempo para irse, así siempre hay una de las dos cubriendo.
+  t.to('.blob-left', { ...layout.leftExit, duration: 1, ease: layout.exitEase }, 0)
+  t.add(
+    clipTween('.blob-right', layout.rightEntersInIntro ? S.rightHero : S.rightHidden, S.rightClaim, {
+      duration: 1,
+      ease: layout.enterEase,
+    }),
+    0
+  )
   t.to('.hero-headline', { autoAlpha: 0, duration: 0.35, ease: 'none' }, 0)
   t.to('.hero-mail', { autoAlpha: 0, duration: 0.3, ease: 'none' }, 0)
   t.fromTo('.hero-claim', { autoAlpha: 0, y: '6rem' }, { autoAlpha: 1, y: 0, duration: 0.45, ease: 'none', immediateRender: false }, 0.55)
@@ -296,6 +321,7 @@ function initHeroScroll(header: HTMLElement | null, layout: Layout): gsap.core.T
 
   const total = t.duration()
   markHeroAnchor('#servicios', servicesAt, total)
+
   return t
 }
 
