@@ -132,9 +132,17 @@ export type Site = {
     /** Cuerpo de /sobre */
     year: string
     text: string[]
+    /** Qué nos define: le da cuerpo a la página y no depende de tener fotos */
+    traitsKicker: string
+    traitsTitle: string
+    traits: { n: string; title: string; text: string }[]
     teamKicker: string
     teamTitle: string
     team: TeamPhoto[]
+    /** Cierre de /sobre: el botón solo quedaba colgado en una sección vacía */
+    finalKicker: string
+    finalTitle: string
+    finalText: string
     ctaFinal: Link
   }
   /** Página /contacto */
@@ -300,11 +308,37 @@ export const site: Site = {
       // cuántos son, cómo se reparten diseño y desarrollo, qué los diferencia.
       'Trabajamos de a pocos proyectos por vez y siempre con el mismo equipo de punta a punta: el que releva es el que diseña y el que desarrolla. Esa continuidad es lo que hace que el producto salga parecido a lo que se habló en la primera reunión.',
     ],
+    // Este bloque no dice nada nuevo: ordena en tres puntos lo que ya afirman los
+    // párrafos de arriba. Le da cuerpo a la página sin depender de las fotos del equipo.
+    // TODO(Dutsiland): validar la redacción de los tres puntos.
+    traitsKicker: 'QUÉ NOS DEFINE',
+    traitsTitle: 'Pocos proyectos por vez, y el mismo equipo de punta a punta',
+    traits: [
+      {
+        n: '01',
+        title: 'Escribimos desde cero',
+        text: 'No adaptamos una plantilla a los tirones: partimos del problema y construimos el sistema que esa operación necesita.',
+      },
+      {
+        n: '02',
+        title: 'El mismo equipo de principio a fin',
+        text: 'El que releva es el que diseña y el que desarrolla. Esa continuidad es lo que hace que el producto salga parecido a lo que se habló en la primera reunión.',
+      },
+      {
+        n: '03',
+        title: 'Del relevamiento al mantenimiento',
+        text: 'Acompañamos el sistema después de publicarlo. El software se sigue usando, y se sigue cambiando con la operación.',
+      },
+    ],
     teamKicker: 'EL EQUIPO',
     teamTitle: 'Quiénes lo hacemos',
     // TODO(Dutsiland): faltan las fotos reales del equipo (van en public/img/equipo/)
     // y los nombres y roles de cada uno.
     team: [],
+    // TODO(Dutsiland): validar el copy del cierre.
+    finalKicker: 'EMPECEMOS',
+    finalTitle: '¿Tenés un problema que el software puede resolver?',
+    finalText: 'Contanos cómo funciona tu operación hoy y vemos juntos qué se puede construir.',
     ctaFinal: { label: 'Trabajemos juntos', href: '/contacto' },
   },
 

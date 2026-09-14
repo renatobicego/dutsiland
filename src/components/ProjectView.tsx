@@ -23,7 +23,8 @@ export default function ProjectView({ project, next }: ProjectViewProps) {
   return (
     <main className="project">
       {/* Portada: la D negra con el nombre, como el hero de la home */}
-      <section className="project-hero" data-set-section="dark" >
+      {/* --con-captura: la única portada que reserva la derecha, porque acá va la captura */}
+      <section className="project-hero project-hero--con-captura" data-set-section="dark">
         <div className="project-hero__shape">
           <div className="project-hero__inner">
             <Link href="/proyectos" className="project-back btn-underlined" data-cursor-style="hovered" data-menu-close>

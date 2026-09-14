@@ -61,6 +61,35 @@ export default function AboutPage() {
           </div>
         </section>
 
+        {/* Qué nos define: ordena en tres puntos lo que dicen los párrafos de arriba.
+            Le da cuerpo a la página sin depender de las fotos del equipo, que todavía
+            no están. */}
+        <section className="about-traits" data-set-section="dark">
+          <div className="about-traits__shape">
+            <div className="project-block">
+              <p className="section-kicker section-kicker--light" data-reveal>
+                <DIcon />
+                <span>{a.traitsKicker}</span>
+              </p>
+              <h2 className="project-block__title project-block__title--light split-words" data-reveal>
+                {a.traitsTitle}
+              </h2>
+
+              <ul className="traits-list">
+                {a.traits.map((t) => (
+                  <li className="trait" key={t.n} data-reveal>
+                    <span className="trait__n">{t.n}</span>
+                    <div className="trait__body">
+                      <h3 className="trait__title">{t.title}</h3>
+                      <p className="trait__text">{t.text}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+
         {/* El equipo. Sin fotos todavía, la sección no se muestra. */}
         {a.team.length ? (
           <section className="about-team" data-set-section="dark">
@@ -88,8 +117,20 @@ export default function AboutPage() {
           </section>
         ) : null}
 
+        {/* Cierre con contexto: el botón solo, sin antetítulo ni título, quedaba
+            colgado en el medio de una sección grande y vacía. */}
         <section className="project-next prev-section" data-set-section="dark">
           <div className="project-next__inner prev-section__inner">
+            <p className="section-kicker section-kicker--light" data-reveal>
+              <DIcon />
+              <span>{a.finalKicker}</span>
+            </p>
+            <h2 className="project-block__title project-block__title--light split-words" data-reveal>
+              {a.finalTitle}
+            </h2>
+            <p className="project-next__text" data-reveal>
+              {a.finalText}
+            </p>
             <div className="project-next__cta" data-reveal>
               <Button href={a.ctaFinal.href}>{a.ctaFinal.label}</Button>
             </div>
