@@ -43,7 +43,17 @@ function playCoverIntro(): gsap.core.Timeline {
   // en el hero: animar el string del clip-path o escribirlo desde un onUpdate se
   // rompe en cuanto ScrollTrigger refresca (ver clipTween en HomeExperience).
   tl.fromTo('.project-hero__shape', { '--pr': '100%' }, { '--pr': '0%', duration: 1, ease: 'power3.inOut' }, 0)
-  tl.from('.project-hero__inner > *', { autoAlpha: 0, y: '4rem', duration: 0.7, stagger: 0.08, ease: 'power3.out' }, 0.45)
+  // fromTo y no from: `from` toma el estado ACTUAL como destino, así que si esta
+  // apertura corre dos veces sobre los mismos nodos —React puede montar el efecto, tirar
+  // la timeline a medio camino y volver a montarlo— la segunda vez lee el estado que
+  // dejó la primera (invisible) y anima de invisible a invisible. Es lo que hacía que al
+  // entrar a una ficha desde /proyectos se viera la portada vacía, sin título ni bajada.
+  tl.fromTo(
+    '.project-hero__inner > *',
+    { autoAlpha: 0, y: '4rem' },
+    { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.08, ease: 'power3.out' },
+    0.45
+  )
   return tl
 }
 

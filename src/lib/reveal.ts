@@ -8,19 +8,28 @@ import type { Cleanup } from './marquee'
 gsap.registerPlugin(ScrollTrigger)
 
 /** Cada elemento entra al aparecer en pantalla. Se usa donde no hay pin: en móvil
- *  en la home, y en toda la ficha de proyecto. */
+ *  en la home, y en toda página que no sea la home.
+ *
+ *  fromTo y no from: `from` toma el estado ACTUAL como destino, así que si el revelado
+ *  se arma dos veces sobre los mismos nodos lee el estado que dejó el anterior
+ *  (invisible) y anima de invisible a invisible, dejando el contenido oculto para
+ *  siempre. Con los dos extremos escritos, armarlo de nuevo da lo mismo. */
 export function initRevealOnEnter(selectors: string[]): gsap.core.Tween[] {
   const tweens: gsap.core.Tween[] = []
   selectors.forEach((sel) => {
     gsap.utils.toArray<HTMLElement>(sel).forEach((el) => {
       tweens.push(
-        gsap.from(el, {
-          y: '3rem',
-          autoAlpha: 0,
-          duration: 0.7,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: el, start: 'top 90%', once: true, invalidateOnRefresh: true },
-        })
+        gsap.fromTo(
+          el,
+          { y: '3rem', autoAlpha: 0 },
+          {
+            y: 0,
+            autoAlpha: 1,
+            duration: 0.7,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: el, start: 'top 90%', once: true, invalidateOnRefresh: true },
+          }
+        )
       )
     })
   })
