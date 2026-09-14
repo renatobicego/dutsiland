@@ -9,10 +9,11 @@ import Button, { DIcon } from './Button'
 // frentes quedan apilados.
 export default function Services() {
   const { kicker, title, intro, groups, cta } = site.services
-  // El id lo usa el botón del hero para scrollear hasta acá dentro de la misma sección
-  // fijada. No es destino del menú: "qué hacemos" no tiene URL propia.
+  // data-ancla y no un id: el botón del hero necesita un punto al que saltar dentro de
+  // la misma sección fijada, pero "qué hacemos" no tiene URL propia y no debería poder
+  // visitarse escribiendo /#servicios.
   return (
-    <div className="services-shape" id="servicios">
+    <div className="services-shape" data-ancla="servicios">
       <div className="services-inner">
         <header className="services-head">
           <p className="section-kicker section-kicker--light">

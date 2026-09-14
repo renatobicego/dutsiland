@@ -321,7 +321,7 @@ function initHeroScroll(header: HTMLElement | null, layout: Layout): gsap.core.T
   }
 
   const total = t.duration()
-  markHeroAnchor('#servicios', servicesAt, total)
+  markHeroAnchor('[data-ancla="servicios"]', servicesAt, total)
 
   return t
 }

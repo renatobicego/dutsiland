@@ -90,7 +90,10 @@ export function initMenu({ smoother, menuMark }: MenuOptions): Cleanup {
     // Los href que empiezan con "/" son rutas: los deja pasar para que navegue Next.
     if (!href.startsWith('#')) return
     e.preventDefault()
-    const target = href === '#top' ? 0 : document.querySelector(href)
+    // Las secciones del home ya no llevan id —no son direcciones, no se visitan— así
+    // que el destino se busca por data-ancla. El href queda como pista de "es acá
+    // mismo": el que navega es este handler.
+    const target = href === '#top' ? 0 : document.querySelector(`[data-ancla="${href.slice(1)}"]`)
     if (target === null) return
     setTimeout(() => scrollToTarget(target, smoother), wasOpen ? 450 : 0)
   }
