@@ -835,8 +835,6 @@ body.menu-active .scroll-top, body.menu-leave .scroll-top { opacity: 0; visibili
 .built-item__n { font-size: 2.8rem; line-height: 1; font-weight: 800; color: var(--red-1); letter-spacing: 0.02em; }
 .built-item__title { margin: 0; color: var(--white-1); font-size: 3.8rem; line-height: 1.1; font-weight: 800; text-transform: uppercase; }
 .built-item__text { margin-top: 1.4rem; max-width: 86rem; color: var(--white-1); font-size: 2.4rem; line-height: 1.45; opacity: 0.82; }
-.project-stack { margin-top: 9rem; }
-.project-stack__title { margin: 0 0 3rem; color: var(--red-1); font-size: 1.9rem; line-height: 1; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
 
 /* ---------- el producto (galería) ---------- */
 .project-photos { position: relative; background: var(--white-1); color: var(--black-1); padding: 18rem 0 16rem; }
@@ -890,7 +888,6 @@ body.menu-active .scroll-top, body.menu-leave .scroll-top { opacity: 0; visibili
   .built-item + .built-item { margin-top: 3rem; }
   .built-item__title { font-size: 3rem; }
   .built-item__text { font-size: 2.2rem; }
-  .project-stack { margin-top: 6rem; }
   .project-photos { padding: 12rem 0 10rem; }
   .project-gallery { grid-template-columns: minmax(0, 1fr); gap: 4rem; margin-top: 5rem; }
   .shot figcaption { font-size: 1.9rem; }

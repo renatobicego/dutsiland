@@ -58,7 +58,6 @@ export type ProjectDetail = {
   /** La problemática que resolvemos, en dos o tres párrafos */
   problem: string[]
   built: BuiltItem[]
-  stack: string[]
   links: Link[]
   photos: ProjectPhoto[]
 }
@@ -172,7 +171,6 @@ export type Site = {
     builtTitle: string
     photosKicker: string
     photosTitle: string
-    stackTitle: string
     nextKicker: string
     cta: Link
   }
@@ -368,7 +366,6 @@ export const site: Site = {
     builtTitle: 'Lo que hicimos',
     photosKicker: 'EL PRODUCTO',
     photosTitle: 'Así se ve',
-    stackTitle: 'Con qué lo construimos',
     nextKicker: 'SIGUIENTE PROYECTO',
     cta: { label: 'Queremos hacer el tuyo', href: '/contacto' },
   },
@@ -411,25 +408,12 @@ export const site: Site = {
           },
           {
             title: 'Notificaciones en tiempo real',
-            text: 'Un servicio de sockets aparte avisa sin recargar la página, más sorteos para la comunidad.',
+            text: 'Los avisos llegan solos, sin recargar la página, más sorteos para la comunidad.',
           },
           {
             title: 'Un backend que aguanta el crecimiento',
-            text: 'Nest.js sobre arquitectura hexagonal, MongoDB para el almacenamiento y Clerk para la autenticación, con tests de integración.',
+            text: 'Preparado para crecer sin rehacerse: cada parte se puede cambiar sin tocar el resto, y los cambios entran con tests que los respaldan.',
           },
-        ],
-        stack: [
-          'Nest.js',
-          'GraphQL',
-          'MongoDB',
-          'Next.js',
-          'OpenAI Agents SDK',
-          'Clerk Auth',
-          'Mercado Pago',
-          'Firebase',
-          'Google Cloud',
-          'Jest',
-          'SuperTest',
         ],
         links: [{ label: 'Ver código', href: 'https://github.com/renatobicego/publicite' }],
         photos: [
@@ -477,7 +461,6 @@ export const site: Site = {
             text: 'Registro de pagos, medios de pago e información de obras sociales, con una vista para seguir los ingresos.',
           },
         ],
-        stack: ['Node.js', 'MongoDB'],
         links: [],
         photos: [
           { src: '/img/proyectos/mahatu/mahatu-3.webp', alt: 'Mahatu — turnos', caption: 'La reserva de turnos del paciente' },
@@ -488,7 +471,6 @@ export const site: Site = {
       },
     },
     // Estos cinco salen de las fichas del sitio actual (dutsiland.com/#trabajos).
-    // TODO(Dutsiland): falta el stack de cada uno; el sitio viejo solo listaba servicios.
     {
       slug: 'ama',
       name: 'Asociación Mendocina de Atletismo',
@@ -510,7 +492,6 @@ export const site: Site = {
           { title: 'Federaciones y clubes', text: 'El padrón de clubes miembros y la gestión de las federaciones.' },
           { title: 'Una interfaz sin obstáculos', text: 'Diseño responsive pensado para que un usuario mayor llegue rápido a lo que busca, con la investigación previa como guía.' },
         ],
-        stack: [],
         links: [{ label: 'Ver sitio', href: 'https://amamendoza.vercel.app/' }],
         // La primera hace de portada en la ficha, por eso va el sitio y no la guía de estilos
         photos: [
@@ -541,7 +522,6 @@ export const site: Site = {
           { title: 'La sucursal en el mapa', text: 'Dirección, horarios y contacto directo por WhatsApp desde cualquier pantalla.' },
           { title: 'Las marcas con las que trabajan', text: 'El respaldo de los proveedores, visible para quien no los conoce.' },
         ],
-        stack: [],
         links: [{ label: 'Ver sitio', href: 'https://cucharepuestos.com/' }],
         photos: [
           { src: '/img/proyectos/cucha/1.webp', alt: 'Cucha — el sitio', caption: 'El sitio en escritorio y en el teléfono' },
@@ -571,7 +551,6 @@ export const site: Site = {
           { title: 'Una identidad que no se diluye', text: 'El diseño colorido e ilustrado del emprendimiento, llevado a la interfaz.' },
           { title: 'El cierre por donde ya vendían', text: 'El contacto directo por WhatsApp e Instagram, que es donde la venta se concreta.' },
         ],
-        stack: [],
         links: [{ label: 'Ver catálogo', href: 'https://medialunamedias.vercel.app/' }],
         photos: [
           { src: '/img/proyectos/medialuna/1.webp', alt: 'Medialuna — la tienda', caption: 'La tienda en escritorio y en el teléfono' },
@@ -601,7 +580,6 @@ export const site: Site = {
           { title: 'Blog propio', text: 'Un espacio para publicar sus notas sobre innovación social y sostener la presencia.' },
           { title: 'Diseño responsive', text: 'La misma pieza, entera, en cualquier pantalla.' },
         ],
-        stack: [],
         links: [{ label: 'Ver sitio', href: 'https://mimpronta.com/' }],
         photos: [
           { src: '/img/proyectos/mimpronta/1.webp', alt: 'Mimpronta — el blog', caption: 'El blog, en la maqueta de diseño' },
@@ -642,7 +620,6 @@ export const site: Site = {
           { title: 'Integración con delivery', text: 'Los pedidos de las apps entran como una comanda más y avisan solos cuando se demoran.' },
           { title: 'Cierre por local y consolidado', text: 'Facturación, tickets y tiempos de cocina por día y por sucursal, comparables entre sí.' },
         ],
-        stack: ['Next.js', 'Node.js', 'PostgreSQL', 'WebSockets', 'Redis', 'Docker'],
         links: [],
         photos: [
           { src: '/img/proyectos/cocina-norte/1.webp', alt: 'Cocina Norte — comandas', caption: 'La pantalla de cocina: cada pedido avanza por columnas y el reloj no se detiene' },
@@ -674,7 +651,6 @@ export const site: Site = {
           { title: 'Alertas de reposición', text: 'Cruza el consumo de las últimas ocho semanas con el stock y arma la orden de compra sugerida por proveedor.' },
           { title: 'Trazabilidad de movimientos', text: 'Cada unidad tiene su historia: quién la recibió, a qué depósito fue y en qué pedido salió.' },
         ],
-        stack: ['React', 'NestJS', 'PostgreSQL', 'Prisma', 'React Native', 'AWS'],
         links: [],
         photos: [
           { src: '/img/proyectos/raiz-distribuciones/1.webp', alt: 'Raíz — stock', caption: 'El stock de los tres depósitos, ordenado por lo que está por faltar' },
@@ -706,7 +682,6 @@ export const site: Site = {
           { title: 'Sala de espera en pantalla', text: 'A quién se está llamando, qué consultorio está libre y cuánta demora hay, en el hall y en recepción.' },
           { title: 'Obras sociales', text: 'Los datos del afiliado y la cobertura se cargan una vez y viajan al turno, a la consulta y a la receta.' },
         ],
-        stack: ['Next.js', 'NestJS', 'PostgreSQL', 'HL7 FHIR', 'Firma digital', 'Docker'],
         links: [],
         photos: [
           { src: '/img/proyectos/centro-aconcagua/1.webp', alt: 'Aconcagua — agenda', caption: 'La agenda de la semana, con las ocho especialidades en la misma grilla' },
@@ -738,7 +713,6 @@ export const site: Site = {
           { title: 'Detección de alumnos en riesgo', text: 'Cruza asistencia y notas y marca al que se está por perder el cuatrimestre mientras todavía hay margen.' },
           { title: 'Aulas y horarios', text: 'La grilla de aulas evita las superposiciones antes de que pasen, no después.' },
         ],
-        stack: ['Next.js', 'Node.js', 'PostgreSQL', 'React Native', 'Redis'],
         links: [],
         photos: [
           { src: '/img/proyectos/instituto-ledesma/1.webp', alt: 'Ledesma — cursadas', caption: 'Las cursadas del docente, con el avance del programa de cada una' },
@@ -770,7 +744,6 @@ export const site: Site = {
           { title: 'Rinde por lote y por campaña', text: 'Cuatro campañas comparables, con el margen bruto calculado sobre el costo real de cada labor.' },
           { title: 'Trabajo sin señal', text: 'La app guarda lo que se carga en el campo y lo sincroniza cuando vuelve a haber señal.' },
         ],
-        stack: ['React Native', 'Next.js', 'PostgreSQL', 'PostGIS', 'Mapbox', 'Node.js'],
         links: [],
         photos: [
           { src: '/img/proyectos/campo-abierto/1.webp', alt: 'Campo Abierto — mapa', caption: 'El mapa de lotes, con el cultivo y el estado de cada uno' },

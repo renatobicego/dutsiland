@@ -120,19 +120,6 @@ export default function ProjectView({ project, next }: ProjectViewProps) {
                 </li>
               ))}
             </ol>
-
-            {detail.stack.length ? (
-              <div className="project-stack" data-reveal>
-                <h3 className="project-stack__title">{v.stackTitle}</h3>
-                <ul className="services-pills">
-                  {detail.stack.map((s) => (
-                    <li className="pill" key={s}>
-                      {s}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : null}
           </div>
         </div>
       </section>

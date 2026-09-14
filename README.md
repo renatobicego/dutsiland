@@ -250,8 +250,6 @@ campo o cambia la estructura salta en el chequeo de tipos y no en pantalla. Las 
   lo que decía el sitio actual, no de un brief del cliente. Publicité y Mahatu están marcados con `TODO`;
   los otros cinco salen de las fichas de `dutsiland.com/#trabajos`, que cuentan el trabajo pero no el
   problema previo.
-- **El stack de cuatro proyectos** (AMA, Cucha, Medialuna y Mimpronta): el sitio actual solo listaba
-  servicios, no tecnologías. Mientras `stack` esté vacío, la ficha no muestra ese bloque.
 - **Los cinco casos marcados `demo: true`** (Cocina Norte, Raíz Distribuciones, Centro Médico
   Aconcagua, Instituto Ledesma y Campo Abierto): **son inventados**. Cliente, números y capturas los
   armamos nosotros para mostrar un caso por rubro mientras el estudio junta los reales. Publicarlos
