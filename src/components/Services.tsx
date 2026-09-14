@@ -26,6 +26,9 @@ export default function Services() {
         <div className="services-stack">
           {groups.map((group) => (
             <article className="service" key={group.title}>
+              {/* Elemento propio y no un border-top: así GSAP puede trazarla con el
+                  scroll, igual que .step__line en "cómo trabajamos" */}
+              <span className="service__line" aria-hidden="true" />
               <span className="service__n">{group.n}</span>
               <div className="service__body">
                 <h3 className="service__title">{group.title}</h3>

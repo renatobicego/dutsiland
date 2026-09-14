@@ -387,6 +387,9 @@ function buildServicesSequence(): gsap.core.Timeline | null {
   gsap.set('.services-cta', { autoAlpha: 0, y: '3rem' })
   gsap.set(services, { autoAlpha: 0, y: '6rem' })
   gsap.set('.services-stack .pill', { autoAlpha: 0, y: '2rem' })
+  // Estado inicial explícito también para la línea: un fromTo en posición > 0 dentro de
+  // una timeline con scrub no aplica su "from" hasta que la playhead llega.
+  gsap.set('.services-stack .service__line', { scaleX: 0 })
 
   const t = gsap.timeline()
 
@@ -401,6 +404,9 @@ function buildServicesSequence(): gsap.core.Timeline | null {
   services.forEach((service, i) => {
     const at = start + i * hold
     t.to(service, { autoAlpha: 1, y: 0, duration: 0.45, ease: 'power3.out' }, at)
+    // La línea se traza de izquierda a derecha mientras el frente entra, igual que los
+    // pasos de "cómo trabajamos"
+    t.to(service.querySelector('.service__line'), { scaleX: 1, duration: 0.55, ease: 'power2.inOut' }, at)
     t.to(service.querySelectorAll('.pill'), { autoAlpha: 1, y: 0, duration: 0.4, stagger: 0.05, ease: 'power2.out' }, at + 0.12)
     if (i < services.length - 1) {
       t.to(service, { autoAlpha: 0, y: '-5rem', duration: 0.4, ease: 'power2.in' }, at + hold - 0.35)
