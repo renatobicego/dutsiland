@@ -74,6 +74,12 @@ export type Project = {
   cover: string
   coverAlt: string
   detail?: ProjectDetail
+  /** ATENCIÓN — Caso INVENTADO, con cliente inventado y capturas armadas por nosotros.
+   *  Están para que el sitio se vea completo mientras el estudio junta los casos reales
+   *  de cada rubro. Publicarlos tal cual sería presentar experiencia que no existe:
+   *  reemplazar el contenido por un caso real, o borrar la entrada, antes de salir a
+   *  producción. Se listan todos juntos al final del array. */
+  demo?: boolean
 }
 
 export type Site = {
@@ -425,10 +431,7 @@ export const site: Site = {
           'Jest',
           'SuperTest',
         ],
-        links: [
-          { label: 'Ver demo', href: 'https://soonpublicite.vercel.app/' },
-          { label: 'Ver código', href: 'https://github.com/renatobicego/publicite' },
-        ],
+        links: [{ label: 'Ver código', href: 'https://github.com/renatobicego/publicite' }],
         photos: [
           { src: '/img/proyectos/publicite/publicite-1.webp', alt: 'Publicité — inicio', caption: 'El inicio, con los anuncios cerca tuyo' },
           { src: '/img/proyectos/publicite/publicite-2.webp', alt: 'Publicité — anuncios', caption: 'Búsqueda por ubicación y filtros' },
@@ -475,7 +478,7 @@ export const site: Site = {
           },
         ],
         stack: ['Node.js', 'MongoDB'],
-        links: [{ label: 'Ver demo', href: 'https://mahatu.vercel.app/' }],
+        links: [],
         photos: [
           { src: '/img/proyectos/mahatu/mahatu-3.webp', alt: 'Mahatu — turnos', caption: 'La reserva de turnos del paciente' },
           { src: '/img/proyectos/mahatu/mahatu-4.webp', alt: 'Mahatu — calendario', caption: 'El calendario del profesional' },
@@ -608,34 +611,172 @@ export const site: Site = {
         ],
       },
     },
+
+    /* =====================================================================
+       DESDE ACÁ, CASOS INVENTADOS (demo: true)
+       Cliente, números y capturas son nuestros, no de un trabajo real. Sirven
+       para mostrar el sitio completo por rubro mientras el estudio junta los
+       casos verdaderos. NO PUBLICAR ASÍ: cada uno se reemplaza por un caso real
+       o se borra. Las capturas salen de maquetas en HTML, no de productos que
+       existan.
+       ===================================================================== */
     {
-      slug: 'wonder-ventures',
-      name: 'Wonder Ventures',
-      lead: 'Plataforma de reservas de experiencias turísticas.',
-      cover: '/img/wonder.jpg',
-      coverAlt: 'Wonder Ventures',
+      slug: 'cocina-norte',
+      name: 'Cocina Norte',
+      lead: 'Comandas, salón y delivery para un grupo gastronómico de cinco locales.',
+      cover: '/img/cocina-norte.webp',
+      coverAlt: 'Cocina Norte',
+      demo: true,
       detail: {
-        kicker: 'TURISMO',
-        role: 'Diseño de interfaz y desarrollo',
-        context: 'Proyecto integrador de la carrera Certified Tech Developer (Digital House)',
+        kicker: 'GASTRONOMÍA',
+        role: 'Diseño de producto y desarrollo',
+        context: 'Caso de demostración',
         problem: [
-          'Reservar una experiencia turística obliga a cruzar tres cosas a la vez: dónde, cuándo y con cuántas personas. Cuando eso no está resuelto en la interfaz, el que busca abandona antes de llegar a la reserva.',
-          'Del otro lado está el problema menos visible: destinos, actividades y disponibilidad cambian todo el tiempo. Sin una forma cómoda de actualizarlos, el catálogo envejece en semanas y deja de ser confiable.',
+          'Un restaurante con salón lleno y tres apps de delivery en simultáneo tiene el mismo problema todas las noches: el pedido existe en un papel, en una pantalla del delivery y en la cabeza del mozo, pero en ningún lado a la vez. La cocina cocina lo que le llega cuando le llega, y nadie sabe cuánto hace que un plato está esperando.',
+          'Con cinco locales el problema se multiplica: cada uno arma su carta, se queda sin un insumo y sigue vendiéndolo igual, y el dueño se entera del resultado de la semana cuando ya pasó. Lo que hacía falta no era un sistema de cajas más, sino que el pedido sea uno solo desde que entra hasta que sale, y que lo que se agota deje de ofrecerse solo.',
         ],
         built: [
-          { title: 'Búsqueda por destino y fecha', text: 'El punto de entrada resuelve de una: a dónde vas y cuándo.' },
-          { title: 'El detalle de cada experiencia', text: 'Fotos, precio por persona, quién la ofrece y la reserva, en la misma pantalla.' },
-          { title: 'Listado con filtros', text: 'Las experiencias por categoría y orden, para recorrer la oferta.' },
-          { title: 'Cuentas de usuario', text: 'Registro e inicio de sesión para seguir las reservas.' },
-          { title: 'Gestión de contenido', text: 'Un sistema para actualizar destinos, actividades y disponibilidad sin tocar código.' },
+          { title: 'Comandas en cocina', text: 'Salón, mostrador y las apps de delivery entran a la misma pantalla, en columnas por estado y con el reloj corriendo en cada pedido.' },
+          { title: 'Mapa de salón', text: 'Qué mesa está ocupada, hace cuánto, con qué mozo y cuánto lleva consumido, sin preguntarle a nadie.' },
+          { title: 'Carta con disponibilidad real', text: 'Lo que se agota en un local deja de ofrecerse ahí mismo, en el salón y en las apps, sin que nadie tenga que acordarse.' },
+          { title: 'Integración con delivery', text: 'Los pedidos de las apps entran como una comanda más y avisan solos cuando se demoran.' },
+          { title: 'Cierre por local y consolidado', text: 'Facturación, tickets y tiempos de cocina por día y por sucursal, comparables entre sí.' },
         ],
-        stack: [],
-        links: [{ label: 'Ver demo', href: 'http://wonderventures3.s3-website-us-east-1.amazonaws.com/' }],
+        stack: ['Next.js', 'Node.js', 'PostgreSQL', 'WebSockets', 'Redis', 'Docker'],
+        links: [],
         photos: [
-          { src: '/img/proyectos/wonder/1.webp', alt: 'Wonder — búsqueda', caption: 'La búsqueda de experiencias por destino y fecha' },
-          { src: '/img/proyectos/wonder/2.webp', alt: 'Wonder — detalle', caption: 'El detalle de una experiencia, con su reserva' },
-          { src: '/img/proyectos/wonder/3.webp', alt: 'Wonder — registro', caption: 'El registro de usuarios' },
-          { src: '/img/proyectos/wonder/4.webp', alt: 'Wonder — listado', caption: 'El listado de experiencias, con filtros' },
+          { src: '/img/proyectos/cocina-norte/1.webp', alt: 'Cocina Norte — comandas', caption: 'La pantalla de cocina: cada pedido avanza por columnas y el reloj no se detiene' },
+          { src: '/img/proyectos/cocina-norte/2.webp', alt: 'Cocina Norte — salón', caption: 'El mapa de salón, con el consumo y el tiempo de cada mesa' },
+          { src: '/img/proyectos/cocina-norte/3.webp', alt: 'Cocina Norte — carta', caption: 'La carta por local: lo que se agota deja de ofrecerse solo' },
+          { src: '/img/proyectos/cocina-norte/4.webp', alt: 'Cocina Norte — reportes', caption: 'El cierre de la semana, con los cinco locales comparables' },
+        ],
+      },
+    },
+    {
+      slug: 'raiz-distribuciones',
+      name: 'Raíz Distribuciones',
+      lead: 'Control de stock en tres depósitos, con lectura de códigos y alertas de quiebre.',
+      cover: '/img/raiz-distribuciones.webp',
+      coverAlt: 'Raíz Distribuciones',
+      demo: true,
+      detail: {
+        kicker: 'STOCK Y DEPÓSITO',
+        role: 'Relevamiento, diseño y desarrollo',
+        context: 'Caso de demostración',
+        problem: [
+          'Una distribuidora con tres depósitos tiene tres stocks distintos y ninguno confiable. El sistema dice que hay mercadería, el depósito dice que no, y la diferencia recién aparece cuando un pedido se arma incompleto y el cliente reclama. Cada control manual se hace con una planilla que queda vieja el mismo día que se llena.',
+          'El costo no es el faltante en sí: es que nadie lo ve venir. Se compra de más lo que sobra, se compra tarde lo que falta, y el que arma los pedidos camina el depósito dos veces porque no sabe dónde está lo que busca. La idea fue que el stock se actualice cuando la mercadería se mueve, no cuando alguien se acuerda de cargarlo.',
+        ],
+        built: [
+          { title: 'Stock consolidado', text: 'Los tres depósitos en una sola vista, con mínimos por producto y cuántos días de cobertura quedan.' },
+          { title: 'Ingreso con lector', text: 'La mercadería entra leyendo el código con el celular y el sistema compara contra el remito: qué falta, qué sobra, en qué renglón.' },
+          { title: 'Picking ordenado por recorrido', text: 'El pedido se arma en el orden en que está la mercadería en el depósito, no en el orden en que lo escribió el cliente.' },
+          { title: 'Alertas de reposición', text: 'Cruza el consumo de las últimas ocho semanas con el stock y arma la orden de compra sugerida por proveedor.' },
+          { title: 'Trazabilidad de movimientos', text: 'Cada unidad tiene su historia: quién la recibió, a qué depósito fue y en qué pedido salió.' },
+        ],
+        stack: ['React', 'NestJS', 'PostgreSQL', 'Prisma', 'React Native', 'AWS'],
+        links: [],
+        photos: [
+          { src: '/img/proyectos/raiz-distribuciones/1.webp', alt: 'Raíz — stock', caption: 'El stock de los tres depósitos, ordenado por lo que está por faltar' },
+          { src: '/img/proyectos/raiz-distribuciones/2.webp', alt: 'Raíz — ingreso', caption: 'El ingreso con lector: el sistema compara contra el remito mientras se lee' },
+          { src: '/img/proyectos/raiz-distribuciones/3.webp', alt: 'Raíz — picking', caption: 'Las hojas de ruta y el avance de cada pedido en preparación' },
+          { src: '/img/proyectos/raiz-distribuciones/4.webp', alt: 'Raíz — reposición', caption: 'La reposición sugerida, con la cobertura de cada producto' },
+        ],
+      },
+    },
+    {
+      slug: 'centro-aconcagua',
+      name: 'Centro Médico Aconcagua',
+      lead: 'Turnos, historia clínica y receta digital para catorce consultorios.',
+      cover: '/img/centro-aconcagua.webp',
+      coverAlt: 'Centro Médico Aconcagua',
+      demo: true,
+      detail: {
+        kicker: 'SALUD',
+        role: 'Diseño de producto y desarrollo',
+        context: 'Caso de demostración',
+        problem: [
+          'En un centro con ocho especialidades, el turno se pide por teléfono, se anota en un cuaderno y se confirma por WhatsApp desde tres celulares distintos. Se superponen, se pierden y el paciente se entera cuando ya está en la sala de espera. La historia clínica, mientras tanto, vive en carpetas: cada profesional ve lo suyo y nadie ve el conjunto.',
+          'El pedido no era digitalizar papeles sino que las tres cosas se toquen: que el turno sepa a qué profesional y a qué consultorio va, que la consulta escriba en la misma historia que van a leer los demás, y que la receta salga firmada de ahí sin volver a tipear nada.',
+        ],
+        built: [
+          { title: 'Agenda por profesional y consultorio', text: 'La semana completa, con sobreturnos, ausencias y los huecos reales que quedan libres.' },
+          { title: 'Historia clínica única', text: 'Una sola línea de tiempo por paciente: consultas, estudios y medicación activa, la escriba quien la escriba.' },
+          { title: 'Receta digital firmada', text: 'Sale de la consulta, le llega al paciente al celular y la farmacia la valida con un código. Al dispensarse queda marcada y no se puede usar dos veces.' },
+          { title: 'Sala de espera en pantalla', text: 'A quién se está llamando, qué consultorio está libre y cuánta demora hay, en el hall y en recepción.' },
+          { title: 'Obras sociales', text: 'Los datos del afiliado y la cobertura se cargan una vez y viajan al turno, a la consulta y a la receta.' },
+        ],
+        stack: ['Next.js', 'NestJS', 'PostgreSQL', 'HL7 FHIR', 'Firma digital', 'Docker'],
+        links: [],
+        photos: [
+          { src: '/img/proyectos/centro-aconcagua/1.webp', alt: 'Aconcagua — agenda', caption: 'La agenda de la semana, con las ocho especialidades en la misma grilla' },
+          { src: '/img/proyectos/centro-aconcagua/2.webp', alt: 'Aconcagua — historia clínica', caption: 'La historia clínica: una sola línea de tiempo por paciente' },
+          { src: '/img/proyectos/centro-aconcagua/3.webp', alt: 'Aconcagua — receta', caption: 'La receta digital, lista para firmar y enviar al paciente' },
+          { src: '/img/proyectos/centro-aconcagua/4.webp', alt: 'Aconcagua — sala de espera', caption: 'La sala de espera: a quién se llama y qué consultorio está libre' },
+        ],
+      },
+    },
+    {
+      slug: 'instituto-ledesma',
+      name: 'Instituto Ledesma',
+      lead: 'Cursadas, asistencia por QR y boletín digital para 1.400 alumnos.',
+      cover: '/img/instituto-ledesma.webp',
+      coverAlt: 'Instituto Ledesma',
+      demo: true,
+      detail: {
+        kicker: 'EDUCACIÓN',
+        role: 'Diseño de producto y desarrollo',
+        context: 'Caso de demostración',
+        problem: [
+          'Tomar asistencia a mano en una comisión de cuarenta alumnos cuesta diez minutos de clase, y después hay que pasarla a una planilla que alguien va a consolidar a fin de mes. Las notas viven en el cuaderno de cada docente y el boletín se arma a mano, materia por materia, cuando el cuatrimestre ya terminó.',
+          'Lo grave no es el trabajo administrativo: es que el alumno que se está por perder el cuatrimestre se detecta tarde. Cuando la asistencia y las notas están en dos lugares distintos, nadie cruza las dos cosas hasta que ya no hay margen para hacer algo.',
+        ],
+        built: [
+          { title: 'Asistencia por código', text: 'El docente muestra un código que cambia cada minuto y el alumno lo escanea. No se puede pasar por mensaje, y el registro queda cerrado y firmado.' },
+          { title: 'Cursadas del docente', text: 'Cada comisión con su avance del programa, su asistencia y su promedio, en una sola pantalla.' },
+          { title: 'Libro de notas', text: 'Parciales, trabajos y recuperatorios se cargan una vez y el boletín se arma solo con esas columnas.' },
+          { title: 'Detección de alumnos en riesgo', text: 'Cruza asistencia y notas y marca al que se está por perder el cuatrimestre mientras todavía hay margen.' },
+          { title: 'Aulas y horarios', text: 'La grilla de aulas evita las superposiciones antes de que pasen, no después.' },
+        ],
+        stack: ['Next.js', 'Node.js', 'PostgreSQL', 'React Native', 'Redis'],
+        links: [],
+        photos: [
+          { src: '/img/proyectos/instituto-ledesma/1.webp', alt: 'Ledesma — cursadas', caption: 'Las cursadas del docente, con el avance del programa de cada una' },
+          { src: '/img/proyectos/instituto-ledesma/2.webp', alt: 'Ledesma — asistencia', caption: 'La asistencia en curso: el código cambia cada minuto y el registro se actualiza solo' },
+          { src: '/img/proyectos/instituto-ledesma/3.webp', alt: 'Ledesma — notas', caption: 'El libro de notas, del que sale el boletín sin volver a cargar nada' },
+          { src: '/img/proyectos/instituto-ledesma/4.webp', alt: 'Ledesma — riesgo', caption: 'Los alumnos en riesgo, detectados cruzando asistencia y notas' },
+        ],
+      },
+    },
+    {
+      slug: 'campo-abierto',
+      name: 'Campo Abierto',
+      lead: 'Seguimiento de lotes, campañas y aplicaciones para un establecimiento agrícola.',
+      cover: '/img/campo-abierto.webp',
+      coverAlt: 'Campo Abierto',
+      demo: true,
+      detail: {
+        kicker: 'AGRO',
+        role: 'Relevamiento, diseño y desarrollo',
+        context: 'Caso de demostración',
+        problem: [
+          'Un establecimiento de tres mil hectáreas toma decisiones sobre ochenta lotes que no se parecen entre sí, y el historial de cada uno vive en un cuaderno, en el celular del ingeniero y en la memoria del encargado. Qué se sembró hace tres campañas, con qué se aplicó y cuánto rindió es una pregunta que lleva media hora contestar y termina en una estimación.',
+          'Sin ese historial no hay comparación posible: no se sabe qué lote conviene rotar, si el gasto en insumos se justificó o si el rinde bueno fue del manejo o de la lluvia. Lo que hacía falta era que cada labor quede registrada donde se hace, con su costo, y que el resultado se pueda mirar campaña contra campaña.',
+        ],
+        built: [
+          { title: 'Mapa de lotes', text: 'Cada lote con su cultivo, su estado fenológico y su superficie, dibujado sobre el campo real.' },
+          { title: 'Registro de aplicaciones', text: 'Producto, dosis, responsable y receta agronómica firmada, cargados desde el celular en el lote.' },
+          { title: 'Clima y agua útil', text: 'Los milímetros de la estación propia se cargan solos al lote y alimentan el agua útil de cada suelo.' },
+          { title: 'Rinde por lote y por campaña', text: 'Cuatro campañas comparables, con el margen bruto calculado sobre el costo real de cada labor.' },
+          { title: 'Trabajo sin señal', text: 'La app guarda lo que se carga en el campo y lo sincroniza cuando vuelve a haber señal.' },
+        ],
+        stack: ['React Native', 'Next.js', 'PostgreSQL', 'PostGIS', 'Mapbox', 'Node.js'],
+        links: [],
+        photos: [
+          { src: '/img/proyectos/campo-abierto/1.webp', alt: 'Campo Abierto — mapa', caption: 'El mapa de lotes, con el cultivo y el estado de cada uno' },
+          { src: '/img/proyectos/campo-abierto/2.webp', alt: 'Campo Abierto — aplicaciones', caption: 'Las aplicaciones registradas, con producto, dosis y receta firmada' },
+          { src: '/img/proyectos/campo-abierto/3.webp', alt: 'Campo Abierto — clima', caption: 'Clima y agua útil: los milímetros se cargan solos al lote' },
+          { src: '/img/proyectos/campo-abierto/4.webp', alt: 'Campo Abierto — rindes', caption: 'El rinde por lote, comparable campaña contra campaña' },
         ],
       },
     },
