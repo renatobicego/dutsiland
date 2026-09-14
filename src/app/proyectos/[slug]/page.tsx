@@ -12,6 +12,9 @@ import ProjectExperience from '@/components/ProjectExperience'
 
 type Params = { slug: string }
 
+// En Next 16 los params de una página llegan como Promise (Async Request APIs)
+type PageProps = { params: Promise<Params> }
+
 type WithDetail = Project & { detail: ProjectDetail }
 
 const conFicha = (p: Project): p is WithDetail => Boolean(p.detail)
@@ -26,8 +29,9 @@ function buscar(slug: string): WithDetail | undefined {
   return site.projects.filter(conFicha).find((p) => p.slug === slug)
 }
 
-export function generateMetadata({ params }: { params: Params }): Metadata {
-  const project = buscar(params.slug)
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params
+  const project = buscar(slug)
   if (!project) return { title: site.name }
   const title = `${project.name} — ${site.shortName}`
   return {
@@ -45,8 +49,9 @@ export function generateMetadata({ params }: { params: Params }): Metadata {
   }
 }
 
-export default function ProjectPage({ params }: { params: Params }) {
-  const project = buscar(params.slug)
+export default async function ProjectPage({ params }: PageProps) {
+  const { slug } = await params
+  const project = buscar(slug)
   if (!project) notFound()
 
   // El siguiente de la lista, y si es el último vuelve al primero

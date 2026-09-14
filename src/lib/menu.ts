@@ -63,23 +63,23 @@ export function initMenu({ smoother, menuMark }: MenuOptions): Cleanup {
     open() {
       body.classList.add(ACTIVE)
       setTimeout(() => menuMark && menuMark.play(), 500)
-      smoother && smoother.paused(true)
+      if (smoother) smoother.paused(true)
     },
     close() {
       if (!api.isOpen) return
-      smoother && smoother.paused(false)
+      if (smoother) smoother.paused(false)
       body.classList.remove(ACTIVE)
       body.classList.add(LEAVE)
       setTimeout(() => {
         body.classList.remove(LEAVE)
-        menuMark && menuMark.pause(0)
+        if (menuMark) menuMark.pause(0)
       }, 800)
     },
   }
 
   const bt = document.getElementById('bt-menu')
   const onBt = () => (api.isOpen ? api.close() : api.open())
-  bt && bt.addEventListener('click', onBt)
+  if (bt) bt.addEventListener('click', onBt)
 
   const onAnchor = (e: Event) => {
     const a = e.currentTarget
@@ -99,7 +99,7 @@ export function initMenu({ smoother, menuMark }: MenuOptions): Cleanup {
   anchors.forEach((a) => a.addEventListener('click', onAnchor))
 
   return () => {
-    bt && bt.removeEventListener('click', onBt)
+    if (bt) bt.removeEventListener('click', onBt)
     anchors.forEach((a) => a.removeEventListener('click', onAnchor))
     body.classList.remove(ACTIVE, LEAVE)
   }

@@ -490,7 +490,7 @@ export default function HomeExperience() {
 
     const loaderMark = animateDMark(document.querySelector('#loader .d-mark'), 1)
     const menuMark = animateDMark(document.querySelector('.menu .d-mark'), 1)
-    loaderMark && loaderMark.play()
+    if (loaderMark) loaderMark.play()
 
     const layout = device.isDesktop ? DESKTOP : MOBILE
     setHeroInitialState(layout)
@@ -567,7 +567,7 @@ export default function HomeExperience() {
         runLoader({
           onLeaving: () => {
             document.dispatchEvent(new CustomEvent('load:leaving'))
-            loaderMark && loaderMark.pause()
+            if (loaderMark) loaderMark.pause()
             gsap.to('#loader .d-mark__d', { scale: 1, duration: 0.35 })
             startMarquees()
           },
@@ -590,15 +590,15 @@ export default function HomeExperience() {
       document.fonts?.removeEventListener('loadingdone', onFonts)
       window.removeEventListener('load', onLoad)
       cleanups.forEach((fn) => fn())
-      marqueeCleanup && marqueeCleanup()
+      if (marqueeCleanup) marqueeCleanup()
       destroyAOS()
-      intro && intro.kill()
+      if (intro) intro.kill()
       if (Array.isArray(process)) process.forEach((t) => t.kill())
-      else process && process.kill()
+      else if (process) process.kill()
       sections.forEach((t) => t && t.kill())
       ScrollTrigger.getAll().forEach((st) => st.kill())
-      loaderMark && loaderMark.kill()
-      menuMark && menuMark.kill()
+      if (loaderMark) loaderMark.kill()
+      if (menuMark) menuMark.kill()
       if (smoother) smoother.kill()
       else {
         ScrollTrigger.normalizeScroll(false)
