@@ -155,7 +155,11 @@ h1, h2, h3 { margin: 0; font-weight: inherit; font-size: inherit; }
 body[data-load='first-loading'] #loader { opacity: 1; pointer-events: auto; z-index: 110; }
 body[data-load='first-leaving'] #loader { opacity: 1; pointer-events: auto; z-index: 110; background-color: var(--black-1); }
 body[data-load='first-leaving'] #loader .d-mark__d path { fill: var(--white-1); }
-body[data-load='first-done'] #loader { opacity: 0; z-index: 110; pointer-events: none; transition: none; }
+/* Sigue negro y sigue arriba: la salida la maneja revelarEntrada() con GSAP, que le
+   escribe la opacidad inline. Si acá volviera al color claro, el desvanecido pasaría
+   por un destello crema justo cuando aparece la vista. */
+body[data-load='first-done'] #loader { background-color: var(--black-1); opacity: 0; z-index: 110; pointer-events: none; transition: none; }
+body[data-load='first-done'] #loader .d-mark__d path { fill: var(--white-1); }
 
 .d-mark { position: relative; width: 100%; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; overflow: visible; }
 .d-mark__d { position: relative; height: 72%; width: auto; display: block; transform-origin: 50% 50%; }
@@ -420,6 +424,12 @@ html.intro-running body { touch-action: none; }
      a la derecha, y al ser flex la máscara de "UTSILAND" se achicaba a nada. */
   .hero-logo { left: 50%; top: 29%; width: max-content; transform: translate(-50%, -50%); }
   .hero-logo__d { height: 20vh; }
+  /* Misma altura que .hero-logo__d y mismo centro (los dos quedan en el medio de la
+     pantalla al arrancar la intro): el paso del preloader al hero es un fundido y no
+     un salto de tamaño. En apaisado ya coincidían las dos en 35vh.
+     vh y no --vh a propósito: --vh sigue a la barra de direcciones y la D cambiaría de
+     tamaño a mitad del fundido; vh es el alto grande del viewport y no se mueve. */
+  #loader .d-mark { height: 20vh; }
   .hero-logo__rest-mask { height: 21.1vh; width: 18.7vh; margin-left: 1.3vh; }
   .hero-mail { left: 2.4rem; bottom: auto; top: calc(58% - 6.5rem); font-size: 1.8rem; }
   /* El titular, debajo de la D, negro sobre el crema */

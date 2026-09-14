@@ -46,6 +46,15 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="es" className={`${montserrat.variable} ${subrayada.variable}`}>
       <body data-load="first-loading" data-scroll-direction="initial" data-scroll-position="top">
+        {/* El navegador restaura el scroll apenas termina el layout inicial, mucho antes
+            de que corra ningún efecto de React. Si avisamos recién ahí llegamos tarde y
+            se ve el salto a mitad de página. anclarArriba() se encarga del resto (ver
+            lib/entrada.ts). */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "try{history.scrollRestoration='manual'}catch(e){}window.scrollTo(0,0)",
+          }}
+        />
         {children}
       </body>
     </html>

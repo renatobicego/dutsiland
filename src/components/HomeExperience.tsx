@@ -12,6 +12,7 @@ import { initMarquees } from '@/lib/marquee'
 import type { Cleanup } from '@/lib/marquee'
 import { initCursor } from '@/lib/cursor'
 import { runLoader } from '@/lib/loader'
+import { anclarArriba, revelarEntrada } from '@/lib/entrada'
 import { initScrollState, initSectionWatcher } from '@/lib/scrollState'
 import { initMenu } from '@/lib/menu'
 import { initRevealOnEnter, initFooterReveal } from '@/lib/reveal'
@@ -492,6 +493,9 @@ export default function HomeExperience() {
     }
 
     runSplitting()
+    // Antes de armar nada: si se recargó con el scroll a mitad, el hero fijado y las
+    // timelines arrancarían descoordinados. Se entra siempre desde arriba.
+    cleanups.push(anclarArriba())
     cleanups.push(initScrollState())
     cleanups.push(initCursor())
 
@@ -575,7 +579,10 @@ export default function HomeExperience() {
             gsap.to('#loader .d-mark__d', { scale: 1, duration: 0.35 })
             startMarquees()
           },
-          onDone: arrancar,
+          onDone: () => {
+            revelarEntrada()
+            arrancar()
+          },
         })
       )
     }

@@ -11,6 +11,7 @@ import { refreshAOS, destroyAOS } from '@/lib/aos'
 import type { Cleanup } from '@/lib/marquee'
 import { initCursor } from '@/lib/cursor'
 import { runLoader } from '@/lib/loader'
+import { anclarArriba, revelarEntrada } from '@/lib/entrada'
 import { initScrollState, initSectionWatcher } from '@/lib/scrollState'
 import { initMenu } from '@/lib/menu'
 import type { Smoother } from '@/lib/menu'
@@ -62,6 +63,9 @@ export default function PageExperience({ content }: PageExperienceProps) {
     }
 
     runSplitting()
+    // Recargar a mitad de página y aparecer ahí de golpe se ve raro en todas las
+    // vistas, no sólo en la home: se entra siempre desde la portada.
+    cleanups.push(anclarArriba())
     cleanups.push(initScrollState())
     cleanups.push(initCursor())
 
@@ -89,7 +93,15 @@ export default function PageExperience({ content }: PageExperienceProps) {
     // El preloader es de la primera carga del sitio. Si se llegó navegando desde la
     // home ya está en 'first-done' y volver a mostrarlo sería tapar la página por gusto.
     if (document.body.dataset.load === 'first-done') arrancar()
-    else cleanups.push(runLoader({ onDone: arrancar }))
+    else
+      cleanups.push(
+        runLoader({
+          onDone: () => {
+            revelarEntrada()
+            arrancar()
+          },
+        })
+      )
 
     const onLoad = () => ScrollTrigger.refresh()
     window.addEventListener('load', onLoad)
