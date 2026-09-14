@@ -35,7 +35,7 @@ El sitio no es una sola página con anclas: cada cosa que el menú ofrece tiene 
 | Ruta                 | Qué contiene                                                            |
 | -------------------- | ----------------------------------------------------------------------- |
 | `/`                  | La home (abajo)                                                         |
-| `/sobre`             | Sobre Dutsiland: cómo empezó el estudio, el año y el equipo             |
+| `/sobre`             | Sobre Dutsiland: cómo empezó, qué nos define, el equipo y el cierre     |
 | `/proyectos`         | Grid con todos los casos; cada uno linkea a su ficha                    |
 | `/proyectos/<slug>`  | La ficha de un caso                                                     |
 | `/contacto`          | Formulario (Formspree) con validación nativa                            |
@@ -150,6 +150,18 @@ scrollea y cada bloque entra al aparecer (`[data-reveal]`). Solo la portada tien
 entrada propia, la misma apertura en D del hero. Por eso la ficha es de bajo riesgo:
 no toca el sistema de pins.
 
+La ficha es la **única** portada que reserva la mitad derecha (ahí va la captura):
+lleva `project-hero--con-captura`. En `/sobre`, `/proyectos` y `/contacto` el título usa
+todo el ancho.
+
+**Ningún contenido puede quedar invisible porque su animación no corrió.** `gsap.from`
+deja el elemento oculto hasta que su trigger entra, así que un trigger que no entra
+nunca es contenido que no existe. `protegerRevelados` lo revisa en cada refresh y muestra
+lo que quedó huérfano; y `refrescarAlCargarMedios` vuelve a medir cuando llegan las
+fuentes y las imágenes, que es lo que corría los tramos y hacía que entrando por primera
+vez a una URL el contenido no se revelara y recargando sí (con todo en caché ya estaba
+cuando se medía).
+
 Las fichas salen de `site.projects`. Un proyecto **sin `detail` no tiene página**: se
 muestra en la marquesina como tarjeta y nada más, y su URL da 404 (`generateStaticParams`
 solo genera los que tienen ficha). Para publicar un caso nuevo alcanza con escribirle
@@ -167,11 +179,15 @@ Dos cosas a tener en cuenta:
 
 ## Header, menú y la entrada al sitio
 
-- **El color del logo y del botón de menú lo decide la sección de abajo.** Cada sección declara
-  `data-set-section` y el header lee el valor en `data-get-section`. Lo resuelve un ScrollTrigger por
-  sección (`initSectionWatcher`) y no un listener de scroll: con el scroll suave la posición visual
-  sigue cambiando después del evento, así que un listener medía a mitad del recorrido y el header
-  terminaba claro sobre fondo claro.
+- **El color del logo y el del botón de menú los decide el fondo que tiene debajo CADA UNO.**
+  `initSectionWatcher` sondea el píxel bajo cada pieza (`elementsFromPoint`, que respeta el
+  `clip-path`) y le deja su `data-tono`. Se mide y no se declara porque las formas de este sitio son
+  recortes que no llenan su propio rectángulo: arriba de `/sobre` la portada es una D negra que no
+  llega hasta la derecha, así que el logo cae sobre negro y el botón sobre crema, y con un criterio
+  único para todo el header uno de los dos se perdía contra el fondo. El `data-set-section` de cada
+  sección sigue ahí como red, para cuando el sondeo no encuentra ningún fondo opaco. Va atado al
+  render (rAF) y no al evento de scroll: con el scroll suave la posición visual sigue cambiando
+  después del evento, así que un listener medía a mitad del recorrido y quedaba con una lectura vieja.
 - **Con el menú abierto el fondo no se mueve.** Son dos frenos distintos: en apaisado alcanza con
   pausar el scroll suave; en vertical el scroll es nativo pero lo intercepta el normalizador de
   ScrollTrigger, así que `overflow: hidden` no alcanza y hay que desactivarlo.
@@ -222,7 +238,10 @@ campo o cambia la estructura salta en el chequeo de tipos y no en pantalla. Las 
 - **Sobre Dutsiland**: falta la ciudad de origen y algún hito concreto (primer cliente, primer sistema
   propio). Los párrafos actuales están redactados con lo que se sabe y marcados con `TODO` en el archivo.
 - **El equipo de `/sobre`**: faltan los nombres, los roles y las fotos (van en `public/img/equipo/`).
-  Mientras `site.about.team` esté vacío la sección directamente no se muestra.
+  Mientras `site.about.team` esté vacío la sección directamente no se muestra; el cuerpo de la página
+  no depende de eso porque "qué nos define" y el cierre ya la sostienen.
+- **"Qué nos define" y el cierre de `/sobre`** (`site.about.traits` y `site.about.final*`): están
+  redactados con lo que ya afirmaban los párrafos de la página, no con un brief. Marcados con `TODO`.
 - **El título de "Cómo trabajamos"**: se reescribió al sacar el paso de la demo y queda por validar
   (marcado con `TODO` en `site.ts`).
 - **Destinos de "Política de privacidad" y "Términos y condiciones"** (`site.footer.legal`): hoy apuntan
