@@ -15,7 +15,7 @@ import { anclarArriba, revelarEntrada } from '@/lib/entrada'
 import { initScrollState, initSectionWatcher } from '@/lib/scrollState'
 import { initMenu } from '@/lib/menu'
 import type { Smoother } from '@/lib/menu'
-import { initRevealOnEnter, initFooterReveal } from '@/lib/reveal'
+import { initRevealOnEnter, initFooterReveal, protegerRevelados, refrescarAlCargarMedios } from '@/lib/reveal'
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother, CustomEase)
 
@@ -86,9 +86,14 @@ export default function PageExperience({ content }: PageExperienceProps) {
     const arrancar = () => {
       intro = playCoverIntro()
       reveals = initRevealOnEnter(REVEALS)
+      cleanups.push(protegerRevelados(reveals))
       refreshAOS()
       ScrollTrigger.refresh()
     }
+    // Las fuentes y las imágenes llegan después de la primera medición y corren todos
+    // los tramos: es lo que hacía que entrando por URL directa el contenido no se
+    // revelara y recargando sí (ver refrescarAlCargarMedios).
+    cleanups.push(refrescarAlCargarMedios())
 
     // El preloader es de la primera carga del sitio. Si se llegó navegando desde la
     // home ya está en 'first-done' y volver a mostrarlo sería tapar la página por gusto.

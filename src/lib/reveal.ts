@@ -1,7 +1,9 @@
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-// Revelados atados al scroll que comparten la home y la ficha de proyecto.
+import type { Cleanup } from './marquee'
+
+// Revelados atados al scroll que comparten la home y las demás vistas.
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -23,6 +25,68 @@ export function initRevealOnEnter(selectors: string[]): gsap.core.Tween[] {
     })
   })
   return tweens
+}
+
+/** Red de seguridad de los revelados: ningún contenido puede quedar invisible porque su
+ *  animación no llegó a correr.
+ *
+ *  `gsap.from` deja el elemento oculto hasta que su trigger entra, así que si el trigger
+ *  no entra nunca el texto no existe para el que mira. Y hay dos formas de que no entre:
+ *  que el punto de arranque caiga más allá del final del scroll (pasa con lo último de
+ *  una página corta) o que las posiciones se hayan calculado con la página más corta de
+ *  lo que terminó siendo —fuentes o imágenes que llegaron después— y el tramo quede
+ *  detrás del scroll sin que nadie lo dispare.
+ *
+ *  Va en el evento 'refresh' y no en 'refreshInit': el primero corre DESPUÉS de
+ *  recalcular las posiciones y de que ScrollTrigger dispare lo que corresponda al scroll
+ *  actual, así que lo que siga sin correr acá es lo que de verdad quedó huérfano. */
+export function protegerRevelados(tweens: gsap.core.Tween[]): Cleanup {
+  const revisar = () => {
+    const limite = ScrollTrigger.maxScroll(window)
+    tweens.forEach((t) => {
+      const st = t.scrollTrigger
+      if (!st || t.progress() > 0) return
+      if (st.start <= limite && st.scroll() <= st.start) return
+      // kill(false, true): se saca el trigger del medio pero se deja viva la animación.
+      // Sin sacarlo, si el tramo volviera a ser alcanzable lo reiniciaría desde
+      // invisible y se vería un parpadeo.
+      st.kill(false, true)
+      t.progress(1)
+    })
+  }
+  ScrollTrigger.addEventListener('refresh', revisar)
+  return () => ScrollTrigger.removeEventListener('refresh', revisar)
+}
+
+/** Las medidas del scroll se toman una vez y las fuentes y las imágenes llegan después:
+ *  cambian el alto de la página y dejan todos los tramos corridos. Con la página en
+ *  caché no se nota —ya están cuando se mide— y por eso el síntoma aparecía al entrar
+ *  por primera vez a una URL y se iba al recargar. */
+export function refrescarAlCargarMedios(): Cleanup {
+  let t = 0
+  const refrescar = () => {
+    clearTimeout(t)
+    // Agrupado: si entran veinte imágenes seguidas, se recalcula una sola vez
+    t = window.setTimeout(() => ScrollTrigger.refresh(), 200)
+  }
+
+  const fuentes = document.fonts
+  fuentes?.addEventListener('loadingdone', refrescar)
+
+  const imgs = Array.from(document.querySelectorAll('img')).filter((i) => !i.complete)
+  imgs.forEach((i) => {
+    i.addEventListener('load', refrescar, { once: true })
+    i.addEventListener('error', refrescar, { once: true })
+  })
+
+  return () => {
+    clearTimeout(t)
+    fuentes?.removeEventListener('loadingdone', refrescar)
+    imgs.forEach((i) => {
+      i.removeEventListener('load', refrescar)
+      i.removeEventListener('error', refrescar)
+    })
+  }
 }
 
 /** El footer se revela por debajo de la última sección, que se va hundiendo.
