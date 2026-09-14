@@ -6,7 +6,7 @@ import { ArrowDiagonal } from './Button'
 
 export default function Header() {
   return (
-    <header id="header" data-get-section="">
+    <header id="header">
       <div className="container-fluid">
         <div className="row">
           <div className="col-lg-6 col-tablet-6 col-6 column-logo">
@@ -15,7 +15,7 @@ export default function Header() {
               {/* La D está siempre; "UTSILAND" se pliega al scrollear y, en vertical,
                   directamente no entra al lado del botón de menú. Cada pieza trae su
                   versión clara y su versión oscura: cuál se ve lo decide el fondo de la
-                  sección que el header tiene debajo (ver data-get-section). */}
+                  fondo que el logo tiene justo debajo (ver data-tono e initSectionWatcher). */}
               <div className="container-logo">
                 <div className="logo-piece logo-d">
                   <img className="is-dark" src="/brand/wide-D-dark.png" alt="" />
