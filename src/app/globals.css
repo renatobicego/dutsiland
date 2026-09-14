@@ -53,7 +53,10 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 @media only screen and (max-width: 1025px) { body { width: 100%; } }
-body.menu-active { overflow: hidden; }
+/* touch-action además de overflow: en vertical el scroll es táctil y overflow solo no
+   lo frena. El menú por dentro sí puede desplazarse si no entra. */
+body.menu-active { overflow: hidden; touch-action: none; }
+body.menu-active .menu--wrapper { touch-action: auto; }
 @media only screen and (min-width: 1025.1px) {
   body, a, button, [data-cursor-style] { cursor: none; }
   [data-cursor-style='off'] { cursor: auto !important; }
@@ -247,6 +250,12 @@ body:not(.menu-active):not(.menu-leave) #header[data-get-section='dark'] { --col
 body:not(.menu-active):not(.menu-leave) #header[data-get-section='dark'] .logo img.is-dark { opacity: 0; }
 body:not(.menu-active):not(.menu-leave) #header[data-get-section='dark'] .logo img.is-light { opacity: 1; }
 body.menu-active #header { --color: var(--black-1); }
+/* Por encima del footer, que está en z-index 100: abierto, el menú tapa todo. Vale
+   también al cerrarse, mientras corre la animación de salida.
+   Y sin transform: en el fondo de la página el header se esconde con translateY(-101%),
+   y como el overlay del menú es hijo suyo, un ancestro transformado se lleva el fixed
+   con él y el menú aparecía corrido hacia arriba, dejando ver el footer abajo. */
+body.menu-active #header, body.menu-leave #header { z-index: 105; transform: none; }
 body.menu-active .logo { opacity: 1; pointer-events: auto; }
 
 

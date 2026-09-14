@@ -1,4 +1,5 @@
 import type gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import type { Cleanup } from './marquee'
 import type { ScrollSmoother } from 'gsap/ScrollSmoother'
 
@@ -42,6 +43,19 @@ export function initMenu({ smoother, menuMark }: MenuOptions): Cleanup {
   const body = document.body
   const ACTIVE = 'menu-active'
   const LEAVE = 'menu-leave'
+
+  /* Con el menú abierto el fondo no se mueve. Son dos frenos distintos según el
+     layout: en apaisado manda el scroll suave, y alcanza con pausarlo; en vertical el
+     scroll es nativo pero lo maneja el normalizador de ScrollTrigger, que intercepta
+     el táctil, así que overflow: hidden en el body no alcanza y hay que desactivarlo. */
+  const bloquearScroll = () => {
+    if (smoother) smoother.paused(true)
+    else ScrollTrigger.normalizeScroll()?.disable()
+  }
+  const soltarScroll = () => {
+    if (smoother) smoother.paused(false)
+    else ScrollTrigger.normalizeScroll()?.enable()
+  }
   const api = {
     get isOpen() {
       return body.classList.contains(ACTIVE)
@@ -49,11 +63,11 @@ export function initMenu({ smoother, menuMark }: MenuOptions): Cleanup {
     open() {
       body.classList.add(ACTIVE)
       setTimeout(() => menuMark && menuMark.play(), 500)
-      if (smoother) smoother.paused(true)
+      bloquearScroll()
     },
     close() {
       if (!api.isOpen) return
-      if (smoother) smoother.paused(false)
+      soltarScroll()
       body.classList.remove(ACTIVE)
       body.classList.add(LEAVE)
       setTimeout(() => {
@@ -86,6 +100,7 @@ export function initMenu({ smoother, menuMark }: MenuOptions): Cleanup {
   return () => {
     if (bt) bt.removeEventListener('click', onBt)
     anchors.forEach((a) => a.removeEventListener('click', onAnchor))
+    soltarScroll()
     body.classList.remove(ACTIVE, LEAVE)
   }
 }
