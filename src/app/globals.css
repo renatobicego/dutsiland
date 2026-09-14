@@ -217,7 +217,7 @@ body.menu-active [data-cursor='default-white'] > div { background: var(--black-1
   color: var(--color);
 }
 /* Sin fondo propio, igual que en apaisado: el header es transparente y las secciones
-   pasan por detrás. El color del logo y del botón lo decide data-get-section. */
+   pasan por detrás. El color del logo y del botón lo decide data-tono, uno por cada uno. */
 @media only screen and (max-width: 1025px) { #header { padding-top: 2.5rem; padding-bottom: 2.5rem; } }
 #header > .container-fluid, #header > .container-fluid > .row { height: 100%; }
 body:not([data-scroll-direction='initial']) #header { padding-top: 3rem; transition-duration: 0.8s, 0.6s, 0.3s; }
@@ -246,13 +246,15 @@ body:not([data-scroll-direction='initial']) #header .logo .logo-rest { transform
 @media only screen and (max-width: 1025px) {
   .logo .logo-rest { display: none; }
 }
-/* El logo y el botón de menú toman su color del fondo que el header tiene debajo:
-   crema sobre las secciones oscuras, negro sobre las claras. Vale en los dos layouts
-   (initSectionWatcher marca data-get-section en todos). Con el menú abierto manda el
+/* El logo y el botón de menú toman su color del fondo que tiene debajo CADA UNO:
+   crema sobre oscuro, negro sobre claro. Van por columna y no por header entero porque
+   no siempre tienen el mismo fondo abajo — arriba de /sobre la portada es una D negra
+   que no llega hasta la derecha, así que el logo cae sobre negro y el botón sobre crema.
+   El tono lo mide initSectionWatcher sondeando el píxel. Con el menú abierto manda el
    fondo del propio menú, que es claro, así que estas reglas se apagan. */
-body:not(.menu-active):not(.menu-leave) #header[data-get-section='dark'] { --color: var(--white-1); }
-body:not(.menu-active):not(.menu-leave) #header[data-get-section='dark'] .logo img.is-dark { opacity: 0; }
-body:not(.menu-active):not(.menu-leave) #header[data-get-section='dark'] .logo img.is-light { opacity: 1; }
+body:not(.menu-active):not(.menu-leave) #header [data-tono='dark'] { --color: var(--white-1); }
+body:not(.menu-active):not(.menu-leave) #header [data-tono='dark'] .logo img.is-dark { opacity: 0; }
+body:not(.menu-active):not(.menu-leave) #header [data-tono='dark'] .logo img.is-light { opacity: 1; }
 body.menu-active #header { --color: var(--black-1); }
 /* Por encima del footer, que está en z-index 100: abierto, el menú tapa todo. Vale
    también al cerrarse, mientras corre la animación de salida.
@@ -566,12 +568,14 @@ html.intro-running body { touch-action: none; }
    bajas el contenido no entraba y se cortaba por arriba, encimándose con el
    header. Con min(rem, vh) cada pieza cede cuando falta alto. */
 @media only screen and (min-width: 1025.1px) {
-  /* El padding superior reserva el lugar del header fijo */
-  .blob-left2 .services-shape { padding: min(13rem, 13vh) 0 min(7rem, 5vh); }
+  /* El padding superior reserva el lugar del header fijo. 8 y no 13 como antes: con
+     cuatro frentes en el índice del cierre, más el botón, el contenido no entraba entre
+     los contornos y el botón se salía por abajo. */
+  .blob-left2 .services-shape { padding: min(6rem, 6vh) 0 min(7rem, 5vh); }
   /* El contorno tiene que ceder con el mismo tope que el padding que ubica el
      contenido. Si queda en 13rem fijo, en pantallas anchas y bajas el contenido
      arranca más arriba que la línea y el antetítulo la termina pisando. */
-  .blob-left2 .services-shape:before { top: min(13rem, 13vh); bottom: min(13rem, 13vh); }
+  .blob-left2 .services-shape:before { top: min(6rem, 6vh); bottom: min(6rem, 6vh); }
   .blob-left2 .services-title { font-size: min(6.6rem, 5.5vh); margin-top: min(2.8rem, 2.2vh); }
   .blob-left2 .services-intro { font-size: min(2.5rem, 2.2vh); margin-top: min(2rem, 1.8vh); }
   /* El hueco tiene que aguantar dos cosas: el frente más alto, y el índice del cierre,
@@ -584,7 +588,8 @@ html.intro-running body { touch-action: none; }
   .blob-left2 .pill { height: min(6.4rem, 5.4vh); padding: 0 min(3.4rem, 3vh); font-size: min(2.3rem, 2vh); }
   /* El bloque va centrado: todo lo que crece el contenido le sube el techo, y el
      antetítulo termina pisando el contorno. Con cuatro frentes hay que ser más cortito. */
-  .blob-left2 .services-cta { margin-top: min(4.5rem, 3.2vh); }
+  /* El aire entre la última fila del índice y el botón: con 3.2vh quedaban pegados */
+  .blob-left2 .services-cta { margin-top: min(8rem, 6vh); }
   .blob-left2 .services-cta .btn-d { height: min(8.7rem, 7.4vh); }
   .blob-left2 .services-cta .btn-d__label { font-size: min(3.6rem, 3.1vh); }
 }
@@ -664,7 +669,13 @@ html.intro-running body { touch-action: none; }
 .card figcaption { position: absolute; bottom: 0; left: 0; right: 0; padding: 8rem 3.4rem 2.8rem; color: var(--white-1); font-size: 2.2rem; line-height: 1.2; font-weight: 700; text-transform: uppercase; letter-spacing: 0.01em; white-space: normal; background: linear-gradient(to top, rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0)); }
 /* El titular va sobre las fotos: sin este velo no se lee */
 .cards-veil { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(58% 62% at 50% 50%, rgba(10, 10, 10, 0.82) 0%, rgba(10, 10, 10, 0.6) 55%, rgba(10, 10, 10, 0) 100%); }
+/* pointer-events: none para que el titular no tape la marquesina que corre atrás... */
 .portfolio-heading { position: absolute; left: 50%; top: 26.4rem; transform: translate(-50%, -50%); width: 100%; padding: 0 4rem; z-index: 2; pointer-events: none; text-align: center; }
+/* ...pero el botón sí tiene que recibir el click. Va sobre el botón y no sobre su
+   contenedor, que es una franja del ancho de la pantalla y taparía la marquesina entera.
+   Las tarjetas de atrás siguen sin responder: son <figure> sin link, decorado, y el
+   índice completo está en /proyectos. */
+.portfolio-cta .btn-d { pointer-events: auto; }
 .portfolio-title { margin: 0; color: var(--white-1); font-size: 10.6rem; line-height: 1.1; font-weight: 800; text-transform: uppercase; }
 .portfolio-subtitle { margin-top: 2.4rem; color: var(--white-1); font-size: 2.8rem; line-height: 1.3; font-weight: 500; opacity: 0.92; }
 @media only screen and (max-width: 1025px) {
@@ -781,7 +792,11 @@ body.menu-active .scroll-top, body.menu-leave .scroll-top { opacity: 0; visibili
 }
 .project-hero__shape:before { content: ''; position: absolute; top: 13rem; right: 13rem; bottom: 13rem; left: -20rem; border: 0.5rem solid var(--white-1); border-radius: 0 calc(var(--blob-radius) - 13rem) calc(var(--blob-radius) - 13rem) 0; pointer-events: none; }
 /* El padding derecho le deja el lugar a la captura de portada */
-.project-hero__inner { position: relative; z-index: 1; width: 100%; padding: min(15rem, 15vh) min(86rem, 50%) min(8rem, 6vh) 21rem; }
+.project-hero__inner { position: relative; z-index: 1; width: 100%; padding: min(15rem, 15vh) 21rem min(8rem, 6vh) 21rem; }
+/* La mitad derecha la reserva sólo la ficha de proyecto, que es la única con captura de
+   portada. En /sobre, /proyectos y /contacto no hay nada ahí, así que reservarla sólo
+   servía para apretar el título contra la izquierda. */
+.project-hero--con-captura .project-hero__inner { padding-right: min(86rem, 50%); }
 /* --btn-color es lo que pinta el texto y el subrayado de .btn-underlined. Sin él
    cae al negro por defecto y queda negro sobre negro. */
 /* flex y no inline-flex: el antetítulo que va abajo también es inline-flex y los dos
@@ -846,6 +861,7 @@ body.menu-active .scroll-top, body.menu-leave .scroll-top { opacity: 0; visibili
 .project-next__link { display: flex; width: fit-content; align-items: center; gap: 2.4rem; margin-top: 3rem; color: var(--white-1); font-size: 7.2rem; line-height: 1.1; font-weight: 800; text-transform: uppercase; }
 .project-next__link .icon-arrow-diagonal { width: 4rem; height: 4rem; flex: none; }
 .project-next__link:hover { color: var(--red-1); }
+.project-next__text { margin-top: 3rem; max-width: 96rem; color: var(--white-1); font-size: 2.6rem; line-height: 1.45; opacity: 0.82; }
 .project-next__cta { margin-top: 8rem; }
 
 @media only screen and (max-width: 1025px) {
@@ -944,6 +960,31 @@ body.menu-active .scroll-top, body.menu-leave .scroll-top { opacity: 0; visibili
 }
 @media only screen and (max-width: 767.98px) {
   .team-grid { grid-template-columns: 1fr; gap: 3.4rem; }
+}
+
+/* =========================================================
+   QUÉ NOS DEFINE (/sobre)
+   Mismo panel negro que el equipo, con las filas numeradas de "cómo trabajamos".
+   ========================================================= */
+.about-traits { position: relative; background: var(--white-1); }
+.about-traits__shape { position: relative; background: var(--black-1); color: var(--white-1); border-radius: 0 var(--blob-radius) var(--blob-radius) 0; overflow: hidden; padding: 14rem 0 16rem; }
+.traits-list { margin-top: 9rem; }
+.trait { display: grid; grid-template-columns: 12rem minmax(0, 1fr); gap: 0 5rem; padding-top: 5rem; border-top: 2px solid rgba(246, 240, 225, 0.24); }
+.trait + .trait { margin-top: 6rem; }
+.trait__n { font-size: 3.2rem; line-height: 1; font-weight: 800; color: var(--red-1); letter-spacing: 0.02em; }
+.trait__title { margin: 0; font-size: 4.4rem; line-height: 1.1; font-weight: 800; text-transform: uppercase; }
+.trait__text { margin-top: 1.8rem; max-width: 86rem; font-size: 2.4rem; line-height: 1.45; opacity: 0.82; }
+@media only screen and (max-width: 1025px) {
+  .about-traits__shape { padding: 9rem 0 11rem; }
+  .traits-list { margin-top: 5rem; }
+  .trait { grid-template-columns: 8rem minmax(0, 1fr); gap: 0 2.4rem; padding-top: 3rem; }
+  .trait + .trait { margin-top: 3.4rem; }
+  .trait__title { font-size: 3.2rem; }
+  .trait__text { font-size: 2rem; }
+}
+@media only screen and (max-width: 767.98px) {
+  .trait { grid-template-columns: 1fr; gap: 0.8rem; }
+  .trait__title { font-size: 2.8rem; }
 }
 
 /* =========================================================
