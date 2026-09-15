@@ -234,7 +234,7 @@ body.menu-leave #header:before { transition: all 0.5s cubic-bezier(0.645, 0.045,
 
 .logo { display: flex; align-items: center; width: auto; height: 3.4rem; }
 @media only screen and (min-width: 767.98px) and (max-width: 1025px) { .logo { height: 3rem; } }
-@media only screen and (max-width: 767.98px) { .logo { height: 2.6rem; } }
+@media only screen and (max-width: 767.98px) { .logo { height: 3.6rem; } }
 .logo .container-logo { position: relative; width: auto; height: 100%; display: flex; align-items: center; }
 .logo .logo-piece { position: relative; height: 100%; width: auto; }
 .logo .logo-piece img { height: 100%; width: auto; display: block; }
@@ -267,12 +267,12 @@ body.menu-active .logo { opacity: 1; pointer-events: auto; }
 
 #bt-menu { display: flex; align-items: center; flex-wrap: wrap; flex-direction: row; position: relative; z-index: 99; outline: none; text-transform: uppercase; margin: auto 0; }
 #bt-menu:before { content: ''; width: 1.5rem; height: 1.5rem; display: block; border-radius: 50%; margin-right: 0.8rem; background: var(--color); transition: all 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86); }
-@media only screen and (max-width: 767.98px) { #bt-menu:before { width: 1.3rem; height: 1.3rem; margin-right: 0.4rem; } }
+@media only screen and (max-width: 767.98px) { #bt-menu:before { width: 1.6rem; height: 1.6rem; margin-right: 0.6rem; } }
 #bt-menu span { display: inline-block; color: var(--color); padding-top: 0.1rem; overflow: hidden; font-size: 1.6rem; line-height: 1em; letter-spacing: 0.02em; font-weight: 700; transition: all 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86); }
 @media only screen and (max-width: 1025px) { #bt-menu span { transition: all 0.6s cubic-bezier(0.785, 0.135, 0.15, 0.86); } }
-@media only screen and (max-width: 767.98px) { #bt-menu span { font-size: 1.4rem; } }
+@media only screen and (max-width: 767.98px) { #bt-menu span { font-size: 2rem; } }
 #bt-menu span.menu-text { padding-left: 0.3rem; }
-@media only screen and (max-width: 767.98px) { #bt-menu span.menu-text { width: 5rem; } }
+@media only screen and (max-width: 767.98px) { #bt-menu span.menu-text { width: 7.4rem; } }
 /* Abierto dice "cerrar", cerrado dice "menu": nunca los dos a la vez */
 #bt-menu span.close-text { width: 0; }
 body.menu-active #bt-menu span.close-text { width: 9rem; }
@@ -280,7 +280,7 @@ body.menu-active #bt-menu span.menu-text { width: 0; padding-left: 0; }
 body.menu-leave #bt-menu span.close-text { width: 0; transition-delay: 0s; }
 body.menu-leave #bt-menu span.menu-text { transition-delay: 0.2s; }
 @media only screen and (max-width: 767.98px) {
-  body.menu-active #bt-menu span.close-text { width: 6.6rem; }
+  body.menu-active #bt-menu span.close-text { width: 9.4rem; }
 }
 
 nav.menu { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 98; margin-left: auto; pointer-events: none; display: block; overflow: hidden; }
@@ -431,14 +431,18 @@ html.intro-running body { touch-action: none; }
      width: max-content porque un absoluto con left: 50% encoge al espacio que le queda
      a la derecha, y al ser flex la máscara de "UTSILAND" se achicaba a nada. */
   .hero-logo { left: 50%; top: 50%; width: max-content; transform: translate(-50%, -50%); }
-  .hero-logo__d { height: 20vh; }
-  /* Misma altura que .hero-logo__d y mismo centro (los dos quedan en el medio de la
-     pantalla al arrancar la intro): el paso del preloader al hero es un fundido y no
-     un salto de tamaño. En apaisado ya coincidían las dos en 35vh.
-     vh y no --vh a propósito: --vh sigue a la barra de direcciones y la D cambiaría de
-     tamaño a mitad del fundido; vh es el alto grande del viewport y no se mueve. */
-  #loader .d-mark { height: 20vh; }
-  .hero-logo__rest-mask { height: 21.1vh; width: 18.7vh; margin-left: 1.3vh; }
+  /* El lockup se mide contra el lado MÁS CHICO. Midiéndolo sólo en vh, en un teléfono
+     angosto y alto la D más "UTSILAND" al lado no entraban en el ancho del blob y se
+     comían su borde redondeado. Las tres piezas salen de la misma variable: la D del
+     hero, la máscara de "UTSILAND" y la D del loader tienen que medir lo mismo para que
+     el paso del preloader al hero sea un fundido y no un salto de tamaño (en apaisado
+     ya coincidían las dos en 35vh).
+     vh y vw, no --vh: --vh sigue a la barra de direcciones y la D cambiaría de tamaño a
+     mitad del fundido; vh es el alto grande del viewport y no se mueve. */
+  :root { --d-hero: min(20vh, 34vw); }
+  .hero-logo__d { height: var(--d-hero); }
+  #loader .d-mark { height: var(--d-hero); }
+  .hero-logo__rest-mask { height: calc(var(--d-hero) * 1.055); width: calc(var(--d-hero) * 0.935); margin-left: calc(var(--d-hero) * 0.065); }
   /* Abajo del todo del blob de abajo, que va del 48% al 97% */
   .hero-mail { left: 2.4rem; bottom: 6%; top: auto; font-size: 1.8rem; }
   /* El titular vive DENTRO del blob de arriba (3% a 45%), crema sobre negro, no abajo

@@ -216,6 +216,11 @@ function initSticky(root: ParentNode = document) {
 }
 
 /* ---------- intro del hero (cuadros 2 → 5), en tiempo, tras el loader ---------- */
+
+/** El hueco entre la D y "UTSILAND", tal como lo dejó el CSS antes de que la intro
+ *  aplaste la máscara. Lo lee setHeroInitialState y lo devuelve playHeroIntro. */
+let huecoLockup = '2.2vh'
+
 function setHeroInitialState(layout: Layout) {
   const S = layout.clip
   setClip('.blob-left', S.leftFull)
@@ -223,6 +228,13 @@ function setHeroInitialState(layout: Layout) {
   setClip('.blob-left2', S.left2Hidden)
   gsap.set('.blob-left', { xPercent: 0, yPercent: 0 })
   gsap.set('.hero-logo', layout.logoFrom)
+  // El hueco entre la D y "UTSILAND" lo fija el CSS y no vale lo mismo en apaisado que
+  // en vertical, donde el lockup se mide contra el lado más chico (--d-hero). Se anota
+  // antes de aplastar la máscara para que la intro lo devuelva tal cual; con un valor
+  // escrito a mano acá, en vertical el lockup terminaba unos píxeles más ancho de lo
+  // que el CSS había calculado para que entrara en el blob.
+  const mascara = document.querySelector<HTMLElement>('.hero-logo__rest-mask')
+  if (mascara) huecoLockup = getComputedStyle(mascara).marginLeft
   gsap.set('.hero-logo__rest-mask', { width: 0, marginLeft: 0 })
   gsap.set('.hero-mail', { autoAlpha: 0, y: '2rem' })
   gsap.set('#header', { autoAlpha: 0 })
@@ -245,7 +257,7 @@ function playHeroIntro(layout: Layout, onComplete: () => void): gsap.core.Timeli
   // 1. el fondo negro del loader se vuelve una D gigante
   tl.add(clipTween('.blob-left', S.leftFull, S.leftRounded, { duration: 0.8, ease: 'power2.inOut' }), 0)
   // 2. "UTSILAND" sale de atrás de la D
-  tl.to(mask, { width: restWidth, marginLeft: '2.2vh', duration: 0.9, ease: 'power3.out' }, 0.55)
+  tl.to(mask, { width: restWidth, marginLeft: huecoLockup, duration: 0.9, ease: 'power3.out' }, 0.55)
   // 3. la D se achica (a la izquierda en apaisado, hacia arriba en vertical) y, en
   //    apaisado, entra la D derecha con el titular
   tl.add(clipTween('.blob-left', S.leftRounded, S.leftHero, { duration: 1.1, ease: 'power3.inOut' }), 1.5)
