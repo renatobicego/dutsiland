@@ -109,11 +109,14 @@ Dos cosas a tener en cuenta al tocar estas secciones:
 
 ### Vertical (teléfono y tablet)
 
-Sigue la referencia móvil del diseñador: **la misma secuencia del hero, en vertical**. La D del
-logo ocupa el 58% de arriba con el lockup y el mail; el titular va debajo, negro sobre el crema;
-la frase entra desde abajo como una tarjeta redondeada a la derecha; la partida en dos, el panel
-que se abre y los cuatro frentes son iguales que en apaisado. Sólo el hero se fija en vertical:
-el anuncio de sobre Dutsiland y el proceso siguen revelándose al entrar, que en un teléfono se lee mejor.
+Sigue la referencia móvil del diseñador: **la misma secuencia del hero, en vertical**. Donde en
+apaisado las dos D se reparten el ANCHO, acá se reparten el ALTO y se miran: el blob de arriba es
+una D al revés —redondeada a la izquierda, a sangre por la derecha— con el titular adentro, y el
+de abajo es una D —a sangre por la izquierda, redondeada a la derecha— con el lockup y el mail. Al
+scrollear el de abajo se va hacia abajo y el de arriba crece a toda la pantalla con la frase, que
+es el mismo movimiento del apaisado girado 90 grados; la partida en dos, el panel que se abre y
+los cuatro frentes son iguales. Sólo el hero se fija en vertical: el anuncio de sobre Dutsiland y
+el proceso siguen revelándose al entrar, que en un teléfono se lee mejor.
 
 Lo que cambia por debajo, y conviene saber al tocarlo:
 
@@ -124,6 +127,11 @@ Lo que cambia por debajo, y conviene saber al tocarlo:
   fija `--vh` una sola vez al arrancar, por el mismo motivo.
 - **Mientras corre la intro no hay scroll** (`html.intro-running`): el trigger del hero recién se
   crea al terminar, y si el usuario scrollea antes el tramo fijado arranca a mitad.
+- **El valor de las siluetas en el CSS es el de REPOSO, no el de arranque.** Al refrescar,
+  ScrollTrigger revierte los estilos inline para medir la página, y un `fromTo` con scrub parado
+  en progreso 0 no los vuelve a escribir: lo que queda a la vista es el valor del CSS. Si ahí
+  estuviera el estado de arranque, el blob de arriba desaparecería apenas termina la intro. El
+  arranque lo escribe `setHeroInitialState` inline, que le gana por especificidad.
 - **Las siluetas son las mismas variables CSS, con otro juego de estados** (`MCLIP` contra `CLIP`
   en `HomeExperience`): insets arriba/abajo, que en apaisado no hacen falta, y radios en `vw`,
   porque en vertical el ancho es lo que manda. Dentro de una misma D todas las fases usan la misma

@@ -79,27 +79,36 @@ const CLIP: Record<ClipName, ClipState> = {
   left2Full: { r: 0, l: 0, tl: 0, tr: 50, br: 50, bl: 0 }, // el panel se abre para "qué hacemos"
 }
 
-/* Vertical (teléfono y tablet), según la referencia móvil del diseñador: la D del logo
-   ocupa la parte alta y el titular va abajo, sobre el crema; la frase entra desde abajo
-   como una tarjeta redondeada a la derecha; la partida y el panel son las mismas que
-   en apaisado. Radios en vw: 50vw es una semicircunferencia en el ancho del teléfono,
-   29vw equivale al --blob-radius de móvil (12rem). */
+/* Vertical (teléfono y tablet), según la referencia móvil del diseñador.
+ *
+ * En apaisado las dos D se reparten el ANCHO; en vertical se reparten el ALTO, una
+ * arriba y otra abajo, y por eso se miran: el blob de arriba es una D al revés
+ * —redondeada a la izquierda y a sangre por la derecha— y el de abajo es una D
+ * —a sangre por la izquierda y redondeada a la derecha—. En el reposo del hero el de
+ * arriba lleva el titular y el de abajo el logotipo con el mail; al scrollear el de
+ * abajo se va y el de arriba crece a toda la pantalla con la frase, que es el mismo
+ * movimiento del apaisado girado 90 grados.
+ *
+ * Todas las siluetas dejan aire arriba (t: 3): el negro no llega al borde de la
+ * pantalla. El botón de menú queda entonces sobre el crema y se pinta oscuro solo,
+ * porque el tono de cada pieza del header se mide contra lo que tiene debajo
+ * (initSectionWatcher). Antes de eso había que llevar el negro hasta el borde para que
+ * el botón no se perdiera.
+ *
+ * Radios en vw: 26vw es el redondeo grande de la referencia y 29vw equivale al
+ * --blob-radius de móvil (12rem). */
 const MCLIP: Record<ClipName, ClipState> = {
-  leftFull: { t: 0, r: 0, b: 0, l: 0, tl: 0, tr: 0, br: 0, bl: 0, u: 'vw' },
-  // Sin radio arriba a la derecha: el negro tiene que llegar al borde superior de la
-  // pantalla, como en la referencia. Si esa esquina queda crema, el botón de menú
-  // —que se pinta claro porque la sección es oscura— queda invisible encima.
-  leftRounded: { t: 0, r: 0, b: 0, l: 0, tl: 0, tr: 0, br: 50, bl: 0, u: 'vw' },
-  leftHero: { t: 0, r: 0, b: 42, l: 0, tl: 0, tr: 0, br: 50, bl: 0, u: 'vw' }, // la D arriba, el 58% del alto
-  // La tarjeta llega al borde superior (t: 0) y sin radio arriba a la derecha, por lo
-  // mismo que la D: si ese ángulo queda crema, el botón de menú se pierde encima. El
-  // aire de tarjeta lo dan el margen derecho y el ángulo inferior redondeado.
-  rightHidden: { t: 100, r: 5, b: 7, l: 0, tl: 0, tr: 0, br: 29, bl: 0, u: 'vw' }, // abajo de todo, sin alto
-  rightHero: { t: 100, r: 5, b: 7, l: 0, tl: 0, tr: 0, br: 29, bl: 0, u: 'vw' }, // en vertical la D derecha no participa de la intro
-  rightClaim: { t: 0, r: 5, b: 7, l: 0, tl: 0, tr: 0, br: 29, bl: 0, u: 'vw' }, // la tarjeta con la frase
-  rightSplit: { t: 0, r: 5, b: 7, l: 48, tl: 0, tr: 0, br: 29, bl: 0, u: 'vw' },
-  rightGone: { t: 0, r: 5, b: 7, l: 100, tl: 0, tr: 0, br: 29, bl: 0, u: 'vw' },
-  // Mismo motivo que arriba: el panel abierto tiene que cubrir el borde superior
+  leftFull: { t: 0, r: 0, b: 0, l: 0, tl: 0, tr: 0, br: 0, bl: 0, u: 'vw' }, // el fondo del loader
+  leftRounded: { t: 3, r: 4, b: 3, l: 0, tl: 0, tr: 26, br: 26, bl: 0, u: 'vw' }, // imagen 1: la D grande con el lockup
+  leftHero: { t: 48, r: 7, b: 3, l: 0, tl: 0, tr: 26, br: 26, bl: 0, u: 'vw' }, // imagen 2: el blob de abajo
+  // El blob de arriba. Arranca sin alto (t + b = 100) y baja su borde inferior hasta el
+  // 45% en la intro; después sigue bajando hasta el piso cuando entra la frase.
+  rightHidden: { t: 3, r: 0, b: 97, l: 7, tl: 26, tr: 0, br: 0, bl: 26, u: 'vw' },
+  rightHero: { t: 3, r: 0, b: 55, l: 7, tl: 26, tr: 0, br: 0, bl: 26, u: 'vw' }, // imagen 2: con el titular
+  rightClaim: { t: 3, r: 0, b: 3, l: 7, tl: 26, tr: 0, br: 0, bl: 26, u: 'vw' }, // imagen 4: crecido, con la frase
+  rightSplit: { t: 3, r: 0, b: 3, l: 45, tl: 26, tr: 0, br: 0, bl: 26, u: 'vw' }, // imagen 5: empieza a irse
+  rightGone: { t: 3, r: 0, b: 3, l: 100, tl: 26, tr: 0, br: 0, bl: 26, u: 'vw' },
+  // "Qué hacemos" (imagen 7) ya estaba aprobado: el panel se abre a pantalla completa
   left2Hidden: { t: 0, r: 100, b: 0, l: 0, tl: 0, tr: 0, br: 29, bl: 0, u: 'vw' },
   left2Split: { t: 0, r: 55, b: 0, l: 0, tl: 0, tr: 0, br: 29, bl: 0, u: 'vw' },
   left2Full: { t: 0, r: 0, b: 0, l: 0, tl: 0, tr: 0, br: 29, bl: 0, u: 'vw' },
@@ -136,10 +145,15 @@ const DESKTOP: Layout = {
 
 const MOBILE: Layout = {
   clip: MCLIP,
-  leftExit: { yPercent: -75 },
+  // Se va hacia abajo mientras el blob de arriba baja encima: el mismo cruce que en
+  // apaisado, donde una sale por la izquierda y la otra crece desde la derecha.
+  leftExit: { yPercent: 70 },
+  // El lockup arranca centrado en la pantalla —para que el paso desde la D del loader
+  // sea un fundido— y termina centrado en el blob de abajo, que va del 48% al 97%.
   logoFrom: { top: '50%' },
-  logoTo: { top: '29%' },
-  rightEntersInIntro: false,
+  logoTo: { top: '70%' },
+  // Sí: en el diseño nuevo los dos blobs ya están en su lugar cuando termina la intro
+  rightEntersInIntro: true,
   exitEase: 'power2.in',
   enterEase: 'power2.out',
 }

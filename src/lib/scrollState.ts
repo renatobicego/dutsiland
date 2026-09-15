@@ -122,7 +122,11 @@ export function initSectionWatcher(): Cleanup {
     const r = el.getBoundingClientRect()
     // El header se esconde al llegar al fondo de la página: ahí no hay nada que medir
     if (r.top < 0 || r.height === 0) return null
-    const marca = el.querySelector<HTMLElement>('.logo, #bt-menu') ?? el
+    // Se mide bajo la MARCA que se ve, no bajo su contenedor: el enlace del logo lleva
+    // adentro el nombre del estudio para quien no ve la imagen, escondido con un
+    // left: -100vw que le estira la caja media pantalla hacia la izquierda. Midiendo el
+    // centro de esa caja, el punto caía lejos de la D y devolvía el fondo equivocado.
+    const marca = el.querySelector<HTMLElement>('.logo .logo-d, #bt-menu') ?? el
     const m = marca.getBoundingClientRect()
     return tonoEn(m.left + m.width / 2, m.top + m.height / 2) ?? respaldo
   }

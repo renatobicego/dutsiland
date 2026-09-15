@@ -418,13 +418,19 @@ html.intro-running body { touch-action: none; }
   /* El alto lo fija --vh al arrancar y no se toca más: si siguiera a la barra de
      direcciones, el escenario fijado cambiaría de alto a mitad del scroll. */
   .hero-stage { height: calc(var(--vh, 1vh) * 100); }
-  .blob-left { --cr: 0%; --cb: 42%; --ctr: 0vw; --cbr: 50vw; }
-  .blob-right { --ct: 100%; --cr: 5%; --cb: 7%; --cl: 0%; --ctl: 0vw; --ctr: 0vw; --cbr: 29vw; --cbl: 0vw; }
+  /* Acá va el estado de REPOSO del hero (leftHero / rightHero / left2Hidden de MCLIP),
+     no el de arranque. Al refrescar, ScrollTrigger revierte los estilos inline para
+     medir la página, y un fromTo con scrub parado en progreso 0 no los vuelve a
+     escribir: lo que queda a la vista es este valor. Si acá estuviera el estado de
+     arranque, el blob de arriba desaparecía al terminar la intro. El arranque lo
+     escribe setHeroInitialState inline, que le gana a esto. */
+  .blob-left { --ct: 48%; --cr: 7%; --cb: 3%; --cl: 0%; --ctl: 0vw; --ctr: 26vw; --cbr: 26vw; --cbl: 0vw; }
+  .blob-right { --ct: 3%; --cr: 0%; --cb: 55%; --cl: 7%; --ctl: 26vw; --ctr: 0vw; --cbr: 0vw; --cbl: 26vw; }
   .blob-left2 { --cr: 100%; --ctr: 0vw; --cbr: 29vw; }
-  /* El lockup, centrado en la D de arriba (la intro lo lleva del 50% al 29%).
+  /* El lockup, centrado en el blob de abajo (la intro lo lleva del 50% al 70%).
      width: max-content porque un absoluto con left: 50% encoge al espacio que le queda
      a la derecha, y al ser flex la máscara de "UTSILAND" se achicaba a nada. */
-  .hero-logo { left: 50%; top: 29%; width: max-content; transform: translate(-50%, -50%); }
+  .hero-logo { left: 50%; top: 50%; width: max-content; transform: translate(-50%, -50%); }
   .hero-logo__d { height: 20vh; }
   /* Misma altura que .hero-logo__d y mismo centro (los dos quedan en el medio de la
      pantalla al arrancar la intro): el paso del preloader al hero es un fundido y no
@@ -433,11 +439,13 @@ html.intro-running body { touch-action: none; }
      tamaño a mitad del fundido; vh es el alto grande del viewport y no se mueve. */
   #loader .d-mark { height: 20vh; }
   .hero-logo__rest-mask { height: 21.1vh; width: 18.7vh; margin-left: 1.3vh; }
-  .hero-mail { left: 2.4rem; bottom: auto; top: calc(58% - 6.5rem); font-size: 1.8rem; }
-  /* El titular, debajo de la D, negro sobre el crema */
-  .hero-headline { left: 2.4rem; right: 2.4rem; top: 63%; transform: none; color: var(--black-1); font-size: 5.6rem; line-height: 1.08; }
-  /* La frase, dentro de la tarjeta (que tiene 7% arriba y abajo y 5% a la derecha) */
-  .hero-claim { left: 2.4rem; right: 9rem; top: 7%; bottom: 7%; width: auto; max-width: none; }
+  /* Abajo del todo del blob de abajo, que va del 48% al 97% */
+  .hero-mail { left: 2.4rem; bottom: 6%; top: auto; font-size: 1.8rem; }
+  /* El titular vive DENTRO del blob de arriba (3% a 45%), crema sobre negro, no abajo
+     sobre el crema como antes. Centrado en ese blob: 24% es su mitad. */
+  .hero-headline { left: 5.2rem; right: 2.4rem; top: 24%; transform: translateY(-50%); color: var(--white-1); font-size: 4.6rem; line-height: 1.12; }
+  /* La frase, dentro del mismo blob ya crecido (3% arriba y abajo, 7% a la izquierda) */
+  .hero-claim { left: 5.2rem; right: 3.4rem; top: 3%; bottom: 3%; width: auto; max-width: none; }
   .hero-claim__text { font-size: 3.8rem; line-height: 1.2; max-width: none; }
   .hero-claim .btn-d { margin-top: 2.6rem; }
   /* El botón deja de ser una pastilla de una línea: a este ancho el texto no entra */
@@ -447,7 +455,7 @@ html.intro-running body { touch-action: none; }
 }
 @media only screen and (max-width: 767.98px) {
   .hero-mail { font-size: 1.55rem; }
-  .hero-headline { font-size: 5.2rem; }
+  .hero-headline { font-size: 4.2rem; }
   .hero-claim__text { font-size: 3.4rem; }
   .btn-d { min-height: 7rem; }
   .btn-d__content { padding: 1.6rem 2.4rem; }
