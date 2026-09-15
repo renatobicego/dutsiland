@@ -234,7 +234,13 @@ function setHeroInitialState(layout: Layout) {
   // escrito a mano acá, en vertical el lockup terminaba unos píxeles más ancho de lo
   // que el CSS había calculado para que entrara en el blob.
   const mascara = document.querySelector<HTMLElement>('.hero-logo__rest-mask')
-  if (mascara) huecoLockup = getComputedStyle(mascara).marginLeft
+  if (mascara) {
+    // Se borra el inline ANTES de leer. React monta el efecto dos veces en desarrollo, y
+    // sin esto la segunda lectura tomaba el 0 que había escrito la primera: el hueco
+    // quedaba en cero y la D terminaba pegada a "UTSILAND".
+    mascara.style.marginLeft = ''
+    huecoLockup = getComputedStyle(mascara).marginLeft
+  }
   gsap.set('.hero-logo__rest-mask', { width: 0, marginLeft: 0 })
   gsap.set('.hero-mail', { autoAlpha: 0, y: '2rem' })
   gsap.set('#header', { autoAlpha: 0 })

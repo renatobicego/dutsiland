@@ -442,14 +442,20 @@ html.intro-running body { touch-action: none; }
   :root { --d-hero: min(20vh, 34vw); }
   .hero-logo__d { height: var(--d-hero); }
   #loader .d-mark { height: var(--d-hero); }
-  .hero-logo__rest-mask { height: calc(var(--d-hero) * 1.055); width: calc(var(--d-hero) * 0.935); margin-left: calc(var(--d-hero) * 0.065); }
+  .hero-logo__rest-mask { height: calc(var(--d-hero) * 1.055); width: calc(var(--d-hero) * 0.935); margin-left: calc(var(--d-hero) * 0.17); }
   /* Abajo del todo del blob de abajo, que va del 48% al 97% */
   .hero-mail { left: 2.4rem; bottom: 6%; top: auto; font-size: 1.8rem; }
   /* El titular vive DENTRO del blob de arriba (3% a 45%), crema sobre negro, no abajo
      sobre el crema como antes. Centrado en ese blob: 24% es su mitad. */
-  .hero-headline { left: 5.2rem; right: 2.4rem; top: 24%; transform: translateY(-50%); color: var(--white-1); font-size: 4.6rem; line-height: 1.12; }
-  /* La frase, dentro del mismo blob ya crecido (3% arriba y abajo, 7% a la izquierda) */
-  .hero-claim { left: 5.2rem; right: 3.4rem; top: 3%; bottom: 3%; width: auto; max-width: none; }
+  /* El margen izquierdo va en % del ancho, no en rem: el blob entra por la izquierda
+     con un redondeo de 26vw, y a la altura del titular esa curva se mete bastante hacia
+     adentro —en tablet, casi 50px—. Con un margen fijo el texto quedaba montado sobre
+     la curva, medio sobre el negro y medio sobre el crema. El 26% de arriba lo baja lo
+     justo para salir de la parte más cerrada de la curva.
+     La frase usa el mismo margen para que el texto no se corra de lugar cuando el
+     titular le deja el blob. */
+  .hero-headline { left: 16%; right: 2.4rem; top: 26%; transform: translateY(-50%); color: var(--white-1); font-size: 4.6rem; line-height: 1.12; }
+  .hero-claim { left: 16%; right: 3.4rem; top: 3%; bottom: 3%; width: auto; max-width: none; }
   .hero-claim__text { font-size: 3.8rem; line-height: 1.2; max-width: none; }
   .hero-claim .btn-d { margin-top: 2.6rem; }
   /* El botón deja de ser una pastilla de una línea: a este ancho el texto no entra */
