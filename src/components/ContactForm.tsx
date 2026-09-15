@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { site } from '@/content/site'
 import { DIcon } from './Button'
+import Spinner from './Spinner'
 
 // El mismo endpoint que usaba el sitio anterior
 const FORMSPREE = 'https://formspree.io/f/xnqenpeb'
@@ -56,14 +57,16 @@ export default function ContactForm() {
       </div>
 
       <div className="contact-actions">
-        {/* Botón de verdad y no el <Button/>, que renderiza un link: esto envía un form */}
+        {/* Botón de verdad y no el <Button/>, que renderiza un link: esto envía un form.
+            Mientras se envía, la D quieta del botón deja su lugar a la que carga: ocupa
+            exactamente el mismo espacio, así que el botón no cambia de ancho. */}
         <button type="submit" className="btn-d" disabled={estado === 'enviando'} data-cursor-style="hovered">
           <span className="btn-d__content">
-            <DIcon />
+            {estado === 'enviando' ? <Spinner /> : <DIcon />}
             <span className="btn-d__label">{estado === 'enviando' ? c.sending : c.submit}</span>
           </span>
           <span className="btn-d__content btn-d__content--hover" aria-hidden="true">
-            <DIcon />
+            {estado === 'enviando' ? <Spinner /> : <DIcon />}
             <span className="btn-d__label">{estado === 'enviando' ? c.sending : c.submit}</span>
           </span>
         </button>

@@ -466,6 +466,46 @@ html.intro-running body { touch-action: none; }
 .btn-d--dark .btn-d__content--hover { background: var(--red-1); }
 .btn-d--dark .btn-d__content--hover .d-icon { fill: var(--white-1); }
 
+/* ---------- spinner de carga ----------
+   La D se va por la derecha y la siguiente entra por la izquierda ya de otro color:
+   el mismo gesto con el que la D del hero sale de cuadro (rightGone). Lo que viaja es
+   el recorte, no la forma.
+
+   La silueta va con border-radius y no con el path de DMark: acá hay que recortarla
+   por encima, y un clip-path sobre el SVG se pelearía con su propia silueta. Los
+   radios son los del path — rx 47.8% del ancho, ry 42.1% del alto — y la caja
+   mantiene la proporción 278:356.
+
+   El cambio de color cae en el instante en que la D está fuera de cuadro, así que
+   nunca se la ve saltar de un tono al otro: cuando vuelve, ya es la otra. */
+.spinner-d { position: relative; display: inline-block; width: 2.3rem; height: 2.9rem; flex: none; vertical-align: middle; overflow: hidden; }
+.spinner-d i {
+  position: absolute; inset: 0; display: block;
+  background: var(--sp-1, currentColor);
+  border-radius: 0 47.8% 47.8% 0 / 0 42.1% 42.1% 0;
+  animation: spinner-corta 1s cubic-bezier(0.645, 0.045, 0.355, 1) infinite,
+    spinner-muda 2s steps(1, end) infinite;
+}
+@keyframes spinner-corta {
+  0% { clip-path: inset(0 100% 0 0); }
+  26%, 62% { clip-path: inset(0 0 0 0); }
+  88%, 100% { clip-path: inset(0 0 0 100%); }
+}
+@keyframes spinner-muda {
+  0%, 49.9% { background: var(--sp-1, currentColor); }
+  50%, 100% { background: var(--sp-2, var(--red-1)); }
+}
+/* Suelto alterna entre la tinta de donde esté y el rojo. Dentro del botón la tinta ya
+   es el rojo, así que ahí el par se da vuelta y el segundo tono es el negro; en el
+   botón oscuro y en la cara que se pinta al pasar el mouse, el crema. */
+.btn-d .spinner-d { width: 2.9rem; height: 3.7rem; --sp-1: var(--red-1); --sp-2: var(--black-1); }
+.btn-d--dark .spinner-d, .btn-d__content--hover .spinner-d { --sp-1: var(--white-1); --sp-2: var(--red-1); }
+@media only screen and (max-width: 1025px) { .btn-d .spinner-d { width: 2.2rem; height: 2.8rem; } }
+@media (prefers-reduced-motion: reduce) {
+  .spinner-d i { animation: spinner-late 2s ease-in-out infinite alternate; clip-path: none; }
+  @keyframes spinner-late { from { opacity: 0.4; } to { opacity: 1; } }
+}
+
 /* =========================================================
    SOBRE DUTSILAND en el home: sección clara, corta el ritmo de las negras.
    Es sólo el anuncio —título, subtítulo y el botón—; el contenido está en /sobre,
