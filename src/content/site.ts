@@ -221,15 +221,30 @@ export const site: Site = {
     title: 'Cuatro frentes, un mismo equipo',
     intro:
       'No vendemos horas de diseño y horas de código por separado. Definimos cómo se usa el producto y lo construimos nosotros mismos.',
+    // El orden de este array ES el orden en el que se ven los frentes, en apaisado y en
+    // vertical: la secuencia del panel recorre los .service tal como están en el DOM.
+    // IA va primera a pedido del estudio, por ser lo más nuevo del mercado.
     groups: [
       {
         n: '01',
+        title: 'IA Y AUTOMATIZACIÓN',
+        lead: 'Que el sistema resuelva solo lo que hoy resuelve alguien a mano.',
+        items: [
+          'Implementación de IA en procesos',
+          'Agentes de IA',
+          'Bots y asistentes',
+          'Automatización de procesos',
+          'Integración con modelos',
+        ],
+      },
+      {
+        n: '02',
         title: 'SOFTWARE A MEDIDA',
         lead: 'El sistema que tu operación necesita, escrito desde cero.',
         items: ['Sistemas de gestión', 'Aplicaciones web', 'Integraciones y APIs', 'Paneles y reportes'],
       },
       {
-        n: '02',
+        n: '03',
         title: 'DISEÑO DE PRODUCTO',
         lead: 'Antes de escribir código, definimos cómo se usa.',
         items: [
@@ -240,22 +255,10 @@ export const site: Site = {
         ],
       },
       {
-        n: '03',
+        n: '04',
         title: 'WEB Y ECOMMERCE',
         lead: 'Tu presencia online, rápida y hecha a medida.',
         items: ['Diseño y desarrollo web', 'Landing pages', 'Tiendas online', 'Web interactiva 3D · WebGL'],
-      },
-      {
-        n: '04',
-        title: 'IA Y AUTOMATIZACIÓN',
-        lead: 'Que el sistema resuelva solo lo que hoy resuelve alguien a mano.',
-        items: [
-          'Implementación de IA en procesos',
-          'Agentes de IA',
-          'Bots y asistentes',
-          'Automatización de procesos',
-          'Integración con modelos',
-        ],
       },
     ],
     cta: { label: 'Hablá con nosotros', href: '/contacto' },
