@@ -1,28 +1,33 @@
-'use client'
+"use client";
 
-import { useEffect } from 'react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { ScrollSmoother } from 'gsap/ScrollSmoother'
-import { CustomEase } from 'gsap/CustomEase'
-import { getDevice } from '@/lib/device'
-import { runSplitting } from '@/lib/splitting'
-import { refreshAOS, destroyAOS } from '@/lib/aos'
-import type { Cleanup } from '@/lib/marquee'
-import { initCursor } from '@/lib/cursor'
-import { runLoader } from '@/lib/loader'
-import { anclarArriba, revelarEntrada } from '@/lib/entrada'
-import { initScrollState, initSectionWatcher } from '@/lib/scrollState'
-import { initMenu } from '@/lib/menu'
-import type { Smoother } from '@/lib/menu'
-import { initRevealOnEnter, initFooterReveal, protegerRevelados, refrescarAlCargarMedios } from '@/lib/reveal'
+import { useEffect } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollSmoother } from "gsap/ScrollSmoother";
+import { CustomEase } from "gsap/CustomEase";
+import { getDevice } from "@/lib/device";
+import { runSplitting } from "@/lib/splitting";
+import { refreshAOS, destroyAOS } from "@/lib/aos";
+import type { Cleanup } from "@/lib/marquee";
+import { initCursor } from "@/lib/cursor";
+import { runLoader } from "@/lib/loader";
+import { anclarArriba, revelarEntrada } from "@/lib/entrada";
+import { initScrollState, initSectionWatcher } from "@/lib/scrollState";
+import { initMenu } from "@/lib/menu";
+import type { Smoother } from "@/lib/menu";
+import {
+  initRevealOnEnter,
+  initFooterReveal,
+  protegerRevelados,
+  refrescarAlCargarMedios,
+} from "@/lib/reveal";
 
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother, CustomEase)
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother, CustomEase);
 
-if (typeof window !== 'undefined' && process.env.NODE_ENV !== 'production') {
+if (typeof window !== "undefined" && process.env.NODE_ENV !== "production") {
   // Acceso desde la consola para depurar, igual que en la home
-  window.__gsap = gsap
-  window.__ScrollTrigger = ScrollTrigger
+  window.__gsap = gsap;
+  window.__ScrollTrigger = ScrollTrigger;
 }
 
 // La coreografía de cualquier página que no sea la home: la ficha de proyecto, /sobre,
@@ -30,108 +35,124 @@ if (typeof window !== 'undefined' && process.env.NODE_ENV !== 'production') {
 // bloque entra al aparecer—, y todas abren con la misma apertura en D de la portada,
 // para que la llegada no se sienta un corte.
 
-const REVEALS = ['[data-reveal]']
+const REVEALS = ["[data-reveal]"];
 
 export type PageExperienceProps = {
   /** El contenido que mueve el scroll suave, por id */
-  content: string
-}
+  content: string;
+};
 
 function playCoverIntro(): gsap.core.Timeline {
-  const tl = gsap.timeline()
+  const tl = gsap.timeline();
   // La D se abre de izquierda a derecha. El recorte va por variables CSS, igual que
   // en el hero: animar el string del clip-path o escribirlo desde un onUpdate se
   // rompe en cuanto ScrollTrigger refresca (ver clipTween en HomeExperience).
-  tl.fromTo('.project-hero__shape', { '--pr': '100%' }, { '--pr': '0%', duration: 1, ease: 'power3.inOut' }, 0)
+  tl.fromTo(
+    ".project-hero__shape",
+    { "--pr": "100%" },
+    { "--pr": "0%", duration: 1, ease: "power3.inOut" },
+    0,
+  );
   // fromTo y no from: `from` toma el estado ACTUAL como destino, así que si esta
   // apertura corre dos veces sobre los mismos nodos —React puede montar el efecto, tirar
   // la timeline a medio camino y volver a montarlo— la segunda vez lee el estado que
   // dejó la primera (invisible) y anima de invisible a invisible. Es lo que hacía que al
   // entrar a una ficha desde /proyectos se viera la portada vacía, sin título ni bajada.
   tl.fromTo(
-    '.project-hero__inner > *',
-    { autoAlpha: 0, y: '4rem' },
-    { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.08, ease: 'power3.out' },
-    0.45
-  )
-  return tl
+    ".project-hero__inner > *",
+    { autoAlpha: 0, y: "4rem" },
+    { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.08, ease: "power3.out" },
+    0.45,
+  );
+  return tl;
 }
 
 export default function PageExperience({ content }: PageExperienceProps) {
   useEffect(() => {
-    const device = getDevice()
-    const cleanups: Cleanup[] = []
-    let smoother: Smoother | null = null
-    let intro: gsap.core.Timeline | null = null
-    let reveals: gsap.core.Tween[] = []
-    let footer: gsap.core.Timeline | null = null
+    const device = getDevice();
+    const cleanups: Cleanup[] = [];
+    let smoother: Smoother | null = null;
+    let intro: gsap.core.Timeline | null = null;
+    let reveals: gsap.core.Tween[] = [];
+    let footer: gsap.core.Timeline | null = null;
 
     if (device.isMobile) {
-      const setVh = () => document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`)
-      setVh()
-      setTimeout(setVh, 1000)
+      const setVh = () =>
+        document.documentElement.style.setProperty(
+          "--vh",
+          `${window.innerHeight * 0.01}px`,
+        );
+      setVh();
+      setTimeout(setVh, 1000);
     }
 
-    runSplitting()
+    runSplitting();
     // Recargar a mitad de página y aparecer ahí de golpe se ve raro en todas las
     // vistas, no sólo en la home: se entra siempre desde la portada.
-    cleanups.push(anclarArriba())
-    cleanups.push(initScrollState())
-    cleanups.push(initCursor())
+    cleanups.push(anclarArriba());
+    cleanups.push(initScrollState());
+    cleanups.push(initCursor());
 
     if (device.isDesktop) {
       smoother = ScrollSmoother.create({
-        wrapper: '#smooth-wrapper',
+        wrapper: "#smooth-wrapper",
         content,
         smooth: 2,
         normalizeScroll: true,
         ignoreMobileResize: true,
         effects: true,
-      })
-      footer = initFooterReveal()
+      });
+      // Llegando desde la home por Link, el documento no recarga: el loader ya está en
+      // 'first-done', así que anclarArriba() no interviene y confía en el scroll del
+      // router. Pero en desktop el scroll lo mueve este ScrollSmoother, que al crearse
+      // hereda la posición del wrapper —la que dejó el smoother de la vista anterior al
+      // matarse— y la página aparecía scrolleada a media altura. Lo llevamos a cero a
+      // mano, que es el arranque correcto de cualquier página que no sea la home.
+      smoother.scrollTop(0);
+      footer = initFooterReveal();
     }
-    cleanups.push(initSectionWatcher())
-    cleanups.push(initMenu({ smoother, menuMark: null }))
+    cleanups.push(initSectionWatcher());
+    cleanups.push(initMenu({ smoother, menuMark: null }));
 
     const arrancar = () => {
-      intro = playCoverIntro()
-      reveals = initRevealOnEnter(REVEALS)
-      cleanups.push(protegerRevelados(reveals))
-      refreshAOS()
-      ScrollTrigger.refresh()
-    }
+      intro = playCoverIntro();
+      reveals = initRevealOnEnter(REVEALS);
+      cleanups.push(protegerRevelados(reveals));
+      refreshAOS();
+      ScrollTrigger.refresh();
+    };
     // Las fuentes y las imágenes llegan después de la primera medición y corren todos
     // los tramos: es lo que hacía que entrando por URL directa el contenido no se
     // revelara y recargando sí (ver refrescarAlCargarMedios).
-    cleanups.push(refrescarAlCargarMedios())
+    cleanups.push(refrescarAlCargarMedios());
 
     // El preloader es de la primera carga del sitio. Si se llegó navegando desde la
     // home ya está en 'first-done' y volver a mostrarlo sería tapar la página por gusto.
-    if (document.body.dataset.load === 'first-done') arrancar()
+    if (document.body.dataset.load === "first-done") arrancar();
     else
       cleanups.push(
         runLoader({
           onDone: () => {
-            revelarEntrada()
-            arrancar()
+            revelarEntrada();
+            arrancar();
           },
-        })
-      )
+        }),
+      );
 
-    const onLoad = () => ScrollTrigger.refresh()
-    window.addEventListener('load', onLoad)
+    const onLoad = () => ScrollTrigger.refresh();
+    window.addEventListener("load", onLoad);
 
     return () => {
-      window.removeEventListener('load', onLoad)
-      cleanups.forEach((fn) => fn())
-      destroyAOS()
-      if (intro) intro.kill()
-      if (footer) footer.kill()
-      reveals.forEach((t) => t.kill())
-      ScrollTrigger.getAll().forEach((st) => st.kill())
-      if (smoother) smoother.kill()
-    }
-  }, [content])
+      window.removeEventListener("load", onLoad);
+      cleanups.forEach((fn) => fn());
+      destroyAOS();
+      if (intro) intro.kill();
+      if (footer) footer.kill();
+      reveals.forEach((t) => t.kill());
+      ScrollTrigger.getAll().forEach((st) => st.kill());
+      if (smoother) smoother.kill();
+    };
+  }, [content]);
 
-  return null
+  return null;
 }
