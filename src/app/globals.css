@@ -1878,12 +1878,11 @@ html.intro-running body {
   content: "";
   position: absolute;
   top: 13rem;
-  right: 13rem;
+  right: 11rem;
   bottom: 13rem;
   left: -20rem;
   border: 0.5rem solid var(--white-1);
-  border-radius: 0 calc(var(--blob-radius) - 13rem)
-    calc(var(--blob-radius) - 13rem) 0;
+  border-radius: 0 calc(var(--blob-radius)) calc(var(--blob-radius)) 0;
   pointer-events: none;
 }
 .services-inner {
@@ -2021,11 +2020,11 @@ html.intro-running body {
   }
   .services-shape:before {
     top: calc(var(--header-height) - 1.5rem);
-    right: 3rem;
+    right: 2.3rem;
     bottom: 2.4rem;
     border-width: 0.35rem;
-    border-radius: 0 calc(var(--blob-radius) - 3rem)
-      calc(var(--blob-radius) - 3rem) 0;
+    border-radius: 0 calc(var(--blob-radius) - 2rem)
+      calc(var(--blob-radius) - 2rem) 0;
   }
   .services-inner {
     padding-left: 2.4rem;
