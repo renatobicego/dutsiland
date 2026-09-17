@@ -23,6 +23,53 @@
   --header-height: 15rem;
   --blob-radius: 50vh;
   /* --font-grotesk la define next/font en <html> (ver layout.tsx) */
+
+  /* -------------------------------------------------------
+     Tamaños de título FIJOS (px), por escalón.
+     No dependen del ancho de ventana: el resto del sistema
+     usa rem escalado por vw en <html>, pero los títulos se
+     fijan acá para que no crezcan/encojan con el viewport.
+     Los valores desktop equivalen al tamaño que rendían antes
+     a 1440px de ancho (1rem = 7.5px). Sobrescritos por
+     breakpoint más abajo. */
+  --fs-display: 80px; /* hero-headline, portfolio-title (10.6rem) */
+  --fs-hero-title: 72px; /* fs--header (9.6rem) */
+  --fs-h1: 63px; /* services-title, process-title (8.4rem) */
+  --fs-claim: 57px; /* hero-claim__text (7.6rem) */
+  --fs-h2: 54px; /* history-title, project-title/block (7.2rem) */
+  --fs-h3: 42px; /* service__title (5.6rem) */
+  --fs-h4: 27px; /* step__title, project-block__title (3.6rem) */
+  --fs-subtitle: 21px; /* history/portfolio subtítulos (2.8rem) */
+  --fs-lead: 20px; /* services/step leads e intros (2.6rem) */
+  --fs-kicker: 14px; /* section-kicker (1.9rem) */
+}
+@media only screen and (min-width: 767.98px) and (max-width: 1025px) {
+  :root {
+    --fs-display: 56px;
+    --fs-hero-title: 60px;
+    --fs-h1: 46px;
+    --fs-claim: 38px;
+    --fs-h2: 46px;
+    --fs-h3: 40px;
+    --fs-h4: 30px;
+    --fs-subtitle: 22px;
+    --fs-lead: 20px;
+    --fs-kicker: 15px;
+  }
+}
+@media only screen and (max-width: 767.98px) {
+  :root {
+    --fs-display: 42px;
+    --fs-hero-title: 40px;
+    --fs-h1: 36px;
+    --fs-claim: 34px;
+    --fs-h2: 36px;
+    --fs-h3: 30px;
+    --fs-h4: 28px;
+    --fs-subtitle: 20px;
+    --fs-lead: 18px;
+    --fs-kicker: 16px;
+  }
 }
 @media only screen and (min-width: 1025.1px) {
   :root {
@@ -269,17 +316,7 @@ h3 {
   line-height: 1em;
   letter-spacing: -0.01em;
   font-weight: 800;
-  font-size: 9.6rem;
-}
-@media only screen and (min-width: 767.98px) and (max-width: 1025px) {
-  .fs--header {
-    font-size: 8rem;
-  }
-}
-@media only screen and (max-width: 767.98px) {
-  .fs--header {
-    font-size: 4rem;
-  }
+  font-size: var(--fs-hero-title);
 }
 
 /* ---------- keyframes ---------- */
@@ -1427,7 +1464,7 @@ body.menu-active #header .social-list {
   transform: translateY(-50%);
   margin: 0;
   color: var(--white-1);
-  font-size: 10.6rem;
+  font-size: var(--fs-display);
   line-height: 1.22;
   font-weight: 800;
   text-transform: uppercase;
@@ -1461,7 +1498,7 @@ body.menu-active #header .social-list {
   color: var(--white-1);
 }
 .hero-claim__text {
-  font-size: 7.6rem;
+  font-size: var(--fs-claim);
   line-height: 1.25;
   font-weight: 800;
   max-width: 108rem;
@@ -1581,7 +1618,6 @@ html.intro-running body {
     top: 26%;
     transform: translateY(-50%);
     color: var(--white-1);
-    font-size: 4.6rem;
     line-height: 1.12;
   }
   .hero-claim {
@@ -1593,7 +1629,6 @@ html.intro-running body {
     max-width: none;
   }
   .hero-claim__text {
-    font-size: 3.8rem;
     line-height: 1.2;
     max-width: none;
   }
@@ -1620,12 +1655,7 @@ html.intro-running body {
   .hero-mail {
     font-size: 1.55rem;
   }
-  .hero-headline {
-    font-size: 4.2rem;
-  }
-  .hero-claim__text {
-    font-size: 3.4rem;
-  }
+
   .btn-d {
     min-height: 7rem;
   }
@@ -1644,7 +1674,7 @@ html.intro-running body {
   gap: 1.1rem;
   margin: 0;
   color: var(--red-1);
-  font-size: 1.9rem;
+  font-size: var(--fs-kicker);
   line-height: 1;
   font-weight: 700;
   text-transform: uppercase;
@@ -1655,11 +1685,6 @@ html.intro-running body {
   height: 1.9rem;
   flex: none;
   fill: var(--red-1);
-}
-@media only screen and (max-width: 767.98px) {
-  .section-kicker {
-    font-size: 1.6rem;
-  }
 }
 
 /* ---------- botón oscuro (para las secciones claras) ---------- */
@@ -1791,14 +1816,14 @@ html.intro-running body {
 }
 .history-title {
   margin: 0;
-  font-size: 7.2rem;
+  font-size: var(--fs-h2);
   line-height: 1.12;
   font-weight: 800;
   max-width: 124rem;
 }
 .history-subtitle {
   margin-top: 3rem;
-  font-size: 2.8rem;
+  font-size: var(--fs-subtitle);
   line-height: 1.5;
   max-width: 96rem;
   opacity: 0.72;
@@ -1817,11 +1842,7 @@ html.intro-running body {
   .history-kicker {
     margin-bottom: 3.4rem;
   }
-  .history-title {
-    font-size: 4.6rem;
-  }
   .history-subtitle {
-    font-size: 2.3rem;
     margin-top: 2.2rem;
   }
   .history-cta {
@@ -1835,12 +1856,6 @@ html.intro-running body {
   .history-inner {
     padding-left: 2.4rem;
     padding-right: 2.4rem;
-  }
-  .history-title {
-    font-size: 3.6rem;
-  }
-  .history-subtitle {
-    font-size: 2rem;
   }
 }
 
@@ -1913,7 +1928,7 @@ html.intro-running body {
 .services-title {
   margin: 4rem 0 0;
   color: var(--white-1);
-  font-size: 8.4rem;
+  font-size: var(--fs-h1);
   line-height: 1.08;
   font-weight: 800;
   text-transform: uppercase;
@@ -1922,7 +1937,7 @@ html.intro-running body {
   margin-top: 3rem;
   max-width: 96rem;
   color: var(--white-1);
-  font-size: 2.6rem;
+  font-size: var(--fs-lead);
   line-height: 1.5;
   opacity: 0.86;
 }
@@ -1962,7 +1977,7 @@ html.intro-running body {
 .service__title {
   margin: 0;
   color: var(--white-1);
-  font-size: 5.6rem;
+  font-size: var(--fs-h3);
   line-height: 1.05;
   font-weight: 800;
   text-transform: uppercase;
@@ -1971,7 +1986,7 @@ html.intro-running body {
   margin-top: 1.8rem;
   max-width: 76rem;
   color: var(--white-1);
-  font-size: 2.6rem;
+  font-size: var(--fs-lead);
   line-height: 1.4;
   font-weight: 500;
   opacity: 0.82;
@@ -2202,7 +2217,7 @@ html.intro-running body {
 }
 .process-title {
   margin: 4rem 0 0;
-  font-size: 8.4rem;
+  font-size: var(--fs-h1);
   line-height: 1.08;
   font-weight: 800;
   text-transform: uppercase;
@@ -2239,14 +2254,14 @@ html.intro-running body {
 /* min-height reserva dos líneas: si no, los pasos de título corto desalinean el texto */
 .step__title {
   margin: 2.6rem 0 0;
-  font-size: 3.6rem;
+  font-size: var(--fs-h4);
   line-height: 1.15;
   font-weight: 800;
   min-height: 2.3em;
 }
 .step__text {
   margin-top: 1.6rem;
-  font-size: 2.2rem;
+  font-size: var(--fs-lead);
   line-height: 1.45;
 }
 .process-cta {
@@ -2262,7 +2277,6 @@ html.intro-running body {
     padding-right: 8rem;
   }
   .process-title {
-    font-size: 5.4rem;
     margin-top: 3rem;
   }
   .process-steps {
@@ -2274,11 +2288,7 @@ html.intro-running body {
     padding-top: 3rem;
   }
   .step__title {
-    font-size: 3rem;
     margin-top: 2rem;
-  }
-  .step__text {
-    font-size: 2.1rem;
   }
   .process-cta {
     margin-top: 8rem;
@@ -2289,19 +2299,12 @@ html.intro-running body {
     padding-left: 4rem;
     padding-right: 4rem;
   }
-  .process-title {
-    font-size: 6.6vw;
-  }
   .process-steps {
     grid-template-columns: 1fr;
     gap: 4rem;
   }
   .step__title {
-    font-size: 2.8rem;
     min-height: 0;
-  }
-  .step__text {
-    font-size: 2rem;
   }
 }
 
@@ -2458,11 +2461,12 @@ html.intro-running body {
    índice completo está en /proyectos. */
 .portfolio-cta .btn-d {
   pointer-events: auto;
+  margin-top: 12px;
 }
 .portfolio-title {
   margin: 0;
   color: var(--white-1);
-  font-size: 10.6rem;
+  font-size: var(--fs-display);
   line-height: 1.1;
   font-weight: 800;
   text-transform: uppercase;
@@ -2470,7 +2474,7 @@ html.intro-running body {
 .portfolio-subtitle {
   margin-top: 2.4rem;
   color: var(--white-1);
-  font-size: 2.8rem;
+  font-size: var(--fs-subtitle);
   line-height: 1.3;
   font-weight: 500;
   opacity: 0.92;
@@ -2498,20 +2502,8 @@ html.intro-running body {
   .portfolio-heading {
     top: 18rem;
   }
-  .portfolio-title {
-    font-size: 5.6rem;
-  }
   .portfolio-subtitle {
     margin-top: 1.6rem;
-    font-size: 2.2rem;
-  }
-}
-@media only screen and (max-width: 767.98px) {
-  .portfolio-title {
-    font-size: 8.5vw;
-  }
-  .portfolio-subtitle {
-    font-size: 3.2vw;
   }
 }
 
@@ -2811,7 +2803,7 @@ body.menu-leave .scroll-top {
 .project-block__title {
   margin: 3rem 0 0;
   color: var(--black-1);
-  font-size: 7.2rem;
+  font-size: var(--fs-h2);
   line-height: 1.08;
   font-weight: 800;
   text-transform: uppercase;
@@ -2876,7 +2868,7 @@ body.menu-leave .scroll-top {
   align-items: center;
   margin-bottom: min(5rem, 4vh);
   color: var(--white-1);
-  font-size: 1.9rem;
+  font-size: var(--fs-kicker);
   line-height: 1;
   font-weight: 700;
   text-transform: uppercase;
@@ -2889,7 +2881,9 @@ body.menu-leave .scroll-top {
 .project-title {
   margin: min(3rem, 2.4vh) 0 0;
   color: var(--white-1);
-  font-size: min(9.6rem, 8.4vh);
+  /* Tamaño fijo, pero con tope en vh: la portada se fija al alto del viewport y en
+     pantallas bajas el título tiene que entrar igual. */
+  font-size: min(var(--fs-hero-title), 8.4vh);
   line-height: 1.05;
   font-weight: 800;
   text-transform: uppercase;
@@ -2898,7 +2892,7 @@ body.menu-leave .scroll-top {
   margin-top: min(2.6rem, 2.2vh);
   max-width: 96rem;
   color: var(--white-1);
-  font-size: min(2.8rem, 2.4vh);
+  font-size: min(var(--fs-lead), 2.4vh);
   line-height: 1.45;
   opacity: 0.86;
 }
@@ -3117,7 +3111,7 @@ body.menu-leave .scroll-top {
   gap: 2.4rem;
   margin-top: 3rem;
   color: var(--white-1);
-  font-size: 7.2rem;
+  font-size: var(--fs-h2);
   line-height: 1.1;
   font-weight: 800;
   text-transform: uppercase;
@@ -3134,7 +3128,7 @@ body.menu-leave .scroll-top {
   margin-top: 3rem;
   max-width: 96rem;
   color: var(--white-1);
-  font-size: 2.6rem;
+  font-size: var(--fs-lead);
   line-height: 1.45;
   opacity: 0.82;
 }
@@ -3148,9 +3142,6 @@ body.menu-leave .scroll-top {
   .project-next__inner {
     padding-left: 8rem;
     padding-right: 8rem;
-  }
-  .project-block__title {
-    font-size: 5rem;
   }
   .project-hero {
     padding: 0;
@@ -3180,9 +3171,6 @@ body.menu-leave .scroll-top {
     transform: none;
     width: auto;
     margin: 0 12rem 12rem 8rem;
-  }
-  .project-title {
-    font-size: 5.6rem;
   }
   .project-lead {
     font-size: 2.3rem;
@@ -3248,7 +3236,6 @@ body.menu-leave .scroll-top {
     padding: 12rem 0 14rem;
   }
   .project-next__link {
-    font-size: 4.4rem;
     gap: 1.6rem;
   }
   .project-next__link .icon-arrow-diagonal {
@@ -3273,15 +3260,16 @@ body.menu-leave .scroll-top {
     margin: 0 9rem 9rem 4rem;
   }
   /* "CONSULTORIOS" es una palabra sola y no puede partirse: a 8.6vw se salía de su
-     columna. Este tamaño la deja entrar en las pantallas angostas. */
+     columna. Estos tamaños fijos, más chicos que el token general, la dejan entrar en
+     las pantallas angostas. */
   .project-title {
-    font-size: 7.2vw;
+    font-size: 28px;
   }
   .project-block__title {
-    font-size: 7.6vw;
+    font-size: 30px;
   }
   .project-next__link {
-    font-size: 7.6vw;
+    font-size: 30px;
   }
   .project-built .project-block {
     padding-right: 9rem;
