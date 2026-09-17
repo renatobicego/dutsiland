@@ -2181,7 +2181,7 @@ html.intro-running body {
 /* Se fija y el scroll traza un paso por vez (ver initProcess) */
 @media only screen and (min-width: 1025.1px) {
   .home-process {
-    height: 380vh;
+    height: 300vh;
     padding: 0;
   }
   .home-process .container-sticky {

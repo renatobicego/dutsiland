@@ -540,7 +540,12 @@ function initHeroScroll(
     2 + HOLD,
   );
 
-  const servicesAt = 2 + HOLD + OPEN + 0.05;
+  // El texto de "qué hacemos" empieza a aparecer antes: enganchamos la secuencia
+  // mientras el panel negro todavía termina de abrirse, en vez de esperar a que abra
+  // del todo (2 + HOLD + OPEN). Solo adelantamos el punto de arranque; las duraciones
+  // internas y el timeScale no se tocan, así el texto entra a la misma velocidad de
+  // siempre, nada más que su breakpoint de scroll queda antes.
+  const servicesAt = 2 + HOLD + OPEN * 0.55;
   const services = buildServicesSequence();
   if (services) {
     services.timeScale(SERVICES_TIMESCALE);
@@ -793,6 +798,36 @@ function initProcess(
   gsap.set(".process-title .word > span", { autoAlpha: 0, yPercent: 110 });
   gsap.set(".process-cta", { autoAlpha: 0, y: "3rem" });
 
+  // El encabezado (kicker + título "Sabés qué se construye...") entra ANTES de que la
+  // sección se fije: se dispara mientras todavía sube hacia el tope, con su propio
+  // trigger, así ya está a la vista cuando arranca el tramo de los pasos. Antes vivía
+  // dentro de la timeline fijada y no aparecía hasta que la sección llegaba a top top.
+  gsap
+    .timeline({
+      scrollTrigger: {
+        trigger: ".home-process",
+        start: "top 50%",
+        once: true,
+        invalidateOnRefresh: true,
+      },
+    })
+    .to(
+      ".process-head .section-kicker",
+      { autoAlpha: 1, y: 0, duration: 0.4, ease: "power2.out" },
+      0,
+    )
+    .to(
+      ".process-title .word > span",
+      {
+        autoAlpha: 1,
+        yPercent: 0,
+        duration: 0.7,
+        stagger: 0.05,
+        ease: "power3.out",
+      },
+      0.1,
+    );
+
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: ".home-process",
@@ -802,24 +837,11 @@ function initProcess(
       invalidateOnRefresh: true,
     },
   });
-  tl.to(
-    ".process-head .section-kicker",
-    { autoAlpha: 1, y: 0, duration: 0.3, ease: "none" },
-    0,
-  );
-  tl.to(
-    ".process-title .word > span",
-    {
-      autoAlpha: 1,
-      yPercent: 0,
-      duration: 0.7,
-      stagger: 0.05,
-      ease: "power3.out",
-    },
-    0.15,
-  );
 
-  const start = 0.95;
+  // El encabezado ya entra con su propio trigger antes del pin, así que los pasos no
+  // tienen que esperar: arrancan casi apenas la sección se fija (start bajo) y cada uno
+  // cuesta menos scroll (step más corto), así se ven antes y sin tanto recorrido.
+  const start = 0.1;
   const step = 0.85; // cuánto scroll cuesta cada paso
   steps.forEach((s, i) => draw(s, contents[i], tl, start + i * step, step));
   tl.to(
