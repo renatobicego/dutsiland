@@ -87,6 +87,22 @@ export type Site = {
   url: string;
   description: string;
   slogan: string;
+  /** Palabras clave para <meta keywords> y como insumo del JSON-LD. Ordenadas de
+   *  diferencial (software a medida) a captación amplia (web, ecommerce) + geo. */
+  keywords: string[];
+  /** Título largo del home: gana al `name` para el <title> de la portada. */
+  seoTitle: string;
+  /** País y región a los que apunta el estudio, para el schema y las señales locales. */
+  geo: {
+    country: string;
+    region: string;
+    /** Código ISO 3166-1 alfa-2 para areaServed del schema. */
+    countryCode: string;
+  };
+  /** Año de fundación, para el schema Organization. */
+  foundingYear: string;
+  /** Imagen social por defecto (Open Graph / Twitter). Ruta bajo /public. */
+  ogImage: string;
   email: string;
   social: Link[];
   menu: Link[];
@@ -189,8 +205,36 @@ export const site: Site = {
   shortName: "Dutsiland",
   url: "https://dutsiland.com",
   description:
-    "Software factory: desarrollamos software a medida, sistemas de gestión y productos web. Tu idea merece algo mejor que una plantilla.",
+    "Software factory argentina para PyMEs: desarrollamos software a medida, sistemas de gestión, aplicaciones web y tiendas online. Tu idea merece algo mejor que una plantilla.",
   slogan: "SOFTWARE A MEDIDA",
+
+  // Diferencial primero (software a medida), captación amplia después (web, ecommerce),
+  // y señal geográfica al cierre. Es la estrategia que hablamos: el home reclama lo que
+  // el estudio ES, y las páginas amplias capturan las búsquedas de mayor volumen.
+  keywords: [
+    "software a medida",
+    "desarrollo de software a medida",
+    "sistemas de gestión a medida",
+    "software factory",
+    "desarrollo de aplicaciones web",
+    "diseño y desarrollo web",
+    "páginas web para empresas",
+    "tiendas online",
+    "automatización de procesos",
+    "software a medida Argentina",
+    "desarrollo de software Buenos Aires",
+    "software a medida CABA",
+    "software para PyMEs",
+  ],
+  seoTitle:
+    "Dutsiland — Software a medida y desarrollo web para empresas en Argentina",
+  geo: {
+    country: "Argentina",
+    region: "Ciudad Autónoma de Buenos Aires",
+    countryCode: "AR",
+  },
+  foundingYear: "2023",
+  ogImage: "/og-image.png",
 
   email: "contacto@dutsiland.com",
   social: [
@@ -223,13 +267,25 @@ export const site: Site = {
     kicker: "QUÉ HACEMOS",
     title: "Cuatro frentes, un mismo equipo",
     intro:
-      "No vendemos horas de diseño y horas de código por separado. Definimos cómo se usa el producto y lo construimos nosotros mismos.",
+      "Trabajamos con empresas que necesitan que el software se adapte a cómo trabajan, y no al revés. Definimos cómo se usa el producto y lo construimos nosotros mismos, de punta a punta.",
     // El orden de este array ES el orden en el que se ven los frentes, en apaisado y en
     // vertical: la secuencia del panel recorre los .service tal como están en el DOM.
-    // IA va primera a pedido del estudio, por ser lo más nuevo del mercado.
+    // Software a medida va primero: es lo que la PyME entiende y busca. La IA queda
+    // segunda, como diferencial que suma justo después.
     groups: [
       {
         n: "01",
+        title: "SOFTWARE A MEDIDA",
+        lead: "El sistema que tu operación necesita, escrito desde cero.",
+        items: [
+          "Sistemas de gestión",
+          "Aplicaciones web",
+          "Integraciones y APIs",
+          "Paneles y reportes",
+        ],
+      },
+      {
+        n: "02",
         title: "IA Y AUTOMATIZACIÓN",
         lead: "Que el sistema resuelva solo lo que hoy resuelve alguien a mano.",
         items: [
@@ -238,17 +294,6 @@ export const site: Site = {
           "Bots y asistentes",
           "Automatización de procesos",
           "Integración con modelos",
-        ],
-      },
-      {
-        n: "02",
-        title: "SOFTWARE A MEDIDA",
-        lead: "El sistema que tu operación necesita, escrito desde cero.",
-        items: [
-          "Sistemas de gestión",
-          "Aplicaciones web",
-          "Integraciones y APIs",
-          "Paneles y reportes",
         ],
       },
       {
@@ -319,14 +364,15 @@ export const site: Site = {
   // va por el botón, a /proyectos.
   portfolio: {
     titleLines: ["PROYECTOS", "DESTACADOS"],
-    subtitle: "Una selección de nuestros trabajos más apasionantes",
+    subtitle:
+      "Sistemas, plataformas y sitios que construimos para empresas argentinas",
     caseLabel: "Ver el caso",
     cta: { label: "Ver portfolio", href: "/proyectos" },
   },
 
   projectsIndex: {
     kicker: "PROYECTOS",
-    title: "Lo que construimos",
+    title: "Proyectos de software a medida",
     intro:
       "Sistemas de gestión, plataformas y sitios para empresas que necesitaban algo que una plantilla no resolvía.",
     sinFicha: "Ficha en preparación",
@@ -337,7 +383,7 @@ export const site: Site = {
     kicker: "SOBRE DUTSILAND",
     title: "Empezamos resolviendo un problema concreto, y no paramos.",
     subtitle:
-      "Un equipo chico que escribe software a medida, del relevamiento al mantenimiento.",
+      "Un equipo chico que escribe software a medida para PyMEs, del relevamiento al mantenimiento.",
     cta: { label: "Conocé más", href: "/sobre" },
     // TODO(Dutsiland): confirmar el año exacto de arranque del estudio.
     year: "2023",

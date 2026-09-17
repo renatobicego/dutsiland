@@ -1,26 +1,27 @@
-import type { Metadata } from 'next'
-import { site } from '@/content/site'
-import PageShell from '@/components/PageShell'
-import ContactForm from '@/components/ContactForm'
-import { ArrowDiagonal, DIcon } from '@/components/Button'
+import type { Metadata } from "next";
+import { site } from "@/content/site";
+import PageShell from "@/components/PageShell";
+import ContactForm from "@/components/ContactForm";
+import { ArrowDiagonal, DIcon } from "@/components/Button";
 
-const title = `Contacto — ${site.shortName}`
+const title = `Contacto — ${site.shortName}`;
 
 export const metadata: Metadata = {
   title,
   description: site.contact.intro,
+  alternates: { canonical: "/contacto" },
   openGraph: {
     title,
     description: site.contact.intro,
     url: `${site.url}/contacto`,
     siteName: site.name,
-    locale: 'es_AR',
-    type: 'website',
+    locale: "es_AR",
+    type: "website",
   },
-}
+};
 
 export default function ContactPage() {
-  const c = site.contact
+  const c = site.contact;
 
   return (
     <PageShell id="pg-contacto">
@@ -56,5 +57,5 @@ export default function ContactPage() {
         </section>
       </main>
     </PageShell>
-  )
+  );
 }

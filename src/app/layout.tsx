@@ -47,16 +47,96 @@ const subrayada = localFont({
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: site.name,
+  // El home usa el título largo (con las keywords); las páginas internas ponen su propio
+  // título y el template les agrega " — Dutsiland" al final.
+  title: {
+    default: site.seoTitle,
+    template: `%s — ${site.shortName}`,
+  },
   description: site.description,
+  keywords: site.keywords,
+  applicationName: site.name,
+  appleWebApp: {
+    title: site.shortName,
+  },
+  authors: [{ name: site.name, url: site.url }],
+  creator: site.name,
+  publisher: site.name,
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   openGraph: {
-    title: site.name,
+    title: site.seoTitle,
     description: site.description,
     url: site.url,
     siteName: site.name,
     locale: "es_AR",
     type: "website",
+    images: [
+      {
+        url: site.ogImage,
+        alt: site.name,
+      },
+    ],
   },
+  twitter: {
+    card: "summary_large_image",
+    title: site.seoTitle,
+    description: site.description,
+    images: [site.ogImage],
+  },
+};
+
+// Datos estructurados del estudio. Describe la organización y el sitio para que Google
+// entienda qué es Dutsiland (empresa de desarrollo de software) y a quién sirve.
+// Se arma desde site.ts para no repetir datos que ya viven ahí.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${site.url}/#organization`,
+      name: site.name,
+      alternateName: site.shortName,
+      url: site.url,
+      description: site.description,
+      email: site.email,
+      foundingDate: site.foundingYear,
+      logo: `${site.url}${site.ogImage}`,
+      image: `${site.url}${site.ogImage}`,
+      sameAs: site.social.map((s) => s.href),
+      areaServed: {
+        "@type": "Country",
+        name: site.geo.country,
+      },
+      address: {
+        "@type": "PostalAddress",
+        addressRegion: site.geo.region,
+        addressCountry: site.geo.countryCode,
+      },
+      knowsAbout: site.keywords,
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${site.url}/#website`,
+      url: site.url,
+      name: site.name,
+      description: site.description,
+      inLanguage: "es-AR",
+      publisher: { "@id": `${site.url}/#organization` },
+    },
+  ],
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -76,6 +156,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             __html:
               "try{history.scrollRestoration='manual'}catch(e){}window.scrollTo(0,0)",
           }}
+        />
+        {/* Datos estructurados (schema.org): Organization + WebSite */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         {children}
         {/* Overlay de la transición entre rutas. Vive en el layout —fuera de cada

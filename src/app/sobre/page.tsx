@@ -1,28 +1,29 @@
 /* eslint-disable @next/next/no-img-element */
-import type { Metadata } from 'next'
-import { site } from '@/content/site'
-import PageShell from '@/components/PageShell'
-import Button, { DIcon } from '@/components/Button'
+import type { Metadata } from "next";
+import { site } from "@/content/site";
+import PageShell from "@/components/PageShell";
+import Button, { DIcon } from "@/components/Button";
 
-const title = `Sobre ${site.shortName} — ${site.shortName}`
+const title = `Sobre ${site.shortName} — ${site.shortName}`;
 
 export const metadata: Metadata = {
   title,
   description: site.about.subtitle,
+  alternates: { canonical: "/sobre" },
   openGraph: {
     title,
     description: site.about.subtitle,
     url: `${site.url}/sobre`,
     siteName: site.name,
-    locale: 'es_AR',
-    type: 'website',
+    locale: "es_AR",
+    type: "website",
   },
-}
+};
 
 // La historia del estudio, que antes era una sección fijada del home. Acá tiene lugar
 // para el cuerpo entero y para el equipo; en el home queda sólo el anuncio con el botón.
 export default function AboutPage() {
-  const a = site.about
+  const a = site.about;
 
   return (
     <PageShell id="pg-sobre">
@@ -71,7 +72,10 @@ export default function AboutPage() {
                 <DIcon />
                 <span>{a.traitsKicker}</span>
               </p>
-              <h2 className="project-block__title project-block__title--light split-words" data-reveal>
+              <h2
+                className="project-block__title project-block__title--light split-words"
+                data-reveal
+              >
                 {a.traitsTitle}
               </h2>
 
@@ -99,7 +103,10 @@ export default function AboutPage() {
                   <DIcon />
                   <span>{a.teamKicker}</span>
                 </p>
-                <h2 className="project-block__title project-block__title--light split-words" data-reveal>
+                <h2
+                  className="project-block__title project-block__title--light split-words"
+                  data-reveal
+                >
                   {a.teamTitle}
                 </h2>
 
@@ -125,7 +132,10 @@ export default function AboutPage() {
               <DIcon />
               <span>{a.finalKicker}</span>
             </p>
-            <h2 className="project-block__title project-block__title--light split-words" data-reveal>
+            <h2
+              className="project-block__title project-block__title--light split-words"
+              data-reveal
+            >
               {a.finalTitle}
             </h2>
             <p className="project-next__text" data-reveal>
@@ -138,5 +148,5 @@ export default function AboutPage() {
         </section>
       </main>
     </PageShell>
-  )
+  );
 }

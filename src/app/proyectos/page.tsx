@@ -1,29 +1,30 @@
 /* eslint-disable @next/next/no-img-element */
-import type { Metadata } from 'next'
-import Link from 'next/link'
-import { site } from '@/content/site'
-import PageShell from '@/components/PageShell'
-import { ArrowDiagonal, DIcon } from '@/components/Button'
+import type { Metadata } from "next";
+import Link from "next/link";
+import { site } from "@/content/site";
+import PageShell from "@/components/PageShell";
+import { ArrowDiagonal, DIcon } from "@/components/Button";
 
-const title = `Proyectos — ${site.shortName}`
+const title = `Proyectos — ${site.shortName}`;
 
 export const metadata: Metadata = {
   title,
   description: site.projectsIndex.intro,
+  alternates: { canonical: "/proyectos" },
   openGraph: {
     title,
     description: site.projectsIndex.intro,
     url: `${site.url}/proyectos`,
     siteName: site.name,
-    locale: 'es_AR',
-    type: 'website',
+    locale: "es_AR",
+    type: "website",
   },
-}
+};
 
 // El índice de proyectos: todos en una grilla. Los que tienen ficha escrita navegan a
 // /proyectos/<slug>; los que todavía no, se muestran igual pero no son clickeables.
 export default function ProjectsPage() {
-  const ix = site.projectsIndex
+  const ix = site.projectsIndex;
 
   return (
     <PageShell id="pg-proyectos">
@@ -47,7 +48,11 @@ export default function ProjectsPage() {
               const inner = (
                 <>
                   <span className="project-card__img">
-                    <img src={project.cover} alt={project.coverAlt} loading="lazy" />
+                    <img
+                      src={project.cover}
+                      alt={project.coverAlt}
+                      loading="lazy"
+                    />
                   </span>
                   <span className="project-card__body">
                     <span className="project-card__name">{project.name}</span>
@@ -64,7 +69,7 @@ export default function ProjectsPage() {
                     </span>
                   </span>
                 </>
-              )
+              );
               return (
                 <li className="project-card" key={project.slug} data-reveal>
                   {project.detail ? (
@@ -78,14 +83,16 @@ export default function ProjectsPage() {
                     </Link>
                   ) : (
                     // Sin ficha todavía: se ve, pero no navega
-                    <div className="project-card__link project-card__link--off">{inner}</div>
+                    <div className="project-card__link project-card__link--off">
+                      {inner}
+                    </div>
                   )}
                 </li>
-              )
+              );
             })}
           </ul>
         </section>
       </main>
     </PageShell>
-  )
+  );
 }
