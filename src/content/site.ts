@@ -36,6 +36,9 @@ export type ProjectPhoto = {
   alt: string;
   /** Pie de foto: qué se está viendo en esa pantalla */
   caption: string;
+  /** Captura vertical (pantalla de celular). La galería la limita en alto para que
+   *  no se agrande de más al ocupar el ancho de la columna. */
+  tall?: boolean;
 };
 
 /** Un bloque de "qué construimos": el titular y la línea que lo explica */
@@ -372,7 +375,7 @@ export const site: Site = {
 
   projectsIndex: {
     kicker: "PROYECTOS",
-    title: "Proyectos de software a medida",
+    title: "Nuestro Portfolio",
     intro:
       "Sistemas de gestión, plataformas y sitios para empresas que necesitaban algo que una plantilla no resolvía.",
     sinFicha: "Ficha en preparación",
@@ -600,33 +603,42 @@ export const site: Site = {
     {
       slug: "ama",
       name: "Asociación Mendocina de Atletismo",
-      lead: "Noticias, inscripciones y federaciones para la asociación.",
+      lead: "Sistema de torneos de atletismo: inscripciones, jueces y resultados en vivo.",
       cover: "/img/ama.jpg",
       coverAlt: "Asociación Mendocina de Atletismo",
       detail: {
-        kicker: "DEPORTE",
-        role: "Investigación, diseño de interfaz y desarrollo",
+        kicker: "DEPORTE · SISTEMA A MEDIDA",
+        role: "Investigación, diseño de producto y desarrollo",
         context: "En producción para la asociación",
         problem: [
-          "La asociación publicaba sus noticias y manejaba inscripciones y federaciones por fuera de la web, cada cosa por su lado. No había un lugar donde un atleta o un club encontrara todo junto.",
-          "Y había una restricción que condicionaba todo el diseño: buena parte de los usuarios son personas mayores. Cualquier fricción de más —un formulario largo, un menú escondido— los deja afuera. Arrancamos con una etapa de investigación para entender dónde estaban los puntos de dolor reales antes de dibujar una pantalla.",
+          "Organizar un torneo de atletismo tiene muchas partes: inscripciones, categorías por edad, jueces cargando marcas y público esperando los resultados. La asociación lo manejaba con planillas y cálculos a mano, así que los puestos tardaban en salir y los errores eran difíciles de evitar.",
+          "Cada disciplina tiene sus propias reglas para las marcas, el viento y las series, y hacerlas cumplir a mano es lento y propenso a errores. La asociación necesitaba un sistema que conociera esas reglas y se encargara de aplicarlas.",
+          "Además, los jueces fiscalizan en la pista, a veces sin señal, y muchos usuarios son personas mayores. Por eso arrancamos con una etapa de investigación para entender las necesidades reales antes de diseñar las pantallas.",
         ],
         built: [
           {
-            title: "Noticias de la asociación",
-            text: "Un lugar propio para publicar y que la información no dependa de las redes.",
+            title: "Inscripciones con las reglas puestas",
+            text: "El atleta se inscribe por DNI y el sistema valida la categoría contra su edad, controla que quede en una sola categoría por torneo y asigna un número de competidor único. Federados y no federados, desde el celular.",
           },
           {
-            title: "Inscripciones online",
-            text: "Los atletas se inscriben a los torneos desde la web, federados y no federados.",
+            title: "Carga de resultados por el juez",
+            text: "El juez elige prueba, categoría, sexo y serie, y carga las marcas con auto-formateo según la disciplina: el tiempo, la distancia o la altura se validan automáticamente mientras tipea, sin que tenga que acordarse del formato.",
           },
           {
-            title: "Gestión de torneos",
-            text: "El alta de un torneo con sus pruebas, categorías y fechas, desde el panel.",
+            title: "Puestos y series automáticos",
+            text: "El sistema ordena los puestos según el tipo de prueba —menor tiempo o mayor distancia— y maneja la progresión de series a semis y finales, sin dejar que un atleta caiga dos veces en la misma ronda.",
           },
           {
-            title: "Federaciones y clubes",
-            text: "El padrón de clubes miembros y la gestión de las federaciones.",
+            title: "Pruebas combinadas con puntaje IAAF",
+            text: "El sistema calcula los puntos de cada disciplina según la tabla IAAF y arma el ranking por suma de puntos, sin mezclarse con las mismas pruebas individuales.",
+          },
+          {
+            title: "Trabajo sin conexión en la pista",
+            text: "El juez puede cargar una jornada entera sin señal: las marcas se guardan en el dispositivo y se sincronizan solas al recuperar conexión.",
+          },
+          {
+            title: "Resultados en vivo para el público",
+            text: "A medida que los jueces cargan, el público sigue las marcas y los puestos en tiempo real, desde cualquier pantalla.",
           },
           {
             title: "Una interfaz sin obstáculos",
@@ -634,27 +646,34 @@ export const site: Site = {
           },
         ],
         links: [{ label: "Ver sitio", href: "https://amamendoza.vercel.app/" }],
-        // La primera hace de portada en la ficha, por eso va el sitio y no la guía de estilos
         photos: [
           {
-            src: "/img/proyectos/ama/2.webp",
-            alt: "AMA — portada",
-            caption: "La portada, con las noticias de la asociación",
+            src: "/img/proyectos/ama/resultados-ama.png",
+            alt: "AMA — resultados en vivo",
+            caption: "Los resultados del torneo, en vivo para el público",
           },
           {
-            src: "/img/proyectos/ama/3.webp",
-            alt: "AMA — torneos",
-            caption: "El alta de un torneo, con sus pruebas y categorías",
+            src: "/img/proyectos/ama/backoffice-juez-resultados-ama.png",
+            alt: "AMA — carga del juez",
+            caption:
+              "La carga del juez: marcas por prueba, categoría, sexo y serie",
           },
           {
-            src: "/img/proyectos/ama/4.webp",
-            alt: "AMA — campeones",
-            caption: "Los campeones nacionales, en la portada",
+            src: "/img/proyectos/ama/backoffice-inscriptos-ama.png",
+            alt: "AMA — inscriptos",
+            caption: "La gestión de inscriptos, con pagos, números y federados",
           },
           {
-            src: "/img/proyectos/ama/1.webp",
-            alt: "AMA — diseño",
-            caption: "La guía de estilos y el mapa de pantallas",
+            src: "/img/proyectos/ama/inscripcion-mobile-ama.png",
+            alt: "AMA — inscripción mobile",
+            caption: "La inscripción del atleta por DNI, desde el teléfono",
+            tall: true,
+          },
+          {
+            src: "/img/proyectos/ama/resultado-mobile-ama.png",
+            alt: "AMA — resultado mobile",
+            caption: "El resultado de una prueba, en el teléfono",
+            tall: true,
           },
         ],
       },
@@ -781,15 +800,15 @@ export const site: Site = {
     {
       slug: "mimpronta",
       name: "Mimpronta",
-      lead: "La landing de una agencia de impacto ambiental.",
+      lead: "La landing de una agencia de consultoría e impacto.",
       cover: "/img/mimpronta.jpg",
       coverAlt: "Mimpronta",
       detail: {
-        kicker: "IMPACTO AMBIENTAL",
+        kicker: "CONSULTORÍA · IMPACTO",
         role: "Diseño de interfaz y desarrollo",
         context: "En producción",
         problem: [
-          "Mimpronta es una agencia de impacto ambiental y necesitaba un lugar donde explicar qué hace y promover sus servicios. Hasta entonces no tenía dónde mandar a alguien que quisiera entender su propuesta.",
+          "Mimpronta es una agencia de consultoría y acompañamiento que ayuda a personas, empresas y organizaciones a desarrollar proyectos con propósito, incorporando sostenibilidad, innovación social y estrategias de impacto. Necesitaba un lugar donde explicar qué hace y promover sus servicios, porque hasta entonces no tenía dónde mandar a alguien que quisiera entender su propuesta.",
           "La dificultad no era técnica sino de traducción: la agencia ya tenía una identidad visual fuerte, ilustrada, y había que llevarla a la web sin que perdiera fuerza. Trabajamos de la mano de sus diseñadores para que el resultado fuera funcional y además se sostuviera como pieza gráfica.",
         ],
         built: [
@@ -831,6 +850,215 @@ export const site: Site = {
             src: "/img/proyectos/mimpronta/4.webp",
             alt: "Mimpronta — pantallas",
             caption: "El mapa de pantallas del proyecto",
+          },
+        ],
+      },
+    },
+    // Caso real: sitio del centenario del Colegio San Luis Gonzaga (Mendoza),
+    // desarrollado por el estudio. Contenido tomado del propio sitio
+    // (https://centenario.colegiosanluisgonzaga.edu.ar/).
+    // Imágenes reales en public/img/proyectos/slg-centenario/ (portada, inicio, mobile).
+    {
+      slug: "san-luis-gonzaga-centenario",
+      name: "Centenario San Luis Gonzaga",
+      lead: "Un mapa colaborativo para celebrar los 100 años del colegio con su comunidad.",
+      cover: "/img/proyectos/slg-centenario/portada-slg-centenario.png",
+      coverAlt: "Centenario del Colegio San Luis Gonzaga",
+      detail: {
+        kicker: "EDUCACIÓN · COMUNIDAD",
+        role: "Diseño de producto y desarrollo",
+        context: "En producción para el centenario",
+        // TODO(Dutsiland): validar con el colegio cómo contamos el problema.
+        // Redactado a partir de lo que hace el sitio, no de un brief.
+        problem: [
+          "El Colegio San Luis Gonzaga es uno de los colegios privados más antiguos de Mendoza, con cien años de historia y varias generaciones de egresados repartidas por todos lados. Para el centenario, la efeméride corría el riesgo de quedar en un acto y unas fotos: mucha memoria dispersa, sin un lugar donde juntarla.",
+          "La idea no era publicar una página institucional más, sino darle a la comunidad una forma de participar. Que cada exalumno, familia o docente pudiera dejar su marca y su historia, y que esas marcas juntas contaran los cien años mejor que cualquier texto.",
+        ],
+        built: [
+          {
+            title: "El Mapa del San Lucho",
+            text: "Un mapa donde cada persona de la comunidad agrega su pin y pasa a formar parte de la historia del colegio.",
+          },
+          {
+            title: "Sumar tu pin en dos pasos",
+            text: "Cargar la ubicación y el relato es simple y rápido, pensado para que participe cualquiera, sin fricción.",
+          },
+          {
+            title: "La comunidad, en un solo lugar",
+            text: "Cien años de egresados y familias, reunidos alrededor de una misma efeméride.",
+          },
+          {
+            title: "Hecho por un desarrollador del estudio",
+            text: "El desarrollo estuvo a cargo de Renato, desarrollador de Dutsiland y egresado del colegio, que conocía de adentro lo que el centenario significaba.",
+          },
+        ],
+        links: [
+          {
+            label: "Ver sitio",
+            href: "https://centenario.colegiosanluisgonzaga.edu.ar/",
+          },
+        ],
+        photos: [
+          {
+            src: "/img/proyectos/slg-centenario/portada-slg-centenario.png",
+            alt: "San Luis Gonzaga — portada",
+            caption:
+              "La portada del centenario, con la invitación a sumar un pin",
+          },
+          {
+            src: "/img/proyectos/slg-centenario/inicio-slg-centenario.png",
+            alt: "San Luis Gonzaga — el mapa",
+            caption: "El Mapa del San Lucho, con los pines de la comunidad",
+          },
+          {
+            src: "/img/proyectos/slg-centenario/mobile-slg-centenario.png",
+            alt: "San Luis Gonzaga — en el teléfono",
+            caption: "El mapa colaborativo, en el teléfono",
+            tall: true,
+          },
+        ],
+      },
+    },
+    // Caso real: Uspallata Experience (https://uspallataexperience.com/), sitio de
+    // una experiencia de montaña en Uspallata, Mendoza. Ficha redactada a partir del
+    // relato de la experiencia (travesía Villavicencio–Uspallata, 4x4 + e-bike,
+    // pulpería centenaria y el vino "Quinto Elemento").
+    // TODO(Dutsiland): reemplazar `cover` por una imagen cuadrada del proyecto
+    //   (public/img/uspallata-experience.webp). Hoy apunta a la captura de inicio.
+    {
+      slug: "uspallata-experience",
+      name: "Uspallata Experience",
+      lead: "La web de una experiencia de montaña entre Villavicencio y Uspallata.",
+      cover:
+        "/img/proyectos/uspallata-experience/inicio-uspallata-experience.png",
+      coverAlt: "Uspallata Experience",
+      detail: {
+        kicker: "TURISMO · EXPERIENCIAS",
+        role: "Diseño de interfaz y desarrollo",
+        context: "En producción",
+        problem: [
+          "Uspallata Experience no es una excursión más: es una travesía de alta montaña que recorre los caminos históricos entre Villavicencio y Uspallata, cruza antiguos escenarios mineros y sectores de reserva natural, y combina tramos en 4x4 con sectores exclusivos en e-bike. El cierre es una degustación privada en una pulpería de más de cien años, con un vino —Quinto Elemento— creado solo para esta experiencia.",
+          "Contar todo eso en una web es el desafío: hay que transmitir la naturaleza salvaje, el silencio de la cordillera y el confort premium sin que se lea como un folleto. La página tenía que hacer sentir la travesía antes de reservarla, y dejar clarísimo que se trata de una experiencia única, imposible de encontrar en otro lado.",
+        ],
+        built: [
+          {
+            title: "El relato de la travesía",
+            text: "Los caminos históricos, la reserva natural y la alta montaña, contados en un recorrido que se lee como se vive: naturaleza salvaje y confort premium.",
+          },
+          {
+            title: "4x4 y e-bike, la experiencia distinta",
+            text: "La combinación de tramos en 4x4 con sectores exclusivos en e-bike, presentada como lo que diferencia a esta travesía: más auténtica, más silenciosa y más conectada con el entorno.",
+          },
+          {
+            title: "La pulpería centenaria",
+            text: 'El sitio de Los Cuatro Elementos: una pulpería de más de cien años, restaurada para las degustaciones privadas y locación de la película "Gregoria".',
+          },
+          {
+            title: "Quinto Elemento",
+            text: "El vino creado junto a enólogos de prestigio, pensado exclusivamente para esta experiencia, con su propio espacio dentro del recorrido.",
+          },
+          {
+            title: "Diseño responsive",
+            text: "La misma inmensidad de la cordillera, entera, tanto en escritorio como en el teléfono.",
+          },
+        ],
+        links: [
+          { label: "Ver sitio", href: "https://uspallataexperience.com/" },
+        ],
+        photos: [
+          {
+            src: "/img/proyectos/uspallata-experience/inicio-uspallata-experience.png",
+            alt: "Uspallata Experience — inicio",
+            caption:
+              "La portada: no es una excursión, es una experiencia de montaña",
+          },
+          {
+            src: "/img/proyectos/uspallata-experience/seccion-inicio-uspallata-experience.png",
+            alt: "Uspallata Experience — la travesía",
+            caption:
+              "La travesía: caminos cargados de historia y silencio, entre Villavicencio y Uspallata",
+          },
+          {
+            src: "/img/proyectos/uspallata-experience/seccion-inicio-mobile-uspallata-experience.png",
+            alt: "Uspallata Experience — en el teléfono",
+            caption: "El relato de la experiencia, en el teléfono",
+            tall: true,
+          },
+          {
+            src: "/img/proyectos/uspallata-experience/fotos-mobile-uspallata-experience.png",
+            alt: "Uspallata Experience — galería mobile",
+            caption: "La galería de la alta montaña, en mobile",
+            tall: true,
+          },
+        ],
+      },
+    },
+
+    // Caso real: Depto Mendoza (https://... alojamiento turístico), landing de un
+    // departamento de alquiler temporario en Godoy Cruz, Mendoza, atendido por su
+    // dueña Marcela. Ficha redactada a partir del contenido del sitio (secciones,
+    // reputación en Airbnb, ubicación y presentación de la anfitriona).
+    // Imágenes reales en public/img/proyectos/depto-mendoza/.
+    {
+      slug: "depto-mendoza",
+      name: "Depto Mendoza",
+      lead: "La landing de un departamento de alquiler temporario en Godoy Cruz, Mendoza.",
+      cover: "/img/proyectos/depto-mendoza/inicio-depto-mendoza.png",
+      coverAlt: "Depto Mendoza",
+      detail: {
+        kicker: "TURISMO · ALOJAMIENTO",
+        role: "Diseño de interfaz y desarrollo",
+        context: "En producción",
+        problem: [
+          "Marcela alquila un departamento amplio y residencial en Gobernador Benegas, Godoy Cruz, y lo atiende ella misma. El problema no era técnico: quien busca dónde hospedarse en Mendoza necesita confiar antes de reservar, y una publicación suelta en una plataforma no alcanza para transmitir cómo es el lugar ni quién lo recibe.",
+          "La idea no era armar otra plataforma de alquileres, sino una landing que genere confianza para reservar un alojamiento específico: que muestre los espacios, la ubicación y la reputación en Airbnb, y que ponga la cara de la anfitriona por delante para que la consulta salga con seguridad.",
+        ],
+        built: [
+          {
+            title: "El departamento, espacio por espacio",
+            text: "Comedor, cocina y patio, baño y las dos habitaciones, mostrados con fotografías para que se entienda cómo es antes de reservar.",
+          },
+          {
+            title: "La anfitriona, por delante",
+            text: "El perfil y la experiencia de Marcela como anfitriona de Airbnb, para que la reserva se haga con una persona y no con un aviso.",
+          },
+          {
+            title: "Reputación que respalda",
+            text: "La valoración 5/5 y las referencias a Airbnb, visibles para dar confianza a quien todavía no reservó.",
+          },
+          {
+            title: "Ubicación y lugares cercanos",
+            text: "En Gobernador Benegas, cerca del Parque San Vicente y Palmares, y a unos 15 minutos en auto del centro de Mendoza.",
+          },
+          {
+            title: "El cierre por consulta directa",
+            text: "Los canales de contacto y redes, para consultar o reservar el alojamiento sin fricción.",
+          },
+        ],
+        links: [],
+        photos: [
+          {
+            src: "/img/proyectos/depto-mendoza/inicio-depto-mendoza.png",
+            alt: "Depto Mendoza — inicio",
+            caption: "La portada: el departamento y su propuesta principal",
+          },
+          {
+            src: "/img/proyectos/depto-mendoza/ubicacion-depto-mendoza.png",
+            alt: "Depto Mendoza — ubicación",
+            caption:
+              "La ubicación en Godoy Cruz y los lugares cercanos al alojamiento",
+          },
+          {
+            src: "/img/proyectos/depto-mendoza/fotos-mobile-depto-mendoza.png",
+            alt: "Depto Mendoza — los espacios en el teléfono",
+            caption: "Los espacios del departamento, en el teléfono",
+            tall: true,
+          },
+          {
+            src: "/img/proyectos/depto-mendoza/resenias-mobile-depto-mendoza.png",
+            alt: "Depto Mendoza — reseñas en el teléfono",
+            caption: "Las reseñas y la valoración 5/5, en el teléfono",
+            tall: true,
           },
         ],
       },
@@ -976,202 +1204,202 @@ export const site: Site = {
         ],
       },
     },
-    {
-      slug: "centro-aconcagua",
-      name: "Centro Médico Aconcagua",
-      lead: "Turnos, historia clínica y receta digital para catorce consultorios.",
-      cover: "/img/centro-aconcagua.webp",
-      coverAlt: "Centro Médico Aconcagua",
-      demo: true,
-      detail: {
-        kicker: "SALUD",
-        role: "Diseño de producto y desarrollo",
-        context: "Caso de demostración",
-        problem: [
-          "En un centro con ocho especialidades, el turno se pide por teléfono, se anota en un cuaderno y se confirma por WhatsApp desde tres celulares distintos. Se superponen, se pierden y el paciente se entera cuando ya está en la sala de espera. La historia clínica, mientras tanto, vive en carpetas: cada profesional ve lo suyo y nadie ve el conjunto.",
-          "El pedido no era digitalizar papeles sino que las tres cosas se toquen: que el turno sepa a qué profesional y a qué consultorio va, que la consulta escriba en la misma historia que van a leer los demás, y que la receta salga firmada de ahí sin volver a tipear nada.",
-        ],
-        built: [
-          {
-            title: "Agenda por profesional y consultorio",
-            text: "La semana completa, con sobreturnos, ausencias y los huecos reales que quedan libres.",
-          },
-          {
-            title: "Historia clínica única",
-            text: "Una sola línea de tiempo por paciente: consultas, estudios y medicación activa, la escriba quien la escriba.",
-          },
-          {
-            title: "Receta digital firmada",
-            text: "Sale de la consulta, le llega al paciente al celular y la farmacia la valida con un código. Al dispensarse queda marcada y no se puede usar dos veces.",
-          },
-          {
-            title: "Sala de espera en pantalla",
-            text: "A quién se está llamando, qué consultorio está libre y cuánta demora hay, en el hall y en recepción.",
-          },
-          {
-            title: "Obras sociales",
-            text: "Los datos del afiliado y la cobertura se cargan una vez y viajan al turno, a la consulta y a la receta.",
-          },
-        ],
-        links: [],
-        photos: [
-          {
-            src: "/img/proyectos/centro-aconcagua/1.webp",
-            alt: "Aconcagua — agenda",
-            caption:
-              "La agenda de la semana, con las ocho especialidades en la misma grilla",
-          },
-          {
-            src: "/img/proyectos/centro-aconcagua/2.webp",
-            alt: "Aconcagua — historia clínica",
-            caption:
-              "La historia clínica: una sola línea de tiempo por paciente",
-          },
-          {
-            src: "/img/proyectos/centro-aconcagua/3.webp",
-            alt: "Aconcagua — receta",
-            caption:
-              "La receta digital, lista para firmar y enviar al paciente",
-          },
-          {
-            src: "/img/proyectos/centro-aconcagua/4.webp",
-            alt: "Aconcagua — sala de espera",
-            caption:
-              "La sala de espera: a quién se llama y qué consultorio está libre",
-          },
-        ],
-      },
-    },
-    {
-      slug: "instituto-ledesma",
-      name: "Instituto Ledesma",
-      lead: "Cursadas, asistencia por QR y boletín digital para 1.400 alumnos.",
-      cover: "/img/instituto-ledesma.webp",
-      coverAlt: "Instituto Ledesma",
-      demo: true,
-      detail: {
-        kicker: "EDUCACIÓN",
-        role: "Diseño de producto y desarrollo",
-        context: "Caso de demostración",
-        problem: [
-          "Tomar asistencia a mano en una comisión de cuarenta alumnos cuesta diez minutos de clase, y después hay que pasarla a una planilla que alguien va a consolidar a fin de mes. Las notas viven en el cuaderno de cada docente y el boletín se arma a mano, materia por materia, cuando el cuatrimestre ya terminó.",
-          "Lo grave no es el trabajo administrativo: es que el alumno que se está por perder el cuatrimestre se detecta tarde. Cuando la asistencia y las notas están en dos lugares distintos, nadie cruza las dos cosas hasta que ya no hay margen para hacer algo.",
-        ],
-        built: [
-          {
-            title: "Asistencia por código",
-            text: "El docente muestra un código que cambia cada minuto y el alumno lo escanea. No se puede pasar por mensaje, y el registro queda cerrado y firmado.",
-          },
-          {
-            title: "Cursadas del docente",
-            text: "Cada comisión con su avance del programa, su asistencia y su promedio, en una sola pantalla.",
-          },
-          {
-            title: "Libro de notas",
-            text: "Parciales, trabajos y recuperatorios se cargan una vez y el boletín se arma solo con esas columnas.",
-          },
-          {
-            title: "Detección de alumnos en riesgo",
-            text: "Cruza asistencia y notas y marca al que se está por perder el cuatrimestre mientras todavía hay margen.",
-          },
-          {
-            title: "Aulas y horarios",
-            text: "La grilla de aulas evita las superposiciones antes de que pasen, no después.",
-          },
-        ],
-        links: [],
-        photos: [
-          {
-            src: "/img/proyectos/instituto-ledesma/1.webp",
-            alt: "Ledesma — cursadas",
-            caption:
-              "Las cursadas del docente, con el avance del programa de cada una",
-          },
-          {
-            src: "/img/proyectos/instituto-ledesma/2.webp",
-            alt: "Ledesma — asistencia",
-            caption:
-              "La asistencia en curso: el código cambia cada minuto y el registro se actualiza solo",
-          },
-          {
-            src: "/img/proyectos/instituto-ledesma/3.webp",
-            alt: "Ledesma — notas",
-            caption:
-              "El libro de notas, del que sale el boletín sin volver a cargar nada",
-          },
-          {
-            src: "/img/proyectos/instituto-ledesma/4.webp",
-            alt: "Ledesma — riesgo",
-            caption:
-              "Los alumnos en riesgo, detectados cruzando asistencia y notas",
-          },
-        ],
-      },
-    },
-    {
-      slug: "campo-abierto",
-      name: "Campo Abierto",
-      lead: "Seguimiento de lotes, campañas y aplicaciones para un establecimiento agrícola.",
-      cover: "/img/campo-abierto.webp",
-      coverAlt: "Campo Abierto",
-      demo: true,
-      detail: {
-        kicker: "AGRO",
-        role: "Relevamiento, diseño y desarrollo",
-        context: "Caso de demostración",
-        problem: [
-          "Un establecimiento de tres mil hectáreas toma decisiones sobre ochenta lotes que no se parecen entre sí, y el historial de cada uno vive en un cuaderno, en el celular del ingeniero y en la memoria del encargado. Qué se sembró hace tres campañas, con qué se aplicó y cuánto rindió es una pregunta que lleva media hora contestar y termina en una estimación.",
-          "Sin ese historial no hay comparación posible: no se sabe qué lote conviene rotar, si el gasto en insumos se justificó o si el rinde bueno fue del manejo o de la lluvia. Lo que hacía falta era que cada labor quede registrada donde se hace, con su costo, y que el resultado se pueda mirar campaña contra campaña.",
-        ],
-        built: [
-          {
-            title: "Mapa de lotes",
-            text: "Cada lote con su cultivo, su estado fenológico y su superficie, dibujado sobre el campo real.",
-          },
-          {
-            title: "Registro de aplicaciones",
-            text: "Producto, dosis, responsable y receta agronómica firmada, cargados desde el celular en el lote.",
-          },
-          {
-            title: "Clima y agua útil",
-            text: "Los milímetros de la estación propia se cargan solos al lote y alimentan el agua útil de cada suelo.",
-          },
-          {
-            title: "Rinde por lote y por campaña",
-            text: "Cuatro campañas comparables, con el margen bruto calculado sobre el costo real de cada labor.",
-          },
-          {
-            title: "Trabajo sin señal",
-            text: "La app guarda lo que se carga en el campo y lo sincroniza cuando vuelve a haber señal.",
-          },
-        ],
-        links: [],
-        photos: [
-          {
-            src: "/img/proyectos/campo-abierto/1.webp",
-            alt: "Campo Abierto — mapa",
-            caption: "El mapa de lotes, con el cultivo y el estado de cada uno",
-          },
-          {
-            src: "/img/proyectos/campo-abierto/2.webp",
-            alt: "Campo Abierto — aplicaciones",
-            caption:
-              "Las aplicaciones registradas, con producto, dosis y receta firmada",
-          },
-          {
-            src: "/img/proyectos/campo-abierto/3.webp",
-            alt: "Campo Abierto — clima",
-            caption:
-              "Clima y agua útil: los milímetros se cargan solos al lote",
-          },
-          {
-            src: "/img/proyectos/campo-abierto/4.webp",
-            alt: "Campo Abierto — rindes",
-            caption: "El rinde por lote, comparable campaña contra campaña",
-          },
-        ],
-      },
-    },
+    // {
+    //   slug: "centro-aconcagua",
+    //   name: "Centro Médico Aconcagua",
+    //   lead: "Turnos, historia clínica y receta digital para catorce consultorios.",
+    //   cover: "/img/centro-aconcagua.webp",
+    //   coverAlt: "Centro Médico Aconcagua",
+    //   demo: true,
+    //   detail: {
+    //     kicker: "SALUD",
+    //     role: "Diseño de producto y desarrollo",
+    //     context: "Caso de demostración",
+    //     problem: [
+    //       "En un centro con ocho especialidades, el turno se pide por teléfono, se anota en un cuaderno y se confirma por WhatsApp desde tres celulares distintos. Se superponen, se pierden y el paciente se entera cuando ya está en la sala de espera. La historia clínica, mientras tanto, vive en carpetas: cada profesional ve lo suyo y nadie ve el conjunto.",
+    //       "El pedido no era digitalizar papeles sino que las tres cosas se toquen: que el turno sepa a qué profesional y a qué consultorio va, que la consulta escriba en la misma historia que van a leer los demás, y que la receta salga firmada de ahí sin volver a tipear nada.",
+    //     ],
+    //     built: [
+    //       {
+    //         title: "Agenda por profesional y consultorio",
+    //         text: "La semana completa, con sobreturnos, ausencias y los huecos reales que quedan libres.",
+    //       },
+    //       {
+    //         title: "Historia clínica única",
+    //         text: "Una sola línea de tiempo por paciente: consultas, estudios y medicación activa, la escriba quien la escriba.",
+    //       },
+    //       {
+    //         title: "Receta digital firmada",
+    //         text: "Sale de la consulta, le llega al paciente al celular y la farmacia la valida con un código. Al dispensarse queda marcada y no se puede usar dos veces.",
+    //       },
+    //       {
+    //         title: "Sala de espera en pantalla",
+    //         text: "A quién se está llamando, qué consultorio está libre y cuánta demora hay, en el hall y en recepción.",
+    //       },
+    //       {
+    //         title: "Obras sociales",
+    //         text: "Los datos del afiliado y la cobertura se cargan una vez y viajan al turno, a la consulta y a la receta.",
+    //       },
+    //     ],
+    //     links: [],
+    //     photos: [
+    //       {
+    //         src: "/img/proyectos/centro-aconcagua/1.webp",
+    //         alt: "Aconcagua — agenda",
+    //         caption:
+    //           "La agenda de la semana, con las ocho especialidades en la misma grilla",
+    //       },
+    //       {
+    //         src: "/img/proyectos/centro-aconcagua/2.webp",
+    //         alt: "Aconcagua — historia clínica",
+    //         caption:
+    //           "La historia clínica: una sola línea de tiempo por paciente",
+    //       },
+    //       {
+    //         src: "/img/proyectos/centro-aconcagua/3.webp",
+    //         alt: "Aconcagua — receta",
+    //         caption:
+    //           "La receta digital, lista para firmar y enviar al paciente",
+    //       },
+    //       {
+    //         src: "/img/proyectos/centro-aconcagua/4.webp",
+    //         alt: "Aconcagua — sala de espera",
+    //         caption:
+    //           "La sala de espera: a quién se llama y qué consultorio está libre",
+    //       },
+    //     ],
+    //   },
+    // },
+    // {
+    //   slug: "instituto-ledesma",
+    //   name: "Instituto Ledesma",
+    //   lead: "Cursadas, asistencia por QR y boletín digital para 1.400 alumnos.",
+    //   cover: "/img/instituto-ledesma.webp",
+    //   coverAlt: "Instituto Ledesma",
+    //   demo: true,
+    //   detail: {
+    //     kicker: "EDUCACIÓN",
+    //     role: "Diseño de producto y desarrollo",
+    //     context: "Caso de demostración",
+    //     problem: [
+    //       "Tomar asistencia a mano en una comisión de cuarenta alumnos cuesta diez minutos de clase, y después hay que pasarla a una planilla que alguien va a consolidar a fin de mes. Las notas viven en el cuaderno de cada docente y el boletín se arma a mano, materia por materia, cuando el cuatrimestre ya terminó.",
+    //       "Lo grave no es el trabajo administrativo: es que el alumno que se está por perder el cuatrimestre se detecta tarde. Cuando la asistencia y las notas están en dos lugares distintos, nadie cruza las dos cosas hasta que ya no hay margen para hacer algo.",
+    //     ],
+    //     built: [
+    //       {
+    //         title: "Asistencia por código",
+    //         text: "El docente muestra un código que cambia cada minuto y el alumno lo escanea. No se puede pasar por mensaje, y el registro queda cerrado y firmado.",
+    //       },
+    //       {
+    //         title: "Cursadas del docente",
+    //         text: "Cada comisión con su avance del programa, su asistencia y su promedio, en una sola pantalla.",
+    //       },
+    //       {
+    //         title: "Libro de notas",
+    //         text: "Parciales, trabajos y recuperatorios se cargan una vez y el boletín se arma solo con esas columnas.",
+    //       },
+    //       {
+    //         title: "Detección de alumnos en riesgo",
+    //         text: "Cruza asistencia y notas y marca al que se está por perder el cuatrimestre mientras todavía hay margen.",
+    //       },
+    //       {
+    //         title: "Aulas y horarios",
+    //         text: "La grilla de aulas evita las superposiciones antes de que pasen, no después.",
+    //       },
+    //     ],
+    //     links: [],
+    //     photos: [
+    //       {
+    //         src: "/img/proyectos/instituto-ledesma/1.webp",
+    //         alt: "Ledesma — cursadas",
+    //         caption:
+    //           "Las cursadas del docente, con el avance del programa de cada una",
+    //       },
+    //       {
+    //         src: "/img/proyectos/instituto-ledesma/2.webp",
+    //         alt: "Ledesma — asistencia",
+    //         caption:
+    //           "La asistencia en curso: el código cambia cada minuto y el registro se actualiza solo",
+    //       },
+    //       {
+    //         src: "/img/proyectos/instituto-ledesma/3.webp",
+    //         alt: "Ledesma — notas",
+    //         caption:
+    //           "El libro de notas, del que sale el boletín sin volver a cargar nada",
+    //       },
+    //       {
+    //         src: "/img/proyectos/instituto-ledesma/4.webp",
+    //         alt: "Ledesma — riesgo",
+    //         caption:
+    //           "Los alumnos en riesgo, detectados cruzando asistencia y notas",
+    //       },
+    //     ],
+    //   },
+    // },
+    // {
+    //   slug: "campo-abierto",
+    //   name: "Campo Abierto",
+    //   lead: "Seguimiento de lotes, campañas y aplicaciones para un establecimiento agrícola.",
+    //   cover: "/img/campo-abierto.webp",
+    //   coverAlt: "Campo Abierto",
+    //   demo: true,
+    //   detail: {
+    //     kicker: "AGRO",
+    //     role: "Relevamiento, diseño y desarrollo",
+    //     context: "Caso de demostración",
+    //     problem: [
+    //       "Un establecimiento de tres mil hectáreas toma decisiones sobre ochenta lotes que no se parecen entre sí, y el historial de cada uno vive en un cuaderno, en el celular del ingeniero y en la memoria del encargado. Qué se sembró hace tres campañas, con qué se aplicó y cuánto rindió es una pregunta que lleva media hora contestar y termina en una estimación.",
+    //       "Sin ese historial no hay comparación posible: no se sabe qué lote conviene rotar, si el gasto en insumos se justificó o si el rinde bueno fue del manejo o de la lluvia. Lo que hacía falta era que cada labor quede registrada donde se hace, con su costo, y que el resultado se pueda mirar campaña contra campaña.",
+    //     ],
+    //     built: [
+    //       {
+    //         title: "Mapa de lotes",
+    //         text: "Cada lote con su cultivo, su estado fenológico y su superficie, dibujado sobre el campo real.",
+    //       },
+    //       {
+    //         title: "Registro de aplicaciones",
+    //         text: "Producto, dosis, responsable y receta agronómica firmada, cargados desde el celular en el lote.",
+    //       },
+    //       {
+    //         title: "Clima y agua útil",
+    //         text: "Los milímetros de la estación propia se cargan solos al lote y alimentan el agua útil de cada suelo.",
+    //       },
+    //       {
+    //         title: "Rinde por lote y por campaña",
+    //         text: "Cuatro campañas comparables, con el margen bruto calculado sobre el costo real de cada labor.",
+    //       },
+    //       {
+    //         title: "Trabajo sin señal",
+    //         text: "La app guarda lo que se carga en el campo y lo sincroniza cuando vuelve a haber señal.",
+    //       },
+    //     ],
+    //     links: [],
+    //     photos: [
+    //       {
+    //         src: "/img/proyectos/campo-abierto/1.webp",
+    //         alt: "Campo Abierto — mapa",
+    //         caption: "El mapa de lotes, con el cultivo y el estado de cada uno",
+    //       },
+    //       {
+    //         src: "/img/proyectos/campo-abierto/2.webp",
+    //         alt: "Campo Abierto — aplicaciones",
+    //         caption:
+    //           "Las aplicaciones registradas, con producto, dosis y receta firmada",
+    //       },
+    //       {
+    //         src: "/img/proyectos/campo-abierto/3.webp",
+    //         alt: "Campo Abierto — clima",
+    //         caption:
+    //           "Clima y agua útil: los milímetros se cargan solos al lote",
+    //       },
+    //       {
+    //         src: "/img/proyectos/campo-abierto/4.webp",
+    //         alt: "Campo Abierto — rindes",
+    //         caption: "El rinde por lote, comparable campaña contra campaña",
+    //       },
+    //     ],
+    //   },
+    // },
   ],
 
   footer: {

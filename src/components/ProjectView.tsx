@@ -1,33 +1,56 @@
 /* eslint-disable @next/next/no-img-element */
-import Link from 'next/link'
-import type { Project, ProjectDetail } from '@/content/site'
-import { site } from '@/content/site'
-import Button, { ArrowDiagonal, DIcon } from './Button'
+import Link from "next/link";
+import type { Project, ProjectDetail } from "@/content/site";
+import { site } from "@/content/site";
+import Button, { ArrowDiagonal, DIcon } from "./Button";
 
 type ProjectViewProps = {
-  project: Project & { detail: ProjectDetail }
+  project: Project & { detail: ProjectDetail };
   /** El que se ofrece al final, para seguir mirando */
-  next: Project
-}
+  next: Project;
+};
 
 // Ficha de proyecto. Usa el mismo vocabulario que la landing: la D negra como
 // contenedor, el antetítulo con la D roja, las pastillas crema y el botón.
 // A diferencia de la home, acá no se fija nada: es un documento que scrollea y
 // cada bloque se revela al entrar (ver PageExperience).
 export default function ProjectView({ project, next }: ProjectViewProps) {
-  const { detail } = project
-  const v = site.projectView
-  // La primera captura hace de imagen de portada
-  const portada = detail.photos[0]
+  const { detail } = project;
+  const v = site.projectView;
+
+  // Las capturas apaisadas van solas, a ancho completo. Las verticales (celular)
+  // se agrupan: las que vienen seguidas caen en una misma fila, lado a lado, en vez
+  // de quedar cada una suelta con un vacío enorme al costado.
+  type PhotoGroup =
+    | { kind: "wide"; photo: (typeof detail.photos)[number] }
+    | { kind: "tall"; photos: typeof detail.photos };
+  const photoGroups = detail.photos.reduce<PhotoGroup[]>((groups, photo) => {
+    if (!photo.tall) {
+      groups.push({ kind: "wide", photo });
+      return groups;
+    }
+    const last = groups[groups.length - 1];
+    if (last && last.kind === "tall") last.photos.push(photo);
+    else groups.push({ kind: "tall", photos: [photo] });
+    return groups;
+  }, []);
 
   return (
     <main className="project">
       {/* Portada: la D negra con el nombre, como el hero de la home */}
       {/* --con-captura: la única portada que reserva la derecha, porque acá va la captura */}
-      <section className="project-hero project-hero--con-captura" data-set-section="dark">
+      <section
+        className="project-hero project-hero--con-captura"
+        data-set-section="dark"
+      >
         <div className="project-hero__shape">
           <div className="project-hero__inner">
-            <Link href="/proyectos" className="project-back btn-underlined" data-cursor-style="hovered" data-menu-close>
+            <Link
+              href="/proyectos"
+              className="project-back btn-underlined"
+              data-cursor-style="hovered"
+              data-menu-close
+            >
               <span>← {v.back}</span>
             </Link>
 
@@ -35,17 +58,13 @@ export default function ProjectView({ project, next }: ProjectViewProps) {
               <DIcon />
               <span>{detail.kicker}</span>
             </p>
-            <h1 className="project-title split-words">{project.name}</h1>
+            <h1 className="project-title">{project.name}</h1>
             <p className="project-lead">{project.lead}</p>
 
             <dl className="project-meta">
               <div className="project-meta__item">
                 <dt>Qué hicimos</dt>
                 <dd>{detail.role}</dd>
-              </div>
-              <div className="project-meta__item">
-                <dt>Contexto</dt>
-                <dd>{detail.context}</dd>
               </div>
             </dl>
 
@@ -67,13 +86,6 @@ export default function ProjectView({ project, next }: ProjectViewProps) {
               </div>
             ) : null}
           </div>
-
-          {/* La captura de portada: el lado derecho de la D era un vacío negro */}
-          {portada ? (
-            <div className="project-hero__shot" aria-hidden="true">
-              <img src={portada.src} alt="" />
-            </div>
-          ) : null}
         </div>
       </section>
 
@@ -105,14 +117,19 @@ export default function ProjectView({ project, next }: ProjectViewProps) {
               <DIcon />
               <span>{v.builtKicker}</span>
             </p>
-            <h2 className="project-block__title project-block__title--light split-words" data-reveal>
+            <h2
+              className="project-block__title project-block__title--light split-words"
+              data-reveal
+            >
               {v.builtTitle}
             </h2>
 
             <ol className="project-built__list">
               {detail.built.map((item, i) => (
                 <li className="built-item" key={item.title} data-reveal>
-                  <span className="built-item__n">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="built-item__n">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
                   <div className="built-item__body">
                     <h3 className="built-item__title">{item.title}</h3>
                     <p className="built-item__text">{item.text}</p>
@@ -137,12 +154,38 @@ export default function ProjectView({ project, next }: ProjectViewProps) {
         </div>
 
         <div className="project-gallery">
-          {detail.photos.map((photo) => (
-            <figure className="shot" key={photo.src} data-reveal data-cursor-style="hovered-small">
-              <img src={photo.src} alt={photo.alt} loading="lazy" />
-              <figcaption>{photo.caption}</figcaption>
-            </figure>
-          ))}
+          {photoGroups.map((group) =>
+            group.kind === "wide" ? (
+              <figure
+                className="shot"
+                key={group.photo.src}
+                data-reveal
+                data-cursor-style="hovered-small"
+              >
+                <img
+                  src={group.photo.src}
+                  alt={group.photo.alt}
+                  loading="lazy"
+                />
+              </figure>
+            ) : (
+              <div
+                className="shot-row"
+                key={group.photos.map((p) => p.src).join("|")}
+                data-reveal
+              >
+                {group.photos.map((photo) => (
+                  <figure
+                    className="shot shot--tall"
+                    key={photo.src}
+                    data-cursor-style="hovered-small"
+                  >
+                    <img src={photo.src} alt={photo.alt} loading="lazy" />
+                  </figure>
+                ))}
+              </div>
+            ),
+          )}
         </div>
       </section>
 
@@ -168,5 +211,5 @@ export default function ProjectView({ project, next }: ProjectViewProps) {
         </div>
       </section>
     </main>
-  )
+  );
 }

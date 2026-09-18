@@ -2855,7 +2855,7 @@ body.menu-leave .scroll-top {
    portada. En /sobre, /proyectos y /contacto no hay nada ahí, así que reservarla sólo
    servía para apretar el título contra la izquierda. */
 .project-hero--con-captura .project-hero__inner {
-  padding-right: min(86rem, 50%);
+  padding-right: min(86rem, 30%);
 }
 /* --btn-color es lo que pinta el texto y el subrayado de .btn-underlined. Sin él
    cae al negro por defecto y queda negro sobre negro. */
@@ -3048,35 +3048,45 @@ body.menu-leave .scroll-top {
   color: var(--black-1);
   padding: 18rem 0 16rem;
 }
+/* Galería en columna: cada captura ocupa el ancho de la sección y arranca alineada
+   con el título (mismo padding lateral que .project-block). Las apaisadas van a ancho
+   completo; las verticales (celular) se limitan para que no se agranden de más. */
 .project-gallery {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
   margin-top: 8rem;
   padding-left: 21rem;
   padding-right: 21rem;
 }
-/* Con una sola captura ocupa el ancho completo, así no queda un hueco al costado */
-.project-gallery .shot:only-child {
-  grid-column: 1 / -1;
-}
 .shot {
   margin: 0;
+  display: block;
 }
 .shot img {
   width: 100%;
   height: auto;
   display: block;
-  border-radius: 2.4rem;
+  border-radius: 0.8rem;
   background: var(--gray-2);
   border: 1px solid rgba(10, 10, 10, 0.12);
 }
-.shot figcaption {
-  margin-top: 1.8rem;
-  font-size: 2rem;
-  line-height: 1.35;
-  font-weight: 600;
-  opacity: 0.7;
+/* Fila de capturas verticales (celular): las que vienen seguidas van juntas, lado a
+   lado y alineadas a la izquierda, en vez de quedar cada una sola con un vacío al lado. */
+.shot-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 3rem;
+}
+/* Dentro de la fila, cada vertical se limita por alto y conserva su proporción. */
+.shot-row .shot--tall {
+  flex: 0 1 auto;
+}
+.shot-row .shot--tall img {
+  width: auto;
+  max-width: 100%;
+  max-height: 80vh;
 }
 
 /* ---------- siguiente proyecto ---------- */
@@ -3225,12 +3235,14 @@ body.menu-leave .scroll-top {
     padding: 12rem 0 10rem;
   }
   .project-gallery {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 4rem;
+    gap: 2rem;
     margin-top: 5rem;
   }
-  .shot figcaption {
-    font-size: 1.9rem;
+  .shot-row {
+    gap: 2rem;
+  }
+  .shot-row .shot--tall img {
+    max-height: 50rem;
   }
   .project-next {
     padding: 12rem 0 14rem;
@@ -3273,6 +3285,18 @@ body.menu-leave .scroll-top {
   }
   .project-built .project-block {
     padding-right: 9rem;
+  }
+  /* En pantallas angostas dos capturas de celular lado a lado quedan diminutas:
+     dejamos que la fila reparta el ancho para que ocupen lo que se pueda. */
+  .shot-row {
+    gap: 2rem;
+  }
+  .shot-row .shot--tall {
+    flex: 1 1 0;
+  }
+  .shot-row .shot--tall img {
+    width: 100%;
+    max-height: none;
   }
 }
 
