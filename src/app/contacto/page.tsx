@@ -4,7 +4,7 @@ import PageShell from "@/components/PageShell";
 import ContactForm from "@/components/ContactForm";
 import { ArrowDiagonal, DIcon } from "@/components/Button";
 
-const title = `Contacto — ${site.shortName}`;
+const title = `Contacto`;
 
 export const metadata: Metadata = {
   title,

@@ -5,7 +5,7 @@ import { site } from "@/content/site";
 import PageShell from "@/components/PageShell";
 import { ArrowDiagonal, DIcon } from "@/components/Button";
 
-const title = `Proyectos — ${site.shortName}`;
+const title = `Proyectos`;
 
 export const metadata: Metadata = {
   title,

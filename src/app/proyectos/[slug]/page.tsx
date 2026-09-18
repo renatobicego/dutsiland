@@ -30,7 +30,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const project = buscar(slug);
   if (!project) return { title: site.name };
-  const title = `${project.name} — ${site.shortName}`;
+  const title = `${project.name}`;
   return {
     title,
     description: project.lead,
