@@ -1020,22 +1020,24 @@ export const site: Site = {
           },
           {
             title: "La anfitriona, por delante",
-            text: "El perfil y la experiencia de Marcela como anfitriona de Airbnb, para que la reserva se haga con una persona y no con un aviso.",
+            text: "El perfil de Marcela —odontóloga de Las Heras, anfitriona de Airbnb— para que la reserva se haga con una persona y no con un aviso.",
           },
           {
             title: "Reputación que respalda",
-            text: "La valoración 5/5 y las referencias a Airbnb, visibles para dar confianza a quien todavía no reservó.",
+            text: 'La valoración 5/5 y el sello "Favorito entre huéspedes" de Airbnb —el alojamiento está entre el 10% mejor del mundo—, visibles para dar confianza a quien todavía no reservó.',
           },
           {
             title: "Ubicación y lugares cercanos",
-            text: "En Gobernador Benegas, cerca del Parque San Vicente y Palmares, y a unos 15 minutos en auto del centro de Mendoza.",
+            text: "Sobre Hilario Cuadros y Perito Moreno, en el barrio Gobernador Benegas: cerca del Parque San Vicente y el centro comercial Palmares, y a 15 minutos en auto del centro de Mendoza.",
           },
           {
             title: "El cierre por consulta directa",
             text: "Los canales de contacto y redes, para consultar o reservar el alojamiento sin fricción.",
           },
         ],
-        links: [],
+        links: [
+          { label: "Ver sitio", href: "https://alquilerdeptomendoza.com.ar/" },
+        ],
         photos: [
           {
             src: "/img/proyectos/depto-mendoza/inicio-depto-mendoza.png",
