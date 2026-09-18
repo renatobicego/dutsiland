@@ -1,16 +1,15 @@
-import type { ReactNode } from 'react'
-import Header from './Header'
-import Footer from './Footer'
-import Cookies from './Cookies'
-import ScrollTop from './ScrollTop'
-import DMark from './DMark'
-import PageExperience from './PageExperience'
+import type { ReactNode } from "react";
+import Header from "./Header";
+import Footer from "./Footer";
+import Cookies from "./Cookies";
+import DMark from "./DMark";
+import PageExperience from "./PageExperience";
 
 export type PageShellProps = {
   /** Id del contenedor que mueve el scroll suave. Uno por página. */
-  id: string
-  children: ReactNode
-}
+  id: string;
+  children: ReactNode;
+};
 
 // El armazón que comparten todas las páginas que no son la home: preloader, cursor,
 // header, el contenedor del scroll suave, footer y la experiencia GSAP.
@@ -40,9 +39,8 @@ export default function PageShell({ id, children }: PageShellProps) {
         </div>
       </div>
 
-      <ScrollTop />
       <Cookies />
       <PageExperience content={`#${id}`} />
     </>
-  )
+  );
 }

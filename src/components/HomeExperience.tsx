@@ -185,6 +185,13 @@ type Layout = {
   clip: Record<ClipName, ClipState>;
   /** Cómo sale de escena la D del logo cuando arranca el scroll */
   leftExit: gsap.TweenVars;
+  /** Fase A: cuánto dura la salida de la D del logo. Más corto = desaparece antes.
+   *  Default 1. */
+  leftExitDuration?: number;
+  /** Fase A: en qué punto de la timeline empieza a crecer la D derecha con la frase.
+   *  Default 0 (a la par de la salida del logo). Atrasarlo separa las dos animaciones
+   *  para que no se pisen. */
+  rightGrowAt?: number;
   /** De dónde a dónde se mueve el lockup durante la intro */
   logoFrom: gsap.TweenVars;
   logoTo: gsap.TweenVars;
@@ -213,6 +220,11 @@ const MOBILE: Layout = {
   // Se va hacia abajo mientras el blob de arriba baja encima: el mismo cruce que en
   // apaisado, donde una sale por la izquierda y la otra crece desde la derecha.
   leftExit: { yPercent: 70 },
+  // Fase A: la D del logo se va más rápido (0.6 en vez de 1) y la frase recién empieza a
+  // crecer a mitad de esa salida (0.35), no a la par. Así el logo ya está saliendo de
+  // escena cuando la frase crece y las dos siluetas no se pisan en el medio.
+  leftExitDuration: 0.6,
+  rightGrowAt: 0.35,
   // El lockup arranca centrado en la pantalla —para que el paso desde la D del loader
   // sea un fundido— y termina centrado en el blob de abajo, que va del 48% al 97%.
   logoFrom: { top: "50%" },
@@ -428,7 +440,7 @@ function playHeroIntro(
 /* La secuencia de "qué hacemos" se escribió con su propio ritmo de scroll (~485px por
    unidad). Metida en la timeline del hero, que corre a ~900px por unidad, hay que
    comprimirla con timeScale para que cada paso cueste el mismo scroll que antes. */
-const SERVICES_TIMESCALE = 1.85;
+const SERVICES_TIMESCALE = 1.15;
 
 /* Posición en la timeline del hero desde la que cada ancla tiene sentido: el menú las
    lee de data-hero-progress para saber a qué altura del tramo fijado saltar. */
@@ -466,9 +478,11 @@ function initHeroScroll(
   // franja del header es crema de un lado y negra del otro, y el logo o el botón —que
   // se pintan de un solo tono— se pierden encima. La tarjeta entra apurada y la D se
   // toma su tiempo para irse, así siempre hay una de las dos cubriendo.
+  const leftExitDur = layout.leftExitDuration ?? 1;
+  const rightGrowAt = layout.rightGrowAt ?? 0;
   t.to(
     ".blob-left",
-    { ...layout.leftExit, duration: 1, ease: layout.exitEase },
+    { ...layout.leftExit, duration: leftExitDur, ease: layout.exitEase },
     0,
   );
   t.add(
@@ -481,7 +495,7 @@ function initHeroScroll(
         ease: layout.enterEase,
       },
     ),
-    0,
+    rightGrowAt,
   );
   t.to(".hero-headline", { autoAlpha: 0, duration: 0.35, ease: "none" }, 0);
   t.to(".hero-mail", { autoAlpha: 0, duration: 0.3, ease: "none" }, 0);
@@ -936,9 +950,12 @@ export default function HomeExperience() {
         if (smoother) smoother.paused(false);
         else {
           document.documentElement.classList.remove("intro-running");
-          // Toma el control del scroll táctil: evita el tirón de la barra de
-          // direcciones y mantiene el pin estable mientras se arrastra con el dedo.
-          ScrollTrigger.normalizeScroll(true);
+          // Scroll táctil NATIVO, sin normalizeScroll: normalizeScroll interceptaba el
+          // gesto y lo movía por JS, así el navegador no recibía el scroll nativo y
+          // NUNCA colapsaba su barra de direcciones. Dejándolo nativo, la barra se
+          // oculta al scrollear. El pin del hero se mantiene estable igual porque
+          // ignoreMobileResize suprime los refresh que dispararía el cambio de alto de
+          // la barra.
         }
         ScrollTrigger.refresh();
         refreshAOS();

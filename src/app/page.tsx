@@ -5,7 +5,6 @@ import Process from "@/components/Process";
 import Portfolio from "@/components/Portfolio";
 import Footer from "@/components/Footer";
 import Cookies from "@/components/Cookies";
-import ScrollTop from "@/components/ScrollTop";
 import DMark from "@/components/DMark";
 import HomeExperience from "@/components/HomeExperience";
 
@@ -43,7 +42,6 @@ export default function Home() {
         </div>
       </div>
 
-      <ScrollTop />
       <Cookies />
       <HomeExperience />
     </>

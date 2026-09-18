@@ -5,6 +5,7 @@ const nextConfig = {
     // con un package-lock.json suelto en el home del usuario, fuera del repo.
     root: __dirname,
   },
-}
+  allowedDevOrigins: ["192.168.68.102"],
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

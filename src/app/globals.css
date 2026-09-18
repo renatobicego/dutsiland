@@ -588,10 +588,16 @@ body[data-load="first-done"] #loader .d-mark__d path {
   --rt-bleed: 55vw;
   position: fixed;
   top: 0;
+  bottom: 0;
   left: calc(-1 * var(--rt-bleed));
   width: calc(100vw + var(--rt-bleed) * 2);
+  /* Tiene que tapar toda la pantalla en cualquier estado de la barra del navegador
+     (sobre todo en mobile). Anclado top:0/bottom:0 y, como alto, el viewport GRANDE
+     (barra oculta) para que nunca quede corto por abajo cuando la barra se colapsa.
+     Cadena de fallbacks: --vh (lo fija el JS) -> 100vh -> 100lvh. */
   height: 100vh;
   height: calc(var(--vh, 1vh) * 100);
+  height: 100lvh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -605,9 +611,22 @@ body[data-load="first-done"] #loader .d-mark__d path {
   will-change: transform;
 }
 .route-transition__mark {
-  /* Centrada en el panel; la contra-traslación de GSAP la fija en el centro del viewport
-     mientras el panel se mueve, para que el blob la vaya revelando. La D es la misma
-     imagen del hero (.hero-logo__d), que ya trae su tamaño. */
+  /* La contra-traslación de GSAP la fija en el centro horizontal del viewport mientras el
+     panel se mueve, para que el blob la vaya revelando. La D es la misma imagen del hero
+     (.hero-logo__d), que ya trae su tamaño.
+
+     El panel mide el viewport GRANDE (100lvh) para tapar todo, pero la D se centra como si
+     el alto fuera el viewport CHICO (100svh, con la barra del navegador visible): así queda
+     en el centro de la zona realmente visible en mobile, no un poco más abajo. Por eso el
+     mark no se centra con el flex del panel, sino que se posiciona sobre una franja de
+     100svh anclada arriba. GSAP sólo la mueve en X; el centrado vertical vive acá. */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+  height: 100svh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1334,11 +1353,25 @@ body.menu-active #header .social-list {
 }
 
 /* ---------- estructura ---------- */
+/* El armazón de PageShell (contacto, sobre, proyectos, ficha de proyecto) debe llenar
+   como mínimo el viewport aunque el contenido sea corto. Cadena de fallbacks igual que
+   el resto del sitio: --vh (lo fija el JS) -> 100vh -> 100dvh (viewport dinámico). */
 #main-transition {
   position: relative;
+  min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
+  min-height: 100dvh;
+}
+.container-wrapper {
+  min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
+  min-height: 100dvh;
 }
 .wrapper {
   width: 100%;
+  min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
+  min-height: 100dvh;
 }
 @media only screen and (min-width: 1025.1px) {
   .wrapper {
@@ -1532,13 +1565,21 @@ html.intro-running body {
    que en desktop: en un teléfono se scrollea a flicks y un pin largo se siente trabado.
    Las siluetas usan radios en vw y sus estados salen de MCLIP (HomeExperience). */
 @media only screen and (max-width: 1025px) {
+  /* 700vh (contra 840vh en apaisado): con 500vh cada fase del hero pasaba volando al
+     hacer flicks. Se sube para dar más recorrido por fase —el ritmo queda en ~640px por
+     unidad de timeline— sin llegar al tramo largo de apaisado, que en táctil se siente
+     trabado. */
   .home-hero {
-    height: 500vh;
+    height: 700vh;
   }
-  /* El alto lo fija --vh al arrancar y no se toca más: si siguiera a la barra de
-     direcciones, el escenario fijado cambiaría de alto a mitad del scroll. */
+  /* 100dvh (dynamic viewport): el escenario llena la ventana visible en cada momento,
+     así no queda espacio vacío abajo cuando la barra de direcciones se colapsa. dvh se
+     re-evalúa solo con la barra; el pin del hero no se rompe porque ignoreMobileResize
+     suprime los refresh que dispararía ese cambio de alto. Fallback --vh para
+     navegadores sin dvh. */
   .hero-stage {
     height: calc(var(--vh, 1vh) * 100);
+    height: 100dvh;
   }
   /* Acá va el estado de REPOSO del hero (leftHero / rightHero / left2Hidden de MCLIP),
      no el de arranque. Al refrescar, ScrollTrigger revierte los estilos inline para
@@ -1571,6 +1612,18 @@ html.intro-running body {
     --ctr: 0vw;
     --cbr: 29vw;
   }
+  /* Solo los dos blobs del HERO INICIAL (el logo y la frase) se fijan en svh: son inset:
+     0 dentro del escenario, que mide 100dvh, así que al colapsarse la barra el escenario
+     crecía y ellos daban un salto de tamaño. Con height: svh (el alto con la barra a la
+     vista, que no se mueve) anclados arriba, su recorte —que es % de este alto— queda
+     estable. NO se incluye .blob-left2: ese es el panel de "qué hacemos", que tiene que
+     crecer a pantalla completa con el scroll y debe seguir el escenario dinámico; si se
+     le fija svh, deja de expandirse. */
+  .blob-left,
+  .blob-right {
+    bottom: auto;
+    height: 100svh;
+  }
   /* El lockup, centrado en el blob de abajo (la intro lo lleva del 50% al 70%).
      width: max-content porque un absoluto con left: 50% encoge al espacio que le queda
      a la derecha, y al ser flex la máscara de "UTSILAND" se achicaba a nada. */
@@ -1586,10 +1639,13 @@ html.intro-running body {
      hero, la máscara de "UTSILAND" y la D del loader tienen que medir lo mismo para que
      el paso del preloader al hero sea un fundido y no un salto de tamaño (en apaisado
      ya coincidían las dos en 35vh).
-     vh y vw, no --vh: --vh sigue a la barra de direcciones y la D cambiaría de tamaño a
-     mitad del fundido; vh es el alto grande del viewport y no se mueve. */
+     svh y vw, no --vh ni vh: --vh sigue a la barra de direcciones y la D cambiaría de
+     tamaño a mitad del fundido; vh es el viewport grande (barra oculta) y no coincide
+     con el escenario, que ahora mide dvh y arranca con la barra a la vista, así que la D
+     quedaba desalineada y saltaba al colapsar la barra. svh es el alto con la barra
+     visible —fijo, no se mueve— y casa con el tamaño de arranque del escenario. */
   :root {
-    --d-hero: min(20vh, 34vw);
+    --d-hero: min(20svh, 34vw);
   }
   .hero-logo__d {
     height: var(--d-hero);
@@ -1621,7 +1677,11 @@ html.intro-running body {
   .hero-headline {
     left: 16%;
     right: 2.4rem;
-    top: 26%;
+    /* svh y no %: el % es del escenario (100dvh), que crece cuando la barra del
+       navegador se colapsa en el primer scroll, y el titular bajaba. 26svh es la misma
+       altura pero contra el viewport estable, así el titular queda quieto y acompaña al
+       blob (que también está en svh). */
+    top: 26svh;
     transform: translateY(-50%);
     color: var(--white-1);
     line-height: 1.12;
@@ -2033,7 +2093,10 @@ html.intro-running body {
   .blob-left2 .services-shape {
     flex: 1;
     display: flex;
-    align-items: center;
+    /* Anclado arriba, no centrado: si se centra y el contenido es más alto que el
+       panel, el excedente se va por arriba y queda tapado por el header fijo. Anclando
+       al tope el contenido arranca siempre debajo del header y crece hacia abajo. */
+    align-items: flex-start;
     background: none;
     border-radius: 0;
     overflow: visible;
@@ -2079,7 +2142,10 @@ html.intro-running body {
   .service {
     grid-template-columns: 1fr;
     gap: 0.6rem;
-    padding-top: min(2rem, 2.2vh);
+    /* Más aire arriba: la línea separadora vive en top:0 del frente, y con un padding
+       chico el número "01" le quedaba pegado/encimado. Le damos lugar para que la
+       línea se lea como separador y no como subrayado del número. */
+    padding-top: min(2.6rem, 3vh);
   }
   .service__n {
     font-size: min(2rem, 2.2vh);
@@ -2106,6 +2172,13 @@ html.intro-running body {
   }
   .services-cta {
     margin-top: min(2rem, 2.2vh);
+    /* El contorno blanco (:before) cierra abajo con una curva grande de radio 10rem que
+       entra hacia adentro por la derecha. Si el botón llega hasta el borde del inner
+       (padding-right: 5rem), su esquina inferior derecha cruza esa curva y queda
+       encimado sobre la línea. Lo apartamos de la curva con más aire a la derecha y un
+       margen inferior que lo deja por encima del tramo curvo del contorno. */
+    padding-right: 3rem;
+    margin-bottom: min(3rem, 3.4vh);
   }
   .services-cta .btn-d {
     min-height: min(7rem, 7.6vh);
@@ -2693,64 +2766,6 @@ html.intro-running body {
   }
 }
 
-/* ---------- volver arriba ----------
-   Va en rojo porque es el único color que contrasta contra las secciones
-   claras y las negras por igual. A la izquierda para no pelearse con el
-   cartel de cookies, que vive abajo a la derecha. */
-.scroll-top {
-  position: fixed;
-  bottom: 3.4rem;
-  left: 3.4rem;
-  z-index: 101;
-  width: 7rem;
-  height: 7rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--red-1);
-  color: var(--white-1);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(1.6rem);
-  transition:
-    opacity 0.4s cubic-bezier(0.215, 0.61, 0.355, 1),
-    transform 0.4s cubic-bezier(0.215, 0.61, 0.355, 1),
-    visibility 0.4s,
-    background-color 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86);
-}
-.scroll-top svg {
-  width: 45%;
-  height: 45%;
-  display: block;
-}
-.scroll-top svg path {
-  stroke: currentColor;
-}
-body:not([data-scroll-position="top"]) .scroll-top {
-  opacity: 1;
-  visibility: visible;
-  transform: none;
-}
-.scroll-top:hover {
-  background: var(--black-1);
-}
-/* Con el menú abierto el botón estorba y el scroll está bloqueado */
-body.menu-active .scroll-top,
-body.menu-leave .scroll-top {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-@media only screen and (max-width: 767.98px) {
-  .scroll-top {
-    width: 5.6rem;
-    height: 5.6rem;
-    bottom: 2.4rem;
-    left: 2.4rem;
-  }
-}
-
 /* ---------- cookies ---------- */
 .container-cookies {
   position: fixed;
@@ -2789,6 +2804,10 @@ body.menu-leave .scroll-top {
     right: auto;
     width: calc(100% - var(--padding-fluid) * 2);
     transform: translate(-50%);
+    /* Más arriba en el teléfono: con bottom: 3.8rem el panel crema quedaba pegado al
+       borde inferior y asomaba medio cortado al scrollear desde el hero. Se sube a
+       10rem (más el safe-area del iPhone) para que aparezca completo y despegado. */
+    bottom: calc(10rem + env(safe-area-inset-bottom, 0px));
   }
 }
 .container-cookies .utilizamos-cookies .btn-cookies {
