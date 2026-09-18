@@ -635,6 +635,12 @@ body[data-load="first-done"] #loader .d-mark__d path {
 .cursor-wrapper.is-visible {
   visibility: visible;
 }
+/* Sobre fondo oscuro el punto pasa a crema para no perderse. El tono lo mide initCursor
+   sondeando el píxel bajo el cursor, igual que el header. El punto (var(--color)) hereda
+   este color; el estilo default-white pinta su fondo a mano y no depende de esto. */
+.cursor-wrapper[data-tono="dark"] {
+  --color: var(--white-1);
+}
 @media only screen and (max-width: 1025px) {
   .cursor-wrapper {
     display: none !important;
