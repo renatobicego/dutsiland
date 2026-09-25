@@ -1,7 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import type { Project, ProjectDetail } from "@/content/site";
 import { site } from "@/content/site";
+import { buildGalleryRows } from "@/lib/gallery";
+import type { GalleryShot } from "@/lib/gallery";
 import Button, { ArrowDiagonal, DIcon } from "./Button";
 
 type ProjectViewProps = {
@@ -17,23 +20,7 @@ type ProjectViewProps = {
 export default function ProjectView({ project, next }: ProjectViewProps) {
   const { detail } = project;
   const v = site.projectView;
-
-  // Las capturas apaisadas van solas, a ancho completo. Las verticales (celular)
-  // se agrupan: las que vienen seguidas caen en una misma fila, lado a lado, en vez
-  // de quedar cada una suelta con un vacío enorme al costado.
-  type PhotoGroup =
-    | { kind: "wide"; photo: (typeof detail.photos)[number] }
-    | { kind: "tall"; photos: typeof detail.photos };
-  const photoGroups = detail.photos.reduce<PhotoGroup[]>((groups, photo) => {
-    if (!photo.tall) {
-      groups.push({ kind: "wide", photo });
-      return groups;
-    }
-    const last = groups[groups.length - 1];
-    if (last && last.kind === "tall") last.photos.push(photo);
-    else groups.push({ kind: "tall", photos: [photo] });
-    return groups;
-  }, []);
+  const galleryRows = buildGalleryRows(detail.photos);
 
   return (
     <main className="project">
@@ -154,38 +141,37 @@ export default function ProjectView({ project, next }: ProjectViewProps) {
         </div>
 
         <div className="project-gallery">
-          {photoGroups.map((group) =>
-            group.kind === "wide" ? (
-              <figure
-                className="shot"
-                key={group.photo.src}
-                data-reveal
-                data-cursor-style="hovered-small"
-              >
-                <img
-                  src={group.photo.src}
-                  alt={group.photo.alt}
-                  loading="lazy"
-                />
-              </figure>
-            ) : (
+          {galleryRows.map((row) => {
+            if (row.kind === "single") {
+              return <Shot shot={row.shot} key={row.shot.src} />;
+            }
+            if (row.kind === "pair") {
+              const shots =
+                row.mobileSide === "right"
+                  ? [row.desktop, row.mobile]
+                  : [row.mobile, row.desktop];
+              return (
+                <div
+                  className="shot-pair"
+                  key={`${row.desktop.src}|${row.mobile.src}`}
+                >
+                  {shots.map((shot) => (
+                    <Shot shot={shot} key={shot.src} />
+                  ))}
+                </div>
+              );
+            }
+            return (
               <div
                 className="shot-row"
-                key={group.photos.map((p) => p.src).join("|")}
-                data-reveal
+                key={row.shots.map((s) => s.src).join("|")}
               >
-                {group.photos.map((photo) => (
-                  <figure
-                    className="shot shot--tall"
-                    key={photo.src}
-                    data-cursor-style="hovered-small"
-                  >
-                    <img src={photo.src} alt={photo.alt} loading="lazy" />
-                  </figure>
+                {row.shots.map((shot) => (
+                  <Shot shot={shot} key={shot.src} />
                 ))}
               </div>
-            ),
-          )}
+            );
+          })}
         </div>
       </section>
 
@@ -211,5 +197,30 @@ export default function ProjectView({ project, next }: ProjectViewProps) {
         </div>
       </section>
     </main>
+  );
+}
+
+// --ar reparte el ancho de una fila para que las capturas queden a la misma altura;
+// --i devuelve el orden original cuando la galería pasa a una sola columna.
+function Shot({ shot }: { shot: GalleryShot }) {
+  const style = {
+    "--ar": shot.width / shot.height,
+    "--i": shot.index,
+  } as CSSProperties;
+  return (
+    <figure
+      className={shot.tall ? "shot shot--tall" : "shot"}
+      style={style}
+      data-reveal
+      data-cursor-style="hovered-small"
+    >
+      <img
+        src={shot.src}
+        alt={shot.alt}
+        width={shot.width}
+        height={shot.height}
+        loading="lazy"
+      />
+    </figure>
   );
 }

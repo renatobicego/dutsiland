@@ -126,7 +126,10 @@ export default function AboutPage() {
 
         {/* Cierre con contexto: el botón solo, sin antetítulo ni título, quedaba
             colgado en el medio de una sección grande y vacía. */}
-        <section className="project-next prev-section" data-set-section="dark">
+        <section
+          className="project-next prev-section about-close"
+          data-set-section="dark"
+        >
           <div className="project-next__inner prev-section__inner">
             <p className="section-kicker section-kicker--light" data-reveal>
               <DIcon />

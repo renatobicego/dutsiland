@@ -36,8 +36,11 @@ export type ProjectPhoto = {
   alt: string;
   /** Pie de foto: qué se está viendo en esa pantalla */
   caption: string;
-  /** Captura vertical (pantalla de celular). La galería la limita en alto para que
-   *  no se agrande de más al ocupar el ancho de la columna. */
+  /** Tamaño real del archivo, en px. La galería lo usa para emparejar capturas a la
+   *  misma altura. */
+  width: number;
+  height: number;
+  /** Captura de celular. En escritorio va al lado de una apaisada, a la misma altura. */
   tall?: boolean;
 };
 
@@ -516,21 +519,29 @@ export const site: Site = {
         photos: [
           {
             src: "/img/proyectos/publicite/publicite-1.webp",
+            width: 1600,
+            height: 1000,
             alt: "Publicité — inicio",
             caption: "El inicio, con los anuncios cerca tuyo",
           },
           {
             src: "/img/proyectos/publicite/publicite-2.webp",
+            width: 1600,
+            height: 1000,
             alt: "Publicité — anuncios",
             caption: "Búsqueda por ubicación y filtros",
           },
           {
             src: "/img/proyectos/publicite/publicite-3.webp",
+            width: 1600,
+            height: 1000,
             alt: "Publicité — Cubito",
             caption: "Cubito valuando una publicación",
           },
           {
             src: "/img/proyectos/publicite/publicite-4.webp",
+            width: 1600,
+            height: 1000,
             alt: "Publicité — comunidad",
             caption: "Grupos y revistas de la comunidad",
           },
@@ -578,21 +589,29 @@ export const site: Site = {
         photos: [
           {
             src: "/img/proyectos/mahatu/mahatu-3.webp",
+            width: 1600,
+            height: 1200,
             alt: "Mahatu — turnos",
             caption: "La reserva de turnos del paciente",
           },
           {
             src: "/img/proyectos/mahatu/mahatu-4.webp",
+            width: 1600,
+            height: 1200,
             alt: "Mahatu — calendario",
             caption: "El calendario del profesional",
           },
           {
             src: "/img/proyectos/mahatu/mahatu-1.webp",
+            width: 1600,
+            height: 1200,
             alt: "Mahatu — pacientes",
             caption: "La ficha del paciente y su historial",
           },
           {
             src: "/img/proyectos/mahatu/mahatu-2.webp",
+            width: 1600,
+            height: 1200,
             alt: "Mahatu — facturación",
             caption: "El control de pagos e ingresos",
           },
@@ -649,28 +668,38 @@ export const site: Site = {
         photos: [
           {
             src: "/img/proyectos/ama/resultados-ama.png",
+            width: 3412,
+            height: 1962,
             alt: "AMA — resultados en vivo",
             caption: "Los resultados del torneo, en vivo para el público",
           },
           {
             src: "/img/proyectos/ama/backoffice-juez-resultados-ama.png",
+            width: 3412,
+            height: 1962,
             alt: "AMA — carga del juez",
             caption:
               "La carga del juez: marcas por prueba, categoría, sexo y serie",
           },
           {
             src: "/img/proyectos/ama/backoffice-inscriptos-ama.png",
+            width: 3412,
+            height: 1962,
             alt: "AMA — inscriptos",
             caption: "La gestión de inscriptos, con pagos, números y federados",
           },
           {
             src: "/img/proyectos/ama/inscripcion-mobile-ama.png",
+            width: 662,
+            height: 1442,
             alt: "AMA — inscripción mobile",
             caption: "La inscripción del atleta por DNI, desde el teléfono",
             tall: true,
           },
           {
             src: "/img/proyectos/ama/resultado-mobile-ama.png",
+            width: 662,
+            height: 1444,
             alt: "AMA — resultado mobile",
             caption: "El resultado de una prueba, en el teléfono",
             tall: true,
@@ -714,21 +743,29 @@ export const site: Site = {
         photos: [
           {
             src: "/img/proyectos/cucha/1.webp",
+            width: 741,
+            height: 596,
             alt: "Cucha — el sitio",
             caption: "El sitio en escritorio y en el teléfono",
           },
           {
             src: "/img/proyectos/cucha/2.webp",
+            width: 1600,
+            height: 900,
             alt: "Cucha — portada",
             caption: "La portada, con las tres promesas del negocio",
           },
           {
             src: "/img/proyectos/cucha/3.webp",
+            width: 1600,
+            height: 900,
             alt: "Cucha — sucursal",
             caption: "La sucursal en el mapa y las marcas con las que trabajan",
           },
           {
             src: "/img/proyectos/cucha/4.webp",
+            width: 810,
+            height: 736,
             alt: "Cucha — pantallas",
             caption: "El mapa de pantallas del proyecto",
           },
@@ -776,21 +813,29 @@ export const site: Site = {
         photos: [
           {
             src: "/img/proyectos/medialuna/1.webp",
+            width: 741,
+            height: 586,
             alt: "Medialuna — la tienda",
             caption: "La tienda en escritorio y en el teléfono",
           },
           {
             src: "/img/proyectos/medialuna/2.webp",
+            width: 1600,
+            height: 900,
             alt: "Medialuna — catálogo",
             caption: "El catálogo, con búsqueda y filtros",
           },
           {
             src: "/img/proyectos/medialuna/3.webp",
+            width: 1600,
+            height: 900,
             alt: "Medialuna — categorías",
             caption: "Las categorías y el contacto directo",
           },
           {
             src: "/img/proyectos/medialuna/4.webp",
+            width: 741,
+            height: 586,
             alt: "Medialuna — pantallas",
             caption: "El mapa de pantallas del proyecto",
           },
@@ -833,21 +878,29 @@ export const site: Site = {
         photos: [
           {
             src: "/img/proyectos/mimpronta/1.webp",
+            width: 1360,
+            height: 830,
             alt: "Mimpronta — el blog",
             caption: "El blog, en la maqueta de diseño",
           },
           {
             src: "/img/proyectos/mimpronta/2.webp",
+            width: 1600,
+            height: 736,
             alt: "Mimpronta — portada",
             caption: "La portada, con el mensaje de la agencia",
           },
           {
             src: "/img/proyectos/mimpronta/3.webp",
+            width: 1553,
+            height: 754,
             alt: "Mimpronta — notas",
             caption: "El blog, con el último post destacado",
           },
           {
             src: "/img/proyectos/mimpronta/4.webp",
+            width: 1085,
+            height: 656,
             alt: "Mimpronta — pantallas",
             caption: "El mapa de pantallas del proyecto",
           },
@@ -901,17 +954,23 @@ export const site: Site = {
         photos: [
           {
             src: "/img/proyectos/slg-centenario/portada-slg-centenario.png",
+            width: 1920,
+            height: 1440,
             alt: "San Luis Gonzaga — portada",
             caption:
               "La portada del centenario, con la invitación a sumar un pin",
           },
           {
             src: "/img/proyectos/slg-centenario/inicio-slg-centenario.png",
+            width: 1920,
+            height: 1440,
             alt: "San Luis Gonzaga — el mapa",
             caption: "El Mapa del San Lucho, con los pines de la comunidad",
           },
           {
             src: "/img/proyectos/slg-centenario/mobile-slg-centenario.png",
+            width: 1920,
+            height: 1440,
             alt: "San Luis Gonzaga — en el teléfono",
             caption: "El mapa colaborativo, en el teléfono",
             tall: true,
@@ -968,24 +1027,32 @@ export const site: Site = {
         photos: [
           {
             src: "/img/proyectos/uspallata-experience/inicio-uspallata-experience.png",
+            width: 3398,
+            height: 1962,
             alt: "Uspallata Experience — inicio",
             caption:
               "La portada: no es una excursión, es una experiencia de montaña",
           },
           {
             src: "/img/proyectos/uspallata-experience/seccion-inicio-uspallata-experience.png",
+            width: 3398,
+            height: 1962,
             alt: "Uspallata Experience — la travesía",
             caption:
               "La travesía: caminos cargados de historia y silencio, entre Villavicencio y Uspallata",
           },
           {
             src: "/img/proyectos/uspallata-experience/seccion-inicio-mobile-uspallata-experience.png",
+            width: 660,
+            height: 1434,
             alt: "Uspallata Experience — en el teléfono",
             caption: "El relato de la experiencia, en el teléfono",
             tall: true,
           },
           {
             src: "/img/proyectos/uspallata-experience/fotos-mobile-uspallata-experience.png",
+            width: 660,
+            height: 1434,
             alt: "Uspallata Experience — galería mobile",
             caption: "La galería de la alta montaña, en mobile",
             tall: true,
@@ -1041,23 +1108,31 @@ export const site: Site = {
         photos: [
           {
             src: "/img/proyectos/depto-mendoza/inicio-depto-mendoza.png",
+            width: 3414,
+            height: 1966,
             alt: "Depto Mendoza — inicio",
             caption: "La portada: el departamento y su propuesta principal",
           },
           {
             src: "/img/proyectos/depto-mendoza/ubicacion-depto-mendoza.png",
+            width: 3414,
+            height: 1966,
             alt: "Depto Mendoza — ubicación",
             caption:
               "La ubicación en Godoy Cruz y los lugares cercanos al alojamiento",
           },
           {
             src: "/img/proyectos/depto-mendoza/fotos-mobile-depto-mendoza.png",
+            width: 658,
+            height: 1440,
             alt: "Depto Mendoza — los espacios en el teléfono",
             caption: "Los espacios del departamento, en el teléfono",
             tall: true,
           },
           {
             src: "/img/proyectos/depto-mendoza/resenias-mobile-depto-mendoza.png",
+            width: 658,
+            height: 1440,
             alt: "Depto Mendoza — reseñas en el teléfono",
             caption: "Las reseñas y la valoración 5/5, en el teléfono",
             tall: true,
@@ -1115,24 +1190,32 @@ export const site: Site = {
         photos: [
           {
             src: "/img/proyectos/cocina-norte/1.webp",
+            width: 1400,
+            height: 845,
             alt: "Cocina Norte — comandas",
             caption:
               "La pantalla de cocina: cada pedido avanza por columnas y el reloj no se detiene",
           },
           {
             src: "/img/proyectos/cocina-norte/2.webp",
+            width: 1400,
+            height: 786,
             alt: "Cocina Norte — salón",
             caption:
               "El mapa de salón, con el consumo y el tiempo de cada mesa",
           },
           {
             src: "/img/proyectos/cocina-norte/3.webp",
+            width: 1400,
+            height: 760,
             alt: "Cocina Norte — carta",
             caption:
               "La carta por local: lo que se agota deja de ofrecerse solo",
           },
           {
             src: "/img/proyectos/cocina-norte/4.webp",
+            width: 1400,
+            height: 760,
             alt: "Cocina Norte — reportes",
             caption:
               "El cierre de la semana, con los cinco locales comparables",
@@ -1181,24 +1264,32 @@ export const site: Site = {
         photos: [
           {
             src: "/img/proyectos/raiz-distribuciones/1.webp",
+            width: 1400,
+            height: 760,
             alt: "Raíz — stock",
             caption:
               "El stock de los tres depósitos, ordenado por lo que está por faltar",
           },
           {
             src: "/img/proyectos/raiz-distribuciones/2.webp",
+            width: 1400,
+            height: 760,
             alt: "Raíz — ingreso",
             caption:
               "El ingreso con lector: el sistema compara contra el remito mientras se lee",
           },
           {
             src: "/img/proyectos/raiz-distribuciones/3.webp",
+            width: 1400,
+            height: 760,
             alt: "Raíz — picking",
             caption:
               "Las hojas de ruta y el avance de cada pedido en preparación",
           },
           {
             src: "/img/proyectos/raiz-distribuciones/4.webp",
+            width: 1400,
+            height: 760,
             alt: "Raíz — reposición",
             caption:
               "La reposición sugerida, con la cobertura de cada producto",

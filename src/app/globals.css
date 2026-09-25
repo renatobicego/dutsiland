@@ -25,24 +25,35 @@
   /* --font-grotesk la define next/font en <html> (ver layout.tsx) */
 
   /* -------------------------------------------------------
-     Tamaños de título FIJOS (px), por escalón.
-     No dependen del ancho de ventana: el resto del sistema
-     usa rem escalado por vw en <html>, pero los títulos se
-     fijan acá para que no crezcan/encojan con el viewport.
-     Los valores desktop equivalen al tamaño que rendían antes
-     a 1440px de ancho (1rem = 7.5px). Sobrescritos por
-     breakpoint más abajo. */
-  --fs-display: 80px; /* hero-headline, portfolio-title (10.6rem) */
-  --fs-hero-title: 72px; /* fs--header (9.6rem) */
-  --fs-h1: 63px; /* services-title, process-title (8.4rem) */
-  --fs-claim: 57px; /* hero-claim__text (7.6rem) */
-  --fs-h2: 54px; /* history-title, project-title/block (7.2rem) */
-  --fs-h3: 42px; /* service__title (5.6rem) */
-  --fs-h4: 27px; /* step__title, project-block__title (3.6rem) */
-  --fs-subtitle: 21px; /* history/portfolio subtítulos (2.8rem) */
-  --fs-lead: 20px; /* services/step leads e intros (2.6rem) */
-  --fs-kicker: 14px; /* section-kicker (1.9rem) */
+     Tamaños de título por escalón.
+     En desktop van en rem, como botones y espaciados: así la
+     proporción entre título y botón es la misma en cualquier
+     ancho (con px fijos, en un monitor grande el botón crecía
+     y el título no). A 1440px de ancho (1rem = 7.5px) rinden
+     el valor entre paréntesis. En tablet y móvil son px fijos,
+     sobrescritos por breakpoint más abajo. */
+  --fs-display: 10.6rem;
+  /* hero-headline, portfolio-title (80px) */
+  --fs-hero-title: 9.6rem;
+  /* fs--header (72px) */
+  --fs-h1: 8.4rem;
+  /* services-title, process-title (63px) */
+  --fs-claim: 7.6rem;
+  /* hero-claim__text (57px) */
+  --fs-h2: 7.2rem;
+  /* history-title, project-title/block (54px) */
+  --fs-h3: 5.6rem;
+  /* service__title (42px) */
+  --fs-h4: 3.6rem;
+  /* step__title, project-block__title (27px) */
+  --fs-subtitle: 2.8rem;
+  /* history/portfolio subtítulos (21px) */
+  --fs-lead: 2.6rem;
+  /* services/step leads e intros (19.5px) */
+  --fs-kicker: 1.9rem;
+  /* section-kicker (14px) */
 }
+
 @media only screen and (min-width: 767.98px) and (max-width: 1025px) {
   :root {
     --fs-display: 56px;
@@ -57,9 +68,10 @@
     --fs-kicker: 15px;
   }
 }
+
 @media only screen and (max-width: 767.98px) {
   :root {
-    --fs-display: 42px;
+    --fs-display: 36px;
     --fs-hero-title: 40px;
     --fs-h1: 36px;
     --fs-claim: 34px;
@@ -71,12 +83,14 @@
     --fs-kicker: 16px;
   }
 }
+
 @media only screen and (min-width: 1025.1px) {
   :root {
     --scrollbar: 7.5px;
     --w-100vw: calc(100vw - var(--scrollbar));
   }
 }
+
 @media only screen and (max-width: 1025px) {
   :root {
     --padding-fluid: 3rem;
@@ -85,6 +99,7 @@
     --blob-radius: 12rem;
   }
 }
+
 @media only screen and (max-width: 767.98px) {
   :root {
     --padding-fluid: 2rem;
@@ -98,24 +113,29 @@
 :after {
   box-sizing: border-box;
 }
+
 html {
   -webkit-text-size-adjust: 100%;
 }
+
 @media only screen and (min-width: 1025.1px) {
   html {
     font-size: 0.5208333333vw;
   }
 }
+
 @media only screen and (min-width: 767.98px) and (max-width: 1025px) {
   html {
     font-size: 1.4vw;
   }
 }
+
 @media only screen and (min-width: 767.98px) and (max-width: 1025.1px) and (orientation: landscape) {
   html {
     font-size: 0.85vw;
   }
 }
+
 @media only screen and (max-width: 767.98px) {
   html {
     font-size: 2.4vw;
@@ -132,27 +152,33 @@ body {
   color: var(--black-1);
   -webkit-font-smoothing: antialiased;
 }
+
 @media only screen and (max-width: 1025px) {
   body {
     width: 100%;
   }
 }
+
 /* touch-action además de overflow: en vertical el scroll es táctil y overflow solo no
    lo frena. El menú por dentro sí puede desplazarse si no entra. */
 body.menu-active {
   overflow: hidden;
   touch-action: none;
 }
+
 body.menu-active .menu--wrapper {
   touch-action: auto;
 }
+
 @media only screen and (min-width: 1025.1px) {
+
   body,
   a,
   button,
   [data-cursor-style] {
     cursor: none;
   }
+
   [data-cursor-style="off"] {
     cursor: auto !important;
   }
@@ -163,11 +189,13 @@ ul {
   margin: 0;
   padding: 0;
 }
+
 a {
   color: inherit;
   text-decoration: none;
   background-color: transparent;
 }
+
 button {
   border: 0;
   outline: none;
@@ -177,14 +205,17 @@ button {
   font: inherit;
   cursor: pointer;
 }
+
 img {
   border-style: none;
   display: block;
 }
+
 p,
 figure {
   margin: 0;
 }
+
 h1,
 h2,
 h3 {
@@ -199,11 +230,13 @@ h3 {
   padding-left: var(--padding-fluid);
   padding-right: var(--padding-fluid);
 }
+
 @media only screen and (min-width: 1025.1px) {
   .container-fluid {
     max-width: var(--w-100vw);
   }
 }
+
 .row {
   display: flex;
   flex-wrap: wrap;
@@ -212,41 +245,52 @@ h3 {
   margin-right: calc(-1 * var(--padding));
   min-width: 100%;
 }
+
 [class*="col-"] {
   padding-left: var(--padding);
   padding-right: var(--padding);
   width: 100%;
 }
+
 .col-3 {
   max-width: 25%;
 }
+
 .col-6 {
   max-width: 50%;
 }
+
 .col-12 {
   max-width: 100%;
 }
+
 @media only screen and (min-width: 1025.1px) {
   .col-lg-2 {
     max-width: 16.6666666667%;
   }
+
   .col-lg-4 {
     max-width: 33.3333333333%;
   }
+
   .offset-lg-6 {
     margin-left: 50%;
   }
+
   .col-lg-8 {
     max-width: 66.6666666667%;
   }
 }
+
 @media only screen and (min-width: 767.98px) and (max-width: 1025px) {
   .col-tablet-3 {
     max-width: 25%;
   }
+
   .col-tablet-4 {
     max-width: 33.3333333333%;
   }
+
   .col-tablet-5 {
     max-width: 41.6666666667%;
   }
@@ -256,39 +300,49 @@ h3 {
 .black-1 {
   color: var(--black-1);
 }
+
 .white-1 {
   color: var(--white-1);
 }
+
 .hide {
   display: inline-block;
   position: absolute;
   left: -100vw;
   text-indent: -99999px;
 }
+
 .w-100 {
   width: 100%;
 }
+
 .d-none {
   display: none !important;
 }
+
 .flex-center {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
 }
+
 .align-self-center {
   align-self: center;
 }
+
 .text-uppercase {
   text-transform: uppercase;
 }
+
 .font-1 {
   font-family: var(--font-grotesk, "Montserrat", system-ui, sans-serif);
 }
+
 .lh-150 {
   line-height: 1.5em;
 }
+
 @media only screen and (max-width: 1025px) {
   .pb-mobile-10 {
     padding-bottom: 1rem !important;
@@ -301,17 +355,20 @@ h3 {
   font-weight: 600;
   font-size: 1.2rem;
 }
+
 @media only screen and (min-width: 1025.1px) {
   .fs--12 {
     font-size: clamp(12px, 1.2rem, 1.2rem);
   }
 }
+
 .fs--13 {
   line-height: 1.2em;
   letter-spacing: -0.01em;
   font-weight: 500;
   font-size: 1.3rem;
 }
+
 .fs--header {
   line-height: 1em;
   letter-spacing: -0.01em;
@@ -325,89 +382,108 @@ h3 {
     opacity: 0;
     transform: translate3d(0, 5rem, 0);
   }
+
   to {
     opacity: 1;
     transform: none;
   }
 }
+
 @keyframes fadeIn {
   0% {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
 }
+
 @keyframes fadeOut {
   0% {
     opacity: 1;
   }
+
   to {
     opacity: 0;
   }
 }
+
 @keyframes scaleOut {
   0% {
     opacity: 0;
     transform: scale(1.2);
   }
+
   to {
     opacity: 1;
     transform: none;
   }
 }
+
 @keyframes unscaleOut {
   0% {
     opacity: 1;
     transform: none;
   }
+
   to {
     opacity: 0;
     transform: scale(1.1);
   }
 }
+
 @keyframes slide-up {
   0% {
     opacity: 0;
     transform: translateY(100%);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
 @keyframes reveal-up {
   0% {
     opacity: 0;
     transform: translateY(25vh);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
 @keyframes click {
   50% {
     transform: scale(0.8);
   }
+
   0%,
   to {
     transform: scale(1);
   }
 }
+
 @keyframes click-2 {
   50% {
     transform: scale(1.2);
   }
+
   0%,
   to {
     transform: scale(1.4);
   }
 }
+
 @keyframes click-3 {
   50% {
     transform: scale(0.5);
   }
+
   0%,
   to {
     transform: scale(0.6);
@@ -418,24 +494,31 @@ h3 {
 [data-aos] {
   visibility: hidden;
 }
+
 [data-aos].aos-animate {
   visibility: visible;
 }
+
 [data-aos|="fadeInUp"] {
   opacity: 0;
 }
+
 [data-aos|="fadeInUp"].aos-animate {
   animation: fadeInUp 0.8s ease-in-out both;
 }
+
 [data-aos|="fadeIn"] {
   opacity: 0;
 }
+
 [data-aos|="fadeIn"].aos-animate {
   animation: fadeIn 0.8s ease-in-out both;
 }
+
 [data-aos|="scaleOut"].aos-animate {
   animation: scaleOut 0.8s ease-in-out both;
 }
+
 [data-aos|="reveal-up"].aos-animate {
   animation: reveal-up 0.8s ease-in-out both;
 }
@@ -446,11 +529,13 @@ h3 {
   overflow-y: hidden;
   display: block;
 }
-.wrapper-mask > span,
-.word > span {
+
+.wrapper-mask>span,
+.word>span {
   display: block;
   opacity: 1;
 }
+
 .split-words .wrapper-mask,
 .split-words .word {
   display: inline-block;
@@ -459,16 +544,19 @@ h3 {
   padding-top: 0.5ch;
   margin-top: -0.6ch;
 }
-.split-words .wrapper-mask > span,
-.split-words .word > span {
+
+.split-words .wrapper-mask>span,
+.split-words .word>span {
   display: inline-block;
 }
+
 .aos-animate.split-words .wrapper-mask,
 .aos-animate.split-words .word {
   animation-delay: 0.2s;
 }
-.aos-animate.split-words .wrapper-mask > span,
-.aos-animate.split-words .word > span {
+
+.aos-animate.split-words .wrapper-mask>span,
+.aos-animate.split-words .word>span {
   animation: slide-up 1s cubic-bezier(0.645, 0.045, 0.355, 1) 0s both;
   animation-delay: calc(var(--word-index) * 32ms);
 }
@@ -491,36 +579,44 @@ h3 {
   opacity: 0;
   transition: background-color 0.35s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
+
 #loader .container-lottie {
   display: flex;
   justify-content: center;
   width: 100%;
 }
+
 #loader .d-mark {
   width: auto;
   height: 35vh;
   aspect-ratio: auto;
 }
+
 #loader .d-mark__d {
   height: 100%;
 }
+
 #loader .d-mark__d path {
   transition: fill 0.35s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
+
 body[data-load="first-loading"] #loader {
   opacity: 1;
   pointer-events: auto;
   z-index: 110;
 }
+
 body[data-load="first-leaving"] #loader {
   opacity: 1;
   pointer-events: auto;
   z-index: 110;
   background-color: var(--black-1);
 }
+
 body[data-load="first-leaving"] #loader .d-mark__d path {
   fill: var(--white-1);
 }
+
 /* Sigue negro y sigue arriba: la salida la maneja revelarEntrada() con GSAP, que le
    escribe la opacidad inline. Si acá volviera al color claro, el desvanecido pasaría
    por un destello crema justo cuando aparece la vista. */
@@ -531,6 +627,7 @@ body[data-load="first-done"] #loader {
   pointer-events: none;
   transition: none;
 }
+
 body[data-load="first-done"] #loader .d-mark__d path {
   fill: var(--white-1);
 }
@@ -544,6 +641,7 @@ body[data-load="first-done"] #loader .d-mark__d path {
   justify-content: center;
   overflow: visible;
 }
+
 .d-mark__d {
   position: relative;
   height: 72%;
@@ -551,9 +649,11 @@ body[data-load="first-done"] #loader .d-mark__d path {
   display: block;
   transform-origin: 50% 50%;
 }
+
 .d-mark__d path {
   fill: var(--d-color, var(--black-1));
 }
+
 .d-mark__hole {
   position: absolute;
   left: 50%;
@@ -610,6 +710,7 @@ body[data-load="first-done"] #loader .d-mark__d path {
   visibility: hidden;
   will-change: transform;
 }
+
 .route-transition__mark {
   /* La contra-traslación de GSAP la fija en el centro horizontal del viewport mientras el
      panel se mueve, para que el blob la vaya revelando. La D es la misma imagen del hero
@@ -651,20 +752,24 @@ body[data-load="first-done"] #loader .d-mark__d path {
   transition: transform 0.1s ease-out;
   visibility: hidden;
 }
+
 .cursor-wrapper.is-visible {
   visibility: visible;
 }
+
 /* Sobre fondo oscuro el punto pasa a crema para no perderse. El tono lo mide initCursor
    sondeando el píxel bajo el cursor, igual que el header. El punto (var(--color)) hereda
    este color; el estilo default-white pinta su fondo a mano y no depende de esto. */
 .cursor-wrapper[data-tono="dark"] {
   --color: var(--white-1);
 }
+
 @media only screen and (max-width: 1025px) {
   .cursor-wrapper {
     display: none !important;
   }
 }
+
 .cursor-wrapper:after {
   content: attr(data-cursor-title);
   text-transform: uppercase;
@@ -678,12 +783,13 @@ body[data-load="first-done"] #loader .d-mark__d path {
   top: 0;
   left: 140px;
 }
-[data-cursor="default"] > div,
-[data-cursor="off"] > div,
-[data-cursor="default-white"] > div,
-[data-cursor="hovered"] > div,
-[data-cursor="hovered-dark"] > div,
-[data-cursor="hovered-small"] > div {
+
+[data-cursor="default"]>div,
+[data-cursor="off"]>div,
+[data-cursor="default-white"]>div,
+[data-cursor="hovered"]>div,
+[data-cursor="hovered-dark"]>div,
+[data-cursor="hovered-small"]>div {
   position: relative;
   left: 0;
   top: 0;
@@ -695,12 +801,13 @@ body[data-load="first-done"] #loader .d-mark__d path {
   border-radius: 50%;
   overflow: visible;
 }
-[data-cursor="default"] > div:after,
-[data-cursor="off"] > div:after,
-[data-cursor="default-white"] > div:after,
-[data-cursor="hovered"] > div:after,
-[data-cursor="hovered-dark"] > div:after,
-[data-cursor="hovered-small"] > div:after {
+
+[data-cursor="default"]>div:after,
+[data-cursor="off"]>div:after,
+[data-cursor="default-white"]>div:after,
+[data-cursor="hovered"]>div:after,
+[data-cursor="hovered-dark"]>div:after,
+[data-cursor="hovered-small"]>div:after {
   content: "";
   position: absolute;
   top: 50%;
@@ -714,44 +821,56 @@ body[data-load="first-done"] #loader .d-mark__d path {
   background: var(--white-1);
   transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
+
 [data-cursor="off"] {
   opacity: 0;
   transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
-[data-cursor="off"] > div {
+
+[data-cursor="off"]>div {
   transform: scale(0);
 }
-[data-cursor="default-white"] > div {
+
+[data-cursor="default-white"]>div {
   background: var(--white-1);
 }
-[data-cursor="default-white"] > div:after {
+
+[data-cursor="default-white"]>div:after {
   background: var(--black-1);
 }
-body.menu-active [data-cursor="default-white"] > div {
+
+body.menu-active [data-cursor="default-white"]>div {
   background: var(--black-1);
 }
-[data-cursor="hovered"] > div,
-[data-cursor="hovered-dark"] > div {
+
+[data-cursor="hovered"]>div,
+[data-cursor="hovered-dark"]>div {
   transform: scale(1.4);
 }
-[data-cursor="hovered"] > div:after,
-[data-cursor="hovered-dark"] > div:after {
+
+[data-cursor="hovered"]>div:after,
+[data-cursor="hovered-dark"]>div:after {
   transform: scale(1);
   transition-delay: 0.15s;
 }
-[data-cursor="hovered-small"] > div {
+
+[data-cursor="hovered-small"]>div {
   transform: scale(0.6);
 }
-[data-cursor="hovered-small"] > div:after {
+
+[data-cursor="hovered-small"]>div:after {
   transform: scale(1);
   transition-delay: 0.15s;
 }
+
 [data-clicked="true"] div {
   animation: click 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86) 0s both 1;
 }
+
 [data-clicked="true"][data-cursor="hovered"] div {
   animation: click-2 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86) 0s both 1;
 }
+
 [data-clicked="true"][data-cursor="hovered-small"] div {
   animation: click-3 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86) 0s both 1;
 }
@@ -773,6 +892,7 @@ body.menu-active [data-cursor="default-white"] > div {
   left: 0;
   color: var(--color);
 }
+
 /* Sin fondo propio, igual que en apaisado: el header es transparente y las secciones
    pasan por detrás. El color del logo y del botón lo decide data-tono, uno por cada uno. */
 @media only screen and (max-width: 1025px) {
@@ -781,17 +901,21 @@ body.menu-active [data-cursor="default-white"] > div {
     padding-bottom: 2.5rem;
   }
 }
-#header > .container-fluid,
-#header > .container-fluid > .row {
+
+#header>.container-fluid,
+#header>.container-fluid>.row {
   height: 100%;
 }
+
 body:not([data-scroll-direction="initial"]) #header {
   padding-top: 3rem;
   transition-duration: 0.8s, 0.6s, 0.3s;
 }
+
 body[data-scroll-position="bottom"] #header {
   transform: translateY(-101%);
 }
+
 #header:before {
   content: "";
   position: fixed;
@@ -806,17 +930,21 @@ body[data-scroll-position="bottom"] #header {
   opacity: 0;
   transition: all 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
 }
+
 body.menu-active #header:before {
   opacity: 1;
 }
+
 body.menu-leave #header:before {
   transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
   transition-delay: 0.3s;
 }
+
 .column-logo {
   position: relative;
   z-index: 99;
 }
+
 .column-bt {
   display: flex;
   justify-content: flex-end;
@@ -832,16 +960,19 @@ body.menu-leave #header:before {
   width: auto;
   height: 3.4rem;
 }
+
 @media only screen and (min-width: 767.98px) and (max-width: 1025px) {
   .logo {
     height: 3rem;
   }
 }
+
 @media only screen and (max-width: 767.98px) {
   .logo {
     height: 3.6rem;
   }
 }
+
 .logo .container-logo {
   position: relative;
   width: auto;
@@ -849,16 +980,19 @@ body.menu-leave #header:before {
   display: flex;
   align-items: center;
 }
+
 .logo .logo-piece {
   position: relative;
   height: 100%;
   width: auto;
 }
+
 .logo .logo-piece img {
   height: 100%;
   width: auto;
   display: block;
 }
+
 .logo .logo-piece img.is-light {
   position: absolute;
   top: 0;
@@ -866,15 +1000,18 @@ body.menu-leave #header:before {
   opacity: 0;
   transition: opacity 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86);
 }
+
 .logo .logo-piece img.is-dark {
   transition: opacity 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86);
 }
+
 .logo .logo-rest {
   margin-left: 0.85rem;
   transition:
     opacity 0.3s ease-in-out 0s,
     transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
 }
+
 body:not([data-scroll-direction="initial"]) #header .logo .logo-rest {
   transform: translateX(-35%);
   opacity: 0;
@@ -883,12 +1020,14 @@ body:not([data-scroll-direction="initial"]) #header .logo .logo-rest {
     opacity 0.3s ease-in-out 0s,
     transform 0.3s cubic-bezier(0.55, 0.085, 0.68, 0.53) 0.05s;
 }
+
 /* En vertical queda sólo la D: "UTSILAND" no entra al lado del botón de menú */
 @media only screen and (max-width: 1025px) {
   .logo .logo-rest {
     display: none;
   }
 }
+
 /* El logo y el botón de menú toman su color del fondo que tiene debajo CADA UNO:
    crema sobre oscuro, negro sobre claro. Van por columna y no por header entero porque
    no siempre tienen el mismo fondo abajo — arriba de /sobre la portada es una D negra
@@ -898,23 +1037,19 @@ body:not([data-scroll-direction="initial"]) #header .logo .logo-rest {
 body:not(.menu-active):not(.menu-leave) #header [data-tono="dark"] {
   --color: var(--white-1);
 }
-body:not(.menu-active):not(.menu-leave)
-  #header
-  [data-tono="dark"]
-  .logo
-  img.is-dark {
+
+body:not(.menu-active):not(.menu-leave) #header [data-tono="dark"] .logo img.is-dark {
   opacity: 0;
 }
-body:not(.menu-active):not(.menu-leave)
-  #header
-  [data-tono="dark"]
-  .logo
-  img.is-light {
+
+body:not(.menu-active):not(.menu-leave) #header [data-tono="dark"] .logo img.is-light {
   opacity: 1;
 }
+
 body.menu-active #header {
   --color: var(--black-1);
 }
+
 /* Por encima del footer, que está en z-index 100: abierto, el menú tapa todo. Vale
    también al cerrarse, mientras corre la animación de salida.
    Y sin transform: en el fondo de la página el header se esconde con translateY(-101%),
@@ -925,6 +1060,7 @@ body.menu-leave #header {
   z-index: 105;
   transform: none;
 }
+
 body.menu-active .logo {
   opacity: 1;
   pointer-events: auto;
@@ -941,6 +1077,7 @@ body.menu-active .logo {
   text-transform: uppercase;
   margin: auto 0;
 }
+
 #bt-menu:before {
   content: "";
   width: 1.5rem;
@@ -951,6 +1088,7 @@ body.menu-active .logo {
   background: var(--color);
   transition: all 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86);
 }
+
 @media only screen and (max-width: 767.98px) {
   #bt-menu:before {
     width: 1.6rem;
@@ -958,6 +1096,7 @@ body.menu-active .logo {
     margin-right: 0.6rem;
   }
 }
+
 #bt-menu span {
   display: inline-block;
   color: var(--color);
@@ -969,42 +1108,52 @@ body.menu-active .logo {
   font-weight: 700;
   transition: all 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86);
 }
+
 @media only screen and (max-width: 1025px) {
   #bt-menu span {
     transition: all 0.6s cubic-bezier(0.785, 0.135, 0.15, 0.86);
   }
 }
+
 @media only screen and (max-width: 767.98px) {
   #bt-menu span {
     font-size: 2rem;
   }
 }
+
 #bt-menu span.menu-text {
   padding-left: 0.3rem;
 }
+
 @media only screen and (max-width: 767.98px) {
   #bt-menu span.menu-text {
     width: 7.4rem;
   }
 }
+
 /* Abierto dice "cerrar", cerrado dice "menu": nunca los dos a la vez */
 #bt-menu span.close-text {
   width: 0;
 }
+
 body.menu-active #bt-menu span.close-text {
   width: 9rem;
 }
+
 body.menu-active #bt-menu span.menu-text {
   width: 0;
   padding-left: 0;
 }
+
 body.menu-leave #bt-menu span.close-text {
   width: 0;
   transition-delay: 0s;
 }
+
 body.menu-leave #bt-menu span.menu-text {
   transition-delay: 0.2s;
 }
+
 @media only screen and (max-width: 767.98px) {
   body.menu-active #bt-menu span.close-text {
     width: 9.4rem;
@@ -1023,6 +1172,7 @@ nav.menu {
   display: block;
   overflow: hidden;
 }
+
 @media only screen and (max-width: 1025px) {
   nav.menu {
     height: 100vh;
@@ -1032,23 +1182,28 @@ nav.menu {
     padding-right: var(--padding-fluid);
   }
 }
+
 @media only screen and (max-width: 767.98px) {
   nav.menu {
     padding-top: var(--header-height);
     padding-bottom: calc(var(--header-height) + 60px);
   }
 }
+
 body.menu-active #header nav.menu {
   pointer-events: auto;
 }
+
 @media only screen and (max-width: 1025px) {
   body.menu-active #header nav.menu {
     overflow-y: auto;
   }
 }
+
 body.menu-leave nav.menu {
   pointer-events: auto;
 }
+
 .menu--wrapper {
   margin: auto 0;
   display: flex;
@@ -1059,12 +1214,14 @@ body.menu-leave nav.menu {
   width: 100%;
   height: 100%;
 }
+
 @media only screen and (max-width: 1025px) {
   .menu--wrapper {
     align-items: flex-start;
     align-content: flex-start;
   }
 }
+
 .menu--wrapper .container-lottie {
   width: 60%;
   height: 100%;
@@ -1074,6 +1231,7 @@ body.menu-leave nav.menu {
   justify-content: center;
   align-items: center;
 }
+
 @media only screen and (max-width: 1025px) {
   .menu--wrapper .container-lottie {
     width: auto;
@@ -1081,44 +1239,52 @@ body.menu-leave nav.menu {
     height: 25rem;
   }
 }
+
 .menu--wrapper .container-lottie .d-mark {
   width: 50rem;
   height: 52rem;
 }
+
 @media only screen and (max-width: 1025px) {
   .menu--wrapper .container-lottie .d-mark {
     width: 25rem;
     height: 25rem;
   }
 }
+
 body.menu-active .container-lottie {
   opacity: 1;
   transform: scale(1);
   transition: all 0.6s cubic-bezier(0.455, 0.03, 0.515, 0.955);
   transition-delay: 0.2s;
 }
+
 body.menu-leave .container-lottie {
   transition: all 0.4s cubic-bezier(0.455, 0.03, 0.515, 0.955);
   transition-delay: 0s;
 }
+
 .menu--wrapper .menu--list {
   margin: auto 0;
   position: relative;
   width: 40%;
   opacity: 0;
 }
+
 @media only screen and (max-width: 1025px) {
   .menu--wrapper .menu--list {
     width: 100%;
     padding-top: 2rem;
   }
 }
+
 .menu--wrapper .menu--list li {
   margin: 2.5rem 0;
   padding: 0 0 0.2rem;
   position: relative;
   text-transform: uppercase;
 }
+
 .menu--wrapper .menu--list li a {
   position: relative;
   display: inline-block;
@@ -1126,51 +1292,65 @@ body.menu-leave .container-lottie {
   letter-spacing: -0.02em;
   transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
+
 .menu--wrapper .menu--list li a:hover {
   color: var(--color-hover);
   transform: translate(4rem);
 }
+
 .menu--wrapper .menu--list li a span {
   width: 100%;
   height: 100%;
   display: block;
 }
+
 body.menu-active .menu--list {
   opacity: 1;
   pointer-events: auto;
 }
+
 body.menu-active .menu--list li {
   overflow: hidden;
   opacity: 1;
   animation: scaleOut 0.6s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0s both 1;
 }
+
 body.menu-active .menu--list li:nth-child(1) {
   animation-delay: 0.2s;
 }
+
 body.menu-active .menu--list li:nth-child(2) {
   animation-delay: 0.3s;
 }
+
 body.menu-active .menu--list li:nth-child(3) {
   animation-delay: 0.35s;
 }
+
 body.menu-active .menu--list li:nth-child(4) {
   animation-delay: 0.4s;
 }
+
 body.menu-active .menu--list li:nth-child(5) {
   animation-delay: 0.45s;
 }
+
 body.menu-active .menu--list li:nth-child(6) {
   animation-delay: 0.5s;
 }
+
 body.menu-leave .menu--list {
   transition: all 0.4s cubic-bezier(0.42, 0, 0.58, 1);
 }
+
 body.menu-leave .menu--list li {
   animation: unscaleOut 0.6s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0s both 1;
 }
+
 body.menu-leave .menu--wrapper {
   opacity: 1;
 }
+
 #header .social-list {
   position: absolute;
   bottom: 6rem;
@@ -1178,10 +1358,12 @@ body.menu-leave .menu--wrapper {
   opacity: 0;
   transform: scale(1.1);
 }
+
 #header .social-list .btn-underline,
 #header .social-list .btn-underlined {
   --btn-color: var(--color);
 }
+
 body.menu-active #header .social-list {
   pointer-events: auto;
   opacity: 1;
@@ -1197,11 +1379,13 @@ body.menu-active #header .social-list {
   flex-wrap: wrap;
   width: 100%;
 }
+
 @media only screen and (max-width: 767.98px) {
   .social-list .phone-wrapper {
     margin-top: 1.5rem;
   }
 }
+
 .social-list .mail-link,
 .social-list .phone-link {
   color: var(--black-1);
@@ -1211,12 +1395,15 @@ body.menu-active #header .social-list {
   letter-spacing: 0;
   font-weight: 700;
 }
+
 @media only screen and (max-width: 767.98px) {
+
   .social-list .mail-link,
   .social-list .phone-link {
     font-size: 1.5rem;
   }
 }
+
 .icon-arrow-diagonal {
   display: inline-block;
   width: 1em;
@@ -1225,11 +1412,13 @@ body.menu-active #header .social-list {
   margin-left: 0.3em;
   font-style: normal;
 }
+
 .icon-arrow-diagonal svg {
   width: 100%;
   height: 100%;
   display: block;
 }
+
 .icon-arrow-diagonal svg path {
   stroke: currentColor;
 }
@@ -1238,49 +1427,48 @@ body.menu-active #header .social-list {
 .btn-underline span {
   display: inline;
   color: var(--btn-color, var(--black-1));
-  background-image: linear-gradient(
-    to right,
-    var(--btn-color, var(--black-1)) 100%,
-    var(--btn-color, var(--black-1)) 0%
-  );
+  background-image: linear-gradient(to right,
+      var(--btn-color, var(--black-1)) 100%,
+      var(--btn-color, var(--black-1)) 0%);
   background-position: 100% 100%;
   background-size: 0 0.12em;
   background-repeat: no-repeat;
   transition: background-size 1s cubic-bezier(0.19, 1, 0.155, 1.01) 0s;
   pointer-events: none;
 }
+
 .btn-underline:hover span,
 .btn-underline.active span {
-  background-image: linear-gradient(
-    to right,
-    var(--btn-color, var(--black-1)) 0%,
-    var(--btn-color, var(--black-1)) 100%
-  );
+  background-image: linear-gradient(to right,
+      var(--btn-color, var(--black-1)) 0%,
+      var(--btn-color, var(--black-1)) 100%);
   background-size: 100% 0.12em;
   background-position: 0 100%;
 }
+
 .btn-underline.white-1 {
   --btn-color: var(--white-1);
 }
+
 /* Subrayado en reposo: va en Montserrat Subrayada, que trae la línea en los propios
    glifos (lo pide el diseñador para todo botón con tipografía subrayada). Por eso acá
    no se dibuja ninguna línea, y el hover —que antes era la línea retirándose— pasa a
    ser un cambio de opacidad. */
 .btn-underlined span {
   display: inline;
-  font-family: var(
-    --font-subrayada,
-    "Montserrat Subrayada",
-    var(--font-grotesk, sans-serif)
-  );
+  font-family: var(--font-subrayada,
+      "Montserrat Subrayada",
+      var(--font-grotesk, sans-serif));
   color: var(--btn-color, var(--black-1));
   transition: opacity 0.45s cubic-bezier(0.19, 1, 0.155, 1.01) 0s;
   pointer-events: none;
 }
+
 .btn-underlined:hover span,
 .btn-underlined.active span {
   opacity: 0.55;
 }
+
 .btn-underlined.white-1 {
   --btn-color: var(--white-1);
 }
@@ -1289,13 +1477,14 @@ body.menu-active #header .social-list {
 .btn-d {
   display: inline-flex;
   position: relative;
-  height: 8.7rem;
+  height: 7.2rem;
   border-radius: 10rem;
   background: var(--white-1);
   overflow: hidden;
   white-space: nowrap;
   box-shadow: 0 0 2.6rem rgba(246, 240, 225, 0.28);
 }
+
 .btn-d__content {
   display: flex;
   align-items: center;
@@ -1303,26 +1492,27 @@ body.menu-active #header .social-list {
   height: 100%;
   padding: 0 2.8rem;
 }
+
 .btn-d__content .d-icon {
   width: 2.9rem;
   height: 3.7rem;
   flex: none;
   fill: var(--red-1);
 }
+
 /* La etiqueta en Montserrat Subrayada: la línea viene en los glifos, no se dibuja */
 .btn-d__label {
-  font-family: var(
-    --font-subrayada,
-    "Montserrat Subrayada",
-    var(--font-grotesk, sans-serif)
-  );
-  font-size: 3.6rem;
+  font-family: var(--font-subrayada,
+      "Montserrat Subrayada",
+      var(--font-grotesk, sans-serif));
+  font-size: 2.6rem;
   line-height: 1;
   font-weight: 700;
   text-transform: uppercase;
   color: var(--red-1);
   padding-top: 0.25em;
 }
+
 .btn-d__content--hover {
   position: absolute;
   inset: 0;
@@ -1330,22 +1520,35 @@ body.menu-active #header .social-list {
   clip-path: ellipse(0% 150% at 50% 50%);
   transition: clip-path 0.45s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
+
 .btn-d__content--hover .d-icon {
   fill: var(--white-1);
 }
+
 .btn-d__content--hover .btn-d__label {
   color: var(--white-1);
 }
+
 .btn-d:hover .btn-d__content--hover {
   clip-path: ellipse(50% 150% at 50% 50%);
 }
+
+@media only screen and (min-width: 1025.1px) {
+  .btn-d__content .d-icon {
+    width: 2.3rem;
+    height: 2.9rem;
+  }
+}
+
 @media only screen and (max-width: 767.98px) {
   .btn-d {
     height: 7rem;
   }
+
   .btn-d__label {
     font-size: 2.6rem;
   }
+
   .btn-d__content .d-icon {
     width: 2.2rem;
     height: 2.8rem;
@@ -1362,22 +1565,26 @@ body.menu-active #header .social-list {
   min-height: calc(var(--vh, 1vh) * 100);
   min-height: 100dvh;
 }
+
 .container-wrapper {
   min-height: 100vh;
   min-height: calc(var(--vh, 1vh) * 100);
   min-height: 100dvh;
 }
+
 .wrapper {
   width: 100%;
   min-height: 100vh;
   min-height: calc(var(--vh, 1vh) * 100);
   min-height: 100dvh;
 }
+
 @media only screen and (min-width: 1025.1px) {
   .wrapper {
     width: var(--w-100vw);
   }
 }
+
 .wrapper main {
   width: 100%;
 }
@@ -1389,6 +1596,7 @@ body.menu-active #header .social-list {
   position: relative;
   background: var(--white-1);
 }
+
 /* 840vh: la intro, la frase, la partida en dos D, la apertura del panel y los cuatro
    frentes adentro. Todo eso lo alimenta un solo tramo fijado; si se suma o se saca un
    frente hay que mover este alto, o cambia el ritmo de todas las fases. */
@@ -1397,11 +1605,13 @@ body.menu-active #header .social-list {
     height: 840vh;
   }
 }
+
 .home-hero .container-sticky {
   position: sticky;
   top: 0;
   left: 0;
 }
+
 .hero-stage {
   position: relative;
   width: 100%;
@@ -1426,23 +1636,23 @@ body.menu-active #header .social-list {
   --ctr: 0vh;
   --cbr: 0vh;
   --cbl: 0vh;
-  clip-path: inset(
-    var(--ct) var(--cr) var(--cb) var(--cl) round var(--ctl) var(--ctr)
-      var(--cbr) var(--cbl)
-  );
+  clip-path: inset(var(--ct) var(--cr) var(--cb) var(--cl) round var(--ctl) var(--ctr) var(--cbr) var(--cbl));
 }
+
 .blob-left {
   --cr: 56%;
   --ctr: 50vh;
   --cbr: 50vh;
   z-index: 2;
 }
+
 .blob-right {
   --cl: 46%;
   --ctl: 50vh;
   --cbl: 50vh;
   z-index: 1;
 }
+
 .blob-left2 {
   --cr: 100%;
   --ctr: 50vh;
@@ -1458,11 +1668,13 @@ body.menu-active #header .social-list {
   display: flex;
   align-items: center;
 }
+
 .hero-logo__d {
   height: 35vh;
   width: auto;
   display: block;
 }
+
 .hero-logo__rest-mask {
   position: relative;
   height: 37vh;
@@ -1470,6 +1682,7 @@ body.menu-active #header .social-list {
   margin-left: 2.2vh;
   overflow: hidden;
 }
+
 .hero-logo__rest {
   position: absolute;
   right: 0;
@@ -1478,6 +1691,7 @@ body.menu-active #header .social-list {
   width: auto;
   max-width: none;
 }
+
 .hero-mail {
   position: absolute;
   left: 7.6rem;
@@ -1509,42 +1723,73 @@ body.menu-active #header .social-list {
   text-transform: uppercase;
   letter-spacing: 0;
 }
+
 .hero-headline__line {
   display: block;
 }
+
 /* Estado de partida nada más: el reveal lo anima GSAP dentro de la intro.
    Con una animación CSS se reiniciaba solo, porque ScrollTrigger re-inserta en el
    DOM el elemento fijado en cada refresh y re-parentar un nodo vuelve a arrancar las
    animaciones CSS de sus descendientes (el titular vive dentro del hero fijado). */
-.hero-headline .word > span {
+.hero-headline .word>span {
   opacity: 0;
   transform: translateY(100%);
 }
 
-/* Centrado con flex, sin transform: GSAP anima `y` acá y un translateY(-50%)
-   sería sobreescrito, descolocando el bloque y sacando el botón de la vista. */
+/* Ocupa todo el blob, no sólo el bloque de texto: es la caja contra la que se mide el
+   contorno concéntrico (:before). El texto va en .hero-claim__inner. */
 .hero-claim {
   position: absolute;
-  left: 21rem;
-  top: 0;
-  bottom: 0;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  color: var(--white-1);
+}
+
+/* Contorno concéntrico, el mismo de "qué hacemos" y en el mismo lugar (curva a la
+   derecha, se escapa por la izquierda): cuando la frase se va y entra el panel, el
+   contorno de uno continúa en el del otro. Las medidas copian las de
+   .blob-left2 .services-shape:before, incluido el padding de 2rem del panel.
+   Vive en .hero-claim —y no en un elemento aparte— porque GSAP le anima el autoAlpha a
+   la frase: así el contorno entra y sale con ella. En el hero inicial el blob sólo lleva
+   el titular y el contorno no tiene que verse. */
+.hero-claim:before {
+  content: "";
+  position: absolute;
+  top: calc(2rem + min(6rem, 6vh));
+  right: 11rem;
+  bottom: calc(2rem + min(6rem, 6vh));
+  left: -20rem;
+  border: 0.5rem solid var(--white-1);
+  border-radius: 0 var(--blob-radius) var(--blob-radius) 0;
+  pointer-events: none;
+}
+
+/* Centrado con flex, sin transform: GSAP anima `y` acá y un translateY(-50%)
+   sería sobreescrito, descolocando el bloque y sacando el botón de la vista. */
+.hero-claim__inner {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: flex-start;
   width: 141rem;
   max-width: calc(100% - 30rem);
-  color: var(--white-1);
+  margin-left: 21rem;
 }
+
 .hero-claim__text {
   font-size: var(--fs-claim);
   line-height: 1.25;
   font-weight: 800;
   max-width: 108rem;
 }
+
 .hero-claim .btn-d {
   margin-top: 3.6rem;
 }
+
 @media only screen and (min-width: 1025.1px) {
   .hero-claim {
     opacity: 0;
@@ -1556,6 +1801,7 @@ body.menu-active #header .social-list {
 html.intro-running {
   overflow: hidden;
 }
+
 html.intro-running body {
   touch-action: none;
 }
@@ -1565,6 +1811,7 @@ html.intro-running body {
    que en desktop: en un teléfono se scrollea a flicks y un pin largo se siente trabado.
    Las siluetas usan radios en vw y sus estados salen de MCLIP (HomeExperience). */
 @media only screen and (max-width: 1025px) {
+
   /* 700vh (contra 840vh en apaisado): con 500vh cada fase del hero pasaba volando al
      hacer flicks. Se sube para dar más recorrido por fase —el ritmo queda en ~640px por
      unidad de timeline— sin llegar al tramo largo de apaisado, que en táctil se siente
@@ -1572,6 +1819,7 @@ html.intro-running body {
   .home-hero {
     height: 700vh;
   }
+
   /* 100dvh (dynamic viewport): el escenario llena la ventana visible en cada momento,
      así no queda espacio vacío abajo cuando la barra de direcciones se colapsa. dvh se
      re-evalúa solo con la barra; el pin del hero no se rompe porque ignoreMobileResize
@@ -1581,6 +1829,7 @@ html.intro-running body {
     height: calc(var(--vh, 1vh) * 100);
     height: 100dvh;
   }
+
   /* Acá va el estado de REPOSO del hero (leftHero / rightHero / left2Hidden de MCLIP),
      no el de arranque. Al refrescar, ScrollTrigger revierte los estilos inline para
      medir la página, y un fromTo con scrub parado en progreso 0 no los vuelve a
@@ -1597,6 +1846,7 @@ html.intro-running body {
     --cbr: 26vw;
     --cbl: 0vw;
   }
+
   .blob-right {
     --ct: 3%;
     --cr: 0%;
@@ -1607,11 +1857,13 @@ html.intro-running body {
     --cbr: 0vw;
     --cbl: 26vw;
   }
+
   .blob-left2 {
     --cr: 100%;
     --ctr: 0vw;
     --cbr: 29vw;
   }
+
   /* Solo los dos blobs del HERO INICIAL (el logo y la frase) se fijan en svh: son inset:
      0 dentro del escenario, que mide 100dvh, así que al colapsarse la barra el escenario
      crecía y ellos daban un salto de tamaño. Con height: svh (el alto con la barra a la
@@ -1624,6 +1876,15 @@ html.intro-running body {
     bottom: auto;
     height: 100svh;
   }
+
+  /* El de la frase sólo es svh en el hero inicial: cuando crece a toda la pantalla tiene
+     que seguir al escenario (dvh) como el panel de "qué hacemos", o al colapsarse la barra
+     queda crema debajo. --fill lo anima GSAP de 0 a 1 mientras el blob crece. */
+  .blob-right {
+    --fill: 0;
+    height: calc(100svh + (100dvh - 100svh) * var(--fill));
+  }
+
   /* El lockup, centrado en el blob de abajo (la intro lo lleva del 50% al 70%).
      width: max-content porque un absoluto con left: 50% encoge al espacio que le queda
      a la derecha, y al ser flex la máscara de "UTSILAND" se achicaba a nada. */
@@ -1633,6 +1894,7 @@ html.intro-running body {
     width: max-content;
     transform: translate(-50%, -50%);
   }
+
   /* El lockup se mide contra el lado MÁS CHICO. Midiéndolo sólo en vh, en un teléfono
      angosto y alto la D más "UTSILAND" al lado no entraban en el ancho del blob y se
      comían su borde redondeado. Las tres piezas salen de la misma variable: la D del
@@ -1647,17 +1909,21 @@ html.intro-running body {
   :root {
     --d-hero: min(20svh, 34vw);
   }
+
   .hero-logo__d {
     height: var(--d-hero);
   }
+
   #loader .d-mark {
     height: var(--d-hero);
   }
+
   .hero-logo__rest-mask {
     height: calc(var(--d-hero) * 1.055);
     width: calc(var(--d-hero) * 0.935);
     margin-left: calc(var(--d-hero) * 0.17);
   }
+
   /* Abajo del todo del blob de abajo, que va del 48% al 97% */
   .hero-mail {
     left: 2.4rem;
@@ -1665,6 +1931,7 @@ html.intro-running body {
     top: auto;
     font-size: 1.8rem;
   }
+
   /* El titular vive DENTRO del blob de arriba (3% a 45%), crema sobre negro, no abajo
      sobre el crema como antes. Centrado en ese blob: 24% es su mitad. */
   /* El margen izquierdo va en % del ancho, no en rem: el blob entra por la izquierda
@@ -1686,30 +1953,63 @@ html.intro-running body {
     color: var(--white-1);
     line-height: 1.12;
   }
+
+  /* La caja del contorno, con las mismas medidas que la de "qué hacemos": debajo del
+     header fijo y con 2.4rem de aire negro abajo. El contenido se centra adentro. */
   .hero-claim {
-    left: 16%;
-    right: 3.4rem;
-    top: 3%;
-    bottom: 3%;
-    width: auto;
-    max-width: none;
+    top: var(--header-height);
+    right: 0;
+    bottom: 2.4rem;
+    left: 0;
   }
+
+  .hero-claim:before {
+    top: 0;
+    right: 2.3rem;
+    bottom: 0;
+    left: -20rem;
+    border-width: 0.35rem;
+    border-radius: 0 calc(var(--blob-radius) - 2rem) calc(var(--blob-radius) - 2rem) 0;
+  }
+
+  /* 16% a la izquierda, el mismo margen que el titular: la frase entra donde él estaba y
+     queda afuera de la curva del blob, que en vertical entra 7% con un redondeo de 26vw */
+  .hero-claim__inner {
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    padding: 0 5rem 0 16%;
+    box-sizing: border-box;
+  }
+
+  /* Escalan con el viewport, igual que el panel de "qué hacemos": así la frase entra
+     completa en un teléfono bajo y no cambia de tamaño con la barra de direcciones. */
   .hero-claim__text {
-    line-height: 1.2;
+    font-size: min(3.6rem, 4.8svh);
+    line-height: 1.18;
     max-width: none;
   }
+
   .hero-claim .btn-d {
-    margin-top: 2.6rem;
+    margin-top: min(2.4rem, 2.6svh);
+    min-height: min(7rem, 7.6svh);
   }
+
+  .hero-claim .btn-d__label {
+    font-size: min(2.1rem, 2.3svh);
+  }
+
   /* El botón deja de ser una pastilla de una línea: a este ancho el texto no entra */
   .btn-d {
     height: auto;
     min-height: 8rem;
     white-space: normal;
   }
+
   .btn-d__content {
     padding: 1.5rem 2.6rem;
   }
+
   .btn-d__label {
     font-size: 2.7rem;
     line-height: 1.15;
@@ -1717,6 +2017,7 @@ html.intro-running body {
     padding-top: 0.15em;
   }
 }
+
 @media only screen and (max-width: 767.98px) {
   .hero-mail {
     font-size: 1.55rem;
@@ -1725,9 +2026,11 @@ html.intro-running body {
   .btn-d {
     min-height: 7rem;
   }
+
   .btn-d__content {
     padding: 1.6rem 2.4rem;
   }
+
   .btn-d__label {
     font-size: 2.1rem;
   }
@@ -1746,6 +2049,7 @@ html.intro-running body {
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
+
 .section-kicker .d-icon {
   width: 1.5rem;
   height: 1.9rem;
@@ -1758,15 +2062,19 @@ html.intro-running body {
   background: var(--black-1);
   box-shadow: none;
 }
+
 .btn-d--dark .btn-d__label {
   color: var(--white-1);
 }
+
 .btn-d--dark .btn-d__content .d-icon {
   fill: var(--red-1);
 }
+
 .btn-d--dark .btn-d__content--hover {
   background: var(--red-1);
 }
+
 .btn-d--dark .btn-d__content--hover .d-icon {
   fill: var(--white-1);
 }
@@ -1792,6 +2100,7 @@ html.intro-running body {
   vertical-align: middle;
   overflow: hidden;
 }
+
 .spinner-d i {
   position: absolute;
   inset: 0;
@@ -1802,29 +2111,36 @@ html.intro-running body {
     spinner-corta 1s cubic-bezier(0.645, 0.045, 0.355, 1) infinite,
     spinner-muda 2s steps(1, end) infinite;
 }
+
 @keyframes spinner-corta {
   0% {
     clip-path: inset(0 100% 0 0);
   }
+
   26%,
   62% {
     clip-path: inset(0 0 0 0);
   }
+
   88%,
   100% {
     clip-path: inset(0 0 0 100%);
   }
 }
+
 @keyframes spinner-muda {
+
   0%,
   49.9% {
     background: var(--sp-1, currentColor);
   }
+
   50%,
   100% {
     background: var(--sp-2, var(--red-1));
   }
 }
+
 /* Suelto alterna entre la tinta de donde esté y el rojo. Dentro del botón la tinta ya
    es el rojo, así que ahí el par se da vuelta y el segundo tono es el negro; en el
    botón oscuro y en la cara que se pinta al pasar el mouse, el crema. */
@@ -1834,26 +2150,31 @@ html.intro-running body {
   --sp-1: var(--red-1);
   --sp-2: var(--black-1);
 }
+
 .btn-d--dark .spinner-d,
 .btn-d__content--hover .spinner-d {
   --sp-1: var(--white-1);
   --sp-2: var(--red-1);
 }
+
 @media only screen and (max-width: 1025px) {
   .btn-d .spinner-d {
     width: 2.2rem;
     height: 2.8rem;
   }
 }
+
 @media (prefers-reduced-motion: reduce) {
   .spinner-d i {
     animation: spinner-late 2s ease-in-out infinite alternate;
     clip-path: none;
   }
+
   @keyframes spinner-late {
     from {
       opacity: 0.4;
     }
+
     to {
       opacity: 1;
     }
@@ -1871,15 +2192,18 @@ html.intro-running body {
   color: var(--black-1);
   padding: 16rem 0;
 }
+
 .history-inner {
   width: 100%;
   padding-left: 21rem;
   padding-right: 21rem;
   max-width: 168rem;
 }
+
 .history-kicker {
   margin-bottom: 5rem;
 }
+
 .history-title {
   margin: 0;
   font-size: var(--fs-h2);
@@ -1887,6 +2211,7 @@ html.intro-running body {
   font-weight: 800;
   max-width: 124rem;
 }
+
 .history-subtitle {
   margin-top: 3rem;
   font-size: var(--fs-subtitle);
@@ -1894,31 +2219,39 @@ html.intro-running body {
   max-width: 96rem;
   opacity: 0.72;
 }
+
 .history-cta {
   margin-top: 6rem;
 }
+
 @media only screen and (max-width: 1025px) {
   .home-history {
     padding: 10rem 0;
   }
+
   .history-inner {
     padding-left: 8rem;
     padding-right: 8rem;
   }
+
   .history-kicker {
     margin-bottom: 3.4rem;
   }
+
   .history-subtitle {
     margin-top: 2.2rem;
   }
+
   .history-cta {
     margin-top: 4rem;
   }
 }
+
 @media only screen and (max-width: 767.98px) {
   .home-history {
     padding: 8rem 0;
   }
+
   .history-inner {
     padding-left: 2.4rem;
     padding-right: 2.4rem;
@@ -1932,6 +2265,7 @@ html.intro-running body {
    En desktop el negro y el recorte los pone el propio panel, que el scroll abre
    a todo el ancho; acá solo queda el contorno concéntrico y el contenido. */
 @media only screen and (min-width: 1025.1px) {
+
   /* Sin align-items: la forma se estira a todo el alto del panel (igual que cuando
      era una sección con su propio container-sticky) y centra el contenido adentro.
      El padding sólo mueve contorno y contenido: el negro lo pinta el panel completo. */
@@ -1939,6 +2273,7 @@ html.intro-running body {
     display: flex;
     padding: 2rem 0;
   }
+
   .blob-left2 .services-shape {
     flex: 1;
     display: flex;
@@ -1948,6 +2283,7 @@ html.intro-running body {
     overflow: visible;
   }
 }
+
 .services-shape {
   position: relative;
   background: var(--black-1);
@@ -1955,6 +2291,7 @@ html.intro-running body {
   overflow: hidden;
   padding: 22rem 0 24rem;
 }
+
 .services-shape:before {
   content: "";
   position: absolute;
@@ -1966,6 +2303,7 @@ html.intro-running body {
   border-radius: 0 calc(var(--blob-radius)) calc(var(--blob-radius)) 0;
   pointer-events: none;
 }
+
 .services-inner {
   position: relative;
   z-index: 1;
@@ -1973,9 +2311,11 @@ html.intro-running body {
   padding-left: 21rem;
   padding-right: 28rem;
 }
+
 .services-head {
   max-width: 128rem;
 }
+
 /* Los tres frentes comparten lugar: el scroll los intercambia (addServicesSequence) */
 @media only screen and (min-width: 1025.1px) {
   .services-stack {
@@ -1983,6 +2323,7 @@ html.intro-running body {
     min-height: 34rem;
     margin-top: 9rem;
   }
+
   .services-stack .service {
     position: absolute;
     top: 0;
@@ -1991,6 +2332,7 @@ html.intro-running body {
     margin-top: 0 !important;
   }
 }
+
 .services-title {
   margin: 4rem 0 0;
   color: var(--white-1);
@@ -1999,6 +2341,7 @@ html.intro-running body {
   font-weight: 800;
   text-transform: uppercase;
 }
+
 .services-intro {
   margin-top: 3rem;
   max-width: 96rem;
@@ -2007,17 +2350,21 @@ html.intro-running body {
   line-height: 1.5;
   opacity: 0.86;
 }
+
 .services-stack {
   margin-top: 10rem;
 }
+
 /* Número + cuerpo: separa visualmente los tres frentes entre sí */
 .service {
   position: relative;
   display: grid;
   grid-template-columns: 12rem minmax(0, 1fr);
+  align-items: baseline;
   gap: 0 5rem;
   padding-top: 6rem;
 }
+
 /* La línea es un elemento y no el border-top del frente, para poder trazarla con el
    scroll (ver buildServicesSequence). Arranca sin ancho; GSAP la lleva a scaleX(1). */
 .service__line {
@@ -2030,9 +2377,11 @@ html.intro-running body {
   transform: scaleX(0);
   transform-origin: left center;
 }
-.service + .service {
+
+.service+.service {
   margin-top: 7rem;
 }
+
 .service__n {
   font-size: 3.2rem;
   line-height: 1;
@@ -2040,6 +2389,7 @@ html.intro-running body {
   color: var(--red-1);
   letter-spacing: 0.02em;
 }
+
 .service__title {
   margin: 0;
   color: var(--white-1);
@@ -2048,6 +2398,7 @@ html.intro-running body {
   font-weight: 800;
   text-transform: uppercase;
 }
+
 .service__lead {
   margin-top: 1.8rem;
   max-width: 76rem;
@@ -2057,12 +2408,14 @@ html.intro-running body {
   font-weight: 500;
   opacity: 0.82;
 }
+
 .services-pills {
   display: flex;
   flex-wrap: wrap;
   gap: 1.8rem 2rem;
   margin-top: 4.4rem;
 }
+
 .pill {
   display: inline-flex;
   align-items: center;
@@ -2078,21 +2431,35 @@ html.intro-running body {
   text-transform: uppercase;
   white-space: nowrap;
 }
+
 .services-cta {
   margin-top: 9rem;
 }
+
 @media only screen and (max-width: 1025px) {
+
   /* En vertical el panel es el mismo escenario fijado que en apaisado, a todo el alto
      del teléfono, y los frentes pasan de a uno en el mismo lugar. El padding de arriba
      le hace lugar al header fijo. */
   .blob-left2 {
     display: flex;
+    flex-direction: column;
+    align-items: stretch;
     padding: 0;
     margin: 0;
   }
+
   .blob-left2 .services-shape {
-    flex: 1;
+    flex: 1 1 auto;
+    align-self: stretch;
+    width: 100%;
+    /* Misma caja que el blob (clip-path): el contorno va en el borde del panel, no
+       en la altura del contenido. */
+    height: 100%;
+    min-height: 100%;
+    max-height: none;
     display: flex;
+    flex-direction: column;
     /* Anclado arriba, no centrado: si se centra y el contenido es más alto que el
        panel, el excedente se va por arriba y queda tapado por el header fijo. Anclando
        al tope el contenido arranca siempre debajo del header y crece hacia abajo. */
@@ -2100,38 +2467,46 @@ html.intro-running body {
     background: none;
     border-radius: 0;
     overflow: visible;
-    padding: calc(var(--header-height) + 1rem) 0 2.4rem;
+    padding: calc(var(--header-height) + 2.5rem) 0 2.4rem;
+    box-sizing: border-box;
   }
-  .services-shape:before {
-    top: calc(var(--header-height) - 1.5rem);
+
+  .blob-left2 .services-shape:before {
+    top: calc(var(--header-height));
     right: 2.3rem;
+    /* Aire negro entre la curva del contorno y el borde inferior del blob */
     bottom: 2.4rem;
+    left: -20rem;
     border-width: 0.35rem;
-    border-radius: 0 calc(var(--blob-radius) - 2rem)
-      calc(var(--blob-radius) - 2rem) 0;
+    border-radius: 0 calc(var(--blob-radius) - 2rem) calc(var(--blob-radius) - 2rem) 0;
   }
+
   .services-inner {
     padding-left: 2.4rem;
     padding-right: 5rem;
   }
-  /* Todo con tope en vh: en un teléfono bajo el panel tiene que entrar igual */
+
+  /* svh: mismo criterio que el contorno — no escala con la barra de direcciones. */
   .services-title {
-    font-size: min(3.6rem, 4vh);
+    font-size: min(3.6rem, 4svh);
     line-height: 1.06;
-    margin-top: min(1.4rem, 1.5vh);
+    margin-top: min(1.4rem, 1.5svh);
   }
+
   .services-intro {
-    font-size: min(1.9rem, 2.1vh);
+    font-size: min(1.9rem, 2.1svh);
     line-height: 1.4;
-    margin-top: min(1.2rem, 1.3vh);
+    margin-top: min(1.2rem, 1.3svh);
   }
+
   /* El alto real del hueco lo fija JS con el frente más alto (fitServicesStack); esto
      es sólo el piso */
   .services-stack {
     position: relative;
-    min-height: 32vh;
-    margin-top: min(2rem, 2.2vh);
+    min-height: 32svh;
+    margin-top: min(2rem, 2.2svh);
   }
+
   .services-stack .service {
     position: absolute;
     top: 0;
@@ -2139,61 +2514,76 @@ html.intro-running body {
     width: 100%;
     margin-top: 0 !important;
   }
+
   .service {
     grid-template-columns: 1fr;
     gap: 0.6rem;
     /* Más aire arriba: la línea separadora vive en top:0 del frente, y con un padding
        chico el número "01" le quedaba pegado/encimado. Le damos lugar para que la
        línea se lea como separador y no como subrayado del número. */
-    padding-top: min(2.6rem, 3vh);
+    padding-top: min(2.6rem, 3svh);
   }
+
   .service__n {
-    font-size: min(2rem, 2.2vh);
+    font-size: min(2rem, 2.2svh);
   }
+
   .service__title {
-    font-size: min(3.2rem, 3.6vh);
+    font-size: min(3.2rem, 3.6svh);
   }
+
   .service__lead {
-    font-size: min(1.9rem, 2.1vh);
+    font-size: min(1.9rem, 2.1svh);
     margin-top: 0.6rem;
   }
+
   .services-pills {
-    gap: min(0.9rem, 1vh) 1rem;
-    margin-top: min(1.6rem, 1.8vh);
+    gap: min(0.9rem, 1svh) 1rem;
+    margin-top: min(1.6rem, 1.8svh);
   }
+
   .pill {
     white-space: normal;
     text-align: center;
     height: auto;
-    min-height: min(4rem, 4.4vh);
-    padding: min(0.8rem, 0.9vh) 1.6rem;
-    font-size: min(1.5rem, 1.65vh);
+    min-height: min(4rem, 4.4svh);
+    padding: min(0.8rem, 0.9svh) 1.6rem;
+    font-size: min(1.5rem, 1.65svh);
     line-height: 1.15;
   }
+
   .services-cta {
-    margin-top: min(2rem, 2.2vh);
+    margin-top: min(2rem, 2.2svh);
     /* El contorno blanco (:before) cierra abajo con una curva grande de radio 10rem que
        entra hacia adentro por la derecha. Si el botón llega hasta el borde del inner
        (padding-right: 5rem), su esquina inferior derecha cruza esa curva y queda
        encimado sobre la línea. Lo apartamos de la curva con más aire a la derecha y un
        margen inferior que lo deja por encima del tramo curvo del contorno. */
     padding-right: 3rem;
-    margin-bottom: min(3rem, 3.4vh);
+    margin-bottom: min(3rem, 3.4svh);
   }
+
   .services-cta .btn-d {
-    min-height: min(7rem, 7.6vh);
+    min-height: min(7rem, 7.6svh);
+  }
+
+  .blob-left2 .services-inner {
+    width: 100%;
   }
 }
+
 @media only screen and (max-width: 767.98px) {
+
   /* En un teléfono el panel no tiene alto para la bajada: el título ya lo dice y los
      frentes son lo que importa. En tablet sí entra. */
   .blob-left2 .services-intro {
     display: none;
   }
+
   /* Que cada título entre en una línea: en el índice del cierre son cuatro filas y a
      dos líneas cada una no hay alto que alcance */
   .blob-left2 .service__title {
-    font-size: min(2.4rem, 2.8vh);
+    font-size: min(2.4rem, 2.8svh);
   }
 }
 
@@ -2203,12 +2593,14 @@ html.intro-running body {
    bajas el contenido no entraba y se cortaba por arriba, encimándose con el
    header. Con min(rem, vh) cada pieza cede cuando falta alto. */
 @media only screen and (min-width: 1025.1px) {
+
   /* El padding superior reserva el lugar del header fijo. 8 y no 13 como antes: con
      cuatro frentes en el índice del cierre, más el botón, el contenido no entraba entre
      los contornos y el botón se salía por abajo. */
   .blob-left2 .services-shape {
     padding: min(6rem, 6vh) 0 min(7rem, 5vh);
   }
+
   /* El contorno tiene que ceder con el mismo tope que el padding que ubica el
      contenido. Si queda en 13rem fijo, en pantallas anchas y bajas el contenido
      arranca más arriba que la línea y el antetítulo la termina pisando. */
@@ -2216,50 +2608,61 @@ html.intro-running body {
     top: min(6rem, 6vh);
     bottom: min(6rem, 6vh);
   }
+
   .blob-left2 .services-title {
     font-size: min(6.6rem, 5.5vh);
     margin-top: min(2.8rem, 2.2vh);
   }
+
   .blob-left2 .services-intro {
     font-size: min(2.5rem, 2.2vh);
     margin-top: min(2rem, 1.8vh);
   }
+
   /* El hueco tiene que aguantar dos cosas: el frente más alto, y el índice del cierre,
      que ahora son cuatro filas en vez de tres. */
   .blob-left2 .services-stack {
     margin-top: min(3.5rem, 2.6vh);
     min-height: min(46rem, 38.5vh);
   }
+
   .blob-left2 .service {
     padding-top: min(5.5rem, 4vh);
   }
+
   .blob-left2 .service__title {
     font-size: min(5.6rem, 4.8vh);
   }
+
   .blob-left2 .service__lead {
     font-size: min(2.6rem, 2.3vh);
     margin-top: min(1.6rem, 1.4vh);
   }
+
   .blob-left2 .services-pills {
     gap: min(1.8rem, 1.6vh) 2rem;
     margin-top: min(4rem, 3vh);
   }
+
   .blob-left2 .pill {
     height: min(6.4rem, 5.4vh);
     padding: 0 min(3.4rem, 3vh);
     font-size: min(2.3rem, 2vh);
   }
+
   /* El bloque va centrado: todo lo que crece el contenido le sube el techo, y el
      antetítulo termina pisando el contorno. Con cuatro frentes hay que ser más cortito. */
   /* El aire entre la última fila del índice y el botón: con 3.2vh quedaban pegados */
   .blob-left2 .services-cta {
     margin-top: min(8rem, 6vh);
   }
+
   .blob-left2 .services-cta .btn-d {
-    height: min(8.7rem, 7.4vh);
+    height: min(7.2rem, 6.1vh);
   }
+
   .blob-left2 .services-cta .btn-d__label {
-    font-size: min(3.6rem, 3.1vh);
+    font-size: min(2.6rem, 2.25vh);
   }
 }
 
@@ -2272,12 +2675,14 @@ html.intro-running body {
   color: var(--black-1);
   padding: 18rem 0 20rem;
 }
+
 /* Se fija y el scroll traza un paso por vez (ver initProcess) */
 @media only screen and (min-width: 1025.1px) {
   .home-process {
     height: 300vh;
     padding: 0;
   }
+
   .home-process .container-sticky {
     position: sticky;
     top: 0;
@@ -2286,14 +2691,17 @@ html.intro-running body {
     align-items: center;
   }
 }
+
 .process-inner {
   width: 100%;
   padding-left: 21rem;
   padding-right: 21rem;
 }
+
 .process-head {
   max-width: 120rem;
 }
+
 .process-title {
   margin: 4rem 0 0;
   font-size: var(--fs-h1);
@@ -2301,16 +2709,19 @@ html.intro-running body {
   font-weight: 800;
   text-transform: uppercase;
 }
+
 .process-steps {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8rem 6rem;
   margin-top: 12rem;
 }
+
 .step {
   position: relative;
   padding-top: 4rem;
 }
+
 /* Línea propia (no border-top) para poder trazarla con GSAP */
 .step__line {
   position: absolute;
@@ -2322,6 +2733,7 @@ html.intro-running body {
   transform: scaleX(0);
   transform-origin: left center;
 }
+
 .step__n {
   display: block;
   font-size: 3.2rem;
@@ -2330,6 +2742,7 @@ html.intro-running body {
   color: var(--red-1);
   letter-spacing: 0.02em;
 }
+
 /* min-height reserva dos líneas: si no, los pasos de título corto desalinean el texto */
 .step__title {
   margin: 2.6rem 0 0;
@@ -2338,50 +2751,62 @@ html.intro-running body {
   font-weight: 800;
   min-height: 2.3em;
 }
+
 .step__text {
   margin-top: 1.6rem;
   font-size: var(--fs-lead);
   line-height: 1.45;
 }
+
 .process-cta {
   display: flex;
   margin-top: 12rem;
 }
+
 @media only screen and (max-width: 1025px) {
   .home-process {
     padding: 11rem 0 12rem;
   }
+
   .process-inner {
     padding-left: 8rem;
     padding-right: 8rem;
   }
+
   .process-title {
     margin-top: 3rem;
   }
+
   .process-steps {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 5rem 4rem;
     margin-top: 8rem;
   }
+
   .step {
     padding-top: 3rem;
   }
+
   .step__title {
     margin-top: 2rem;
   }
+
   .process-cta {
     margin-top: 8rem;
   }
 }
+
 @media only screen and (max-width: 767.98px) {
   .process-inner {
     padding-left: 4rem;
     padding-right: 4rem;
   }
+
   .process-steps {
     grid-template-columns: 1fr;
     gap: 4rem;
   }
+
   .step__title {
     min-height: 0;
   }
@@ -2390,6 +2815,7 @@ html.intro-running body {
 /* Ajuste a la ALTURA de la pantalla para la sección fijada (mismo motivo que en
    servicios: el rem escala con el ancho). Va al final para ganar por orden. */
 @media only screen and (min-width: 1025.1px) {
+
   /* El padding superior reserva el lugar del header fijo.
      Seis pasos con título y texto son mucho contenido para una pantalla, así que
      los topes en vh acá son más ajustados que en las otras secciones. */
@@ -2397,37 +2823,47 @@ html.intro-running body {
     padding-top: min(11rem, 8.5vh);
     padding-bottom: min(5rem, 3.5vh);
   }
+
   .home-process .process-title {
     font-size: min(7.2rem, 5vh);
     margin-top: min(3.4rem, 2.2vh);
   }
+
   .home-process .process-steps {
     gap: min(8rem, 3.5vh) 6rem;
     margin-top: min(9rem, 4vh);
   }
+
   .home-process .step {
     padding-top: min(4rem, 2.8vh);
   }
+
   .home-process .step__n {
     font-size: min(3.2rem, 2.4vh);
   }
+
   .home-process .step__title {
     font-size: min(3.6rem, 2.6vh);
     margin-top: min(2.6rem, 1.8vh);
   }
+
   .home-process .step__text {
     font-size: min(2.2rem, 1.7vh);
     margin-top: min(1.6rem, 1.2vh);
   }
+
   .home-process .process-cta {
     margin-top: min(12rem, 4vh);
   }
+
   .home-process .process-cta .btn-d {
-    height: min(8.7rem, 6.6vh);
+    height: min(7.2rem, 5.5vh);
   }
+
   .home-process .process-cta .btn-d__label {
-    font-size: min(3.6rem, 2.7vh);
+    font-size: min(2.6rem, 1.95vh);
   }
+
   .home-process .section-kicker {
     font-size: min(1.9rem, 1.7vh);
   }
@@ -2444,18 +2880,22 @@ html.intro-running body {
   z-index: 2;
   overflow: hidden;
 }
+
 .portfolio-inner {
   position: relative;
 }
+
 .cards-marquee {
   position: relative;
   width: 100%;
   overflow: hidden;
 }
+
 .cards-marquee .marquee-trigger {
   position: relative;
   height: 52.8rem;
 }
+
 .cards-marquee .marquee {
   position: absolute;
   top: 0;
@@ -2464,12 +2904,14 @@ html.intro-running body {
   flex-wrap: nowrap;
   white-space: nowrap;
 }
+
 .cards-row {
   display: flex;
   flex-wrap: nowrap;
   gap: 4.2rem;
   padding-left: 4.2rem;
 }
+
 .card {
   position: relative;
   flex: none;
@@ -2479,6 +2921,7 @@ html.intro-running body {
   overflow: hidden;
   background: var(--gray-2);
 }
+
 .card img {
   width: 100%;
   height: 100%;
@@ -2486,9 +2929,11 @@ html.intro-running body {
   object-position: center;
   transition: transform 0.8s cubic-bezier(0.215, 0.61, 0.355, 1);
 }
+
 .card:hover img {
   transform: scale(1.06);
 }
+
 /* white-space: normal para que los nombres largos envuelvan: la marquesina impone nowrap */
 .card figcaption {
   position: absolute;
@@ -2503,25 +2948,23 @@ html.intro-running body {
   text-transform: uppercase;
   letter-spacing: 0.01em;
   white-space: normal;
-  background: linear-gradient(
-    to top,
-    rgba(10, 10, 10, 0.85),
-    rgba(10, 10, 10, 0)
-  );
+  background: linear-gradient(to top,
+      rgba(10, 10, 10, 0.85),
+      rgba(10, 10, 10, 0));
 }
+
 /* El titular va sobre las fotos: sin este velo no se lee */
 .cards-veil {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background: radial-gradient(
-    58% 62% at 50% 50%,
-    rgba(10, 10, 10, 0.82) 0%,
-    rgba(10, 10, 10, 0.6) 55%,
-    rgba(10, 10, 10, 0) 100%
-  );
+  background: radial-gradient(58% 62% at 50% 50%,
+      rgba(10, 10, 10, 0.82) 0%,
+      rgba(10, 10, 10, 0.6) 55%,
+      rgba(10, 10, 10, 0) 100%);
 }
+
 /* pointer-events: none para que el titular no tape la marquesina que corre atrás... */
 .portfolio-heading {
   position: absolute;
@@ -2534,6 +2977,7 @@ html.intro-running body {
   pointer-events: none;
   text-align: center;
 }
+
 /* ...pero el botón sí tiene que recibir el click. Va sobre el botón y no sobre su
    contenedor, que es una franja del ancho de la pantalla y taparía la marquesina entera.
    Las tarjetas de atrás siguen sin responder: son <figure> sin link, decorado, y el
@@ -2542,6 +2986,13 @@ html.intro-running body {
   pointer-events: auto;
   margin-top: 12px;
 }
+
+@media only screen and (min-width: 1025.1px) {
+  .portfolio-cta .btn-d {
+    margin-top: 3.2rem;
+  }
+}
+
 .portfolio-title {
   margin: 0;
   color: var(--white-1);
@@ -2550,6 +3001,7 @@ html.intro-running body {
   font-weight: 800;
   text-transform: uppercase;
 }
+
 .portfolio-subtitle {
   margin-top: 2.4rem;
   color: var(--white-1);
@@ -2558,29 +3010,36 @@ html.intro-running body {
   font-weight: 500;
   opacity: 0.92;
 }
+
 @media only screen and (max-width: 1025px) {
   .home-portfolio {
     padding: 14rem 0 10rem;
   }
+
   .cards-marquee .marquee-trigger {
     height: 36rem;
   }
+
   .cards-row {
     gap: 2.4rem;
     padding-left: 2.4rem;
   }
+
   .card {
     width: 36rem;
     height: 36rem;
     border-radius: 3rem;
   }
+
   .card figcaption {
     padding: 6rem 2.4rem 2rem;
     font-size: 2rem;
   }
+
   .portfolio-heading {
     top: 18rem;
   }
+
   .portfolio-subtitle {
     margin-top: 1.6rem;
   }
@@ -2595,6 +3054,7 @@ html.intro-running body {
   padding: 0 1.5rem 1.5rem;
   z-index: 100;
 }
+
 .footer-panel {
   position: relative;
   background: var(--white-1);
@@ -2603,14 +3063,25 @@ html.intro-running body {
   padding: 10.5rem 9.5rem 6.6rem 11rem;
   overflow: hidden;
 }
+
+.wrapper:has(> main > section:last-child[data-set-section=""]) > #footer {
+  background: var(--white-1);
+}
+
+.wrapper:has(> main > section:last-child[data-set-section=""]) > #footer .footer-panel {
+  border: 2px solid var(--black-1);
+}
+
 .footer-row {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
 }
+
 .footer-row--map {
   gap: 3rem 6rem;
 }
+
 .footer-brand,
 .footer-slogan {
   font-size: 2.65rem;
@@ -2618,15 +3089,19 @@ html.intro-running body {
   font-weight: 700;
   text-transform: uppercase;
 }
+
 @media only screen and (min-width: 1025.1px) {
+
   .footer-brand,
   .footer-slogan {
     white-space: nowrap;
   }
 }
+
 .footer-slogan {
   margin-left: 5rem;
 }
+
 .footer-site-map {
   display: flex;
   align-items: center;
@@ -2635,6 +3110,7 @@ html.intro-running body {
   margin-left: auto;
   justify-content: flex-end;
 }
+
 .footer-link {
   display: inline-flex;
   align-items: center;
@@ -2647,17 +3123,20 @@ html.intro-running body {
   text-transform: uppercase;
   white-space: nowrap;
 }
+
 .footer-link .d-icon {
   width: 2.3rem;
   height: 2.7rem;
   fill: var(--red-1);
   flex: none;
 }
+
 .footer-rule {
   height: 2px;
   background: var(--black-1);
   margin: 7.8rem 0 5.6rem;
 }
+
 .footer-row--legal {
   justify-content: space-between;
   gap: 2rem 4rem;
@@ -2666,34 +3145,41 @@ html.intro-running body {
   font-weight: 600;
   text-transform: uppercase;
 }
+
 .footer-mail {
   display: inline-flex;
   align-items: center;
 }
+
 .footer-legal {
   display: flex;
   gap: 3rem;
 }
+
 .footer-logo-wrap {
   display: flex;
   justify-content: center;
   padding-top: 13.5rem;
 }
+
 .footer-logo {
   width: 57%;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
 }
+
 .footer-logo .letter-mask {
   display: block;
   overflow: hidden;
 }
+
 .footer-logo .letter {
   display: block;
   height: auto;
   width: 100%;
 }
+
 /* Punto de partida, para que no haya un parpadeo antes de que corra GSAP.
    El estado inicial lo vuelve a declarar initFooterReveal con las dos componentes
    (yPercent e y): si lo lee de este transform, GSAP lo pasa a píxeles y animar solo
@@ -2703,15 +3189,18 @@ html.intro-running body {
     transform: translateY(115%);
   }
 }
+
 @media only screen and (max-width: 1025px) {
   #footer {
     margin-top: 0;
     padding: 0 1.2rem 1.2rem;
   }
+
   .footer-panel {
     border-radius: 3rem;
     padding: 6rem 3.4rem 4.4rem;
   }
+
   /* En vertical no entran dos cosas en una fila: cada bloque va uno abajo del otro y
      todo alineado a la izquierda. En fila, el mapa del sitio heredaba el
      justify-content: flex-end del layout apaisado y, al caer cada link en su propia
@@ -2719,21 +3208,25 @@ html.intro-running body {
   .footer-row {
     display: block;
   }
+
   .footer-brand,
   .footer-slogan,
   .footer-link {
     font-size: 1.95rem;
   }
+
   /* La marca y el eslogan son una unidad: pegados entre sí y separados de lo que sigue */
   .footer-brand {
     display: inline-flex;
   }
+
   .footer-slogan {
     display: block;
     margin-left: 0;
     margin-top: 0.9rem;
     opacity: 0.62;
   }
+
   .footer-site-map {
     display: flex;
     flex-direction: column;
@@ -2743,24 +3236,30 @@ html.intro-running body {
     margin: 3.4rem 0 0;
     gap: 1.7rem;
   }
+
   .footer-rule {
     margin: 3.4rem 0 3rem;
   }
+
   .footer-row--legal {
     font-size: 1.7rem;
   }
+
   .footer-mail {
     display: flex;
   }
+
   .footer-legal {
     flex-direction: column;
     align-items: flex-start;
     gap: 1.3rem;
     margin-top: 2.2rem;
   }
+
   .footer-logo-wrap {
     padding-top: 6rem;
   }
+
   .footer-logo {
     width: 92%;
   }
@@ -2776,6 +3275,7 @@ html.intro-running body {
   z-index: 99;
   pointer-events: none;
 }
+
 .container-cookies .utilizamos-cookies {
   --w: 55rem;
   width: var(--w);
@@ -2789,6 +3289,7 @@ html.intro-running body {
   pointer-events: auto;
   padding: 3.5rem 2.5rem 3.5rem 3.2rem;
 }
+
 @media only screen and (max-width: 1025px) {
   .container-cookies .utilizamos-cookies {
     padding: 2.5rem;
@@ -2798,6 +3299,7 @@ html.intro-running body {
     bottom: 3.8rem;
   }
 }
+
 @media only screen and (max-width: 767.98px) {
   .container-cookies .utilizamos-cookies {
     left: 50%;
@@ -2807,9 +3309,10 @@ html.intro-running body {
     /* Más arriba en el teléfono: con bottom: 3.8rem el panel crema quedaba pegado al
        borde inferior y asomaba medio cortado al scrollear desde el hero. Se sube a
        10rem (más el safe-area del iPhone) para que aparezca completo y despegado. */
-    bottom: calc(10rem + env(safe-area-inset-bottom, 0px));
+    bottom: calc(18rem + env(safe-area-inset-bottom, 0px));
   }
 }
+
 .container-cookies .utilizamos-cookies .btn-cookies {
   padding: 0.3rem 0;
   margin-top: 1rem;
@@ -2825,6 +3328,7 @@ html.intro-running body {
   padding-left: 21rem;
   padding-right: 21rem;
 }
+
 .project-block__title {
   margin: 3rem 0 0;
   color: var(--black-1);
@@ -2833,6 +3337,7 @@ html.intro-running body {
   font-weight: 800;
   text-transform: uppercase;
 }
+
 .project-block__title--light {
   color: var(--white-1);
 }
@@ -2843,6 +3348,7 @@ html.intro-running body {
   background: var(--white-1);
   padding: 2rem 0;
 }
+
 /* El recorte va por variable, igual que las "D" del hero: animar el string del
    clip-path o escribirlo desde un onUpdate se rompe cuando ScrollTrigger refresca. */
 .project-hero__shape {
@@ -2853,10 +3359,9 @@ html.intro-running body {
   align-items: center;
   background: var(--black-1);
   overflow: hidden;
-  clip-path: inset(
-    0% var(--pr) 0% 0% round 0 var(--blob-radius) var(--blob-radius) 0
-  );
+  clip-path: inset(0% var(--pr) 0% 0% round 0 var(--blob-radius) var(--blob-radius) 0);
 }
+
 .project-hero__shape:before {
   content: "";
   position: absolute;
@@ -2865,23 +3370,25 @@ html.intro-running body {
   bottom: 13rem;
   left: -20rem;
   border: 0.5rem solid var(--white-1);
-  border-radius: 0 calc(var(--blob-radius) - 13rem)
-    calc(var(--blob-radius) - 13rem) 0;
+  border-radius: 0 calc(var(--blob-radius) - 13rem) calc(var(--blob-radius) - 13rem) 0;
   pointer-events: none;
 }
+
 /* El padding derecho le deja el lugar a la captura de portada */
 .project-hero__inner {
   position: relative;
   z-index: 1;
   width: 100%;
-  padding: min(15rem, 15vh) 21rem min(8rem, 6vh) 21rem;
+  padding: 20rem 21rem 20rem 21rem;
 }
+
 /* La mitad derecha la reserva sólo la ficha de proyecto, que es la única con captura de
    portada. En /sobre, /proyectos y /contacto no hay nada ahí, así que reservarla sólo
    servía para apretar el título contra la izquierda. */
 .project-hero--con-captura .project-hero__inner {
   padding-right: min(86rem, 30%);
 }
+
 /* --btn-color es lo que pinta el texto y el subrayado de .btn-underlined. Sin él
    cae al negro por defecto y queda negro sobre negro. */
 /* flex y no inline-flex: el antetítulo que va abajo también es inline-flex y los dos
@@ -2900,9 +3407,11 @@ html.intro-running body {
   letter-spacing: 0.1em;
   opacity: 0.75;
 }
+
 .project-back:hover {
   opacity: 1;
 }
+
 .project-title {
   margin: min(3rem, 2.4vh) 0 0;
   color: var(--white-1);
@@ -2913,6 +3422,7 @@ html.intro-running body {
   font-weight: 800;
   text-transform: uppercase;
 }
+
 .project-lead {
   margin-top: min(2.6rem, 2.2vh);
   max-width: 96rem;
@@ -2921,12 +3431,14 @@ html.intro-running body {
   line-height: 1.45;
   opacity: 0.86;
 }
+
 .project-meta {
   display: flex;
   flex-wrap: wrap;
   gap: min(6rem, 5vh) 9rem;
   margin: min(5rem, 4vh) 0 0;
 }
+
 .project-meta__item dt {
   color: var(--red-1);
   font-size: 1.7rem;
@@ -2935,6 +3447,7 @@ html.intro-running body {
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
+
 .project-meta__item dd {
   margin: 1.4rem 0 0;
   color: var(--white-1);
@@ -2942,12 +3455,14 @@ html.intro-running body {
   line-height: 1.3;
   font-weight: 600;
 }
+
 .project-links {
   display: flex;
   flex-wrap: wrap;
   gap: 2rem 4rem;
   margin-top: min(5rem, 4vh);
 }
+
 .project-link {
   --btn-color: var(--white-1);
   display: inline-flex;
@@ -2972,6 +3487,7 @@ html.intro-running body {
   transform: translateY(-50%);
   width: min(54rem, 31%);
 }
+
 .project-hero__shot img {
   width: 100%;
   height: auto;
@@ -2987,16 +3503,19 @@ html.intro-running body {
   color: var(--black-1);
   padding: 20rem 0 16rem;
 }
+
 .project-problem__text {
   margin-top: 6rem;
-  max-width: 118rem;
+  max-width: 96rem;
 }
+
 .project-problem__text p {
-  font-size: 3rem;
-  line-height: 1.5;
+  font-size: 2.4rem;
+  line-height: 1.55;
 }
-.project-problem__text p + p {
-  margin-top: 3.4rem;
+
+.project-problem__text p+p {
+  margin-top: 2.8rem;
 }
 
 /* ---------- qué construimos (D negra) ---------- */
@@ -3005,6 +3524,7 @@ html.intro-running body {
   background: var(--white-1);
   padding: 0 0 4rem;
 }
+
 .project-built__shape {
   position: relative;
   background: var(--black-1);
@@ -3012,6 +3532,7 @@ html.intro-running body {
   overflow: hidden;
   padding: 18rem 0 18rem;
 }
+
 .project-built__shape:before {
   content: "";
   position: absolute;
@@ -3020,18 +3541,20 @@ html.intro-running body {
   bottom: 10rem;
   left: -20rem;
   border: 0.5rem solid var(--white-1);
-  border-radius: 0 calc(var(--blob-radius) - 10rem)
-    calc(var(--blob-radius) - 10rem) 0;
+  border-radius: 0 calc(var(--blob-radius) - 10rem) calc(var(--blob-radius) - 10rem) 0;
   pointer-events: none;
 }
+
 .project-built .project-block {
   position: relative;
   z-index: 1;
   padding-right: 28rem;
 }
+
 .project-built__list {
   margin: 8rem 0 0;
 }
+
 .built-item {
   display: grid;
   grid-template-columns: 10rem minmax(0, 1fr);
@@ -3039,9 +3562,11 @@ html.intro-running body {
   padding-top: 4.4rem;
   border-top: 2px solid rgba(246, 240, 225, 0.24);
 }
-.built-item + .built-item {
+
+.built-item+.built-item {
   margin-top: 4.4rem;
 }
+
 .built-item__n {
   font-size: 2.8rem;
   line-height: 1;
@@ -3049,6 +3574,7 @@ html.intro-running body {
   color: var(--red-1);
   letter-spacing: 0.02em;
 }
+
 .built-item__title {
   margin: 0;
   color: var(--white-1);
@@ -3057,6 +3583,7 @@ html.intro-running body {
   font-weight: 800;
   text-transform: uppercase;
 }
+
 .built-item__text {
   margin-top: 1.4rem;
   max-width: 86rem;
@@ -3073,6 +3600,7 @@ html.intro-running body {
   color: var(--black-1);
   padding: 18rem 0 16rem;
 }
+
 /* Galería en columna: cada captura ocupa el ancho de la sección y arranca alineada
    con el título (mismo padding lateral que .project-block). Las apaisadas van a ancho
    completo; las verticales (celular) se limitan para que no se agranden de más. */
@@ -3084,10 +3612,12 @@ html.intro-running body {
   padding-left: 21rem;
   padding-right: 21rem;
 }
+
 .shot {
   margin: 0;
   display: block;
 }
+
 .shot img {
   width: 100%;
   height: auto;
@@ -3096,18 +3626,39 @@ html.intro-running body {
   background: var(--gray-2);
   border: 1px solid rgba(10, 10, 10, 0.12);
 }
-/* Fila de capturas verticales (celular): las que vienen seguidas van juntas, lado a
-   lado y alineadas a la izquierda, en vez de quedar cada una sola con un vacío al lado. */
+
+/* Apaisada + celular a la misma altura: cada una crece según su proporción (--ar), así
+   el alto de las dos sale igual. object-fit absorbe el borde de 1px. */
+.shot-pair {
+  display: flex;
+  align-items: flex-start;
+  gap: 3rem;
+}
+
+.shot-pair .shot {
+  flex: var(--ar) 1 0;
+  min-width: 0;
+}
+
+.shot-pair .shot img {
+  aspect-ratio: var(--ar);
+  object-fit: cover;
+}
+
+/* Las de celular que sobran, sin apaisada con quien ir: juntas, lado a lado y
+   alineadas a la izquierda, en vez de quedar cada una sola con un vacío al lado. */
 .shot-row {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
   gap: 3rem;
 }
+
 /* Dentro de la fila, cada vertical se limita por alto y conserva su proporción. */
 .shot-row .shot--tall {
   flex: 0 1 auto;
 }
+
 .shot-row .shot--tall img {
   width: auto;
   max-width: 100%;
@@ -3122,6 +3673,7 @@ html.intro-running body {
   z-index: 2;
   overflow: hidden;
 }
+
 /* Al menos un alto de pantalla: el footer se revela por encima de esta sección y le
    va bajando la opacidad (initFooterReveal). Si la sección es más corta que la
    ventana, el footer arranca antes de que se llegue a leer el siguiente proyecto. */
@@ -3132,11 +3684,23 @@ html.intro-running body {
     align-items: center;
   }
 }
+
+.about-traits+.project-next,
+.about-team+.project-next {
+  align-items: flex-start;
+  padding-top: 10rem;
+}
+
+#pg-sobre .about-close {
+  margin-top: 6rem;
+}
+
 .project-next__inner {
   width: 100%;
   padding-left: 21rem;
   padding-right: 21rem;
 }
+
 /* flex y no inline-flex, por lo mismo que .project-back: el antetítulo de arriba es
    inline-flex y los dos caerían en la misma línea. */
 .project-next__link {
@@ -3151,14 +3715,17 @@ html.intro-running body {
   font-weight: 800;
   text-transform: uppercase;
 }
+
 .project-next__link .icon-arrow-diagonal {
   width: 4rem;
   height: 4rem;
   flex: none;
 }
+
 .project-next__link:hover {
   color: var(--red-1);
 }
+
 .project-next__text {
   margin-top: 3rem;
   max-width: 96rem;
@@ -3167,161 +3734,198 @@ html.intro-running body {
   line-height: 1.45;
   opacity: 0.82;
 }
+
 .project-next__cta {
   margin-top: 8rem;
 }
 
 @media only screen and (max-width: 1025px) {
+
   .project-block,
   .project-gallery,
   .project-next__inner {
     padding-left: 8rem;
     padding-right: 8rem;
   }
+
   .project-hero {
     padding: 0;
   }
+
   /* block y no flex: en el ancho de un teléfono la captura va debajo del texto, y
      como fila de flex quedaba espachurrada al costado. */
   .project-hero__shape {
     display: block;
     min-height: 0;
     clip-path: none;
-    border-radius: 0 var(--blob-radius) var(--blob-radius) 0;
+    border-radius: 0 0 var(--blob-radius) 0;
   }
+
   .project-hero__shape:before {
-    top: 6rem;
-    right: 6rem;
-    bottom: 6rem;
+    top: 8rem;
+    right: 4rem;
+    bottom: 4rem;
     border-width: 0.35rem;
-    border-radius: 0 calc(var(--blob-radius) - 6rem)
-      calc(var(--blob-radius) - 6rem) 0;
+    border-radius: 0 calc(var(--blob-radius) - 4rem) calc(var(--blob-radius) - 4rem) 0;
   }
+
   /* En pantallas chicas la captura va debajo del texto, no al costado */
   .project-hero__inner {
     padding: calc(var(--header-height) + 10rem) 12rem 12rem 8rem;
   }
+
   .project-hero__shot {
     position: static;
     transform: none;
     width: auto;
     margin: 0 12rem 12rem 8rem;
   }
+
   .project-lead {
     font-size: 2.3rem;
   }
+
   .project-meta {
     gap: 3.4rem 6rem;
   }
+
   .project-problem {
     padding: 12rem 0 10rem;
   }
+
   .project-problem__text {
     margin-top: 4rem;
   }
+
   .project-problem__text p {
     font-size: 2.3rem;
   }
-  .project-problem__text p + p {
+
+  .project-problem__text p+p {
     margin-top: 2.4rem;
   }
+
   .project-built__shape {
     padding: 12rem 0 12rem;
   }
+
   .project-built__shape:before {
     top: 5rem;
     right: 5rem;
     bottom: 5rem;
     border-width: 0.35rem;
-    border-radius: 0 calc(var(--blob-radius) - 5rem)
-      calc(var(--blob-radius) - 5rem) 0;
+    border-radius: 0 calc(var(--blob-radius) - 5rem) calc(var(--blob-radius) - 5rem) 0;
   }
+
   .project-built .project-block {
     padding-right: 12rem;
   }
+
   .project-built__list {
     margin-top: 5rem;
   }
+
   .built-item {
     grid-template-columns: 1fr;
     gap: 1.2rem;
     padding-top: 3rem;
   }
-  .built-item + .built-item {
+
+  .built-item+.built-item {
     margin-top: 3rem;
   }
+
   .built-item__title {
     font-size: 3rem;
   }
+
   .built-item__text {
     font-size: 2.2rem;
   }
+
   .project-photos {
     padding: 12rem 0 10rem;
   }
+
   .project-gallery {
     gap: 2rem;
     margin-top: 5rem;
   }
+
+  /* Una sola columna, en el orden en que vienen las capturas */
+  .shot-pair,
   .shot-row {
-    gap: 2rem;
+    display: contents;
   }
+
+  .project-gallery .shot {
+    flex: none;
+    order: var(--i);
+  }
+
+  .shot-pair .shot img {
+    aspect-ratio: auto;
+  }
+
+  .shot--tall img,
   .shot-row .shot--tall img {
-    max-height: 50rem;
+    width: auto;
+    max-width: 100%;
+    max-height: 80vh;
   }
+
   .project-next {
     padding: 12rem 0 14rem;
   }
+
   .project-next__link {
     gap: 1.6rem;
   }
+
   .project-next__link .icon-arrow-diagonal {
     width: 3rem;
     height: 3rem;
   }
+
   .project-next__cta {
     margin-top: 5rem;
   }
 }
+
 @media only screen and (max-width: 767.98px) {
+
   .project-block,
   .project-gallery,
   .project-next__inner {
     padding-left: 4rem;
     padding-right: 4rem;
   }
+
   .project-hero__inner {
     padding: calc(var(--header-height) + 8rem) 9rem 9rem 4rem;
   }
+
   .project-hero__shot {
     margin: 0 9rem 9rem 4rem;
   }
+
   /* "CONSULTORIOS" es una palabra sola y no puede partirse: a 8.6vw se salía de su
      columna. Estos tamaños fijos, más chicos que el token general, la dejan entrar en
      las pantallas angostas. */
   .project-title {
     font-size: 28px;
   }
+
   .project-block__title {
     font-size: 30px;
   }
+
   .project-next__link {
     font-size: 30px;
   }
+
   .project-built .project-block {
     padding-right: 9rem;
-  }
-  /* En pantallas angostas dos capturas de celular lado a lado quedan diminutas:
-     dejamos que la fila reparta el ancho para que ocupen lo que se pueda. */
-  .shot-row {
-    gap: 2rem;
-  }
-  .shot-row .shot--tall {
-    flex: 1 1 0;
-  }
-  .shot-row .shot--tall img {
-    width: 100%;
-    max-height: none;
   }
 }
 
@@ -3329,6 +3933,7 @@ html.intro-running body {
 .card__name {
   display: block;
 }
+
 .card__case {
   display: inline-flex;
   align-items: center;
@@ -3344,10 +3949,12 @@ html.intro-running body {
     opacity 0.45s cubic-bezier(0.215, 0.61, 0.355, 1),
     transform 0.45s cubic-bezier(0.215, 0.61, 0.355, 1);
 }
+
 .card__case .icon-arrow-diagonal {
   width: 1.4rem;
   height: 1.4rem;
 }
+
 .card--link:hover .card__case {
   opacity: 1;
   transform: translateY(0);
@@ -3362,6 +3969,7 @@ html.intro-running body {
   color: var(--black-1);
   padding: 14rem 0 16rem;
 }
+
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -3369,16 +3977,19 @@ html.intro-running body {
   width: 100%;
   padding: 0 12rem;
 }
+
 .project-card__link {
   display: flex;
   flex-direction: column;
   height: 100%;
   color: inherit;
 }
+
 /* Sin ficha todavía: se ve igual pero no navega */
 .project-card__link--off {
   cursor: default;
 }
+
 .project-card__img {
   display: block;
   position: relative;
@@ -3387,6 +3998,7 @@ html.intro-running body {
   background: var(--gray-2);
   aspect-ratio: 4 / 3;
 }
+
 .project-card__img img {
   width: 100%;
   height: 100%;
@@ -3394,13 +4006,16 @@ html.intro-running body {
   display: block;
   transition: transform 0.8s cubic-bezier(0.215, 0.61, 0.355, 1);
 }
+
 .project-card__link:not(.project-card__link--off):hover .project-card__img img {
   transform: scale(1.05);
 }
+
 .project-card__body {
   display: block;
   padding-top: 2.6rem;
 }
+
 .project-card__name {
   display: block;
   font-size: 3rem;
@@ -3408,6 +4023,7 @@ html.intro-running body {
   font-weight: 800;
   text-transform: uppercase;
 }
+
 .project-card__lead {
   display: block;
   margin-top: 1.2rem;
@@ -3415,6 +4031,7 @@ html.intro-running body {
   line-height: 1.45;
   opacity: 0.7;
 }
+
 .project-card__case {
   display: inline-flex;
   align-items: center;
@@ -3426,35 +4043,43 @@ html.intro-running body {
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
+
 .project-card__link--off .project-card__case {
   color: var(--black-1);
   opacity: 0.4;
 }
+
 @media only screen and (max-width: 1025px) {
   .projects-index {
     padding: 9rem 0 11rem;
   }
+
   .projects-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 5rem 3rem;
     padding: 0 6rem;
   }
+
   .project-card__name {
     font-size: 2.6rem;
   }
+
   .project-card__lead {
     font-size: 1.9rem;
   }
 }
+
 @media only screen and (max-width: 767.98px) {
   .projects-grid {
     grid-template-columns: 1fr;
     gap: 4.4rem;
     padding: 0 2.4rem;
   }
+
   .project-card__img {
     border-radius: 2.4rem;
   }
+
   .project-card__name {
     font-size: 2.8rem;
   }
@@ -3467,6 +4092,7 @@ html.intro-running body {
   position: relative;
   background: var(--white-1);
 }
+
 .about-team__shape {
   position: relative;
   background: var(--black-1);
@@ -3475,12 +4101,14 @@ html.intro-running body {
   overflow: hidden;
   padding: 14rem 0 16rem;
 }
+
 .team-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 6rem 5rem;
   margin-top: 8rem;
 }
+
 .team-member img {
   width: 100%;
   aspect-ratio: 1 / 1;
@@ -3489,6 +4117,7 @@ html.intro-running body {
   background: var(--gray-1);
   display: block;
 }
+
 .team-member__name {
   margin-top: 2.2rem;
   font-size: 2.4rem;
@@ -3496,22 +4125,26 @@ html.intro-running body {
   font-weight: 800;
   text-transform: uppercase;
 }
+
 .team-member__role {
   margin-top: 0.6rem;
   font-size: 1.9rem;
   line-height: 1.3;
   opacity: 0.72;
 }
+
 @media only screen and (max-width: 1025px) {
   .about-team__shape {
     padding: 9rem 0 11rem;
   }
+
   .team-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 4rem 3rem;
     margin-top: 5rem;
   }
 }
+
 @media only screen and (max-width: 767.98px) {
   .team-grid {
     grid-template-columns: 1fr;
@@ -3527,6 +4160,7 @@ html.intro-running body {
   position: relative;
   background: var(--white-1);
 }
+
 .about-traits__shape {
   position: relative;
   background: var(--black-1);
@@ -3535,9 +4169,11 @@ html.intro-running body {
   overflow: hidden;
   padding: 14rem 0 16rem;
 }
+
 .traits-list {
   margin-top: 9rem;
 }
+
 .trait {
   display: grid;
   grid-template-columns: 12rem minmax(0, 1fr);
@@ -3545,9 +4181,11 @@ html.intro-running body {
   padding-top: 5rem;
   border-top: 2px solid rgba(246, 240, 225, 0.24);
 }
-.trait + .trait {
+
+.trait+.trait {
   margin-top: 6rem;
 }
+
 .trait__n {
   font-size: 3.2rem;
   line-height: 1;
@@ -3555,6 +4193,7 @@ html.intro-running body {
   color: var(--red-1);
   letter-spacing: 0.02em;
 }
+
 .trait__title {
   margin: 0;
   font-size: 4.4rem;
@@ -3562,6 +4201,7 @@ html.intro-running body {
   font-weight: 800;
   text-transform: uppercase;
 }
+
 .trait__text {
   margin-top: 1.8rem;
   max-width: 86rem;
@@ -3569,33 +4209,41 @@ html.intro-running body {
   line-height: 1.45;
   opacity: 0.82;
 }
+
 @media only screen and (max-width: 1025px) {
   .about-traits__shape {
     padding: 9rem 0 11rem;
   }
+
   .traits-list {
     margin-top: 5rem;
   }
+
   .trait {
     grid-template-columns: 8rem minmax(0, 1fr);
     gap: 0 2.4rem;
     padding-top: 3rem;
   }
-  .trait + .trait {
+
+  .trait+.trait {
     margin-top: 3.4rem;
   }
+
   .trait__title {
     font-size: 3.2rem;
   }
+
   .trait__text {
     font-size: 2rem;
   }
 }
+
 @media only screen and (max-width: 767.98px) {
   .trait {
     grid-template-columns: 1fr;
     gap: 0.8rem;
   }
+
   .trait__title {
     font-size: 2.8rem;
   }
@@ -3610,15 +4258,18 @@ html.intro-running body {
   color: var(--black-1);
   padding: 12rem 0 16rem;
 }
+
 .contact-form {
   display: grid;
   gap: 4rem;
   max-width: 104rem;
 }
+
 .contact-field {
   display: grid;
   gap: 1.2rem;
 }
+
 .contact-field label {
   font-size: 1.9rem;
   line-height: 1;
@@ -3627,6 +4278,7 @@ html.intro-running body {
   letter-spacing: 0.06em;
   color: var(--red-1);
 }
+
 .contact-field input,
 .contact-field textarea {
   width: 100%;
@@ -3641,21 +4293,25 @@ html.intro-running body {
   border-radius: 0;
   transition: border-color 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
 }
+
 .contact-field textarea {
   resize: vertical;
   min-height: 14rem;
 }
+
 .contact-field input:focus,
 .contact-field textarea:focus {
   outline: none;
   border-bottom-color: var(--red-1);
 }
+
 /* :user-invalid y no :invalid: marca en rojo recién cuando el usuario ya interactuó,
    no apenas carga la página con los campos vacíos. */
 .contact-field input:user-invalid,
 .contact-field textarea:user-invalid {
   border-bottom-color: var(--red-1);
 }
+
 .contact-actions {
   display: flex;
   align-items: center;
@@ -3663,39 +4319,48 @@ html.intro-running body {
   flex-wrap: wrap;
   margin-top: 2rem;
 }
+
 .contact-form .btn-d:disabled {
   opacity: 0.6;
   cursor: default;
 }
+
 .contact-status {
   font-size: 2rem;
   line-height: 1.4;
   max-width: 52rem;
 }
+
 @media only screen and (max-width: 1025px) {
   .contact-section {
     padding: 8rem 0 11rem;
   }
+
   .contact-form {
     gap: 3rem;
   }
+
   .contact-field input,
   .contact-field textarea {
     font-size: 2.1rem;
     padding: 1.6rem 0;
   }
+
   .contact-status {
     font-size: 1.8rem;
   }
 }
+
 @media only screen and (max-width: 767.98px) {
   .contact-field label {
     font-size: 1.6rem;
   }
+
   .contact-field input,
   .contact-field textarea {
     font-size: 1.9rem;
   }
+
   .contact-actions {
     gap: 2rem;
   }

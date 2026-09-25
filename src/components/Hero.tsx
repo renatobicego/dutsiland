@@ -50,8 +50,12 @@ export default function Hero() {
           {/* Blob derecho: la frase, que entra con el scroll */}
           <div className="blob-right blob" data-cursor-style="default-white">
             <div className="hero-claim">
-              <p className="hero-claim__text">{site.claim.text}</p>
-              <Button href={site.claim.cta.href}>{site.claim.cta.label}</Button>
+              <div className="hero-claim__inner">
+                <p className="hero-claim__text">{site.claim.text}</p>
+                <Button href={site.claim.cta.href}>
+                  {site.claim.cta.label}
+                </Button>
+              </div>
             </div>
           </div>
 

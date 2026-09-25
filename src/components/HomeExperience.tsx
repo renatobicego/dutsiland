@@ -104,8 +104,8 @@ const CLIP: Record<ClipName, ClipState> = {
  * abajo se va y el de arriba crece a toda la pantalla con la frase, que es el mismo
  * movimiento del apaisado girado 90 grados.
  *
- * Todas las siluetas dejan aire arriba (t: 3): el negro no llega al borde de la
- * pantalla. El botón de menú queda entonces sobre el crema y se pinta oscuro solo,
+ * Las siluetas del hero inicial dejan aire arriba (t: 3): el negro no llega al borde de
+ * la pantalla. Desde la frase en adelante sí llega, como el panel de "qué hacemos". El botón de menú queda entonces sobre el crema y se pinta oscuro solo,
  * porque el tono de cada pieza del header se mide contra lo que tiene debajo
  * (initSectionWatcher). Antes de eso había que llevar el negro hasta el borde para que
  * el botón no se perdiera.
@@ -140,11 +140,12 @@ const MCLIP: Record<ClipName, ClipState> = {
     u: "vw",
   },
   rightHero: { t: 3, r: 0, b: 55, l: 7, tl: 26, tr: 0, br: 0, bl: 26, u: "vw" }, // imagen 2: con el titular
-  rightClaim: { t: 3, r: 0, b: 3, l: 7, tl: 26, tr: 0, br: 0, bl: 26, u: "vw" }, // imagen 4: crecido, con la frase
+  // Con la frase el blob llena el alto, igual que el panel de "qué hacemos" que le sigue
+  rightClaim: { t: 0, r: 0, b: 0, l: 7, tl: 26, tr: 0, br: 0, bl: 26, u: "vw" }, // imagen 4: crecido, con la frase
   rightSplit: {
-    t: 3,
+    t: 0,
     r: 0,
-    b: 3,
+    b: 0,
     l: 45,
     tl: 26,
     tr: 0,
@@ -153,9 +154,9 @@ const MCLIP: Record<ClipName, ClipState> = {
     u: "vw",
   }, // imagen 5: empieza a irse
   rightGone: {
-    t: 3,
+    t: 0,
     r: 0,
-    b: 3,
+    b: 0,
     l: 100,
     tl: 26,
     tr: 0,
@@ -359,7 +360,10 @@ function setHeroInitialState(layout: Layout) {
   gsap.set(".hero-headline .word > span", { opacity: 0, yPercent: 100, y: 0 });
   // La frase arranca oculta en los dos layouts. En apaisado además lo dice el CSS; en
   // vertical no, y sin esto se vería dentro de la tarjeta apenas la tarjeta asoma.
-  gsap.set(".hero-claim", { autoAlpha: 0, y: "6rem" });
+  // El fundido va en .hero-claim porque ahí vive el contorno concéntrico, que tiene que
+  // aparecer con la frase y no en el hero inicial; el desplazamiento, sólo en el texto.
+  gsap.set(".hero-claim", { autoAlpha: 0 });
+  gsap.set(".hero-claim__inner", { y: "6rem" });
 }
 
 function playHeroIntro(
@@ -497,13 +501,39 @@ function initHeroScroll(
     ),
     rightGrowAt,
   );
+  // En vertical el blob arranca en svh (estable para el hero inicial) y mientras crece
+  // pasa a seguir el escenario en dvh: si no, al colapsarse la barra de direcciones
+  // queda una franja crema abajo de la frase (ver --fill en .blob-right).
+  if (layout === MOBILE) {
+    t.fromTo(
+      ".blob-right",
+      { "--fill": 0 },
+      {
+        "--fill": 1,
+        duration: 1,
+        ease: layout.enterEase,
+        immediateRender: false,
+      },
+      rightGrowAt,
+    );
+  }
   t.to(".hero-headline", { autoAlpha: 0, duration: 0.35, ease: "none" }, 0);
   t.to(".hero-mail", { autoAlpha: 0, duration: 0.3, ease: "none" }, 0);
   t.fromTo(
     ".hero-claim",
-    { autoAlpha: 0, y: "6rem" },
+    { autoAlpha: 0 },
     {
       autoAlpha: 1,
+      duration: 0.45,
+      ease: "none",
+      immediateRender: false,
+    },
+    0.55,
+  );
+  t.fromTo(
+    ".hero-claim__inner",
+    { y: "6rem" },
+    {
       y: 0,
       duration: 0.45,
       ease: "none",
@@ -562,7 +592,10 @@ function initHeroScroll(
   const servicesAt = 2 + HOLD + OPEN * 0.55;
   const services = buildServicesSequence();
   if (services) {
-    services.timeScale(SERVICES_TIMESCALE);
+    const mobileServices = getDevice().isMobile;
+    services.timeScale(
+      mobileServices ? SERVICES_TIMESCALE * 0.82 : SERVICES_TIMESCALE,
+    );
     t.add(services, servicesAt);
   }
 
@@ -603,8 +636,14 @@ function buildServicesSequence(): gsap.core.Timeline | null {
     // la barra de direcciones del teléfono, un giro de pantalla. Cada vez que el hueco
     // cambia de tamaño se vuelve a medir; y si el alto resultante cambió, se refresca
     // ScrollTrigger para que el índice del cierre recalcule sus filas.
+    let lastStackWidth = stack.offsetWidth;
     stackObserver = new ResizeObserver(() => {
       if (!fitServicesStack) return;
+      // En vertical la barra de direcciones mueve el alto del viewport sin cambiar el
+      // ancho: refrescar ScrollTrigger ahí re-fija el hero y el contorno salta.
+      const w = stack.offsetWidth;
+      if (getDevice().isMobile && Math.abs(w - lastStackWidth) < 1) return;
+      lastStackWidth = w;
       const alto = fitServicesStack();
       if (Math.abs(alto - ultimo) > 1) {
         ultimo = alto;
@@ -617,14 +656,23 @@ function buildServicesSequence(): gsap.core.Timeline | null {
   // Alto de una fila del índice del cierre: con el detalle oculto, de cada frente
   // solo queda el número y el título. Se mide en vivo (y se recalcula en cada
   // refresh) porque el rem escala con el ancho de la ventana.
+  const mobileServices = getDevice().isMobile;
   const rowStep = () => {
     if (!stack) return 0;
     const first = services[0];
     const title = first.querySelector<HTMLElement>(".service__title");
+    const n = first.querySelector<HTMLElement>(".service__n");
     const pad = parseFloat(getComputedStyle(first).paddingTop) || 0;
+    const gap = parseFloat(getComputedStyle(first).gap) || 0;
+    const titleH = title ? title.offsetHeight : 0;
+    const nH = n ? n.offsetHeight : 0;
+    // En vertical el stack mide un solo frente; caparlo con stack/4 aplastaba el índice
+    // del cierre y las líneas de cada .service (top:0) se encimaban sobre el texto.
+    if (mobileServices) {
+      return pad + nH + gap + titleH + 12;
+    }
     const natural =
-      pad + (title ? title.offsetHeight : 0) + 2 + stack.offsetHeight * 0.05;
-    // Repartido entre los frentes que haya: así las filas entran siempre, sean tres o cuatro
+      pad + titleH + 2 + stack.offsetHeight * 0.05;
     return Math.min(natural, stack.offsetHeight / services.length);
   };
 
@@ -678,31 +726,39 @@ function buildServicesSequence(): gsap.core.Timeline | null {
   // de una línea ya hecha y no se vería ningún trazado. Por eso cada una se retrae
   // cuando su frente se va, y la de al lado arranca de cero sobre el panel limpio.
   const start = 1.3;
-  const hold = 1.1;
+  // En vertical hace falta más tramo quieto por frente: con scrub lineal el texto se
+  // funde apenas entra. Misma duración de tweens, pero más pausa entre salida y entrada.
+  const hold = mobileServices ? 1.85 : 1.1;
+  const enterEase = mobileServices ? "power2.inOut" : "power3.out";
+  const exitEase = mobileServices ? "power2.inOut" : "power2.in";
+  const pauseAfterEnter = mobileServices ? 0.55 : 0.12;
+  const exitLead = mobileServices ? 0.2 : 0.35;
   services.forEach((service, i) => {
     const at = start + i * hold;
     const linea = service.querySelector(".service__line");
-    t.to(linea, { scaleX: 1, duration: 0.6, ease: "power2.out" }, at);
+    t.to(linea, { scaleX: 1, duration: 0.6, ease: enterEase }, at);
     t.to(
       contenido(service),
-      { autoAlpha: 1, y: 0, duration: 0.45, ease: "power3.out" },
+      { autoAlpha: 1, y: 0, duration: 0.45, ease: enterEase },
       at + 0.2,
     );
     t.to(
       service.querySelectorAll(".pill"),
-      { autoAlpha: 1, y: 0, duration: 0.4, stagger: 0.05, ease: "power2.out" },
+      { autoAlpha: 1, y: 0, duration: 0.4, stagger: 0.05, ease: enterEase },
       at + 0.32,
     );
+    // Tramo de timeline sin cambios = el scroll avanza pero el frente queda legible.
+    t.to({}, { duration: pauseAfterEnter }, at + 0.78);
     if (i < services.length - 1) {
       t.to(
         contenido(service),
-        { autoAlpha: 0, y: "-5rem", duration: 0.4, ease: "power2.in" },
-        at + hold - 0.35,
+        { autoAlpha: 0, y: "-5rem", duration: 0.4, ease: exitEase },
+        at + hold - exitLead,
       );
       t.to(
         linea,
-        { scaleX: 0, duration: 0.4, ease: "power2.in" },
-        at + hold - 0.35,
+        { scaleX: 0, duration: 0.4, ease: exitEase },
+        at + hold - exitLead,
       );
     }
   });
@@ -712,13 +768,24 @@ function buildServicesSequence(): gsap.core.Timeline | null {
   // Acá cada fila llega con su línea trazándose: es el momento en que el índice se
   // arma, y es donde el trazado se lee mejor porque las cuatro quedan a la vista.
   const recap = start + services.length * hold + 0.25;
+  if (stack && mobileServices) {
+    t.to(
+      stack,
+      {
+        minHeight: () => rowStep() * services.length + 8,
+        duration: 0.35,
+        ease: "power2.out",
+      },
+      recap - 0.05,
+    );
+  }
   t.to(
     ".services-stack .service__lead, .services-stack .services-pills",
     { autoAlpha: 0, duration: 0.35, ease: "power2.in" },
     recap,
   );
   services.forEach((service, i) => {
-    const cuando = recap + 0.1 + i * 0.08;
+    const cuando = recap + 0.1 + i * 0.12;
     t.to(
       service,
       { y: () => i * rowStep(), duration: 0.7, ease: "power3.out" },
@@ -729,7 +796,6 @@ function buildServicesSequence(): gsap.core.Timeline | null {
       { autoAlpha: 1, y: 0, duration: 0.7, ease: "power3.out" },
       cuando,
     );
-    // El último ya tiene la suya dibujada: es el frente que estaba en pantalla
     if (i < services.length - 1) {
       t.to(
         service.querySelector(".service__line"),
@@ -910,6 +976,8 @@ export default function HomeExperience() {
         wrapper: "#smooth-wrapper",
         content: "#pg-home",
         smooth: 2,
+        smoothTouch: true,
+        ease: "power2.out",
         normalizeScroll: true,
         ignoreMobileResize: true,
         effects: true,
