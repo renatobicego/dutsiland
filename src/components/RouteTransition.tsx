@@ -21,8 +21,13 @@ import gsap from "gsap";
 // es el que se ve al abrir el sitio. Este overlay es otra capa, sólo para el ir y venir
 // entre páginas ya cargadas.
 
-const EXIT = 2; // s: el blob barre hasta tapar
-const ENTER = 2; // s: el blob sigue y sale por la izquierda
+// La ida tapa y la vuelta destapa, así que el tiempo que se espera para ver la página
+// nueva es la suma de las dos. A 2s + 2s eran cuatro segundos por cada click del menú:
+// la transición dejaba de leerse como un gesto y pasaba a sentirse como una demora.
+// 0.65 + 0.65 alcanza de sobra para ver el blob pasar y calar la D, y la navegación
+// vuelve a sentirse inmediata.
+const EXIT = 0.65; // s: el blob barre hasta tapar
+const ENTER = 0.65; // s: el blob sigue y sale por la izquierda
 const EASE = "power2.inOut";
 const BLEED = 0.55; // fracción del ancho de sobreancho a cada lado; sigue a --rt-bleed (55vw)
 
