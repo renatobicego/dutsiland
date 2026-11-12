@@ -297,7 +297,11 @@ export const site: Site = {
   },
 
   claim: {
-    text: "Tu idea merece algo mejor que una plantilla. Nosotros la construimos de cero",
+    // Sin pronombre. Decía "Nosotros LA construimos de cero", y ese "la" tenía dos
+    // candidatos: "tu idea" y "una plantilla". El más cercano manda, así que la frase
+    // se leía como que construimos la plantilla, que es justo lo contrario. Nombrar la
+    // cosa en vez de apuntarla es lo único que lo arregla del todo.
+    text: "Tu idea merece algo mejor que una plantilla. Escribimos tu software desde cero",
     cta: { label: "Conocé qué hacemos", href: "#servicios" },
   },
 
