@@ -6,6 +6,10 @@
 export type Link = {
   label: string;
   href: string;
+  /** Versión corta, para el header en apaisado, donde el espacio es el que es */
+  short?: string;
+  /** El destino que se destaca como botón en vez de ir como link suelto */
+  cta?: boolean;
 };
 
 export type ServiceGroup = {
@@ -120,6 +124,17 @@ export type Site = {
     text: string;
     cta: Link;
   };
+  /** Los síntomas con los que el visitante se reconoce, antes de contarle qué hacemos. */
+  problems: {
+    /** La pregunta abre la sección y va sola: antes había un antetítulo chico
+     *  —"TE SUENA CONOCIDO"— y debajo un titular, y los dos decían lo mismo. */
+    title: string;
+    items: { n: string; quote: string }[];
+    /** El cierre, al pie: primero por qué ninguna de las cuatro se arregla comprando
+     *  otra cosa, y debajo el remate. Va después de las fichas y no antes: la tensión
+     *  la hacen las cuatro quejas seguidas, y soltarla antes de que caigan la desarma. */
+    cierre: { texto: string; remate: string };
+  };
   services: {
     kicker: string;
     title: string;
@@ -138,6 +153,8 @@ export type Site = {
     subtitle: string;
     /** Lo que dice la tarjeta cuando el proyecto sí tiene ficha */
     caseLabel: string;
+    /** El botón del visor del home, y el rótulo del cursor sobre cada tarjeta */
+    verLabel: string;
     /** Botón del home que lleva a /proyectos */
     cta: Link;
   };
@@ -149,16 +166,17 @@ export type Site = {
     /** Lo que dice una tarjeta que todavía no tiene ficha */
     sinFicha: string;
   };
-  /** Página /sobre, y el bloque reducido que la anuncia en el home */
+  /** Página /sobre. El home ya no la anuncia: se entra por el menú y por el pie */
   about: {
-    kicker: string;
-    title: string;
-    subtitle: string;
-    /** Botón del home hacia /sobre */
-    cta: Link;
-    /** Cuerpo de /sobre */
+    /** El titular de /sobre. No se ve —la página abre en el recorrido— pero es el h1:
+     *  sin él la página arranca su esquema en h2 y no se sabe de qué trata. */
+    pageTitle: string;
+    /** Sólo para Google y para el link cuando se comparte: no se ve en la página. */
+    metaDescription: string;
+    /** Cuerpo de /sobre: la historia contada como recorrido. Cada hito lleva su
+     *  etapa (la etiqueta chica), su titular y el párrafo. */
     year: string;
-    text: string[];
+    hitos: { etapa: string; title: string; text: string }[];
     /** Qué nos define: le da cuerpo a la página y no depende de tener fotos */
     traitsKicker: string;
     traitsTitle: string;
@@ -182,6 +200,12 @@ export type Site = {
     sending: string;
     success: string;
     error: string;
+    /** Qué pasa después de enviar. Va al lado del formulario porque es lo que frena a
+     *  cualquiera antes de escribirle a un proveedor que no conoce. */
+    nextTitle: string;
+    next: { n: string; title: string; text: string }[];
+    /** Encabeza el mail y las redes, para el que prefiere no llenar un formulario */
+    directLabel: string;
   };
   projects: Project[];
   /** Copys fijos de la ficha de proyecto */
@@ -193,6 +217,12 @@ export type Site = {
     builtTitle: string;
     photosKicker: string;
     photosTitle: string;
+    /** Lo que dice el cursor sobre una captura. El sitio apaga el cursor del sistema,
+     *  así que sin esto no aparece la manito y nada avisa que la imagen se puede abrir. */
+    photosHint: string;
+    /** La misma aclaración, escrita debajo del título: el rótulo del cursor sólo lo ve
+     *  el que ya puso el puntero encima, y en el teléfono no existe. */
+    photosNota: string;
     nextKicker: string;
     cta: Link;
   };
@@ -254,9 +284,12 @@ export const site: Site = {
   // Tres rutas. "Qué hacemos" y "Cómo trabajamos" siguen siendo secciones del home,
   // pero no tienen entrada en el menú ni URL propia.
   menu: [
-    { label: "Sobre Dutsiland", href: "/sobre" },
+    { label: "Sobre Dutsiland", href: "/sobre", short: "Sobre" },
     { label: "Proyectos", href: "/proyectos" },
-    { label: "Contacto", href: "/contacto" },
+    // TODO(Dutsiland): "Hablemos" es la palabra del botón del header; el menú a pantalla
+    // completa y el footer siguen diciendo "Contacto". Si se prefiere una sola palabra
+    // en todos lados, se borra este `short`.
+    { label: "Contacto", href: "/contacto", short: "Hablemos", cta: true },
   ],
 
   hero: {
@@ -268,7 +301,26 @@ export const site: Site = {
     cta: { label: "Conocé qué hacemos", href: "#servicios" },
   },
 
-  // ---------- Qué hacemos (tres frentes diferenciados) ----------
+  // ---------- Te suenan algunas de estas situaciones ----------
+  // Los síntomas con los que el visitante se reconoce, antes de contarle qué hacemos.
+  // TODO(Dutsiland): validar las cuatro frases con lo que de verdad se escucha en las
+  // primeras reuniones, y cambiar las que no suenen a algo que un cliente diría.
+  problems: {
+    title: "¿Te suenan algunas de estas situaciones?",
+    items: [
+      { n: "01", quote: "Quiero hacer algo y el sistema no me deja" },
+      { n: "02", quote: "La mitad del trabajo lo hacemos en planillas aparte" },
+      { n: "03", quote: "Eso no se puede tocar, lo hizo alguien que ya no está" },
+      { n: "04", quote: "Lo pedimos hace meses y todavía estamos esperando" },
+    ],
+    cierre: {
+      texto:
+        "Ninguna se arregla cambiando de licencia. Se arreglan construyendo el sistema que esa operación necesita.",
+      remate: "Nosotros lo resolvemos.",
+    },
+  },
+
+  // ---------- Qué hacemos (cuatro frentes diferenciados) ----------
   services: {
     kicker: "QUÉ HACEMOS",
     title: "Cuatro frentes, un mismo equipo",
@@ -345,7 +397,7 @@ export const site: Site = {
       {
         n: "02",
         title: "Entendemos la necesidad",
-        text: "Analizamos cómo funciona tu operación hoy y dónde el software puede sacarte trabajo.",
+        text: "Analizamos cómo funciona tu operación hoy y dónde el software puede ahorrarte tiempo.",
       },
       {
         n: "03",
@@ -373,6 +425,7 @@ export const site: Site = {
     subtitle:
       "Sistemas, plataformas y sitios que construimos para empresas argentinas",
     caseLabel: "Ver el caso",
+    verLabel: "Ver proyecto",
     cta: { label: "Ver portfolio", href: "/proyectos" },
   },
 
@@ -380,32 +433,55 @@ export const site: Site = {
     kicker: "PROYECTOS",
     title: "Nuestro Portfolio",
     intro:
-      "Sistemas de gestión, plataformas y sitios para empresas que necesitaban algo que una plantilla no resolvía.",
+      "Sistemas de gestión, plataformas y sitios para empresas que necesitaban algo que una plantilla o un sistema enlatado no resolvía.",
     sinFicha: "Ficha en preparación",
   },
 
   // ---------- Sobre Dutsiland ----------
   about: {
-    kicker: "SOBRE DUTSILAND",
-    title: "Empezamos resolviendo un problema concreto, y no paramos.",
-    subtitle:
-      "Un equipo chico que escribe software a medida para PyMEs, del relevamiento al mantenimiento.",
-    cta: { label: "Conocé más", href: "/sobre" },
+    pageTitle:
+      "Sacamos de las planillas el trabajo que no debería hacer una persona",
+    metaDescription:
+      "El origen del estudio, cómo encaramos cada proyecto y qué nos define.",
     // TODO(Dutsiland): confirmar el año exacto de arranque del estudio.
     year: "2023",
-    text: [
-      "Dutsiland arrancó como un equipo chico de desarrolladores al que le pedían siempre lo mismo: un sistema que las herramientas de siempre no podían dar. En vez de forzar una plantilla, escribimos el software desde cero.",
-      // TODO(Dutsiland): sumar la ciudad de origen y algún hito concreto (primer cliente, primer sistema propio).
-      "Ese primer sistema se convirtió en la forma de trabajar del estudio. Hoy somos una software factory: diseñamos y desarrollamos productos digitales completos, desde el relevamiento hasta el mantenimiento, para empresas que necesitan que el software se adapte a su operación y no al revés.",
-      // TODO(Dutsiland): este párrafo es un borrador. Contar cómo trabaja el equipo hoy:
-      // cuántos son, cómo se reparten diseño y desarrollo, qué los diferencia.
-      "Trabajamos de a pocos proyectos por vez y siempre con el mismo equipo de punta a punta: el que releva es el que diseña y el que desarrolla. Esa continuidad es lo que hace que el producto salga parecido a lo que se habló en la primera reunión.",
+    /* El hilo de los tres hitos no es la tecnología, es el relevamiento: lo que el
+       estudio hace es siempre lo mismo —mirar cómo trabaja una empresa y sacarle el
+       trabajo que no debería estar haciendo alguien a mano— y lo que cambia es con qué.
+       Así la IA entra como continuación y no como moda, que es la diferencia entre
+       sonar oportunista y sonar con criterio.
+
+       En el home sólo se ven la etapa y el titular, así que cada titular tiene que
+       sostenerse solo. Los párrafos existen únicamente en /sobre.
+
+       Lo que NO va acá ni en ninguna otra parte del sitio: cuántos son y cuántos
+       proyectos toman. "Equipo chico" y "pocos proyectos por vez" se leen como falta de
+       capacidad para una empresa que está evaluando a quién confiarle un sistema; la
+       continuidad —el mismo equipo de punta a punta— es la misma virtud contada por el
+       lado que suma, y vive en `traits`. */
+    hitos: [
+      {
+        etapa: "El problema de siempre",
+        title:
+          "Casi todo lo que hace una empresa pasa primero por una planilla",
+        text: "Turnos en un cuaderno, stock en tres depósitos que no coinciden, asistencia en papel, el pedido en la cabeza del que atiende. Ninguna de esas empresas estaba parada: todas funcionaban. El problema es que funcionaban a fuerza de que alguien hiciera a mano, todos los días, lo que un sistema podía hacer solo.",
+      },
+      {
+        etapa: "Cómo lo resolvemos",
+        title: "Primero relevamos, después escribimos",
+        text: "Nunca empezamos por la herramienta. Empezamos mirando cómo trabaja la empresa hoy, paso por paso, hasta encontrar dónde se pierde el tiempo y por qué. Recién ahí se decide qué construir. Por eso los sistemas se parecen a la operación y no al revés: salen de haberla mirado, no de haberla supuesto.",
+      },
+      {
+        etapa: "Hoy",
+        title: "La IA no cambió qué hacemos, cambió con qué",
+        text: "Hay tareas que hasta hace poco había que programar una por una y hoy las resuelve un modelo: leer un documento, clasificar un pedido, responder una consulta, estimar un precio. Lo que no cambió es lo de antes: entender la operación antes de tocarla. Automatizar un proceso que nadie revisó sólo lo hace más rápido, no mejor.",
+      },
     ],
-    // Este bloque no dice nada nuevo: ordena en tres puntos lo que ya afirman los
-    // párrafos de arriba. Le da cuerpo a la página sin depender de las fotos del equipo.
-    // TODO(Dutsiland): validar la redacción de los tres puntos.
+    // Este bloque ordena en tres puntos lo que ya cuenta el recorrido de arriba. Le da
+    // cuerpo a la página sin depender de las fotos del equipo.
     traitsKicker: "QUÉ NOS DEFINE",
-    traitsTitle: "Pocos proyectos por vez, y el mismo equipo de punta a punta",
+    traitsTitle:
+      "El mismo equipo, desde el primer relevamiento hasta el último ajuste",
     traits: [
       {
         n: "01",
@@ -415,12 +491,12 @@ export const site: Site = {
       {
         n: "02",
         title: "El mismo equipo de principio a fin",
-        text: "El que releva es el que diseña y el que desarrolla. Esa continuidad es lo que hace que el producto salga parecido a lo que se habló en la primera reunión.",
+        text: "El equipo que releva es el que diseña y el que desarrolla. Sin traspasos entre áreas no se pierde contexto en el camino, y eso se traduce en la calidad de lo que se entrega.",
       },
       {
         n: "03",
-        title: "Del relevamiento al mantenimiento",
-        text: "Acompañamos el sistema después de publicarlo. El software se sigue usando, y se sigue cambiando con la operación.",
+        title: "Acompañamos todo el ciclo de vida",
+        text: "La entrega no cierra el trabajo. El sistema se sigue usando y el negocio sigue cambiando, así que seguimos al lado para evolucionarlo: ajustes, funciones nuevas y soporte, con el equipo que lo construyó.",
       },
     ],
     teamKicker: "EL EQUIPO",
@@ -441,7 +517,7 @@ export const site: Site = {
     kicker: "CONTACTO",
     title: "Contanos qué necesitás",
     intro:
-      "Escribinos y coordinamos una primera reunión para entender el problema.",
+      "Escribinos y coordinamos una primera reunión para entender tus necesidades y tus ideas.",
     fields: {
       name: "Nombre y apellido",
       email: "Correo electrónico",
@@ -451,6 +527,27 @@ export const site: Site = {
     sending: "Enviando…",
     success: "¡Solicitud de contacto enviada! Te respondemos a la brevedad.",
     error: "No pudimos enviar el mensaje. Escribinos directo a",
+    nextTitle: "Qué pasa después",
+    // TODO(Dutsiland): confirmar el plazo real de respuesta. Si son 24 o 48 horas,
+    // decirlo con el número: un plazo concreto convence mucho más que "a la brevedad".
+    next: [
+      {
+        n: "01",
+        title: "Te respondemos",
+        text: "Leemos lo que nos contás y te escribimos para coordinar una primera charla.",
+      },
+      {
+        n: "02",
+        title: "Nos reunimos",
+        text: "Una reunión para entender cómo funciona tu operación hoy y en qué puntos el software puede aportar más valor.",
+      },
+      {
+        n: "03",
+        title: "Te pasamos alcance y precio",
+        text: "Con el problema definido, documentamos qué incluye el desarrollo, qué se deja planificado para una etapa posterior, en cuánto tiempo y a qué costo.",
+      },
+    ],
+    directLabel: "O escribinos directo",
   },
 
   projectView: {
@@ -461,6 +558,8 @@ export const site: Site = {
     builtTitle: "Lo que hicimos",
     photosKicker: "EL PRODUCTO",
     photosTitle: "Así se ve",
+    photosHint: "Ampliar",
+    photosNota: "Ampliá cualquier captura",
     nextKicker: "SIGUIENTE PROYECTO",
     cta: { label: "Queremos hacer el tuyo", href: "/contacto" },
   },
@@ -551,7 +650,7 @@ export const site: Site = {
     {
       slug: "mahatu-consultorios",
       name: "Mahatu Consultorios",
-      lead: "Sistema de gestión de turnos online para una clínica odontológica.",
+      lead: "Sistema de gestión de turnos online para un consultorio de psicopedagogía.",
       cover: "/img/mahatu.jpg",
       coverAlt: "Mahatu Consultorios",
       detail: {
@@ -560,21 +659,21 @@ export const site: Site = {
         context: "En producción para la clínica",
         // TODO(Dutsiland): confirmar con Mahatu cómo era la operación antes del sistema.
         problem: [
-          "La clínica coordinaba los turnos por teléfono y a mano. Cada cambio de agenda había que avisarlo, el historial de cada paciente estaba en papel y los ingresos se seguían aparte, así que nadie tenía el panorama completo en un solo lugar.",
-          "Lo que hacía falta no era una agenda digital más, sino que el paciente pudiera reservar solo, sobre la disponibilidad real del profesional, y que la clínica viera en el mismo sistema la atención y la facturación.",
+          "El consultorio coordinaba los turnos por teléfono y a mano. Cada cambio de agenda había que avisarlo, el historial de cada paciente estaba en papel y los ingresos se seguían aparte, así que nadie tenía el panorama completo en un solo lugar.",
+          "Lo que hacía falta no era una agenda digital más, sino que el paciente pudiera reservar solo, sobre la disponibilidad real de la profesional, y que el consultorio viera en el mismo sistema la atención y la facturación.",
         ],
         built: [
           {
             title: "Turnos online",
-            text: "El paciente reserva según la disponibilidad real del profesional, y el profesional también puede asignar turnos él mismo.",
+            text: "El paciente reserva según la disponibilidad real de la agenda, y la profesional también puede asignar turnos ella misma.",
           },
           {
-            title: "Agenda del profesional",
+            title: "Agenda de la profesional",
             text: "Asignar, reprogramar o eliminar turnos desde un calendario.",
           },
           {
             title: "Fichas de pacientes",
-            text: "Historial clínico detallado, con la información de cada paciente en un solo lugar.",
+            text: "Historial detallado, con la información de cada paciente en un solo lugar.",
           },
           {
             title: "Anotaciones por turno",
@@ -719,7 +818,7 @@ export const site: Site = {
         context: "En producción",
         problem: [
           "Cucha Repuestos vende repuestos importados para camiones Iveco y es referente en la Patagonia, pero toda su operación vivía fuera de línea: para saber si había una pieza, o con qué marcas trabajaban, había que llamar o pasar por el local.",
-          "El sitio tenía que hacer dos cosas a la vez: mostrar la línea completa de productos a alguien que no está en Comodoro, y dejar claro por qué comprarles a ellos —envíos a todo el país, garantía, repuestos originales y alternativos—.",
+          "El sitio tenía que hacer dos cosas a la vez: poner el catálogo completo online, para el que está lejos del local y no puede pasar a preguntar, y dejar claro por qué comprarles a ellos —envíos a todo el país, garantía, repuestos originales y alternativos—.",
         ],
         built: [
           {

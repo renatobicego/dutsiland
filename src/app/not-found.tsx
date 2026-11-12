@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { site } from "@/content/site";
 import PageShell from "@/components/PageShell";
 import Button, { DIcon } from "@/components/Button";
 
