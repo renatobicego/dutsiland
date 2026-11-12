@@ -297,11 +297,13 @@ export const site: Site = {
   },
 
   claim: {
-    // Sin pronombre. Decía "Nosotros LA construimos de cero", y ese "la" tenía dos
-    // candidatos: "tu idea" y "una plantilla". El más cercano manda, así que la frase
-    // se leía como que construimos la plantilla, que es justo lo contrario. Nombrar la
-    // cosa en vez de apuntarla es lo único que lo arregla del todo.
-    text: "Tu idea merece algo mejor que una plantilla. Escribimos tu software desde cero",
+    // Sin pronombre suelto. Decía "Nosotros LA construimos de cero", y ese "la" tenía
+    // dos candidatos: "tu idea" y "una plantilla". El más cercano manda, así que la
+    // frase se leía como que construimos la plantilla, justo lo contrario de lo que
+    // quiere decir. Acá "el sistema que necesita" cuelga de "tu idea" sin que quede
+    // nada en el medio, y además es el mismo giro con el que cierra "¿Te suenan algunas
+    // de estas situaciones?", más abajo en esta misma página.
+    text: "Tu idea no entra en una plantilla. Construimos el sistema que necesita",
     cta: { label: "Conocé qué hacemos", href: "#servicios" },
   },
 
