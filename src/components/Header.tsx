@@ -1,7 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link'
 import { site } from '@/content/site'
-import DMark from './DMark'
+import HeaderNav from './HeaderNav'
+import MenuList from './MenuList'
 import { ArrowDiagonal } from './Button'
 
 export default function Header() {
@@ -30,6 +31,10 @@ export default function Header() {
           </div>
 
           <div className="col-lg-6 col-tablet-6 col-6 column-bt">
+            {/* En apaisado, los tres destinos escritos; en vertical no entran al lado
+                del logotipo y manda el botón de abajo. Nunca los dos (ver globals.css). */}
+            <HeaderNav />
+
             <button type="button" id="bt-menu" aria-label="Menú" data-cursor-style="hovered">
               <span className="close-text">cerrar</span>
               <span className="menu-text">menu</span>
@@ -37,19 +42,20 @@ export default function Header() {
 
             <nav className="menu">
               <div className="menu--wrapper">
+                {/* El logotipo horizontal, no la D suelta: a lo ancho funciona como
+                    título del menú y ocupa el espacio que la D dejaba vacío a los
+                    costados. Es el mismo que cierra el footer.
+
+                    Va como caja pintada y recortada con el PNG de máscara, no como
+                    <img>: el menú es negro y del logotipo entero sólo existe el
+                    archivo en tinta oscura. Así el color sale de --white-1 —el crema
+                    exacto de la marca, no el blanco de un invert()— sin pedir otro
+                    archivo (ver .menu-logotipo en globals.css). */}
                 <div className="container-lottie">
-                  <DMark className="d-mark--menu" />
+                  <span className="menu-logotipo" aria-hidden="true" />
                 </div>
 
-                <ul className="menu--list fs--header">
-                  {site.menu.map((item) => (
-                    <li key={item.href}>
-                      <Link href={item.href} data-menu-close data-cursor-style="hovered">
-                        <span data-letter={item.label}>{item.label}</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+                <MenuList />
 
                 <div className="social-list container-fluid">
                   <div className="row">

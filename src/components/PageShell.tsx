@@ -32,7 +32,7 @@ export default function PageShell({ id, children }: PageShellProps) {
       <Header />
 
       <div id="main-transition">
-        <div id="smooth-wrapper" className="container-wrapper">
+        <div className="container-wrapper">
           <div className="wrapper" id={id} data-scroll-container>
             {children}
             <Footer />
@@ -42,7 +42,7 @@ export default function PageShell({ id, children }: PageShellProps) {
 
       <ScrollTop />
       <Cookies />
-      <PageExperience content={`#${id}`} />
+      <PageExperience />
     </>
   )
 }

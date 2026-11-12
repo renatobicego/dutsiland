@@ -2,7 +2,8 @@
 import Link from 'next/link'
 import type { Project, ProjectDetail } from '@/content/site'
 import { site } from '@/content/site'
-import Button, { ArrowDiagonal, DIcon } from './Button'
+import Button, { ArrowDiagonal, Check, DIcon } from './Button'
+import ProjectGallery from './ProjectGallery'
 
 type ProjectViewProps = {
   project: Project & { detail: ProjectDetail }
@@ -36,36 +37,11 @@ export default function ProjectView({ project, next }: ProjectViewProps) {
               <span>{detail.kicker}</span>
             </p>
             <h1 className="project-title split-words">{project.name}</h1>
+            {/* Qué es el proyecto, en una línea. Debajo iban dos datos sueltos —"qué
+                hicimos" y el estado— y los enlaces al producto: el primero sobraba
+                porque los proyectos se hacen enteros y no por partes, y los enlaces no
+                van porque la mayoría son sistemas privados de cada cliente. */}
             <p className="project-lead">{project.lead}</p>
-
-            <dl className="project-meta">
-              <div className="project-meta__item">
-                <dt>Qué hicimos</dt>
-                <dd>{detail.role}</dd>
-              </div>
-              <div className="project-meta__item">
-                <dt>Contexto</dt>
-                <dd>{detail.context}</dd>
-              </div>
-            </dl>
-
-            {detail.links.length ? (
-              <div className="project-links">
-                {detail.links.map((l) => (
-                  <a
-                    key={l.href}
-                    href={l.href}
-                    className="project-link btn-underlined"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-cursor-style="hovered"
-                  >
-                    <span>{l.label}</span>
-                    <ArrowDiagonal />
-                  </a>
-                ))}
-              </div>
-            ) : null}
           </div>
 
           {/* La captura de portada: el lado derecho de la D era un vacío negro */}
@@ -109,17 +85,23 @@ export default function ProjectView({ project, next }: ProjectViewProps) {
               {v.builtTitle}
             </h2>
 
-            <ol className="project-built__list">
-              {detail.built.map((item, i) => (
+            {/* Una lista de tildes y no una lista numerada: estas no son etapas en
+                orden, son cosas que el sistema hace. Antes cada una ocupaba un bloque
+                con número, título de 3,8rem y su regla; seis piezas eran casi dos
+                pantallas para enumerar funcionalidades. */}
+            <ul className="project-built__list">
+              {detail.built.map((item) => (
                 <li className="built-item" key={item.title} data-reveal>
-                  <span className="built-item__n">{String(i + 1).padStart(2, '0')}</span>
-                  <div className="built-item__body">
+                  <span className="built-item__check">
+                    <Check />
+                  </span>
+                  <div>
                     <h3 className="built-item__title">{item.title}</h3>
                     <p className="built-item__text">{item.text}</p>
                   </div>
                 </li>
               ))}
-            </ol>
+            </ul>
           </div>
         </div>
       </section>
@@ -134,16 +116,14 @@ export default function ProjectView({ project, next }: ProjectViewProps) {
           <h2 className="project-block__title split-words" data-reveal>
             {v.photosTitle}
           </h2>
+          <p className="project-photos__nota" data-reveal>
+            {v.photosNota}
+          </p>
         </div>
 
-        <div className="project-gallery">
-          {detail.photos.map((photo) => (
-            <figure className="shot" key={photo.src} data-reveal data-cursor-style="hovered-small">
-              <img src={photo.src} alt={photo.alt} loading="lazy" />
-              <figcaption>{photo.caption}</figcaption>
-            </figure>
-          ))}
-        </div>
+        {/* Las capturas en carrusel, no en grilla: así se ven más grandes, y el click
+            abre cualquiera a pantalla casi completa (ver ProjectGallery). */}
+        <ProjectGallery fotos={detail.photos} />
       </section>
 
       {/* Siguiente proyecto + la invitación a contactarnos */}

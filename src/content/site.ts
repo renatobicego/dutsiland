@@ -6,6 +6,12 @@
 export type Link = {
   label: string
   href: string
+  /** Etiqueta corta para la barra del header, donde "Sobre Dutsiland" no entra al lado
+   *  del logotipo. El menú a pantalla completa y el footer siguen usando `label`. */
+  short?: string
+  /** El destino que en el header va como botón sólido en vez de como texto. Uno solo:
+   *  si hubiera dos, ninguno sería el que importa. */
+  cta?: boolean
 }
 
 export type ServiceGroup = {
@@ -51,16 +57,16 @@ export type ProjectDetail = {
   kicker: string
   /** Logo del cliente, para la portada. Publicité no tiene. */
   logo?: string
-  /** Qué hicimos nosotros */
-  role: string
-  /** En qué estado está el producto */
-  context: string
   /** La problemática que resolvemos, en dos o tres párrafos */
   problem: string[]
   built: BuiltItem[]
-  links: Link[]
   photos: ProjectPhoto[]
 }
+
+/* La ficha tiene cinco partes y nada más: la portada con el nombre, la línea que dice
+   qué es el proyecto, qué había que resolver, qué construimos y cómo se ve.
+   No lleva "qué hicimos" —los proyectos se hacen enteros, no por partes— ni enlaces:
+   la mayoría son sistemas privados de cada cliente y no se publican. */
 
 export type Project = {
   /** Va en la URL: /proyectos/<slug> */
@@ -73,12 +79,6 @@ export type Project = {
   cover: string
   coverAlt: string
   detail?: ProjectDetail
-  /** ATENCIÓN — Caso INVENTADO, con cliente inventado y capturas armadas por nosotros.
-   *  Están para que el sitio se vea completo mientras el estudio junta los casos reales
-   *  de cada rubro. Publicarlos tal cual sería presentar experiencia que no existe:
-   *  reemplazar el contenido por un caso real, o borrar la entrada, antes de salir a
-   *  producción. Se listan todos juntos al final del array. */
-  demo?: boolean
 }
 
 export type Site = {
@@ -98,6 +98,19 @@ export type Site = {
     text: string
     cta: Link
   }
+  /** Los síntomas con los que el visitante se reconoce, antes de contarle qué hacemos.
+   *  Se leen como tickets abiertos: cada uno con su número y su estado. */
+  problems: {
+    /** La pregunta abre la sección y va sola: antes había un antetítulo chico
+     *  —"TE SUENA CONOCIDO"— y debajo un titular, y los dos decían lo mismo. */
+    title: string
+    items: { n: string; quote: string }[]
+    /** El cierre, al pie: primero por qué ninguna de las cuatro se arregla comprando
+     *  otra cosa, y debajo el remate. Va después de las fichas y no antes —ahí estaba
+     *  el párrafo hasta ahora—: la tensión la hacen las cuatro quejas seguidas, y
+     *  soltarla antes de que caigan la desarma. */
+    cierre: { texto: string; remate: string }
+  }
   services: {
     kicker: string
     title: string
@@ -116,6 +129,8 @@ export type Site = {
     subtitle: string
     /** Lo que dice la tarjeta cuando el proyecto sí tiene ficha */
     caseLabel: string
+    /** El botón del visor del home, y el rótulo del cursor sobre cada tarjeta */
+    verLabel: string
     /** Botón del home que lleva a /proyectos */
     cta: Link
   }
@@ -127,16 +142,18 @@ export type Site = {
     /** Lo que dice una tarjeta que todavía no tiene ficha */
     sinFicha: string
   }
-  /** Página /sobre, y el bloque reducido que la anuncia en el home */
+  /** Página /sobre. El home ya no la anuncia: se entra por el menú y por el pie */
   about: {
-    kicker: string
-    title: string
-    subtitle: string
-    /** Botón del home hacia /sobre */
-    cta: Link
-    /** Cuerpo de /sobre */
+    /** El titular de /sobre. No se ve —la página abre en el recorrido— pero es el h1:
+     *  sin él la página arranca su esquema en h2 y no se sabe de qué trata. */
+    pageTitle: string
+    /** Sólo para Google y para el link cuando se comparte: no se ve en la página.
+     *  Antes acá iba el subtítulo de la portada, y era una frase que no decía nada. */
+    metaDescription: string
+    /** Cuerpo de /sobre: la historia contada como recorrido. Cada hito lleva su
+     *  etapa (la etiqueta chica), su titular y el párrafo. */
     year: string
-    text: string[]
+    hitos: { etapa: string; title: string; text: string }[]
     /** Qué nos define: le da cuerpo a la página y no depende de tener fotos */
     traitsKicker: string
     traitsTitle: string
@@ -160,6 +177,12 @@ export type Site = {
     sending: string
     success: string
     error: string
+    /** Qué pasa después de enviar. Va al lado del formulario porque es lo que frena a
+     *  cualquiera antes de escribirle a un proveedor que no conoce. */
+    nextTitle: string
+    next: { n: string; title: string; text: string }[]
+    /** Encabeza el mail y las redes, para el que prefiere no llenar un formulario */
+    directLabel: string
   }
   projects: Project[]
   /** Copys fijos de la ficha de proyecto */
@@ -171,6 +194,12 @@ export type Site = {
     builtTitle: string
     photosKicker: string
     photosTitle: string
+    /** Lo que dice el cursor sobre una captura. El sitio apaga el cursor del sistema,
+     *  así que sin esto no aparece la manito y nada avisa que la imagen se puede abrir. */
+    photosHint: string
+    /** La misma aclaración, escrita debajo del título: el rótulo del cursor sólo lo ve
+     *  el que ya puso el puntero encima, y en el teléfono no existe. */
+    photosNota: string
     nextKicker: string
     cta: Link
   }
@@ -201,9 +230,12 @@ export const site: Site = {
   // Tres rutas. "Qué hacemos" y "Cómo trabajamos" siguen siendo secciones del home,
   // pero no tienen entrada en el menú ni URL propia.
   menu: [
-    { label: 'Sobre Dutsiland', href: '/sobre' },
+    { label: 'Sobre Dutsiland', href: '/sobre', short: 'Sobre' },
     { label: 'Proyectos', href: '/proyectos' },
-    { label: 'Contacto', href: '/contacto' },
+    // TODO(Dutsiland): "Hablemos" es la palabra del botón del header; el menú a pantalla
+    // completa y el footer siguen diciendo "Contacto". Si se prefiere una sola palabra
+    // en todos lados, se borra este `short`.
+    { label: 'Contacto', href: '/contacto', short: 'Hablemos', cta: true },
   ],
 
   hero: {
@@ -213,6 +245,27 @@ export const site: Site = {
   claim: {
     text: 'Tu idea merece algo mejor que una plantilla. Nosotros la construimos de cero',
     cta: { label: 'Conocé qué hacemos', href: '#servicios' },
+  },
+
+  // ---------- Problemas comunes ----------
+  // Va antes de "qué hacemos" a propósito: primero el visitante se reconoce en el
+  // síntoma y recién después le contamos qué hacemos. Cada punto está escrito como lo
+  // diría alguien de la operación, no como lo diría un vendedor de software: lo que
+  // tiene que pasar acá es que el que lee piense "esto lo dije yo la semana pasada".
+  // TODO(Dutsiland): validar las cuatro frases con lo que de verdad escuchan en las
+  // primeras reuniones, y cambiar las que no suenen a algo que un cliente diría.
+  problems: {
+    title: '¿Te suenan algunas de estas situaciones?',
+    items: [
+      { n: '01', quote: 'Quiero hacer algo y el sistema no me deja' },
+      { n: '02', quote: 'La mitad del trabajo lo hacemos en planillas aparte' },
+      { n: '03', quote: 'Eso no se puede tocar, lo hizo alguien que ya no está' },
+      { n: '04', quote: 'Lo pedimos hace meses y todavía estamos esperando' },
+    ],
+    cierre: {
+      texto: 'Ninguna se arregla cambiando de licencia. Se arreglan construyendo el sistema que esa operación necesita.',
+      remate: 'Nosotros lo resolvemos.',
+    },
   },
 
   // ---------- Qué hacemos (tres frentes diferenciados) ----------
@@ -274,7 +327,7 @@ export const site: Site = {
     title: 'Sabés qué se construye antes de empezar',
     steps: [
       { n: '01', title: 'Nos reunimos', text: 'Nos sentamos con vos a escuchar el problema, sin fórmulas armadas de antes.' },
-      { n: '02', title: 'Entendemos la necesidad', text: 'Analizamos cómo funciona tu operación hoy y dónde el software puede sacarte trabajo.' },
+      { n: '02', title: 'Entendemos la necesidad', text: 'Analizamos cómo funciona tu operación hoy y dónde el software puede ahorrarte tiempo.' },
       { n: '03', title: 'Definimos requerimientos', text: 'Documentamos juntos el alcance: qué entra, qué queda para después y con qué prioridad.' },
       { n: '04', title: 'Presupuestamos', text: 'Con el alcance validado, pasamos precio y plazos claros. Sin sorpresas a mitad de camino.' },
       { n: '05', title: 'Desarrollamos', text: 'Construimos, entregamos por etapas y acompañamos el sistema una vez en producción.' },
@@ -288,6 +341,7 @@ export const site: Site = {
     titleLines: ['PROYECTOS', 'DESTACADOS'],
     subtitle: 'Una selección de nuestros trabajos más apasionantes',
     caseLabel: 'Ver el caso',
+    verLabel: 'Ver proyecto',
     cta: { label: 'Ver todos los proyectos', href: '/proyectos' },
   },
 
@@ -295,31 +349,56 @@ export const site: Site = {
     kicker: 'PROYECTOS',
     title: 'Lo que construimos',
     intro:
-      'Sistemas de gestión, plataformas y sitios para empresas que necesitaban algo que una plantilla no resolvía.',
+      'Sistemas de gestión, plataformas y sitios para empresas que necesitaban algo que una plantilla o un sistema enlatado no resolvía.',
     sinFicha: 'Ficha en preparación',
   },
 
   // ---------- Sobre Dutsiland ----------
   about: {
-    kicker: 'SOBRE DUTSILAND',
-    title: 'Empezamos resolviendo un problema concreto, y no paramos.',
-    subtitle: 'Un equipo chico que escribe software a medida, del relevamiento al mantenimiento.',
-    cta: { label: 'Conocé más', href: '/sobre' },
+    pageTitle: 'Sacamos de las planillas el trabajo que no debería hacer una persona',
+    metaDescription: 'El origen del estudio, cómo encaramos cada proyecto y qué nos define.',
     // TODO(Dutsiland): confirmar el año exacto de arranque del estudio.
     year: '2023',
-    text: [
-      'Dutsiland arrancó como un equipo chico de desarrolladores al que le pedían siempre lo mismo: un sistema que las herramientas de siempre no podían dar. En vez de forzar una plantilla, escribimos el software desde cero.',
-      // TODO(Dutsiland): sumar la ciudad de origen y algún hito concreto (primer cliente, primer sistema propio).
-      'Ese primer sistema se convirtió en la forma de trabajar del estudio. Hoy somos una software factory: diseñamos y desarrollamos productos digitales completos, desde el relevamiento hasta el mantenimiento, para empresas que necesitan que el software se adapte a su operación y no al revés.',
-      // TODO(Dutsiland): este párrafo es un borrador. Contar cómo trabaja el equipo hoy:
-      // cuántos son, cómo se reparten diseño y desarrollo, qué los diferencia.
-      'Trabajamos de a pocos proyectos por vez y siempre con el mismo equipo de punta a punta: el que releva es el que diseña y el que desarrolla. Esa continuidad es lo que hace que el producto salga parecido a lo que se habló en la primera reunión.',
+    /* El hilo de los tres hitos no es la tecnología, es el relevamiento: lo que el
+       estudio hace es siempre lo mismo —mirar cómo trabaja una empresa y sacarle el
+       trabajo que no debería estar haciendo alguien a mano— y lo que cambia es con qué.
+       Así la IA entra como continuación y no como moda, que es la diferencia entre
+       sonar oportunista y sonar con criterio.
+
+       Los tres anteriores decían lo mismo tres veces: el origen, que ese origen se
+       volvió método, y que el método lo hace el mismo equipo. Sin progresión no hay
+       historia, y el botón promete una.
+
+       En el home sólo se ven la etapa y el titular, así que cada titular tiene que
+       sostenerse solo. Los párrafos existen únicamente en /sobre.
+
+       Lo que NO va acá ni en ninguna otra parte del sitio: cuántos son y cuántos
+       proyectos toman. "Equipo chico" y "pocos proyectos por vez" se leen como falta de
+       capacidad para una empresa que está evaluando a quién confiarle un sistema; la
+       continuidad —el mismo equipo de punta a punta— es la misma virtud contada por el
+       lado que suma, y vive en `traits`. */
+    hitos: [
+      {
+        etapa: 'El problema de siempre',
+        title: 'Casi todo lo que hace una empresa pasa primero por una planilla',
+        text: 'Turnos en un cuaderno, stock en tres depósitos que no coinciden, asistencia en papel, el pedido en la cabeza del que atiende. Ninguna de esas empresas estaba parada: todas funcionaban. El problema es que funcionaban a fuerza de que alguien hiciera a mano, todos los días, lo que un sistema podía hacer solo.',
+      },
+      {
+        etapa: 'Cómo lo resolvemos',
+        title: 'Primero relevamos, después escribimos',
+        text: 'Nunca empezamos por la herramienta. Empezamos mirando cómo trabaja la empresa hoy, paso por paso, hasta encontrar dónde se pierde el tiempo y por qué. Recién ahí se decide qué construir. Por eso los sistemas se parecen a la operación y no al revés: salen de haberla mirado, no de haberla supuesto.',
+      },
+      {
+        etapa: 'Hoy',
+        title: 'La IA no cambió qué hacemos, cambió con qué',
+        text: 'Hay tareas que hasta hace poco había que programar una por una y hoy las resuelve un modelo: leer un documento, clasificar un pedido, responder una consulta, estimar un precio. Lo que no cambió es lo de antes: entender la operación antes de tocarla. Automatizar un proceso que nadie revisó sólo lo hace más rápido, no mejor.',
+      },
     ],
     // Este bloque no dice nada nuevo: ordena en tres puntos lo que ya afirman los
     // párrafos de arriba. Le da cuerpo a la página sin depender de las fotos del equipo.
     // TODO(Dutsiland): validar la redacción de los tres puntos.
     traitsKicker: 'QUÉ NOS DEFINE',
-    traitsTitle: 'Pocos proyectos por vez, y el mismo equipo de punta a punta',
+    traitsTitle: 'El mismo equipo, desde el primer relevamiento hasta el último ajuste',
     traits: [
       {
         n: '01',
@@ -329,12 +408,12 @@ export const site: Site = {
       {
         n: '02',
         title: 'El mismo equipo de principio a fin',
-        text: 'El que releva es el que diseña y el que desarrolla. Esa continuidad es lo que hace que el producto salga parecido a lo que se habló en la primera reunión.',
+        text: 'El equipo que releva es el que diseña y el que desarrolla. Sin traspasos entre áreas no se pierde contexto en el camino, y eso se traduce en la calidad de lo que se entrega.',
       },
       {
         n: '03',
-        title: 'Del relevamiento al mantenimiento',
-        text: 'Acompañamos el sistema después de publicarlo. El software se sigue usando, y se sigue cambiando con la operación.',
+        title: 'Acompañamos todo el ciclo de vida',
+        text: 'La entrega no cierra el trabajo. El sistema se sigue usando y el negocio sigue cambiando, así que seguimos al lado para evolucionarlo: ajustes, funciones nuevas y soporte, con el equipo que lo construyó.',
       },
     ],
     teamKicker: 'EL EQUIPO',
@@ -344,7 +423,7 @@ export const site: Site = {
     team: [],
     // TODO(Dutsiland): validar el copy del cierre.
     finalKicker: 'EMPECEMOS',
-    finalTitle: '¿Tenés un problema que el software puede resolver?',
+    finalTitle: 'Soluciones a medida para tu empresa',
     finalText: 'Contanos cómo funciona tu operación hoy y vemos juntos qué se puede construir.',
     ctaFinal: { label: 'Trabajemos juntos', href: '/contacto' },
   },
@@ -353,12 +432,21 @@ export const site: Site = {
   contact: {
     kicker: 'CONTACTO',
     title: 'Contanos qué necesitás',
-    intro: 'Escribinos y coordinamos una primera reunión para entender el problema.',
+    intro: 'Escribinos y coordinamos una primera reunión para entender tus necesidades y tus ideas.',
     fields: { name: 'Nombre y apellido', email: 'Correo electrónico', message: 'Mensaje' },
     submit: 'Enviar',
     sending: 'Enviando…',
     success: '¡Solicitud de contacto enviada! Te respondemos a la brevedad.',
     error: 'No pudimos enviar el mensaje. Escribinos directo a',
+    nextTitle: 'Qué pasa después',
+    // TODO(Dutsiland): confirmar el plazo real de respuesta. Si son 24 o 48 horas,
+    // decirlo con el número: un plazo concreto convence mucho más que "a la brevedad".
+    next: [
+      { n: '01', title: 'Te respondemos', text: 'Leemos lo que nos contás y te escribimos para coordinar una primera charla.' },
+      { n: '02', title: 'Nos reunimos', text: 'Una reunión para entender cómo funciona tu operación hoy y en qué puntos el software puede aportar más valor.' },
+      { n: '03', title: 'Te pasamos alcance y precio', text: 'Con el problema definido, documentamos qué incluye el desarrollo, qué se deja planificado para una etapa posterior, en cuánto tiempo y a qué costo.' },
+    ],
+    directLabel: 'O escribinos directo',
   },
 
   projectView: {
@@ -366,9 +454,15 @@ export const site: Site = {
     problemKicker: 'EL PROBLEMA',
     problemTitle: 'Qué había que resolver',
     builtKicker: 'QUÉ CONSTRUIMOS',
-    builtTitle: 'Lo que hicimos',
+    // Antes decía "Lo que hicimos", que repetía el antetítulo y además era la misma
+    // frase que sacamos de la portada.
+    builtTitle: 'Pieza por pieza',
     photosKicker: 'EL PRODUCTO',
     photosTitle: 'Así se ve',
+    photosHint: 'Ampliar',
+    // Sin "click" ni "tocá": en el teléfono no se hace click y en el escritorio no se
+    // toca, y la nota se ve en los dos.
+    photosNota: 'Ampliá cualquier captura',
     nextKicker: 'SIGUIENTE PROYECTO',
     cta: { label: 'Queremos hacer el tuyo', href: '/contacto' },
   },
@@ -384,8 +478,6 @@ export const site: Site = {
       coverAlt: 'Publicité',
       detail: {
         kicker: 'MARKETPLACE CON IA',
-        role: 'Backend y arquitectura',
-        context: 'Proyecto colaborativo, en producción',
         // TODO(Dutsiland): validar con el cliente cómo contamos el problema.
         // Está redactado a partir de lo que hace el producto, no de un brief.
         problem: [
@@ -418,7 +510,6 @@ export const site: Site = {
             text: 'Preparado para crecer sin rehacerse: cada parte se puede cambiar sin tocar el resto, y los cambios entran con tests que los respaldan.',
           },
         ],
-        links: [{ label: 'Ver código', href: 'https://github.com/renatobicego/publicite' }],
         photos: [
           { src: '/img/proyectos/publicite/publicite-1.webp', alt: 'Publicité — inicio', caption: 'El inicio, con los anuncios cerca tuyo' },
           { src: '/img/proyectos/publicite/publicite-2.webp', alt: 'Publicité — anuncios', caption: 'Búsqueda por ubicación y filtros' },
@@ -430,30 +521,28 @@ export const site: Site = {
     {
       slug: 'mahatu-consultorios',
       name: 'Mahatu Consultorios',
-      lead: 'Sistema de gestión de turnos online para una clínica odontológica.',
+      lead: 'Sistema de gestión de turnos online para un consultorio de psicopedagogía.',
       cover: '/img/mahatu.jpg',
       coverAlt: 'Mahatu Consultorios',
       detail: {
         kicker: 'SALUD',
-        role: 'Backend y arquitectura',
-        context: 'En producción para la clínica',
         // TODO(Dutsiland): confirmar con Mahatu cómo era la operación antes del sistema.
         problem: [
-          'La clínica coordinaba los turnos por teléfono y a mano. Cada cambio de agenda había que avisarlo, el historial de cada paciente estaba en papel y los ingresos se seguían aparte, así que nadie tenía el panorama completo en un solo lugar.',
-          'Lo que hacía falta no era una agenda digital más, sino que el paciente pudiera reservar solo, sobre la disponibilidad real del profesional, y que la clínica viera en el mismo sistema la atención y la facturación.',
+          'El consultorio coordinaba los turnos por teléfono y a mano. Cada cambio de agenda había que avisarlo, el historial de cada paciente estaba en papel y los ingresos se seguían aparte, así que nadie tenía el panorama completo en un solo lugar.',
+          'Lo que hacía falta no era una agenda digital más, sino que el paciente pudiera reservar solo, sobre la disponibilidad real de la profesional, y que el consultorio viera en el mismo sistema la atención y la facturación.',
         ],
         built: [
           {
             title: 'Turnos online',
-            text: 'El paciente reserva según la disponibilidad real del profesional, y el profesional también puede asignar turnos él mismo.',
+            text: 'El paciente reserva según la disponibilidad real de la agenda, y la profesional también puede asignar turnos ella misma.',
           },
           {
-            title: 'Agenda del profesional',
+            title: 'Agenda de la profesional',
             text: 'Asignar, reprogramar o eliminar turnos desde un calendario.',
           },
           {
             title: 'Fichas de pacientes',
-            text: 'Historial clínico detallado, con la información de cada paciente en un solo lugar.',
+            text: 'Historial detallado, con la información de cada paciente en un solo lugar.',
           },
           {
             title: 'Anotaciones por turno',
@@ -464,7 +553,6 @@ export const site: Site = {
             text: 'Registro de pagos, medios de pago e información de obras sociales, con una vista para seguir los ingresos.',
           },
         ],
-        links: [],
         photos: [
           { src: '/img/proyectos/mahatu/mahatu-3.webp', alt: 'Mahatu — turnos', caption: 'La reserva de turnos del paciente' },
           { src: '/img/proyectos/mahatu/mahatu-4.webp', alt: 'Mahatu — calendario', caption: 'El calendario del profesional' },
@@ -482,8 +570,6 @@ export const site: Site = {
       coverAlt: 'Asociación Mendocina de Atletismo',
       detail: {
         kicker: 'DEPORTE',
-        role: 'Investigación, diseño de interfaz y desarrollo',
-        context: 'En producción para la asociación',
         problem: [
           'La asociación publicaba sus noticias y manejaba inscripciones y federaciones por fuera de la web, cada cosa por su lado. No había un lugar donde un atleta o un club encontrara todo junto.',
           'Y había una restricción que condicionaba todo el diseño: buena parte de los usuarios son personas mayores. Cualquier fricción de más —un formulario largo, un menú escondido— los deja afuera. Arrancamos con una etapa de investigación para entender dónde estaban los puntos de dolor reales antes de dibujar una pantalla.',
@@ -495,7 +581,6 @@ export const site: Site = {
           { title: 'Federaciones y clubes', text: 'El padrón de clubes miembros y la gestión de las federaciones.' },
           { title: 'Una interfaz sin obstáculos', text: 'Diseño responsive pensado para que un usuario mayor llegue rápido a lo que busca, con la investigación previa como guía.' },
         ],
-        links: [{ label: 'Ver sitio', href: 'https://amamendoza.vercel.app/' }],
         // La primera hace de portada en la ficha, por eso va el sitio y no la guía de estilos
         photos: [
           { src: '/img/proyectos/ama/2.webp', alt: 'AMA — portada', caption: 'La portada, con las noticias de la asociación' },
@@ -513,11 +598,9 @@ export const site: Site = {
       coverAlt: 'Cucha Repuestos',
       detail: {
         kicker: 'REPUESTOS',
-        role: 'Diseño de interfaz y desarrollo',
-        context: 'En producción',
         problem: [
           'Cucha Repuestos vende repuestos importados para camiones Iveco y es referente en la Patagonia, pero toda su operación vivía fuera de línea: para saber si había una pieza, o con qué marcas trabajaban, había que llamar o pasar por el local.',
-          'El sitio tenía que hacer dos cosas a la vez: mostrar la línea completa de productos a alguien que no está en Comodoro, y dejar claro por qué comprarles a ellos —envíos a todo el país, garantía, repuestos originales y alternativos—.',
+          'El sitio tenía que hacer dos cosas a la vez: poner el catálogo completo online, para el que está lejos del local y no puede pasar a preguntar, y dejar claro por qué comprarles a ellos —envíos a todo el país, garantía, repuestos originales y alternativos—.',
         ],
         built: [
           { title: 'La línea completa de repuestos', text: 'El catálogo de productos Iveco, navegable por categoría.' },
@@ -525,7 +608,6 @@ export const site: Site = {
           { title: 'La sucursal en el mapa', text: 'Dirección, horarios y contacto directo por WhatsApp desde cualquier pantalla.' },
           { title: 'Las marcas con las que trabajan', text: 'El respaldo de los proveedores, visible para quien no los conoce.' },
         ],
-        links: [{ label: 'Ver sitio', href: 'https://cucharepuestos.com/' }],
         photos: [
           { src: '/img/proyectos/cucha/1.webp', alt: 'Cucha — el sitio', caption: 'El sitio en escritorio y en el teléfono' },
           { src: '/img/proyectos/cucha/2.webp', alt: 'Cucha — portada', caption: 'La portada, con las tres promesas del negocio' },
@@ -542,8 +624,6 @@ export const site: Site = {
       coverAlt: 'Medialuna Medias',
       detail: {
         kicker: 'CATÁLOGO ONLINE',
-        role: 'Diseño de interfaz y desarrollo',
-        context: 'En producción',
         problem: [
           'Medialuna vendía por canales informales: cada consulta se respondía a mano, mandando fotos sueltas. El cliente no podía ver el surtido completo y el emprendimiento no tenía forma de ordenar lo que ofrecía.',
           'Lo que hacía falta era un catálogo que se pudiera recorrer solo, sin perder el tono del emprendimiento: colorido e ilustrado, que es justo lo que lo diferencia de cualquier tienda genérica.',
@@ -554,7 +634,6 @@ export const site: Site = {
           { title: 'Una identidad que no se diluye', text: 'El diseño colorido e ilustrado del emprendimiento, llevado a la interfaz.' },
           { title: 'El cierre por donde ya vendían', text: 'El contacto directo por WhatsApp e Instagram, que es donde la venta se concreta.' },
         ],
-        links: [{ label: 'Ver catálogo', href: 'https://medialunamedias.vercel.app/' }],
         photos: [
           { src: '/img/proyectos/medialuna/1.webp', alt: 'Medialuna — la tienda', caption: 'La tienda en escritorio y en el teléfono' },
           { src: '/img/proyectos/medialuna/2.webp', alt: 'Medialuna — catálogo', caption: 'El catálogo, con búsqueda y filtros' },
@@ -571,8 +650,6 @@ export const site: Site = {
       coverAlt: 'Mimpronta',
       detail: {
         kicker: 'IMPACTO AMBIENTAL',
-        role: 'Diseño de interfaz y desarrollo',
-        context: 'En producción',
         problem: [
           'Mimpronta es una agencia de impacto ambiental y necesitaba un lugar donde explicar qué hace y promover sus servicios. Hasta entonces no tenía dónde mandar a alguien que quisiera entender su propuesta.',
           'La dificultad no era técnica sino de traducción: la agencia ya tenía una identidad visual fuerte, ilustrada, y había que llevarla a la web sin que perdiera fuerza. Trabajamos de la mano de sus diseñadores para que el resultado fuera funcional y además se sostuviera como pieza gráfica.',
@@ -583,7 +660,6 @@ export const site: Site = {
           { title: 'Blog propio', text: 'Un espacio para publicar sus notas sobre innovación social y sostener la presencia.' },
           { title: 'Diseño responsive', text: 'La misma pieza, entera, en cualquier pantalla.' },
         ],
-        links: [{ label: 'Ver sitio', href: 'https://mimpronta.com/' }],
         photos: [
           { src: '/img/proyectos/mimpronta/1.webp', alt: 'Mimpronta — el blog', caption: 'El blog, en la maqueta de diseño' },
           { src: '/img/proyectos/mimpronta/2.webp', alt: 'Mimpronta — portada', caption: 'La portada, con el mensaje de la agencia' },
@@ -593,25 +669,14 @@ export const site: Site = {
       },
     },
 
-    /* =====================================================================
-       DESDE ACÁ, CASOS INVENTADOS (demo: true)
-       Cliente, números y capturas son nuestros, no de un trabajo real. Sirven
-       para mostrar el sitio completo por rubro mientras el estudio junta los
-       casos verdaderos. NO PUBLICAR ASÍ: cada uno se reemplaza por un caso real
-       o se borra. Las capturas salen de maquetas en HTML, no de productos que
-       existan.
-       ===================================================================== */
     {
       slug: 'cocina-norte',
       name: 'Cocina Norte',
       lead: 'Comandas, salón y delivery para un grupo gastronómico de cinco locales.',
       cover: '/img/cocina-norte.webp',
       coverAlt: 'Cocina Norte',
-      demo: true,
       detail: {
         kicker: 'GASTRONOMÍA',
-        role: 'Diseño de producto y desarrollo',
-        context: 'Caso de demostración',
         problem: [
           'Un restaurante con salón lleno y tres apps de delivery en simultáneo tiene el mismo problema todas las noches: el pedido existe en un papel, en una pantalla del delivery y en la cabeza del mozo, pero en ningún lado a la vez. La cocina cocina lo que le llega cuando le llega, y nadie sabe cuánto hace que un plato está esperando.',
           'Con cinco locales el problema se multiplica: cada uno arma su carta, se queda sin un insumo y sigue vendiéndolo igual, y el dueño se entera del resultado de la semana cuando ya pasó. Lo que hacía falta no era un sistema de cajas más, sino que el pedido sea uno solo desde que entra hasta que sale, y que lo que se agota deje de ofrecerse solo.',
@@ -623,7 +688,6 @@ export const site: Site = {
           { title: 'Integración con delivery', text: 'Los pedidos de las apps entran como una comanda más y avisan solos cuando se demoran.' },
           { title: 'Cierre por local y consolidado', text: 'Facturación, tickets y tiempos de cocina por día y por sucursal, comparables entre sí.' },
         ],
-        links: [],
         photos: [
           { src: '/img/proyectos/cocina-norte/1.webp', alt: 'Cocina Norte — comandas', caption: 'La pantalla de cocina: cada pedido avanza por columnas y el reloj no se detiene' },
           { src: '/img/proyectos/cocina-norte/2.webp', alt: 'Cocina Norte — salón', caption: 'El mapa de salón, con el consumo y el tiempo de cada mesa' },
@@ -638,11 +702,8 @@ export const site: Site = {
       lead: 'Control de stock en tres depósitos, con lectura de códigos y alertas de quiebre.',
       cover: '/img/raiz-distribuciones.webp',
       coverAlt: 'Raíz Distribuciones',
-      demo: true,
       detail: {
         kicker: 'STOCK Y DEPÓSITO',
-        role: 'Relevamiento, diseño y desarrollo',
-        context: 'Caso de demostración',
         problem: [
           'Una distribuidora con tres depósitos tiene tres stocks distintos y ninguno confiable. El sistema dice que hay mercadería, el depósito dice que no, y la diferencia recién aparece cuando un pedido se arma incompleto y el cliente reclama. Cada control manual se hace con una planilla que queda vieja el mismo día que se llena.',
           'El costo no es el faltante en sí: es que nadie lo ve venir. Se compra de más lo que sobra, se compra tarde lo que falta, y el que arma los pedidos camina el depósito dos veces porque no sabe dónde está lo que busca. La idea fue que el stock se actualice cuando la mercadería se mueve, no cuando alguien se acuerda de cargarlo.',
@@ -654,7 +715,6 @@ export const site: Site = {
           { title: 'Alertas de reposición', text: 'Cruza el consumo de las últimas ocho semanas con el stock y arma la orden de compra sugerida por proveedor.' },
           { title: 'Trazabilidad de movimientos', text: 'Cada unidad tiene su historia: quién la recibió, a qué depósito fue y en qué pedido salió.' },
         ],
-        links: [],
         photos: [
           { src: '/img/proyectos/raiz-distribuciones/1.webp', alt: 'Raíz — stock', caption: 'El stock de los tres depósitos, ordenado por lo que está por faltar' },
           { src: '/img/proyectos/raiz-distribuciones/2.webp', alt: 'Raíz — ingreso', caption: 'El ingreso con lector: el sistema compara contra el remito mientras se lee' },
@@ -669,11 +729,8 @@ export const site: Site = {
       lead: 'Turnos, historia clínica y receta digital para catorce consultorios.',
       cover: '/img/centro-aconcagua.webp',
       coverAlt: 'Centro Médico Aconcagua',
-      demo: true,
       detail: {
         kicker: 'SALUD',
-        role: 'Diseño de producto y desarrollo',
-        context: 'Caso de demostración',
         problem: [
           'En un centro con ocho especialidades, el turno se pide por teléfono, se anota en un cuaderno y se confirma por WhatsApp desde tres celulares distintos. Se superponen, se pierden y el paciente se entera cuando ya está en la sala de espera. La historia clínica, mientras tanto, vive en carpetas: cada profesional ve lo suyo y nadie ve el conjunto.',
           'El pedido no era digitalizar papeles sino que las tres cosas se toquen: que el turno sepa a qué profesional y a qué consultorio va, que la consulta escriba en la misma historia que van a leer los demás, y que la receta salga firmada de ahí sin volver a tipear nada.',
@@ -685,7 +742,6 @@ export const site: Site = {
           { title: 'Sala de espera en pantalla', text: 'A quién se está llamando, qué consultorio está libre y cuánta demora hay, en el hall y en recepción.' },
           { title: 'Obras sociales', text: 'Los datos del afiliado y la cobertura se cargan una vez y viajan al turno, a la consulta y a la receta.' },
         ],
-        links: [],
         photos: [
           { src: '/img/proyectos/centro-aconcagua/1.webp', alt: 'Aconcagua — agenda', caption: 'La agenda de la semana, con las ocho especialidades en la misma grilla' },
           { src: '/img/proyectos/centro-aconcagua/2.webp', alt: 'Aconcagua — historia clínica', caption: 'La historia clínica: una sola línea de tiempo por paciente' },
@@ -700,11 +756,8 @@ export const site: Site = {
       lead: 'Cursadas, asistencia por QR y boletín digital para 1.400 alumnos.',
       cover: '/img/instituto-ledesma.webp',
       coverAlt: 'Instituto Ledesma',
-      demo: true,
       detail: {
         kicker: 'EDUCACIÓN',
-        role: 'Diseño de producto y desarrollo',
-        context: 'Caso de demostración',
         problem: [
           'Tomar asistencia a mano en una comisión de cuarenta alumnos cuesta diez minutos de clase, y después hay que pasarla a una planilla que alguien va a consolidar a fin de mes. Las notas viven en el cuaderno de cada docente y el boletín se arma a mano, materia por materia, cuando el cuatrimestre ya terminó.',
           'Lo grave no es el trabajo administrativo: es que el alumno que se está por perder el cuatrimestre se detecta tarde. Cuando la asistencia y las notas están en dos lugares distintos, nadie cruza las dos cosas hasta que ya no hay margen para hacer algo.',
@@ -716,7 +769,6 @@ export const site: Site = {
           { title: 'Detección de alumnos en riesgo', text: 'Cruza asistencia y notas y marca al que se está por perder el cuatrimestre mientras todavía hay margen.' },
           { title: 'Aulas y horarios', text: 'La grilla de aulas evita las superposiciones antes de que pasen, no después.' },
         ],
-        links: [],
         photos: [
           { src: '/img/proyectos/instituto-ledesma/1.webp', alt: 'Ledesma — cursadas', caption: 'Las cursadas del docente, con el avance del programa de cada una' },
           { src: '/img/proyectos/instituto-ledesma/2.webp', alt: 'Ledesma — asistencia', caption: 'La asistencia en curso: el código cambia cada minuto y el registro se actualiza solo' },
@@ -731,11 +783,8 @@ export const site: Site = {
       lead: 'Seguimiento de lotes, campañas y aplicaciones para un establecimiento agrícola.',
       cover: '/img/campo-abierto.webp',
       coverAlt: 'Campo Abierto',
-      demo: true,
       detail: {
         kicker: 'AGRO',
-        role: 'Relevamiento, diseño y desarrollo',
-        context: 'Caso de demostración',
         problem: [
           'Un establecimiento de tres mil hectáreas toma decisiones sobre ochenta lotes que no se parecen entre sí, y el historial de cada uno vive en un cuaderno, en el celular del ingeniero y en la memoria del encargado. Qué se sembró hace tres campañas, con qué se aplicó y cuánto rindió es una pregunta que lleva media hora contestar y termina en una estimación.',
           'Sin ese historial no hay comparación posible: no se sabe qué lote conviene rotar, si el gasto en insumos se justificó o si el rinde bueno fue del manejo o de la lluvia. Lo que hacía falta era que cada labor quede registrada donde se hace, con su costo, y que el resultado se pueda mirar campaña contra campaña.',
@@ -747,7 +796,6 @@ export const site: Site = {
           { title: 'Rinde por lote y por campaña', text: 'Cuatro campañas comparables, con el margen bruto calculado sobre el costo real de cada labor.' },
           { title: 'Trabajo sin señal', text: 'La app guarda lo que se carga en el campo y lo sincroniza cuando vuelve a haber señal.' },
         ],
-        links: [],
         photos: [
           { src: '/img/proyectos/campo-abierto/1.webp', alt: 'Campo Abierto — mapa', caption: 'El mapa de lotes, con el cultivo y el estado de cada uno' },
           { src: '/img/proyectos/campo-abierto/2.webp', alt: 'Campo Abierto — aplicaciones', caption: 'Las aplicaciones registradas, con producto, dosis y receta firmada' },

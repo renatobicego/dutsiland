@@ -4,10 +4,10 @@ import type { Cleanup } from './marquee'
 // body[data-load] pasa por: first-loading -> first-leaving -> first-done
 // El progreso combina imágenes precargadas + un tiempo mínimo de "script ready".
 
-const LEAVING_DURATION = 1000
-const FAKE_PROGRESS_MAX = 10000
+const LEAVING_DURATION = 380
+const FAKE_PROGRESS_MAX = 2600
 const TIMEOUT = 10000
-const SCRIPT_READY_DELAY = 2300
+const SCRIPT_READY_DELAY = 700
 
 type LoadStatus = 'loading' | 'leaving' | 'done'
 
@@ -73,8 +73,9 @@ export function runLoader({ onLeaving, onDone }: LoaderOptions = {}): Cleanup {
       return
     }
     if (state.progress < 100) {
-      if (state.progress < 80) state.progress += 5
-      setProgress(++state.progress)
+      // Remate del contador una vez que ya está todo listo: en unos pocos frames, no
+      // de a uno por ciento. Lo que quedaba del número no es espera, es trámite.
+      setProgress(Math.min(100, state.progress + (state.progress < 80 ? 12 : 4)))
       return
     }
     if (status === 'loading') {

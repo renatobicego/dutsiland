@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import type { AnchorHTMLAttributes, ReactNode } from 'react'
 
-// Botón del storyboard: pastilla crema con la "D" y el texto en rojo ladrillo, subrayado.
+// Botón del storyboard: pastilla crema con la "D" y el texto en rojo ladrillo.
 // Al pasar el mouse se invierte con la misma apertura en elipse de la referencia.
 export function DIcon({ className = '' }: { className?: string }) {
   return (
@@ -43,6 +43,16 @@ export default function Button({ href, children, className = '', ...rest }: Butt
     <a href={href} {...props}>
       {contenido}
     </a>
+  )
+}
+
+// El tilde de "qué construimos": marca cada funcionalidad como algo que el sistema ya
+// hace. Va en un trazo abierto, sin relleno, para que el grosor no cambie con el tamaño.
+export function Check({ className = '' }: { className?: string }) {
+  return (
+    <svg className={`check-icon ${className}`} viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 12.5 L9.5 18 L20 6.5" />
+    </svg>
   )
 }
 

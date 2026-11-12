@@ -1,61 +1,37 @@
 import type gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import type { Cleanup } from './marquee'
-import type { ScrollSmoother } from 'gsap/ScrollSmoother'
 
 // Menú y anclas. Lo usan las dos vistas (la home y la ficha de proyecto), por eso
 // vive acá y no dentro de HomeExperience.
 
-export type Smoother = ReturnType<typeof ScrollSmoother.create>
-
 export type MenuOptions = {
-  smoother: Smoother | null
   menuMark: gsap.core.Timeline | null
 }
 
 /** Lleva el scroll a un ancla. `0` es el principio de la página.
  *
- *  Las anclas que caen dentro del hero de la home no tienen una posición propia: el
- *  hero está fijado y su contenido lo va mostrando el scroll, así que initHeroScroll
- *  deja en cada una un data-hero-progress con el punto del tramo en el que se ve. */
-export function scrollToTarget(target: Element | 0, smoother: Smoother | null): void {
+ *  Todas las anclas son secciones de verdad, con su lugar en la página: alcanza con
+ *  pedirle al navegador que vaya. Antes no era así —las que caían dentro del hero no
+ *  tenían posición propia, porque el hero estaba fijado y su contenido lo mostraba el
+ *  scroll— y había que calcular la altura a partir de un data-hero-progress. */
+export function scrollToTarget(target: Element | 0): void {
   if (target === 0) {
-    if (smoother) smoother.scrollTo(0, true)
-    else window.scrollTo({ top: 0, behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: 'smooth' })
     return
   }
-  // El hero está fijado en los dos layouts (con scroll suave en apaisado, con scroll
-  // nativo en vertical), así que la altura de sus anclas se calcula igual en ambos.
-  const hero = target.closest('.home-hero')
-  if (hero instanceof HTMLElement && target instanceof HTMLElement) {
-    const p = parseFloat(target.dataset.heroProgress ?? '')
-    const span = Math.max(0, hero.offsetHeight - window.innerHeight)
-    const y = hero.offsetTop + (Number.isFinite(p) ? p * span : window.innerHeight)
-    if (smoother) smoother.scrollTo(y, true)
-    else window.scrollTo({ top: y, behavior: 'smooth' })
-    return
-  }
-  if (smoother) smoother.scrollTo(target, true, 'top top')
-  else target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  target.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
-export function initMenu({ smoother, menuMark }: MenuOptions): Cleanup {
+export function initMenu({ menuMark }: MenuOptions): Cleanup {
   const body = document.body
   const ACTIVE = 'menu-active'
   const LEAVE = 'menu-leave'
 
-  /* Con el menú abierto el fondo no se mueve. Son dos frenos distintos según el
-     layout: en apaisado manda el scroll suave, y alcanza con pausarlo; en vertical el
-     scroll es nativo pero lo maneja el normalizador de ScrollTrigger, que intercepta
-     el táctil, así que overflow: hidden en el body no alcanza y hay que desactivarlo. */
-  const bloquearScroll = () => {
-    if (smoother) smoother.paused(true)
-    else ScrollTrigger.normalizeScroll()?.disable()
-  }
-  const soltarScroll = () => {
-    if (smoother) smoother.paused(false)
-    else ScrollTrigger.normalizeScroll()?.enable()
-  }
+  /* Con el menú abierto el fondo no se mueve, y de eso ya se encarga el CSS: la clase
+     menu-active del body trae overflow: hidden y touch-action: none. Antes hacía falta
+     además frenar a mano el scroll suave en apaisado y el normalizador táctil de
+     ScrollTrigger en vertical, que interceptaban el gesto antes que el navegador. */
+
   const api = {
     get isOpen() {
       return body.classList.contains(ACTIVE)
@@ -63,11 +39,9 @@ export function initMenu({ smoother, menuMark }: MenuOptions): Cleanup {
     open() {
       body.classList.add(ACTIVE)
       setTimeout(() => menuMark && menuMark.play(), 500)
-      bloquearScroll()
     },
     close() {
       if (!api.isOpen) return
-      soltarScroll()
       body.classList.remove(ACTIVE)
       body.classList.add(LEAVE)
       setTimeout(() => {
@@ -95,7 +69,7 @@ export function initMenu({ smoother, menuMark }: MenuOptions): Cleanup {
     // mismo": el que navega es este handler.
     const target = href === '#top' ? 0 : document.querySelector(`[data-ancla="${href.slice(1)}"]`)
     if (target === null) return
-    setTimeout(() => scrollToTarget(target, smoother), wasOpen ? 450 : 0)
+    setTimeout(() => scrollToTarget(target), wasOpen ? 450 : 0)
   }
   const anchors = Array.from(document.querySelectorAll('a[href^="#"], a[data-menu-close]'))
   anchors.forEach((a) => a.addEventListener('click', onAnchor))
@@ -103,7 +77,6 @@ export function initMenu({ smoother, menuMark }: MenuOptions): Cleanup {
   return () => {
     if (bt) bt.removeEventListener('click', onBt)
     anchors.forEach((a) => a.removeEventListener('click', onAnchor))
-    soltarScroll()
     body.classList.remove(ACTIVE, LEAVE)
   }
 }

@@ -1,6 +1,8 @@
 import Header from '@/components/Header'
 import Hero from '@/components/Hero'
-import History from '@/components/History'
+import Claim from '@/components/Claim'
+import Problems from '@/components/Problems'
+import Services from '@/components/Services'
 import Process from '@/components/Process'
 import Portfolio from '@/components/Portfolio'
 import Footer from '@/components/Footer'
@@ -27,14 +29,17 @@ export default function Home() {
       <Header />
 
       <div id="main-transition">
-        <div id="smooth-wrapper" className="container-wrapper">
+        <div className="container-wrapper">
           <div className="wrapper" id="pg-home" data-scroll-container>
-            {/* "Qué hacemos" no es una sección propia: va dentro del panel izquierdo
-                del hero, que es la sombra negra que entra cuando la frase se va.
-                "Sobre Dutsiland" acá es sólo el anuncio; el contenido está en /sobre. */}
+            {/* Cada bloque es una sección propia y se anima al entrar en pantalla.
+                La historia del estudio no está acá: /sobre es una página entera y el
+                home la anunciaba contando lo mismo en chico. Se entra por el menú y
+                por el pie, que están en todas las pantallas. */}
             <main>
               <Hero />
-              <History />
+              <Claim />
+              <Problems />
+              <Services />
               <Process />
               <Portfolio />
             </main>

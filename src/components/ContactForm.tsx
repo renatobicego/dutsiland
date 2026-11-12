@@ -60,7 +60,10 @@ export default function ContactForm() {
         {/* Botón de verdad y no el <Button/>, que renderiza un link: esto envía un form.
             Mientras se envía, la D quieta del botón deja su lugar a la que carga: ocupa
             exactamente el mismo espacio, así que el botón no cambia de ancho. */}
-        <button type="submit" className="btn-d" disabled={estado === 'enviando'} data-cursor-style="hovered">
+        {/* Variante oscura: el formulario vive sobre el crema y la píldora clara, que
+            funciona sobre las secciones negras, acá queda crema sobre crema y no se lee
+            como un botón. Es la única acción de la página. */}
+        <button type="submit" className="btn-d btn-d--dark" disabled={estado === 'enviando'} data-cursor-style="hovered">
           <span className="btn-d__content">
             {estado === 'enviando' ? <Spinner /> : <DIcon />}
             <span className="btn-d__label">{estado === 'enviando' ? c.sending : c.submit}</span>

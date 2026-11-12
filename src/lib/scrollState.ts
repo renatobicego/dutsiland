@@ -87,26 +87,44 @@ function tonoEn(x: number, y: number): 'dark' | '' | null {
   return null
 }
 
-/** El logo y el botón de menú toman cada uno su color del fondo que tienen debajo.
+/** Qué piezas del header toman su color del fondo, y qué se mide para cada una.
  *
- *  Cada uno por su lado y no un valor único para todo el header: cuando la forma de
- *  arriba es una D que no cubre el ancho, el logo queda sobre negro y el botón sobre
- *  crema, y con un solo criterio uno de los dos se pierde contra el fondo.
+ *  `destino` recibe el data-tono; `marca` es lo que se sondea, cuando no coincide con
+ *  el destino. Una lista y no dos lecturas sueltas porque ahora arriba hay más que el
+ *  logo y un botón: los tres destinos escritos ocupan media barra, y nada garantiza que
+ *  todos caigan sobre el mismo fondo. */
+const PIEZAS: { destino: string; marca?: string }[] = [
+  // El enlace del logo lleva adentro el nombre del estudio para quien no ve la imagen,
+  // escondido con un left: -100vw que le estira la caja media pantalla hacia la
+  // izquierda: midiendo el centro de esa caja, el punto caía lejos de la D.
+  { destino: '.column-logo', marca: '.logo .logo-d' },
+  { destino: '.column-bt', marca: '#bt-menu' },
+  { destino: '.header-link' },
+  { destino: '.header-cta' },
+]
+
+/** Cada pieza del header toma su color del fondo que tiene justo debajo.
+ *
+ *  Una por una y no un valor único para todo el header: el header no tiene fondo propio
+ *  y lo que pasa por detrás puede cambiar a lo ancho. Arriba de /sobre la portada es una
+ *  D negra que no llega hasta el borde derecho, así que el logo cae sobre negro y la
+ *  navegación sobre crema; con un solo criterio, una de las dos se pierde contra su
+ *  fondo. El botón de contacto además necesita dos colores, porque está relleno: toma
+ *  --color de fondo y --color-contra de texto, y así nunca queda crema sobre crema.
  *
  *  Se mide el píxel en lugar de leer la sección declarada porque la sección no alcanza:
  *  las formas de este sitio son recortes que no llenan su propio rectángulo. El
  *  `data-set-section` de cada sección queda como red: si el sondeo no encuentra ningún
  *  fondo opaco, manda lo declarado.
  *
- *  Va atado al render (rAF) y no al evento de scroll: con el scroll suave la posición
- *  VISUAL sigue cambiando después del evento —el smoother interpola la transformación
- *  del contenido durante un par de segundos, sin disparar más eventos— así que un
- *  listener medía a mitad del recorrido y se quedaba con una lectura vieja. */
+ *  Va atado al render (rAF) y no al evento de scroll: lo que se mide es lo que se VE, y
+ *  eso puede seguir cambiando después del último evento de scroll —una silueta que
+ *  termina de entrar, un bloque que se revela—, así que un listener se quedaba con una
+ *  lectura vieja. Antes el caso grande era el scroll suave, que seguía interpolando la
+ *  posición del contenido un par de segundos sin disparar un solo evento más. */
 export function initSectionWatcher(): Cleanup {
   const header = document.querySelector<HTMLElement>('#header')
-  const logo = header?.querySelector<HTMLElement>('.column-logo')
-  const boton = header?.querySelector<HTMLElement>('.column-bt')
-  if (!header || !logo || !boton) return () => {}
+  if (!header) return () => {}
 
   const declarado = () => {
     // La sección que cruza la mitad del header, como respaldo del sondeo
@@ -118,16 +136,14 @@ export function initSectionWatcher(): Cleanup {
     return CLARO
   }
 
-  const medir = (el: HTMLElement, respaldo: string) => {
-    const r = el.getBoundingClientRect()
-    // El header se esconde al llegar al fondo de la página: ahí no hay nada que medir
-    if (r.top < 0 || r.height === 0) return null
-    // Se mide bajo la MARCA que se ve, no bajo su contenedor: el enlace del logo lleva
-    // adentro el nombre del estudio para quien no ve la imagen, escondido con un
-    // left: -100vw que le estira la caja media pantalla hacia la izquierda. Midiendo el
-    // centro de esa caja, el punto caía lejos de la D y devolvía el fondo equivocado.
-    const marca = el.querySelector<HTMLElement>('.logo .logo-d, #bt-menu') ?? el
+  const medir = (destino: HTMLElement, selMarca: string | undefined, respaldo: string) => {
+    // Se mide bajo la MARCA que se ve, no siempre bajo el destino: ver PIEZAS.
+    const marca = (selMarca ? destino.querySelector<HTMLElement>(selMarca) : null) ?? destino
     const m = marca.getBoundingClientRect()
+    // Lo que no se ve no se mide: el header escondido al llegar al fondo de la página, y
+    // las piezas que el ancho actual apaga —la navegación escrita en vertical, el botón
+    // de menú en apaisado— quedan con alto cero.
+    if (m.top < 0 || m.height === 0) return null
     return tonoEn(m.left + m.width / 2, m.top + m.height / 2) ?? respaldo
   }
 
@@ -136,13 +152,18 @@ export function initSectionWatcher(): Cleanup {
   const aplicar = () => {
     raf = requestAnimationFrame(aplicar)
     // Un sondeo de cada tres: el cambio de color tarda 0.3s en CSS, así que medir a
-    // ~20Hz es indistinguible de medir a 60 y son dos hit tests menos por frame.
+    // ~20Hz es indistinguible de medir a 60 y son varios hit tests menos por frame.
     if (frame++ % 3) return
     const respaldo = declarado()
-    const tLogo = medir(logo, respaldo)
-    const tBoton = medir(boton, respaldo)
-    if (tLogo !== null && logo.dataset.tono !== tLogo) logo.dataset.tono = tLogo
-    if (tBoton !== null && boton.dataset.tono !== tBoton) boton.dataset.tono = tBoton
+    // Las piezas se buscan en cada sondeo y no una sola vez: la navegación escrita la
+    // monta un componente de cliente, así que puede no existir todavía cuando esto
+    // arranca. Son cuatro consultas a ~20Hz sobre el header, no sobre el documento.
+    for (const { destino, marca } of PIEZAS) {
+      for (const el of header.querySelectorAll<HTMLElement>(destino)) {
+        const t = medir(el, marca, respaldo)
+        if (t !== null && el.dataset.tono !== t) el.dataset.tono = t
+      }
+    }
   }
   raf = requestAnimationFrame(aplicar)
 

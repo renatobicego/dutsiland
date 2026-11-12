@@ -18,6 +18,9 @@
   --white-1: #f6f0e1;
   --white-2: #ffffff;
   --red-1: #b34d4d;
+  /* El mismo rojo aclarado, para cuando va sobre negro: --red-1 sobre --black-1 da
+     3:1 y los números del menú miden 1.6rem, que es tamaño de texto chico. */
+  --red-2: #d98282;
   --padding-fluid: 6.4rem;
   --padding: 1.6rem;
   --header-height: 15rem;
@@ -40,7 +43,14 @@ html { -webkit-text-size-adjust: 100%; }
 @media only screen and (min-width: 1025.1px) { html { font-size: 0.5208333333vw; } }
 @media only screen and (min-width: 767.98px) and (max-width: 1025px) { html { font-size: 1.4vw; } }
 @media only screen and (min-width: 767.98px) and (max-width: 1025.1px) and (orientation: landscape) { html { font-size: 0.85vw; } }
-@media only screen and (max-width: 767.98px) { html { font-size: 2.4vw; } }
+/* El rem de vertical lleva techo. Sin él, 2.4vw daba 9,4px en un teléfono de 390 y
+   10,3px en uno de 430: el cuerpo quedaba en 19,7px y las frases en 21,5px, cuando en
+   un teléfono lo cómodo son 16-17, y las líneas entraban de cuatro palabras. Encima
+   crecía con el ancho sin freno, así que cuanto más grande el teléfono, más grande la
+   letra. Con 7,9px de tope la escala queda cerca de la del diseño original (7,5px a
+   1440 de ancho) y deja de depender del equipo. Por debajo de ~330px de ancho el vw
+   vuelve a mandar, para que en un teléfono chico no se desborde. */
+@media only screen and (max-width: 767.98px) { html { font-size: min(2.4vw, 7.9px); } }
 
 body {
   margin: 0;
@@ -196,7 +206,6 @@ body[data-load='first-done'] #loader .d-mark__d path { fill: var(--white-1); }
 [data-cursor='off'] > div { transform: scale(0); }
 [data-cursor='default-white'] > div { background: var(--white-1); }
 [data-cursor='default-white'] > div:after { background: var(--black-1); }
-body.menu-active [data-cursor='default-white'] > div { background: var(--black-1); }
 [data-cursor='hovered'] > div, [data-cursor='hovered-dark'] > div { transform: scale(1.4); }
 [data-cursor='hovered'] > div:after, [data-cursor='hovered-dark'] > div:after { transform: scale(1); transition-delay: 0.15s; }
 [data-cursor='hovered-small'] > div { transform: scale(0.6); }
@@ -207,8 +216,17 @@ body.menu-active [data-cursor='default-white'] > div { background: var(--black-1
 
 /* ---------- header ---------- */
 #header {
-  --bg-active: var(--white-1);
+  /* El fondo del menú a pantalla completa (lo pinta #header:before). Va en negro y no
+     en crema: abrir el menú tiene que sentirse un cambio de modo y no otra pantalla
+     crema más, que era lo que lo dejaba sin identidad propia. Sólo se ve con el menú
+     abierto, así que no afecta a nada más. */
+  --bg-active: var(--black-1);
   --color: var(--black-1);
+  /* El color opuesto al del fondo que hay debajo. Lo usan las piezas rellenas —hoy el
+     botón de contacto—, que necesitan dos colores y no uno: el fondo del botón toma
+     --color y su texto --color-contra, así que la píldora siempre queda invertida
+     respecto de lo que tiene atrás y nunca es crema sobre crema. */
+  --color-contra: var(--white-1);
   --color-hover: var(--red-1);
   width: var(--w-100vw, 100%);
   padding-top: 5.3rem;
@@ -222,6 +240,41 @@ body.menu-active [data-cursor='default-white'] > div { background: var(--black-1
 #header > .container-fluid, #header > .container-fluid > .row { height: 100%; }
 body:not([data-scroll-direction='initial']) #header { padding-top: 3rem; transition-duration: 0.8s, 0.6s, 0.3s; }
 body[data-scroll-position='bottom'] #header { transform: translateY(-101%); }
+/* En vertical el header se esconde al bajar y vuelve al subir.
+   El header no tiene fondo propio, así que en apaisado se apoya sobre los márgenes
+   laterales y no molesta. En vertical el contenido ocupa todo el ancho y el botón de
+   menú queda permanentemente encima de lo que se está leyendo: se comía el final de
+   "automatización de proce—sos", de "el problema de siem—pre" y de media docena de
+   líneas más. Mientras se lee no hay nada arriba; con el primer gesto hacia arriba
+   —que es el que hace quien quiere irse de la página— vuelve.
+   Recién después de media pantalla, para que no desaparezca apenas se toca el scroll. */
+@media only screen and (max-width: 1025px) {
+  /* Los :not del menú van acá y no se delegan a la regla de más abajo: ésta tiene más
+     especificidad y le ganaría, escondiendo el header —y con él el botón de cerrar—
+     con el menú abierto. */
+  body:not(.menu-active):not(.menu-leave):not([data-scroll-position='top'])[data-scroll-direction='down'] #header { transform: translateY(-110%); }
+
+  /* Y cuando está a la vista, deja de ser transparente: en vertical el contenido ocupa
+     todo el ancho y el logotipo y el botón quedaban literalmente escritos encima del
+     titular —"CASI SIEMPRE NOS LLAMAN POR UNA DE" con la D y el MENU por arriba—.
+     Sobre la primera pantalla sigue transparente, que es donde el diseño lo quiere.
+
+     La banda es siempre crema y no cambia de tono con la sección: un header fijo que se
+     da vuelta cada vez que pasás de una sección a otra es ruido, y acá lo que hace
+     falta es que no moleste. Por eso las piezas de adentro también dejan de mirar lo
+     que tienen debajo y toman el tono de la banda. */
+  body:not(.menu-active):not(.menu-leave):not([data-scroll-position='top']) #header {
+    background: var(--white-1);
+    box-shadow: 0 1px 0 rgba(10, 10, 10, 0.08);
+    transition: padding-top 0.6s cubic-bezier(0.215, 0.61, 0.355, 1), transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1), background-color 0.3s ease;
+  }
+  body:not(.menu-active):not(.menu-leave):not([data-scroll-position='top']) #header [data-tono] {
+    --color: var(--black-1);
+    --color-contra: var(--white-1);
+  }
+  body:not(.menu-active):not(.menu-leave):not([data-scroll-position='top']) #header [data-tono] .logo img.is-dark { opacity: 1; }
+  body:not(.menu-active):not(.menu-leave):not([data-scroll-position='top']) #header [data-tono] .logo img.is-light { opacity: 0; }
+}
 #header:before {
   content: ''; position: fixed; top: 0; left: 0; display: block; width: 100%; height: 100vh; z-index: 0;
   background-color: var(--bg-active); pointer-events: none; opacity: 0;
@@ -252,10 +305,22 @@ body:not([data-scroll-direction='initial']) #header .logo .logo-rest { transform
    que no llega hasta la derecha, así que el logo cae sobre negro y el botón sobre crema.
    El tono lo mide initSectionWatcher sondeando el píxel. Con el menú abierto manda el
    fondo del propio menú, que es claro, así que estas reglas se apagan. */
-body:not(.menu-active):not(.menu-leave) #header [data-tono='dark'] { --color: var(--white-1); }
+body:not(.menu-active):not(.menu-leave) #header [data-tono='dark'] { --color: var(--white-1); --color-contra: var(--black-1); }
 body:not(.menu-active):not(.menu-leave) #header [data-tono='dark'] .logo img.is-dark { opacity: 0; }
 body:not(.menu-active):not(.menu-leave) #header [data-tono='dark'] .logo img.is-light { opacity: 1; }
-body.menu-active #header { --color: var(--black-1); }
+/* Con el menú abierto el fondo es el negro del propio menú, así que las piezas del
+   header se dan vuelta enteras: la D pasa a su versión clara y el botón de cerrar
+   —borde, punto y texto, los tres con var(--color)— queda en crema.
+   .menu-leave entra en la misma regla porque al cerrar el panel se queda opaco 0.3s
+   antes de empezar a irse: sin esto, durante ese tramo habría negro sobre negro y el
+   botón de cerrar desaparecería justo cuando se lo está tocando. */
+body.menu-active #header, body.menu-leave #header {
+  --color: var(--white-1);
+  --color-contra: var(--black-1);
+  --color-hover: var(--red-2);
+}
+body.menu-active #header .logo img.is-dark, body.menu-leave #header .logo img.is-dark { opacity: 0; }
+body.menu-active #header .logo img.is-light, body.menu-leave #header .logo img.is-light { opacity: 1; }
 /* Por encima del footer, que está en z-index 100: abierto, el menú tapa todo. Vale
    también al cerrarse, mientras corre la animación de salida.
    Y sin transform: en el fondo de la página el header se esconde con translateY(-101%),
@@ -265,7 +330,56 @@ body.menu-active #header, body.menu-leave #header { z-index: 105; transform: non
 body.menu-active .logo { opacity: 1; pointer-events: auto; }
 
 
+/* ---------- navegación escrita (apaisado) ----------
+   Los tres destinos a la vista, con el último como botón sólido. En vertical no está:
+   ahí manda #bt-menu y el menú a pantalla completa.
+
+   El alto de 4.4rem lleva piso en px: el rem del sitio escala con el ancho del
+   viewport, así que 4.4rem son 44px a 1920 pero 31 a 1366 — justo cuando el dedo y el
+   puntero siguen midiendo lo mismo. El área que se toca es una medida física. */
+.header-nav { display: flex; align-items: center; gap: 3.6rem; }
+/* En vertical la navegación no va escrita: el botón abre el menú a pantalla completa.
+   No es sólo cuestión de espacio. En el hero el fondo debajo del header no es uniforme
+   —son dos blobs negros con un canal de crema de 144px justo entre medio— y los tres
+   links caían encima de esa frontera: "Sobre" mitad sobre negro y mitad sobre crema, y
+   "Proyectos" entero sobre el canal. No hay color que resuelva eso. El botón, en
+   cambio, vive en el extremo derecho, donde el fondo sí es parejo. */
+@media only screen and (max-width: 1025px) { .header-nav { display: none; } }
+
+.header-link { position: relative; display: inline-flex; align-items: center; height: max(4.4rem, 44px); color: var(--color); font-size: 1.6rem; line-height: 1; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; transition: color 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86); }
+.header-link__bar { position: absolute; left: 0; right: 0; bottom: 0.9rem; height: 2px; background: currentColor; transform: scaleX(0); transform-origin: left center; transition: transform 0.35s cubic-bezier(0.785, 0.135, 0.15, 0.86); }
+.header-link:hover .header-link__bar { transform: scaleX(1); }
+/* La página en la que se está, marcada con el rojo de la marca */
+.header-link[aria-current='page'] .header-link__bar { transform: scaleX(1); background: var(--color-hover); }
+
+.header-cta { display: inline-flex; align-items: center; gap: 0.9rem; height: max(4.4rem, 44px); padding: 0 2.4rem; border-radius: 10rem; background: var(--color); color: var(--color-contra); font-size: 1.6rem; line-height: 1; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; transition: background 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86), color 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86); }
+/* El punto queda rojo en los dos tonos: es lo único que no cambia cuando el botón se
+   invierte, y por eso es lo que lo identifica. Sobre crema da 4.5:1 y sobre negro
+   3.8:1, de sobra para una marca que no lleva texto. */
+.header-cta__dot { width: 1.1rem; height: 1.1rem; border-radius: 50%; background: var(--color-hover); transition: background 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86); }
+.header-cta:hover { background: var(--color-hover); color: var(--white-1); }
+.header-cta:hover .header-cta__dot { background: var(--white-1); }
+
 #bt-menu { display: flex; align-items: center; flex-wrap: wrap; flex-direction: row; position: relative; z-index: 99; outline: none; text-transform: uppercase; margin: auto 0; }
+/* Uno u otro, nunca los dos: en apaisado la navegación va escrita y este botón sobra.
+   Va después de la regla de arriba, no antes, porque con la misma especificidad gana
+   la última. */
+@media only screen and (min-width: 1025.1px) { #bt-menu { display: none; } }
+/* En vertical el botón es toda la navegación, así que tiene que poder tocarse: 19px de
+   alto es menos de la mitad de lo que cubre una yema, y sin caja nada avisaba que ahí
+   había un botón. La píldora resuelve las dos cosas con la forma que ya usa el sitio.
+   El borde va con var(--color) y no con currentColor porque el color del header se
+   hereda ya resuelto desde #header: el data-tono de la columna redefine la variable,
+   no el color heredado (es lo mismo que hacen el punto y los textos de acá abajo). */
+@media only screen and (max-width: 1025px) {
+  #bt-menu {
+    min-height: 44px;
+    padding: 0 1.8rem;
+    border: 1px solid var(--color);
+    border-radius: 10rem;
+    transition: border-color 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+  }
+}
 #bt-menu:before { content: ''; width: 1.5rem; height: 1.5rem; display: block; border-radius: 50%; margin-right: 0.8rem; background: var(--color); transition: all 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86); }
 @media only screen and (max-width: 767.98px) { #bt-menu:before { width: 1.6rem; height: 1.6rem; margin-right: 0.6rem; } }
 #bt-menu span { display: inline-block; color: var(--color); padding-top: 0.1rem; overflow: hidden; font-size: 1.6rem; line-height: 1em; letter-spacing: 0.02em; font-weight: 700; transition: all 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86); }
@@ -292,9 +406,22 @@ body.menu-leave nav.menu { pointer-events: auto; }
 .menu--wrapper { margin: auto 0; display: flex; align-items: center; align-content: center; flex-wrap: wrap; flex-direction: row; width: 100%; height: 100%; }
 @media only screen and (max-width: 1025px) { .menu--wrapper { align-items: flex-start; align-content: flex-start; } }
 .menu--wrapper .container-lottie { width: 60%; height: 100%; opacity: 0; transform: scale(1.1); display: flex; justify-content: center; align-items: center; }
-@media only screen and (max-width: 1025px) { .menu--wrapper .container-lottie { width: auto; min-width: 25rem; height: 25rem; } }
-.menu--wrapper .container-lottie .d-mark { width: 50rem; height: 52rem; }
-@media only screen and (max-width: 1025px) { .menu--wrapper .container-lottie .d-mark { width: 25rem; height: 25rem; } }
+/* El logotipo a lo ancho hace de título del menú. Antes acá iba la D sola, que dejaba
+   el ancho de la pantalla vacío a su derecha y un escalón muerto debajo, porque el
+   contenedor medía 25rem fijos y la letra no los llenaba. */
+/* El PNG viene en tinta oscura y con el fondo transparente, así que se usa de máscara:
+   lo que se ve es esta caja pintada de crema recortada con la forma del logotipo. Es el
+   crema de la marca y no el blanco plano que daría un invert(), y no hace falta sumar
+   otro archivo al repositorio. */
+.menu-logotipo {
+  display: block; width: 100%; aspect-ratio: 1000 / 126;
+  background-color: var(--white-1);
+  -webkit-mask: url('/brand/wide-dark.png') no-repeat center / contain;
+  mask: url('/brand/wide-dark.png') no-repeat center / contain;
+}
+@media only screen and (max-width: 1025px) {
+  .menu--wrapper .container-lottie { width: 100%; min-width: 0; height: auto; max-width: 52rem; margin-bottom: 5rem; }
+}
 body.menu-active .container-lottie { opacity: 1; transform: scale(1); transition: all 0.6s cubic-bezier(0.455, 0.03, 0.515, 0.955); transition-delay: 0.2s; }
 body.menu-leave .container-lottie { transition: all 0.4s cubic-bezier(0.455, 0.03, 0.515, 0.955); transition-delay: 0s; }
 .menu--wrapper .menu--list { margin: auto 0; position: relative; width: 40%; opacity: 0; }
@@ -303,6 +430,45 @@ body.menu-leave .container-lottie { transition: all 0.4s cubic-bezier(0.455, 0.0
 .menu--wrapper .menu--list li a { position: relative; display: inline-block; color: var(--color); letter-spacing: -0.02em; transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1); }
 .menu--wrapper .menu--list li a:hover { color: var(--color-hover); transform: translate(4rem); }
 .menu--wrapper .menu--list li a span { width: 100%; height: 100%; display: block; }
+
+/* ---------- el menú en vertical ----------
+   Acá el menú ES la navegación del sitio: en apaisado los destinos van escritos en el
+   header y esta pantalla no se abre nunca. Por eso se trata como una página y no como
+   un desplegable.
+
+   Antes era una lista suelta con un hueco muerto en el medio y nada que dijera en qué
+   página estabas. Ahora cada destino lleva su número y su línea —el mismo vocabulario
+   que los pasos del proceso y los tickets de problemas comunes— y el actual queda
+   marcado en rojo. */
+@media only screen and (max-width: 1025px) {
+  /* La marca y los destinos se centran en el espacio que queda. Anclados arriba, el
+     hueco contra el bloque de contacto crecía con la pantalla —89px en un teléfono
+     chico, 328px en uno grande— y se leía como un agujero en el medio del menú.
+     Centrado, el aire se reparte arriba y abajo y deja de notarse. */
+  .menu--wrapper { flex-direction: column; flex-wrap: nowrap; justify-content: center; align-items: flex-start; align-content: center; }
+  /* Sin el margin: auto heredado de apaisado. En una columna flex ese auto se come
+     todo el espacio libre y empuja el logotipo contra el header: el grupo tiene que
+     centrarse entero, no separarse en dos. */
+  .menu--wrapper .menu--list { margin: 0; padding-top: 0; width: 100%; }
+  /* Las líneas van en crema porque el menú es negro (ver --bg-active) */
+  .menu--wrapper .menu--list li { margin: 0; padding: 0; border-top: 1px solid rgba(246, 240, 225, 0.2); }
+  .menu--wrapper .menu--list li:last-child { border-bottom: 1px solid rgba(246, 240, 225, 0.2); }
+  .menu--wrapper .menu--list li a {
+    display: grid; grid-template-columns: 5rem minmax(0, 1fr); align-items: baseline;
+    gap: 0 1.6rem; padding: 2.6rem 0; width: 100%;
+  }
+  /* El desplazamiento al pasar el mouse es de apaisado, donde hay puntero */
+  .menu--wrapper .menu--list li a:hover { transform: none; }
+  /* A pleno y no al 55%: sobre el negro del menú, el rojo bajado de opacidad se hunde
+     en el fondo y esto es texto de 1.6rem, no un adorno. */
+  .menu--list__n { font-size: 1.6rem; font-weight: 800; letter-spacing: 0.1em; color: var(--red-2); }
+  .menu--list__label { display: block; }
+  /* La página en la que estás: el nombre también en rojo */
+  .menu--list li.is-active .menu--list__label { color: var(--red-2); }
+}
+/* En apaisado este menú no se abre —el botón que lo abre no existe— pero si alguna vez
+   volviera, sin esto el número quedaría en su propio renglón encima del nombre. */
+@media only screen and (min-width: 1025.1px) { .menu--list__n { display: none; } }
 body.menu-active .menu--list { opacity: 1; pointer-events: auto; }
 body.menu-active .menu--list li { overflow: hidden; opacity: 1; animation: scaleOut 0.6s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0s both 1; }
 body.menu-active .menu--list li:nth-child(1) { animation-delay: 0.2s; }
@@ -318,9 +484,40 @@ body.menu-leave .menu--wrapper { opacity: 1; }
 #header .social-list .btn-underline, #header .social-list .btn-underlined { --btn-color: var(--color); }
 body.menu-active #header .social-list { pointer-events: auto; opacity: 1; transform: scale(1); transition: all 0.6s cubic-bezier(0.455, 0.03, 0.515, 0.955); transition-delay: 0.2s; }
 
+/* ---------- el menú con el teléfono acostado ----------
+   Acostado quedan menos de 400px de alto y el grupo centrado no entra. Se salía por
+   arriba, donde el scroll no llega: en una columna flex centrada el desborde se reparte
+   a los dos lados y la mitad de arriba queda fuera de alcance. Y el bloque de contacto,
+   clavado al fondo de la pantalla, se montaba encima de los destinos.
+
+   Acá el menú se ancla arriba, se aprieta —logotipo más chico, renglones más juntos— y
+   el contacto vuelve al flujo, debajo de la lista. Si aun así no entrara, lo que sobra
+   queda abajo y el menú scrollea, que es donde el dedo lo busca. */
+@media only screen and (max-width: 1025px) and (max-height: 560px) {
+  /* El padding de arriba vuelve a 12rem: en vertical lo fija --header-height, que mide
+     8rem cuando el header real mide 84px, y acostado el logotipo le quedaba por debajo. */
+  nav.menu { padding-top: 12rem; padding-bottom: 2rem; }
+  .menu--wrapper { justify-content: flex-start; }
+  .menu--wrapper .container-lottie { max-width: 30rem; margin-bottom: 1.2rem; }
+  /* El interlineado va en el enlace y no en el nombre: fs--header lo fija en 1em, que
+     se hereda ya resuelto en píxeles del tamaño grande, así que el número —aunque mida
+     1.6rem— seguía reservando el renglón entero y dejaba filas de 75px. */
+  .menu--wrapper .menu--list li a { padding: 1.5rem 0; line-height: 1.1; }
+  .menu--list__label { font-size: 3.2rem; }
+  #header .social-list { position: static; width: 100%; margin-top: 1.6rem; padding-left: 0; padding-right: 0; }
+}
+
 .social-list .phone-wrapper { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; width: 100%; }
-@media only screen and (max-width: 767.98px) { .social-list .phone-wrapper { margin-top: 1.5rem; } }
-.social-list .mail-link, .social-list .phone-link { color: var(--black-1); text-transform: uppercase; font-size: 1.8rem; line-height: 1.2em; letter-spacing: 0; font-weight: 700; }
+/* En vertical las dos redes van juntas y no una en cada punta: separadas por el ancho
+   de la pantalla no se leían como un par, parecían dos cosas sin relación. */
+@media only screen and (max-width: 1025px) {
+  .social-list .phone-wrapper { justify-content: flex-start; gap: 4rem; margin-top: 2.4rem; }
+}
+@media only screen and (max-width: 767.98px) { .social-list .phone-wrapper { margin-top: 2rem; } }
+/* var(--color) y no el negro fijo: el texto ya tomaba el color del menú por --btn-color,
+   pero la flecha del mail va con currentColor y se quedaba negra sobre el negro del
+   menú. Este bloque sólo existe dentro del menú, así que no afecta a nada más. */
+.social-list .mail-link, .social-list .phone-link { color: var(--color); text-transform: uppercase; font-size: 1.8rem; line-height: 1.2em; letter-spacing: 0; font-weight: 700; }
 @media only screen and (max-width: 767.98px) { .social-list .mail-link, .social-list .phone-link { font-size: 1.5rem; } }
 .icon-arrow-diagonal { display: inline-block; width: 1em; height: 1em; vertical-align: -0.1em; margin-left: 0.3em; font-style: normal; }
 .icon-arrow-diagonal svg { width: 100%; height: 100%; display: block; }
@@ -343,7 +540,12 @@ body.menu-active #header .social-list { pointer-events: auto; opacity: 1; transf
 .btn-d__content { display: flex; align-items: center; gap: 1.1rem; height: 100%; padding: 0 2.8rem; }
 .btn-d__content .d-icon { width: 2.9rem; height: 3.7rem; flex: none; fill: var(--red-1); }
 /* La etiqueta en Montserrat Subrayada: la línea viene en los glifos, no se dibuja */
-.btn-d__label { font-family: var(--font-subrayada, 'Montserrat Subrayada', var(--font-grotesk, sans-serif)); font-size: 3.6rem; line-height: 1; font-weight: 700; text-transform: uppercase; color: var(--red-1); padding-top: 0.25em; }
+/* En Montserrat y no en la Subrayada: el subrayado de esa tipografía viene dentro de
+   los glifos, y en el botón no aportaba nada —la pastilla ya es el botón—. Por eso
+   tampoco lleva padding-top: el que había compensaba el hueco que la Subrayada reserva
+   debajo de la línea de base para su propio trazo. Sin ella, las mayúsculas quedan
+   centradas solas (medido contra el centro exacto de la pastilla). */
+.btn-d__label { font-family: var(--font-grotesk, sans-serif); font-size: 3.6rem; line-height: 1; font-weight: 700; text-transform: uppercase; color: var(--red-1); }
 .btn-d__content--hover { position: absolute; inset: 0; background: var(--red-1); clip-path: ellipse(0% 150% at 50% 50%); transition: clip-path 0.45s cubic-bezier(0.645, 0.045, 0.355, 1); }
 .btn-d__content--hover .d-icon { fill: var(--white-1); }
 .btn-d__content--hover .btn-d__label { color: var(--white-1); }
@@ -363,12 +565,10 @@ body.menu-active #header .social-list { pointer-events: auto; opacity: 1; transf
 /* =========================================================
    HERO (cuadros 3–8): dos "D" negras
    ========================================================= */
+/* Una pantalla y nada más. Antes medía 840vh: ese alto era el recorrido que alimentaba
+   el tramo fijado —la frase, la partida en dos D, la apertura del panel y los frentes
+   adentro—. Todo eso son secciones propias ahora, así que el hero mide lo que ocupa. */
 .home-hero { position: relative; background: var(--white-1); }
-/* 840vh: la intro, la frase, la partida en dos D, la apertura del panel y los cuatro
-   frentes adentro. Todo eso lo alimenta un solo tramo fijado; si se suma o se saca un
-   frente hay que mover este alto, o cambia el ritmo de todas las fases. */
-@media only screen and (min-width: 1025.1px) { .home-hero { height: 840vh; } }
-.home-hero .container-sticky { position: sticky; top: 0; left: 0; }
 .hero-stage { position: relative; width: 100%; height: 100vh; overflow: hidden; background: var(--white-1); }
 
 /* La silueta se compone con variables, una por número: así GSAP anima escalares y
@@ -378,9 +578,9 @@ body.menu-active #header .social-list { pointer-events: auto; opacity: 1; transf
   --ct: 0%; --cr: 0%; --cb: 0%; --cl: 0%; --ctl: 0vh; --ctr: 0vh; --cbr: 0vh; --cbl: 0vh;
   clip-path: inset(var(--ct) var(--cr) var(--cb) var(--cl) round var(--ctl) var(--ctr) var(--cbr) var(--cbl));
 }
+/* El estado de REPOSO de cada D, que es donde las deja la intro y donde se quedan. */
 .blob-left { --cr: 56%; --ctr: 50vh; --cbr: 50vh; z-index: 2; }
 .blob-right { --cl: 46%; --ctl: 50vh; --cbl: 50vh; z-index: 1; }
-.blob-left2 { --cr: 100%; --ctr: 50vh; --cbr: 50vh; z-index: 3; }
 
 .hero-logo { position: absolute; left: 22%; top: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; }
 .hero-logo__d { height: 35vh; width: auto; display: block; }
@@ -398,12 +598,90 @@ body.menu-active #header .social-list { pointer-events: auto; opacity: 1; transf
    animaciones CSS de sus descendientes (el titular vive dentro del hero fijado). */
 .hero-headline .word > span { opacity: 0; transform: translateY(100%); }
 
-/* Centrado con flex, sin transform: GSAP anima `y` acá y un translateY(-50%)
-   sería sobreescrito, descolocando el bloque y sacando el botón de la vista. */
-.hero-claim { position: absolute; left: 21rem; top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; width: 141rem; max-width: calc(100% - 30rem); color: var(--white-1); }
-.hero-claim__text { font-size: 7.6rem; line-height: 1.25; font-weight: 800; max-width: 108rem; }
-.hero-claim .btn-d { margin-top: 3.6rem; }
-@media only screen and (min-width: 1025.1px) { .hero-claim { opacity: 0; visibility: hidden; } }
+/* =========================================================
+   LA FRASE: la D espejada, redondeada por la izquierda
+   =========================================================
+   Antes vivía dentro de la D derecha del hero, en absoluto y a pantalla completa, y la
+   descubría el scroll. Ahora es una sección con su propia silueta: la misma D, dada
+   vuelta, a sangre por la derecha. */
+.home-claim { position: relative; background: var(--white-1); overflow: hidden; }
+/* La D entra barriendo de derecha a izquierda: el recorte se come la forma por la
+   izquierda (--pl va de 100% a 0%) y el borde redondeado avanza destapándola. Es el
+   espejo de cómo abre la portada de una ficha de proyecto (.project-hero__shape).
+   El recorte va por variable y no como string: animar el clip-path entero se rompe
+   cuando ScrollTrigger refresca (ver clipTween en HomeExperience). */
+.claim-shape {
+  --pl: 0%;
+  position: relative; background: var(--black-1); padding: 18rem 0 20rem;
+  clip-path: inset(0% 0% 0% var(--pl) round var(--blob-radius) 0 0 var(--blob-radius));
+}
+.claim-inner { position: relative; width: 100%; padding-left: 28rem; padding-right: 21rem; }
+.hero-claim__text { margin: 0; color: var(--white-1); font-size: 7.6rem; line-height: 1.25; font-weight: 800; max-width: 108rem; }
+.claim-cta { display: flex; margin-top: 3.6rem; }
+@media only screen and (max-width: 1025px) {
+  .claim-shape { padding: 10rem 0 11rem; }
+  .claim-inner { padding-left: 8rem; padding-right: 4rem; }
+  .hero-claim__text { font-size: 4.4rem; }
+}
+@media only screen and (max-width: 767.98px) {
+  .claim-shape { padding: 7rem 0 8rem; }
+  .claim-inner { padding-left: 4rem; padding-right: 3rem; }
+  .hero-claim__text { font-size: 6.4vw; }
+  .claim-cta { margin-top: 3rem; }
+}
+
+/* =========================================================
+   PROBLEMAS COMUNES: los síntomas, antes de la solución
+   =========================================================
+   Sección clara entre dos negras (la frase y "qué hacemos"): además de cortar el
+   ritmo, el contraste separa el problema de la solución. */
+.home-problems { position: relative; background: var(--white-1); color: var(--black-1); padding: 18rem 0 20rem; }
+.problems-inner { width: 100%; padding-left: 21rem; padding-right: 21rem; }
+.problems-head { max-width: 128rem; }
+/* Sin margen arriba: el antetítulo que lo empujaba ya no está, la pregunta abre sola. */
+.problems-title { margin: 0; font-size: 8.4rem; line-height: 1.08; font-weight: 800; text-transform: uppercase; }
+/* Los síntomas, como un listado: el número y la frase, tal como la dice el que la sufre. */
+.problems-list { margin-top: 10rem; padding: 0; list-style: none; }
+.problem { position: relative; display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: 0 4rem; align-items: center; padding: 3.4rem 0; }
+/* Línea propia (no border-top) para poder trazarla con GSAP, igual que el riel de
+   "cómo trabajamos" */
+.problem__line { position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: rgba(10, 10, 10, 0.18); transform: scaleX(0); transform-origin: left center; }
+/* La primera lleva también la línea de arriba, más marcada: es el encabezado del listado */
+.problems-list .problem:first-child { border-top: 0.25rem solid var(--black-1); }
+.problem__id { font-size: 1.9rem; font-weight: 800; color: var(--red-1); letter-spacing: 0.06em; }
+/* Las comillas las pone el CSS: son un signo de la pieza, no parte de la frase. Así no
+   las lee el lector de pantalla y no se pierden si alguien reescribe el contenido. */
+.problem__quote { margin: 0; font-size: 2.9rem; line-height: 1.2; font-weight: 800; }
+.problem__quote:before { content: '\201C'; }
+.problem__quote:after { content: '\201D'; }
+/* Acá iba una pastilla roja que decía "sin resolver" en las cuatro filas, con un punto
+   que latía. La repetición pretendía ser el argumento, pero una etiqueta que nunca
+   cambia no informa nada y cuatro alarmas rojas seguidas dejan al que lee parado en el
+   problema. La respuesta la da el pie de la sección. */
+/* El pie: el párrafo explica por qué ninguna se arregla comprando otra cosa, y el
+   remate la cierra. El remate NO va en rojo aunque sea lo más fuerte de la sección:
+   acá el rojo marca el problema —los números de cada fila—, y pintar la solución del
+   mismo color borraría esa lectura. */
+.problems-close { margin: 7rem 0 0; max-width: 110rem; }
+.problems-close__texto { margin: 0; font-size: 2.6rem; line-height: 1.5; opacity: 0.72; }
+.problems-close__remate { margin: 2.6rem 0 0; font-size: 4.8rem; line-height: 1.1; font-weight: 800; text-transform: uppercase; }
+@media only screen and (max-width: 1025px) {
+  .home-problems { padding: 11rem 0 12rem; }
+  .problems-inner { padding-left: 8rem; padding-right: 8rem; }
+  .problems-title { font-size: 5.4rem; }
+  .problems-list { margin-top: 7rem; }
+  .problem { padding: 3rem 0; }
+  .problem__quote { font-size: 2.6rem; }
+  .problems-close { margin-top: 5rem; }
+  .problems-close__texto { font-size: 2.1rem; }
+  .problems-close__remate { font-size: 3.4rem; margin-top: 2rem; }
+}
+@media only screen and (max-width: 767.98px) {
+  .problems-inner { padding-left: 4rem; padding-right: 4rem; }
+  .problems-title { font-size: 6.6vw; }
+  .problem { grid-template-columns: 7rem minmax(0, 1fr); gap: 0 2rem; }
+  .problem__quote { font-size: 2.3rem; }
+}
 
 /* Sin scroll mientras corre la intro en vertical (ver HomeExperience) */
 html.intro-running { overflow: hidden; }
@@ -414,19 +692,15 @@ html.intro-running body { touch-action: none; }
    que en desktop: en un teléfono se scrollea a flicks y un pin largo se siente trabado.
    Las siluetas usan radios en vw y sus estados salen de MCLIP (HomeExperience). */
 @media only screen and (max-width: 1025px) {
-  .home-hero { height: 500vh; }
   /* El alto lo fija --vh al arrancar y no se toca más: si siguiera a la barra de
-     direcciones, el escenario fijado cambiaría de alto a mitad del scroll. */
+     direcciones, la portada cambiaría de alto apenas se scrollea. */
   .hero-stage { height: calc(var(--vh, 1vh) * 100); }
-  /* Acá va el estado de REPOSO del hero (leftHero / rightHero / left2Hidden de MCLIP),
-     no el de arranque. Al refrescar, ScrollTrigger revierte los estilos inline para
-     medir la página, y un fromTo con scrub parado en progreso 0 no los vuelve a
-     escribir: lo que queda a la vista es este valor. Si acá estuviera el estado de
-     arranque, el blob de arriba desaparecía al terminar la intro. El arranque lo
-     escribe setHeroInitialState inline, que le gana a esto. */
+  /* Acá va el estado de REPOSO del hero (leftHero / rightHero de MCLIP), no el de
+     arranque. Al refrescar, ScrollTrigger revierte los estilos inline para medir la
+     página: lo que queda a la vista es este valor. El arranque lo escribe
+     setHeroInitialState inline, que le gana a esto. */
   .blob-left { --ct: 48%; --cr: 7%; --cb: 3%; --cl: 0%; --ctl: 0vw; --ctr: 26vw; --cbr: 26vw; --cbl: 0vw; }
   .blob-right { --ct: 3%; --cr: 0%; --cb: 55%; --cl: 7%; --ctl: 26vw; --ctr: 0vw; --cbr: 0vw; --cbl: 26vw; }
-  .blob-left2 { --cr: 100%; --ctr: 0vw; --cbr: 29vw; }
   /* El lockup, centrado en el blob de abajo (la intro lo lleva del 50% al 70%).
      width: max-content porque un absoluto con left: 50% encoge al espacio que le queda
      a la derecha, y al ser flex la máscara de "UTSILAND" se achicaba a nada. */
@@ -461,7 +735,7 @@ html.intro-running body { touch-action: none; }
   /* El botón deja de ser una pastilla de una línea: a este ancho el texto no entra */
   .btn-d { height: auto; min-height: 8rem; white-space: normal; }
   .btn-d__content { padding: 1.5rem 2.6rem; }
-  .btn-d__label { font-size: 2.7rem; line-height: 1.15; text-align: left; padding-top: 0.15em; }
+  .btn-d__label { font-size: 2.7rem; line-height: 1.15; text-align: left; }
 }
 @media only screen and (max-width: 767.98px) {
   .hero-mail { font-size: 1.55rem; }
@@ -524,54 +798,25 @@ html.intro-running body { touch-action: none; }
   @keyframes spinner-late { from { opacity: 0.4; } to { opacity: 1; } }
 }
 
-/* =========================================================
-   SOBRE DUTSILAND en el home: sección clara, corta el ritmo de las negras.
-   Es sólo el anuncio —título, subtítulo y el botón—; el contenido está en /sobre,
-   así que no se fija: entra al aparecer como cualquier bloque corto.
-   ========================================================= */
-.home-history { position: relative; background: var(--white-1); color: var(--black-1); padding: 16rem 0; }
-.history-inner { width: 100%; padding-left: 21rem; padding-right: 21rem; max-width: 168rem; }
-.history-kicker { margin-bottom: 5rem; }
-.history-title { margin: 0; font-size: 7.2rem; line-height: 1.12; font-weight: 800; max-width: 124rem; }
-.history-subtitle { margin-top: 3rem; font-size: 2.8rem; line-height: 1.5; max-width: 96rem; opacity: 0.72; }
-.history-cta { margin-top: 6rem; }
-@media only screen and (max-width: 1025px) {
-  .home-history { padding: 10rem 0; }
-  .history-inner { padding-left: 8rem; padding-right: 8rem; }
-  .history-kicker { margin-bottom: 3.4rem; }
-  .history-title { font-size: 4.6rem; }
-  .history-subtitle { font-size: 2.3rem; margin-top: 2.2rem; }
-  .history-cta { margin-top: 4rem; }
-}
-@media only screen and (max-width: 767.98px) {
-  .home-history { padding: 8rem 0; }
-  .history-inner { padding-left: 2.4rem; padding-right: 2.4rem; }
-  .history-title { font-size: 3.6rem; }
-  .history-subtitle { font-size: 2rem; }
-}
+/* La historia del estudio ya no tiene bloque en el home: estaba contando en chico lo
+   mismo que /sobre, que es una página entera. A esa página se entra por el menú y por
+   el pie. Lo que había acá (.home-history, .history-mini y su recorrido en miniatura)
+   vive ahora sólo en /sobre, en .about-story. */
 
 /* =========================================================
    QUÉ HACEMOS (cuadros 9–10): D negra con contorno concéntrico
    ========================================================= */
-/* No es una sección: va dentro del panel izquierdo del hero (.blob-left2).
-   En desktop el negro y el recorte los pone el propio panel, que el scroll abre
-   a todo el ancho; acá solo queda el contorno concéntrico y el contenido. */
-@media only screen and (min-width: 1025.1px) {
-  /* Sin align-items: la forma se estira a todo el alto del panel (igual que cuando
-     era una sección con su propio container-sticky) y centra el contenido adentro.
-     El padding sólo mueve contorno y contenido: el negro lo pinta el panel completo. */
-  .blob-left2 { display: flex; padding: 2rem 0; }
-  .blob-left2 .services-shape { flex: 1; display: flex; align-items: center; background: none; border-radius: 0; overflow: visible; }
-}
+/* Es una sección con su propia silueta: la D negra con el contorno concéntrico adentro.
+   Antes vivía dentro del panel izquierdo del hero, que el scroll abría a todo el ancho,
+   y el negro y el recorte los ponía ese panel. */
+.home-services { position: relative; background: var(--white-1); }
 .services-shape { position: relative; background: var(--black-1); border-radius: 0 var(--blob-radius) var(--blob-radius) 0; overflow: hidden; padding: 22rem 0 24rem; }
 .services-shape:before { content: ''; position: absolute; top: 13rem; right: 13rem; bottom: 13rem; left: -20rem; border: 0.5rem solid var(--white-1); border-radius: 0 calc(var(--blob-radius) - 13rem) calc(var(--blob-radius) - 13rem) 0; pointer-events: none; }
 .services-inner { position: relative; z-index: 1; width: 100%; padding-left: 21rem; padding-right: 28rem; }
 .services-head { max-width: 128rem; }
-/* Los tres frentes comparten lugar: el scroll los intercambia (addServicesSequence) */
-@media only screen and (min-width: 1025.1px) {
-  .services-stack { position: relative; min-height: 34rem; margin-top: 9rem; }
-  .services-stack .service { position: absolute; top: 0; left: 0; width: 100%; margin-top: 0 !important; }
-}
+/* Los frentes van apilados, uno debajo del otro. Antes compartían lugar —absolutos, en
+   el mismo píxel— y el scroll los intercambiaba de a uno (ver initServices). */
+@media only screen and (min-width: 1025.1px) { .services-stack { margin-top: 9rem; } }
 .services-title { margin: 4rem 0 0; color: var(--white-1); font-size: 8.4rem; line-height: 1.08; font-weight: 800; text-transform: uppercase; }
 .services-intro { margin-top: 3rem; max-width: 96rem; color: var(--white-1); font-size: 2.6rem; line-height: 1.5; opacity: 0.86; }
 .services-stack { margin-top: 10rem; }
@@ -587,144 +832,148 @@ html.intro-running body { touch-action: none; }
 .services-pills { display: flex; flex-wrap: wrap; gap: 1.8rem 2rem; margin-top: 4.4rem; }
 .pill { display: inline-flex; align-items: center; justify-content: center; height: 6.4rem; padding: 0 3.4rem; border-radius: 10rem; background: var(--white-1); color: var(--black-1); font-size: 2.3rem; line-height: 1; font-weight: 700; text-transform: uppercase; white-space: nowrap; }
 .services-cta { margin-top: 9rem; }
+/* Ya no hay topes en vh en toda esta sección. Los tenía porque el panel era una
+   pantalla fija y todo —título, bajada, frentes, pastillas, botón— tenía que entrar
+   ahí adentro sin importar lo bajo que fuera el monitor. Ahora la sección crece con su
+   contenido, así que cada pieza vuelve a medir lo suyo. */
 @media only screen and (max-width: 1025px) {
-  /* En vertical el panel es el mismo escenario fijado que en apaisado, a todo el alto
-     del teléfono, y los frentes pasan de a uno en el mismo lugar. El padding de arriba
-     le hace lugar al header fijo. */
-  .blob-left2 { display: flex; padding: 0; margin: 0; }
-  .blob-left2 .services-shape { flex: 1; display: flex; align-items: center; background: none; border-radius: 0; overflow: visible; padding: calc(var(--header-height) + 1rem) 0 2.4rem; }
-  .services-shape:before { top: calc(var(--header-height) - 1.5rem); right: 3rem; bottom: 2.4rem; border-width: 0.35rem; border-radius: 0 calc(var(--blob-radius) - 3rem) calc(var(--blob-radius) - 3rem) 0; }
-  .services-inner { padding-left: 2.4rem; padding-right: 5rem; }
-  /* Todo con tope en vh: en un teléfono bajo el panel tiene que entrar igual */
-  .services-title { font-size: min(3.6rem, 4vh); line-height: 1.06; margin-top: min(1.4rem, 1.5vh); }
-  .services-intro { font-size: min(1.9rem, 2.1vh); line-height: 1.4; margin-top: min(1.2rem, 1.3vh); }
-  /* El alto real del hueco lo fija JS con el frente más alto (fitServicesStack); esto
-     es sólo el piso */
-  .services-stack { position: relative; min-height: 32vh; margin-top: min(2rem, 2.2vh); }
-  .services-stack .service { position: absolute; top: 0; left: 0; width: 100%; margin-top: 0 !important; }
-  .service { grid-template-columns: 1fr; gap: 0.6rem; padding-top: min(2rem, 2.2vh); }
-  .service__n { font-size: min(2rem, 2.2vh); }
-  .service__title { font-size: min(3.2rem, 3.6vh); }
-  .service__lead { font-size: min(1.9rem, 2.1vh); margin-top: 0.6rem; }
-  .services-pills { gap: min(0.9rem, 1vh) 1rem; margin-top: min(1.6rem, 1.8vh); }
-  .pill { white-space: normal; text-align: center; height: auto; min-height: min(4rem, 4.4vh); padding: min(0.8rem, 0.9vh) 1.6rem; font-size: min(1.5rem, 1.65vh); line-height: 1.15; }
-  .services-cta { margin-top: min(2rem, 2.2vh); }
-  .services-cta .btn-d { min-height: min(7rem, 7.6vh); }
+  .services-shape { padding: 12rem 0 13rem; }
+  .services-shape:before { top: 6rem; right: 3rem; bottom: 6rem; border-width: 0.35rem; border-radius: 0 calc(var(--blob-radius) - 3rem) calc(var(--blob-radius) - 3rem) 0; }
+  .services-inner { padding-left: 8rem; padding-right: 5rem; }
+  .services-title { font-size: 5.4rem; line-height: 1.06; margin-top: 3rem; }
+  .services-intro { font-size: 2.1rem; line-height: 1.4; margin-top: 2rem; }
+  .services-stack { margin-top: 7rem; }
+  .service { grid-template-columns: 1fr; gap: 1.2rem; padding-top: 4rem; }
+  .service + .service { margin-top: 5rem; }
+  .service__n { font-size: 2.4rem; }
+  .service__title { font-size: 3.6rem; }
+  .service__lead { font-size: 2.1rem; margin-top: 1.2rem; }
+  .services-pills { gap: 1.2rem 1.4rem; margin-top: 2.6rem; }
+  .pill { white-space: normal; text-align: center; height: auto; min-height: 4.4rem; padding: 1rem 2rem; font-size: 1.7rem; line-height: 1.15; }
+  .services-cta { margin-top: 6rem; }
 }
 @media only screen and (max-width: 767.98px) {
-  /* En un teléfono el panel no tiene alto para la bajada: el título ya lo dice y los
-     frentes son lo que importa. En tablet sí entra. */
-  .blob-left2 .services-intro { display: none; }
-  /* Que cada título entre en una línea: en el índice del cierre son cuatro filas y a
-     dos líneas cada una no hay alto que alcance */
-  .blob-left2 .service__title { font-size: min(2.4rem, 2.8vh); }
-}
-
-/* Ajuste a la ALTURA de la pantalla, para el panel de "qué hacemos".
-   Va al final para ganarle por orden a las reglas de arriba.
-   El rem de este proyecto escala con el ANCHO, así que en pantallas anchas y
-   bajas el contenido no entraba y se cortaba por arriba, encimándose con el
-   header. Con min(rem, vh) cada pieza cede cuando falta alto. */
-@media only screen and (min-width: 1025.1px) {
-  /* El padding superior reserva el lugar del header fijo. 8 y no 13 como antes: con
-     cuatro frentes en el índice del cierre, más el botón, el contenido no entraba entre
-     los contornos y el botón se salía por abajo. */
-  .blob-left2 .services-shape { padding: min(6rem, 6vh) 0 min(7rem, 5vh); }
-  /* El contorno tiene que ceder con el mismo tope que el padding que ubica el
-     contenido. Si queda en 13rem fijo, en pantallas anchas y bajas el contenido
-     arranca más arriba que la línea y el antetítulo la termina pisando. */
-  .blob-left2 .services-shape:before { top: min(6rem, 6vh); bottom: min(6rem, 6vh); }
-  .blob-left2 .services-title { font-size: min(6.6rem, 5.5vh); margin-top: min(2.8rem, 2.2vh); }
-  .blob-left2 .services-intro { font-size: min(2.5rem, 2.2vh); margin-top: min(2rem, 1.8vh); }
-  /* El hueco tiene que aguantar dos cosas: el frente más alto, y el índice del cierre,
-     que ahora son cuatro filas en vez de tres. */
-  .blob-left2 .services-stack { margin-top: min(3.5rem, 2.6vh); min-height: min(46rem, 38.5vh); }
-  .blob-left2 .service { padding-top: min(5.5rem, 4vh); }
-  .blob-left2 .service__title { font-size: min(5.6rem, 4.8vh); }
-  .blob-left2 .service__lead { font-size: min(2.6rem, 2.3vh); margin-top: min(1.6rem, 1.4vh); }
-  .blob-left2 .services-pills { gap: min(1.8rem, 1.6vh) 2rem; margin-top: min(4rem, 3vh); }
-  .blob-left2 .pill { height: min(6.4rem, 5.4vh); padding: 0 min(3.4rem, 3vh); font-size: min(2.3rem, 2vh); }
-  /* El bloque va centrado: todo lo que crece el contenido le sube el techo, y el
-     antetítulo termina pisando el contorno. Con cuatro frentes hay que ser más cortito. */
-  /* El aire entre la última fila del índice y el botón: con 3.2vh quedaban pegados */
-  .blob-left2 .services-cta { margin-top: min(8rem, 6vh); }
-  .blob-left2 .services-cta .btn-d { height: min(8.7rem, 7.4vh); }
-  .blob-left2 .services-cta .btn-d__label { font-size: min(3.6rem, 3.1vh); }
+  .services-shape { padding: 9rem 0 10rem; }
+  .services-shape:before { right: 2rem; }
+  .services-inner { padding-left: 4rem; padding-right: 3rem; }
+  .services-title { font-size: 6.6vw; }
+  .service__title { font-size: 3rem; }
 }
 
 /* =========================================================
-   CÓMO TRABAJAMOS: los seis pasos de la software factory
+   CÓMO TRABAJAMOS: el proceso como recorrido, sobre negro
    ========================================================= */
-.home-process { position: relative; background: var(--white-1); color: var(--black-1); padding: 18rem 0 20rem; }
-/* Se fija y el scroll traza un paso por vez (ver initProcess) */
-@media only screen and (min-width: 1025.1px) {
-  .home-process { height: 380vh; padding: 0; }
-  .home-process .container-sticky { position: sticky; top: 0; height: 100vh; display: flex; align-items: center; }
-}
-.process-inner { width: 100%; padding-left: 21rem; padding-right: 21rem; }
+/* Era la segunda de dos secciones claras seguidas que además abrían igual —antetítulo
+   rojo, título negro, alineadas a la izquierda— y las dos se leían como una sola cosa
+   larga. Ahora es oscura y los pasos cuelgan de un riel que recorre la D de la marca,
+   encendiendo cada estación al pasarle por encima (ver initProcess).
+   Los topes en vh que tenía esta sección murieron con el pin: existían sólo para que
+   los seis pasos entraran en una pantalla fijada. */
+/* El padding de abajo es el lugar que la curva necesita para resolverse. Sin él la
+   forma negra terminaba en el mismo píxel donde arranca Proyectos —que también es
+   oscuro— y la cuña de crema que deja la curva quedaba cortada por una horizontal: la
+   curva no terminaba, la guillotinaban. */
+.home-process { position: relative; background: var(--white-1); padding-bottom: 13rem; }
+/* La D mira a la izquierda, espejo de la de "Qué hacemos": las dos secciones oscuras
+   del medio son parientes, no la misma. Y la curva de abajo deja ver el crema antes de
+   Proyectos, que también es oscuro; sin ella los dos bloques negros se fundirían en una
+   sola mancha de dos pantallas. */
+/* El radio vertical va en 50% y no en --blob-radius: así vale siempre la mitad del alto
+   de la forma, los dos arcos se tocan en el medio y la curva sale de una sola pieza.
+   Con un radio fijo la curva sólo cerraba si la caja medía menos de dos radios, y como
+   el alto lo pone el contenido —que escala con el ANCHO de la ventana, mientras el radio
+   estaba atado al ALTO— cuanto más grande el monitor más se separaban los arcos y más
+   parecía una forma cortada. A 1856 de ancho el radio valía 0,72 de la mitad del alto. */
+.process-shape { position: relative; background: var(--black-1); color: var(--white-1); border-radius: var(--blob-radius) 0 0 var(--blob-radius) / 50% 0 0 50%; overflow: hidden; padding: 11rem 0 12rem; }
+.process-inner { position: relative; z-index: 1; width: 100%; padding-left: 28rem; padding-right: 21rem; }
 .process-head { max-width: 120rem; }
 .process-title { margin: 4rem 0 0; font-size: 8.4rem; line-height: 1.08; font-weight: 800; text-transform: uppercase; }
-.process-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8rem 6rem; margin-top: 12rem; }
-.step { position: relative; padding-top: 4rem; }
-/* Línea propia (no border-top) para poder trazarla con GSAP */
-.step__line { position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: var(--black-1); transform: scaleX(0); transform-origin: left center; }
-.step__n { display: block; font-size: 3.2rem; line-height: 1; font-weight: 800; color: var(--red-1); letter-spacing: 0.02em; }
-/* min-height reserva dos líneas: si no, los pasos de título corto desalinean el texto */
-.step__title { margin: 2.6rem 0 0; font-size: 3.6rem; line-height: 1.15; font-weight: 800; min-height: 2.3em; }
-.step__text { margin-top: 1.6rem; font-size: 2.2rem; line-height: 1.45; }
-.process-cta { display: flex; margin-top: 12rem; }
+
+/* El riel y los pasos comparten origen: el aire de arriba lo pone cada paso y no la
+   lista, así el punto de cada estación cae justo sobre la línea. El `right` del riel lo
+   afina initProcess con la posición real del último punto; el calc es el valor con el
+   que se dibuja antes de que corra el script. */
+.process-track { --paso-gap: 4rem; position: relative; margin-top: 8rem; }
+.process-rail { position: absolute; top: 1.15rem; left: 0; right: calc((100% - 4 * var(--paso-gap)) / 5 - 0.75rem); height: 0.25rem; background: rgba(246, 240, 225, 0.22); }
+.process-rail__fill { position: absolute; inset: 0; background: var(--red-1); transform: scaleX(0); transform-origin: left center; }
+.process-rail__mark { position: absolute; left: 0; top: 50%; width: 2.8rem; height: 2.8rem; margin: -1.4rem 0 0 -1.4rem; display: flex; align-items: center; justify-content: center; opacity: 0; }
+.process-rail__mark .d-icon { width: 100%; height: auto; fill: var(--red-1); }
+.process-steps { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0 var(--paso-gap); margin: 0; padding: 0; list-style: none; }
+.step { position: relative; padding-top: 4.4rem; }
+.step__dot { position: absolute; left: 0; top: 0.525rem; width: 1.5rem; height: 1.5rem; border-radius: 50%; background: var(--black-1); border: 0.3rem solid var(--red-1); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.step__n { display: block; font-size: 2.8rem; line-height: 1; font-weight: 800; color: var(--red-1); letter-spacing: 0.02em; }
+.step__title { margin: 1.8rem 0 0; font-size: 2.8rem; line-height: 1.15; font-weight: 800; }
+.step__text { margin-top: 1.4rem; font-size: 1.9rem; line-height: 1.5; opacity: 0.78; transition: opacity 0.3s ease; }
+/* El recorrido sigue vivo después de la entrada: al pasar el mouse, la estación se
+   agranda y su texto termina de encenderse. */
+.step:hover .step__dot { transform: scale(1.45); }
+.step:hover .step__text { opacity: 1; }
+.process-cta { display: flex; margin-top: 8rem; }
+
 @media only screen and (max-width: 1025px) {
-  .home-process { padding: 11rem 0 12rem; }
-  .process-inner { padding-left: 8rem; padding-right: 8rem; }
+  .home-process { padding-bottom: 8rem; }
+  /* En vertical el radio vuelve a ser fijo, SIN el `/ 50%` de apaisado, y es a
+     propósito. Acá la forma mide 1726px —dos pantallas y media, porque los cinco pasos
+     se apilan— así que medio alto serían 863px contra 108 de radio horizontal: una
+     curva tan estirada que se lee como un borde recto y la marca desaparece. Con el
+     radio fijo quedan dos esquinas redondeadas limpias, que es lo que corresponde a una
+     columna alta. El padding lo hereda de la regla de arriba. */
+  .process-shape { border-radius: var(--blob-radius) 0 0 var(--blob-radius); }
+  .process-inner { padding-left: 11rem; padding-right: 8rem; }
   .process-title { font-size: 5.4rem; margin-top: 3rem; }
-  .process-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5rem 4rem; margin-top: 8rem; }
-  .step { padding-top: 3rem; }
-  .step__title { font-size: 3rem; margin-top: 2rem; }
+  /* En vertical el recorrido baja en vez de cruzar: cinco columnas no entran, y una
+     línea de tiempo vertical es la misma figura girada. */
+  .process-track { margin-top: 8rem; }
+  .process-rail { top: 0.9rem; left: 0.625rem; right: auto; width: 0.25rem; height: calc(100% - 1.8rem); }
+  .process-rail__fill { transform: scaleY(0); transform-origin: top center; }
+  .process-rail__mark { left: 0.75rem; top: 0; margin-top: -1.4rem; }
+  .process-steps { grid-template-columns: 1fr; gap: 4.5rem; padding-left: 5rem; }
+  .step { padding-top: 0; }
+  .step__dot { left: -5rem; top: 0.4rem; }
+  .step__title { font-size: 3rem; margin-top: 1.6rem; }
   .step__text { font-size: 2.1rem; }
   .process-cta { margin-top: 8rem; }
 }
 @media only screen and (max-width: 767.98px) {
-  .process-inner { padding-left: 4rem; padding-right: 4rem; }
+  .process-inner { padding-left: 6rem; padding-right: 4rem; }
   .process-title { font-size: 6.6vw; }
-  .process-steps { grid-template-columns: 1fr; gap: 4rem; }
-  .step__title { font-size: 2.8rem; min-height: 0; }
+  .step__title { font-size: 2.8rem; }
   .step__text { font-size: 2rem; }
-}
-
-/* Ajuste a la ALTURA de la pantalla para la sección fijada (mismo motivo que en
-   servicios: el rem escala con el ancho). Va al final para ganar por orden. */
-@media only screen and (min-width: 1025.1px) {
-  /* El padding superior reserva el lugar del header fijo.
-     Seis pasos con título y texto son mucho contenido para una pantalla, así que
-     los topes en vh acá son más ajustados que en las otras secciones. */
-  .home-process .process-inner { padding-top: min(11rem, 8.5vh); padding-bottom: min(5rem, 3.5vh); }
-  .home-process .process-title { font-size: min(7.2rem, 5vh); margin-top: min(3.4rem, 2.2vh); }
-  .home-process .process-steps { gap: min(8rem, 3.5vh) 6rem; margin-top: min(9rem, 4vh); }
-  .home-process .step { padding-top: min(4rem, 2.8vh); }
-  .home-process .step__n { font-size: min(3.2rem, 2.4vh); }
-  .home-process .step__title { font-size: min(3.6rem, 2.6vh); margin-top: min(2.6rem, 1.8vh); }
-  .home-process .step__text { font-size: min(2.2rem, 1.7vh); margin-top: min(1.6rem, 1.2vh); }
-  .home-process .process-cta { margin-top: min(12rem, 4vh); }
-  .home-process .process-cta .btn-d { height: min(8.7rem, 6.6vh); }
-  .home-process .process-cta .btn-d__label { font-size: min(3.6rem, 2.7vh); }
-  .home-process .section-kicker { font-size: min(1.9rem, 1.7vh); }
 }
 
 /* =========================================================
    PROYECTOS (cuadro 11): marquesina de tarjetas + frase
    ========================================================= */
 /* El padding inferior deja el botón a la vista antes de que el footer suba y lo tape */
+/* Arranca en recto: lo que lo separa de "cómo trabajamos" es la franja de crema que
+   deja esa sección abajo, no una forma propia. */
 .home-portfolio { position: relative; background: var(--black-1); padding: 24rem 0 24rem; z-index: 2; overflow: hidden; }
 .portfolio-inner { position: relative; }
 .cards-marquee { position: relative; width: 100%; overflow: hidden; }
 .cards-marquee .marquee-trigger { position: relative; height: 52.8rem; }
 .cards-marquee .marquee { position: absolute; top: 0; left: 0; display: flex; flex-wrap: nowrap; white-space: nowrap; }
 .cards-row { display: flex; flex-wrap: nowrap; gap: 4.2rem; padding-left: 4.2rem; }
-.card { position: relative; flex: none; width: 52.8rem; height: 52.8rem; border-radius: 4.4rem; overflow: hidden; background: var(--gray-2); }
+.card { position: relative; flex: none; width: 52.8rem; height: 52.8rem; border-radius: 4.4rem; overflow: hidden; background: var(--gray-2); margin: 0; }
+/* La tarjeta entera es el botón que abre el proyecto en grande (ver Portfolio) */
+.card__btn { display: block; width: 100%; height: 100%; }
 .card img { width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform 0.8s cubic-bezier(0.215, 0.61, 0.355, 1); }
 .card:hover img { transform: scale(1.06); }
 /* white-space: normal para que los nombres largos envuelvan: la marquesina impone nowrap */
-.card figcaption { position: absolute; bottom: 0; left: 0; right: 0; padding: 8rem 3.4rem 2.8rem; color: var(--white-1); font-size: 2.2rem; line-height: 1.2; font-weight: 700; text-transform: uppercase; letter-spacing: 0.01em; white-space: normal; background: linear-gradient(to top, rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0)); }
+.card__pie { position: absolute; bottom: 0; left: 0; right: 0; padding: 8rem 3.4rem 2.8rem; color: var(--white-1); font-size: 2.2rem; line-height: 1.2; font-weight: 700; text-transform: uppercase; letter-spacing: 0.01em; white-space: normal; text-align: left; background: linear-gradient(to top, rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0)); }
+/* El dedo que arranca sobre una tarjeta tiene que scrollear la página y nada más.
+   Sin esto, en el teléfono apoyar y mover sobre un <img> dispara el arrastre nativo del
+   sistema —y la pulsación larga, el menú de "Guardar imagen"—: el navegador se queda
+   con el gesto y la página no se mueve hasta que levantás el dedo y lo volvés a apoyar
+   en otro lado. Es lo que rompía el scroll justo al llegar a los carruseles.
+   `pan-y` le avisa al navegador que acá el único gesto es el vertical, y
+   `pointer-events: none` en la imagen deja al botón como blanco del toque, que es
+   quien sabe qué abrir. Vale para los dos carruseles: el del home y el de las fichas. */
+.cards-marquee, .project-gallery { touch-action: pan-y pinch-zoom; }
+/* Sin selección de texto: la fila del home se arrastra (ver initMarquees), y arrastrar
+   sobre el nombre de un proyecto lo dejaría seleccionado en vez de mover la fila. */
+.cards-marquee { -webkit-user-select: none; user-select: none; }
+.card img, .shot img { -webkit-user-drag: none; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; pointer-events: none; }
+
 /* El titular va sobre las fotos: sin este velo no se lee */
 .cards-veil { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(58% 62% at 50% 50%, rgba(10, 10, 10, 0.82) 0%, rgba(10, 10, 10, 0.6) 55%, rgba(10, 10, 10, 0) 100%); }
 /* pointer-events: none para que el titular no tape la marquesina que corre atrás... */
@@ -741,21 +990,40 @@ html.intro-running body { touch-action: none; }
   .cards-marquee .marquee-trigger { height: 36rem; }
   .cards-row { gap: 2.4rem; padding-left: 2.4rem; }
   .card { width: 36rem; height: 36rem; border-radius: 3rem; }
-  .card figcaption { padding: 6rem 2.4rem 2rem; font-size: 2rem; }
-  .portfolio-heading { top: 18rem; }
+  .card__pie { padding: 6rem 2.4rem 2rem; font-size: 2rem; }
+  /* El titular deja de ir ENCIMA de las tarjetas y pasa a ir arriba de ellas.
+     En apaisado el bloque flota sobre la marquesina y funciona: las tarjetas son
+     grandes, el velo oscurece el centro y el titular tiene aire de sobra. En vertical
+     no queda nada de eso: el texto de las propias capturas se mezclaba con el titular
+     —se leía "PROYECTOS DESTACADOS de" con palabras sueltas de las fotos al costado—,
+     los nombres de las tarjetas competían desde los bordes y la bajada quedaba en 12px
+     ilegibles sobre una foto. Apilado, cada cosa ocupa su lugar y el velo ya no hace
+     falta. */
+  .portfolio-inner { display: flex; flex-direction: column; }
+  .portfolio-heading { order: -1; position: static; transform: none; width: 100%; padding: 0 var(--padding-fluid); margin-bottom: 4.4rem; text-align: left; }
+  .cards-veil { display: none; }
   .portfolio-title { font-size: 5.6rem; }
-  .portfolio-subtitle { margin-top: 1.6rem; font-size: 2.2rem; }
+  .portfolio-subtitle { margin-top: 1.6rem; font-size: 2.2rem; max-width: 60rem; }
+  .portfolio-cta { margin-top: 3.4rem; }
 }
 @media only screen and (max-width: 767.98px) {
   .portfolio-title { font-size: 8.5vw; }
-  .portfolio-subtitle { font-size: 3.2vw; }
+  /* En vw la bajada caía a 12px, que no se lee en ningún teléfono */
+  .portfolio-subtitle { font-size: 2rem; }
 }
 
 /* =========================================================
    FOOTER (cuadro 12): panel crema sobre negro
    ========================================================= */
-#footer { position: relative; background: var(--black-1); padding: 0 1.5rem 1.5rem; z-index: 100; }
-.footer-panel { position: relative; background: var(--white-1); color: var(--black-1); border-radius: 4.4rem; padding: 10.5rem 9.5rem 6.6rem 11rem; overflow: hidden; }
+/* El panel crema flota sobre negro, y el marco tiene que verse como una decisión. Con
+   1.5rem a los costados y 0 arriba quedaba una línea negra de 11px bordeando tres lados
+   y nada en el cuarto: demasiado fina para leerse como un marco y suficiente para
+   parecer un div mal colocado. Pareja y más ancha, la tarjeta se apoya. */
+#footer { position: relative; background: var(--black-1); padding: 3rem; z-index: 100; }
+/* Paddings laterales iguales: con 11rem a la izquierda y 9.5rem a la derecha, el
+   logotipo —que se centra dentro del área de contenido— quedaba corrido respecto al
+   panel, que es contra lo que el ojo lo mide. */
+.footer-panel { position: relative; background: var(--white-1); color: var(--black-1); border-radius: 4.4rem; padding: 10.5rem 10.5rem 9rem; overflow: hidden; }
 .footer-row { display: flex; align-items: center; flex-wrap: wrap; }
 .footer-row--map { gap: 3rem 6rem; }
 .footer-brand, .footer-slogan { font-size: 2.65rem; line-height: 1.15; font-weight: 700; text-transform: uppercase; }
@@ -768,7 +1036,10 @@ html.intro-running body { touch-action: none; }
 .footer-row--legal { justify-content: space-between; gap: 2rem 4rem; font-size: 2rem; line-height: 1; font-weight: 600; text-transform: uppercase; }
 .footer-mail { display: inline-flex; align-items: center; }
 .footer-legal { display: flex; gap: 3rem; }
-.footer-logo-wrap { display: flex; justify-content: center; padding-top: 13.5rem; }
+/* El logotipo es el remate del footer y necesita apoyarse en algo: con 13.5rem de aire
+   arriba y el padding chico del panel abajo, quedaban 81px arriba contra 39 abajo y se
+   veía descolgado, casi tocando el borde. */
+.footer-logo-wrap { display: flex; justify-content: center; padding-top: 11rem; }
 .footer-logo { width: 57%; display: flex; justify-content: space-between; align-items: flex-end; }
 .footer-logo .letter-mask { display: block; overflow: hidden; }
 .footer-logo .letter { display: block; height: auto; width: 100%; }
@@ -778,8 +1049,8 @@ html.intro-running body { touch-action: none; }
    yPercent no mueve nada. */
 @media only screen and (min-width: 1025.1px) { .footer-logo .letter { transform: translateY(115%); } }
 @media only screen and (max-width: 1025px) {
-  #footer { margin-top: 0; padding: 0 1.2rem 1.2rem; }
-  .footer-panel { border-radius: 3rem; padding: 6rem 3.4rem 4.4rem; }
+  #footer { margin-top: 0; padding: 1.6rem; }
+  .footer-panel { border-radius: 3rem; padding: 6rem 3.4rem 5rem; }
   /* En vertical no entran dos cosas en una fila: cada bloque va uno abajo del otro y
      todo alineado a la izquierda. En fila, el mapa del sitio heredaba el
      justify-content: flex-end del layout apaisado y, al caer cada link en su propia
@@ -789,11 +1060,14 @@ html.intro-running body { touch-action: none; }
   /* La marca y el eslogan son una unidad: pegados entre sí y separados de lo que sigue */
   .footer-brand { display: inline-flex; }
   .footer-slogan { display: block; margin-left: 0; margin-top: 0.9rem; opacity: 0.62; }
-  .footer-site-map { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; width: 100%; margin: 3.4rem 0 0; gap: 1.7rem; }
+  /* Los huecos crecen para que las áreas tocables de 44px de acá abajo no se pisen
+     entre sí: con 1,7rem de separación y enlaces de 24px de alto, dos áreas contiguas
+     se solapaban y el dedo caía en la de abajo. */
+  .footer-site-map { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; width: 100%; margin: 3.4rem 0 0; gap: 2.6rem; }
   .footer-rule { margin: 3.4rem 0 3rem; }
   .footer-row--legal { font-size: 1.7rem; }
   .footer-mail { display: flex; }
-  .footer-legal { flex-direction: column; align-items: flex-start; gap: 1.3rem; margin-top: 2.2rem; }
+  .footer-legal { flex-direction: column; align-items: flex-start; gap: 4rem; margin-top: 2.6rem; }
   .footer-logo-wrap { padding-top: 6rem; }
   .footer-logo { width: 92%; }
 }
@@ -863,11 +1137,11 @@ body.menu-active .scroll-top, body.menu-leave .scroll-top { opacity: 0; visibili
 .project-back:hover { opacity: 1; }
 .project-title { margin: min(3rem, 2.4vh) 0 0; color: var(--white-1); font-size: min(9.6rem, 8.4vh); line-height: 1.05; font-weight: 800; text-transform: uppercase; }
 .project-lead { margin-top: min(2.6rem, 2.2vh); max-width: 96rem; color: var(--white-1); font-size: min(2.8rem, 2.4vh); line-height: 1.45; opacity: 0.86; }
+/* Sólo lo usa la portada de /sobre, para el "Desde 2023". La ficha de proyecto lo tenía
+   para "qué hicimos" y el estado del producto, y esos dos datos ya no van. */
 .project-meta { display: flex; flex-wrap: wrap; gap: min(6rem, 5vh) 9rem; margin: min(5rem, 4vh) 0 0; }
 .project-meta__item dt { color: var(--red-1); font-size: 1.7rem; line-height: 1; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
 .project-meta__item dd { margin: 1.4rem 0 0; color: var(--white-1); font-size: min(2.4rem, 2.1vh); line-height: 1.3; font-weight: 600; }
-.project-links { display: flex; flex-wrap: wrap; gap: 2rem 4rem; margin-top: min(5rem, 4vh); }
-.project-link { --btn-color: var(--white-1); display: inline-flex; align-items: center; color: var(--white-1); font-size: min(2.4rem, 2.1vh); line-height: 1; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; }
 
 /* La captura de portada, al costado del texto: el lado derecho de la D era un vacío.
    El contorno concéntrico termina en una semicircunferencia, así que a la altura de
@@ -887,21 +1161,86 @@ body.menu-active .scroll-top, body.menu-leave .scroll-top { opacity: 0; visibili
 .project-built__shape { position: relative; background: var(--black-1); border-radius: 0 var(--blob-radius) var(--blob-radius) 0; overflow: hidden; padding: 18rem 0 18rem; }
 .project-built__shape:before { content: ''; position: absolute; top: 10rem; right: 10rem; bottom: 10rem; left: -20rem; border: 0.5rem solid var(--white-1); border-radius: 0 calc(var(--blob-radius) - 10rem) calc(var(--blob-radius) - 10rem) 0; pointer-events: none; }
 .project-built .project-block { position: relative; z-index: 1; padding-right: 28rem; }
-.project-built__list { margin: 8rem 0 0; }
-.built-item { display: grid; grid-template-columns: 10rem minmax(0, 1fr); gap: 0 5rem; padding-top: 4.4rem; border-top: 2px solid rgba(246, 240, 225, 0.24); }
-.built-item + .built-item { margin-top: 4.4rem; }
-.built-item__n { font-size: 2.8rem; line-height: 1; font-weight: 800; color: var(--red-1); letter-spacing: 0.02em; }
-.built-item__title { margin: 0; color: var(--white-1); font-size: 3.8rem; line-height: 1.1; font-weight: 800; text-transform: uppercase; }
-.built-item__text { margin-top: 1.4rem; max-width: 86rem; color: var(--white-1); font-size: 2.4rem; line-height: 1.45; opacity: 0.82; }
+/* Lista de tildes en dos columnas. El formato anterior —número, título de 3,8rem en
+   mayúsculas, párrafo y una regla por pieza— medía 854px para las seis piezas de
+   Publicité; así mide 253px, con la misma información. */
+.project-built__list { margin: 6rem 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3.6rem 7rem; }
+.built-item { display: grid; grid-template-columns: 3rem minmax(0, 1fr); gap: 0 1.8rem; align-items: start; }
+.built-item__check { width: 3rem; height: 3rem; margin-top: 0.2rem; border-radius: 50%; background: var(--red-1); display: flex; align-items: center; justify-content: center; }
+.built-item__check .check-icon { width: 1.5rem; height: auto; display: block; }
+.built-item__check path { stroke: var(--white-1); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+.built-item__title { margin: 0; color: var(--white-1); font-size: 2.3rem; line-height: 1.2; font-weight: 800; }
+.built-item__text { margin: 0.8rem 0 0; color: var(--white-1); font-size: 1.8rem; line-height: 1.45; opacity: 0.74; }
 
 /* ---------- el producto (galería) ---------- */
 .project-photos { position: relative; background: var(--white-1); color: var(--black-1); padding: 18rem 0 16rem; }
-.project-gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5rem; margin-top: 8rem; padding-left: 21rem; padding-right: 21rem; }
-/* Con una sola captura ocupa el ancho completo, así no queda un hueco al costado */
-.project-gallery .shot:only-child { grid-column: 1 / -1; }
-.shot { margin: 0; }
-.shot img { width: 100%; height: auto; display: block; border-radius: 2.4rem; background: var(--gray-2); border: 1px solid rgba(10, 10, 10, 0.12); }
-.shot figcaption { margin-top: 1.8rem; font-size: 2rem; line-height: 1.35; font-weight: 600; opacity: 0.7; }
+/* Carrusel, no grilla: las capturas se ven más grandes que en dos columnas y el riel
+   lleva el set duplicado, que es lo que hace que el loop no tenga costura. El desfile
+   se pausa con :hover y con la imagen abierta; el resto se desenfoca para que la que
+   está debajo del puntero quede sola. Nada de esto necesita JavaScript. */
+.project-gallery { position: relative; margin-top: 7rem; overflow: hidden; padding: 4rem 0; }
+.project-gallery__track { display: flex; width: max-content; gap: 3.4rem; padding: 0 3.4rem; }
+.project-gallery[data-desfila] .project-gallery__track { animation: desfile-capturas 36s linear infinite; }
+@keyframes desfile-capturas { from { transform: translateX(0); } to { transform: translateX(calc(-50% - 1.7rem)); } }
+.project-gallery:hover .project-gallery__track,
+.project-gallery[data-abierta] .project-gallery__track { animation-play-state: paused; }
+.shot { flex: none; width: 46rem; margin: 0; position: relative; transition: transform 0.45s cubic-bezier(0.215, 0.61, 0.355, 1), filter 0.4s ease, opacity 0.4s ease; }
+/* Cada captura va encuadrada en un marco de proporción fija, y no suelta con el alto
+   que le dé su archivo: las 24 capturas del sitio van de 1.10 a 2.59 de proporción, y
+   con `height: auto` cada tarjeta quedaba de un alto distinto —la fila se veía
+   desparejo y los pies de foto no se alineaban entre sí—.
+   16/10 es la mediana de todas, así que la mitad llena el marco casi exacto.
+   Y adentro `contain`, no `cover`: son capturas de pantalla, recortarlas para llenar
+   el marco se lee como un error, no como un encuadre. La que quiera verse entera y
+   grande ya se abre con un click. */
+.shot__btn { display: block; width: 100%; aspect-ratio: 16 / 10; padding: 1.4rem; border: 1px solid rgba(10, 10, 10, 0.12); border-radius: 2.4rem; background: rgba(10, 10, 10, 0.05); overflow: hidden; }
+.shot img { width: 100%; height: 100%; display: block; object-fit: contain; }
+.shot figcaption { margin-top: 1.4rem; font-size: 1.7rem; line-height: 1.35; font-weight: 600; opacity: 0.7; }
+.project-gallery:hover .shot { filter: blur(4px); opacity: 0.45; }
+.project-gallery:hover .shot:hover { filter: none; opacity: 1; transform: scale(1.09); z-index: 2; }
+
+/* La captura en grande. Por encima del header (105) y del footer (100), y por debajo
+   del cursor del sitio, que vive en 1600000 y tiene que seguir viéndose acá adentro. */
+.project-viewer { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center; padding: 6rem; background: rgba(10, 10, 10, 0.92); animation: visor-entra 0.28s ease both; }
+@keyframes visor-entra { from { opacity: 0; } to { opacity: 1; } }
+.project-viewer__caja { margin: 0; max-width: 92vw; max-height: 88vh; display: flex; flex-direction: column; align-items: center; animation: visor-sube 0.34s cubic-bezier(0.215, 0.61, 0.355, 1) both; }
+@keyframes visor-sube { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: none; } }
+.project-viewer__caja img { max-width: 92vw; max-height: 78vh; width: auto; height: auto; display: block; border-radius: 2rem; border: 1px solid rgba(246, 240, 225, 0.16); }
+.project-viewer__caja figcaption { margin-top: 2.2rem; color: var(--white-1); font-size: 2rem; line-height: 1.35; font-weight: 600; text-align: center; opacity: 0.86; }
+.project-viewer__caja figcaption small { display: block; margin-top: 0.8rem; font-size: 1.5rem; font-weight: 800; letter-spacing: 0.14em; color: var(--red-1); opacity: 1; }
+/* Los controles van rellenos del rojo de la marca desde el principio, no sólo al pasar
+   el mouse: con el contorno translúcido que tenían, sobre una captura clara se perdían
+   y no se sabía dónde cerrar ni cómo seguir. Al pasar el mouse se invierten. */
+.project-viewer__cerrar { position: absolute; top: 3.4rem; right: 3.4rem; width: 5.6rem; height: 5.6rem; border: 0; border-radius: 50%; background: var(--red-1); display: flex; align-items: center; justify-content: center; transition: background 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.project-viewer__cerrar:hover { background: var(--white-1); transform: scale(1.08); }
+.project-viewer__cerrar span { position: absolute; width: 2.2rem; height: 2px; background: var(--white-1); transition: background 0.3s ease; }
+.project-viewer__cerrar:hover span { background: var(--black-1); }
+.project-viewer__cerrar span:first-child { transform: rotate(45deg); }
+.project-viewer__cerrar span:last-child { transform: rotate(-45deg); }
+.project-viewer__flecha { position: absolute; top: 50%; width: 6.4rem; height: 6.4rem; border: 0; border-radius: 50%; background: var(--red-1); color: var(--white-1); font-size: 2.6rem; line-height: 1; display: flex; align-items: center; justify-content: center; transform: translateY(-50%); transition: background 0.3s ease, color 0.3s ease; }
+.project-viewer__flecha:hover { background: var(--white-1); color: var(--black-1); }
+.project-viewer__flecha--izq { left: 3.4rem; }
+.project-viewer__flecha--der { right: 3.4rem; }
+
+/* El visor del carrusel del home: mismo fondo y mismo chrome —la cruz y las flechas—
+   que el de las capturas, porque es el mismo gesto. Lo propio es la caja: la portada
+   a un lado y, al otro, qué es el proyecto y el botón que lleva a su ficha.
+   El ancho se queda en 84vw y no en 92vw para no meterse debajo de las flechas. */
+.portfolio-viewer__caja { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 5.4rem; align-items: center; width: min(118rem, 84vw); min-width: 0; animation: visor-sube 0.34s cubic-bezier(0.215, 0.61, 0.355, 1) both; }
+.portfolio-viewer__foto { min-width: 0; border-radius: 2.6rem; overflow: hidden; border: 1px solid rgba(246, 240, 225, 0.16); background: rgba(246, 240, 225, 0.05); }
+/* contain y no cover: esto es "abrila en grande", así que la portada se ve entera.
+   Recortada, lo primero que se perdía era el nombre del producto, que suele estar
+   contra un borde de la captura. */
+.portfolio-viewer__foto img { display: block; width: 100%; max-height: 70vh; object-fit: contain; }
+.portfolio-viewer__n { margin: 0 0 2rem; font-size: 1.6rem; font-weight: 800; letter-spacing: 0.14em; color: var(--red-1); }
+.portfolio-viewer__nombre { margin: 0; color: var(--white-1); font-size: 5rem; line-height: 1.1; font-weight: 800; text-transform: uppercase; }
+.portfolio-viewer__lead { margin: 2.2rem 0 0; color: var(--white-1); font-size: 2.3rem; line-height: 1.5; opacity: 0.82; }
+.portfolio-viewer__cta { margin-top: 4rem; }
+.portfolio-viewer__sinficha { display: inline-block; margin: 4rem 0 0; padding: 1.2rem 2.4rem; border: 0.2rem solid rgba(246, 240, 225, 0.3); border-radius: 10rem; color: var(--white-1); font-size: 1.6rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.7; }
+
+/* La aclaración debajo del título: el rótulo del cursor sólo lo ve quien ya puso el
+   puntero sobre una captura, y en el teléfono no hay puntero. */
+.project-photos__nota { margin: 2.2rem 0 0; font-size: 1.9rem; line-height: 1.4; font-weight: 600; opacity: 0.6; }
 
 /* ---------- siguiente proyecto ---------- */
 .project-next { position: relative; background: var(--black-1); padding: 18rem 0 20rem; z-index: 2; overflow: hidden; }
@@ -921,16 +1260,25 @@ body.menu-active .scroll-top, body.menu-leave .scroll-top { opacity: 0; visibili
 .project-next__cta { margin-top: 8rem; }
 
 @media only screen and (max-width: 1025px) {
-  .project-block, .project-gallery, .project-next__inner { padding-left: 8rem; padding-right: 8rem; }
+  .project-block, .project-next__inner { padding-left: 8rem; padding-right: 8rem; }
   .project-block__title { font-size: 5rem; }
-  .project-hero { padding: 0; }
+  /* La D arranca por debajo del header, no en el borde de la pantalla. Pegada arriba,
+     su esquina redondeada y el contorno blanco pasaban justo por detrás del botón de
+     menú, y las tres curvas se cruzaban. Ahora queda una franja de crema arriba, el
+     header se lee sobre ella y la forma empieza entera. */
+  .project-hero { padding: calc(var(--header-height) + 4.5rem) 0 0; }
   /* block y no flex: en el ancho de un teléfono la captura va debajo del texto, y
      como fila de flex quedaba espachurrada al costado. */
   .project-hero__shape { display: block; min-height: 0; clip-path: none; border-radius: 0 var(--blob-radius) var(--blob-radius) 0; }
-  .project-hero__shape:before { top: 6rem; right: 6rem; bottom: 6rem; border-width: 0.35rem; border-radius: 0 calc(var(--blob-radius) - 6rem) calc(var(--blob-radius) - 6rem) 0; }
-  /* En pantallas chicas la captura va debajo del texto, no al costado */
-  .project-hero__inner { padding: calc(var(--header-height) + 10rem) 12rem 12rem 8rem; }
-  .project-hero__shot { position: static; transform: none; width: auto; margin: 0 12rem 12rem 8rem; }
+  .project-hero__shape:before { top: 4.5rem; right: 4.5rem; bottom: 4.5rem; border-width: 0.35rem; border-radius: 0 calc(var(--blob-radius) - 4.5rem) calc(var(--blob-radius) - 4.5rem) 0; }
+  /* Menos aire arriba: ya no tiene que esquivar el header, que quedó afuera de la D */
+  .project-hero__inner { padding: 9rem 7rem 10rem 8rem; }
+  /* La mitad derecha la reserva SÓLO el escritorio, que es donde la captura va al
+     costado del texto. Acá la captura baja debajo, así que seguir reservándola dejaba
+     el antetítulo, el titular y la bajada metidos en una columna de 156px en un
+     teléfono de 375: todo partido en dos o tres palabras por renglón. */
+  .project-hero--con-captura .project-hero__inner { padding-right: 7rem; }
+  .project-hero__shot { position: static; transform: none; width: auto; margin: 0 7rem 10rem 8rem; }
   .project-title { font-size: 5.6rem; }
   .project-lead { font-size: 2.3rem; }
   .project-meta { gap: 3.4rem 6rem; }
@@ -941,23 +1289,116 @@ body.menu-active .scroll-top, body.menu-leave .scroll-top { opacity: 0; visibili
   .project-built__shape { padding: 12rem 0 12rem; }
   .project-built__shape:before { top: 5rem; right: 5rem; bottom: 5rem; border-width: 0.35rem; border-radius: 0 calc(var(--blob-radius) - 5rem) calc(var(--blob-radius) - 5rem) 0; }
   .project-built .project-block { padding-right: 12rem; }
-  .project-built__list { margin-top: 5rem; }
-  .built-item { grid-template-columns: 1fr; gap: 1.2rem; padding-top: 3rem; }
-  .built-item + .built-item { margin-top: 3rem; }
-  .built-item__title { font-size: 3rem; }
-  .built-item__text { font-size: 2.2rem; }
+  .project-built__list { margin-top: 5rem; grid-template-columns: 1fr; gap: 3rem; }
+  .built-item { grid-template-columns: 2.8rem minmax(0, 1fr); gap: 0 1.6rem; }
+  .built-item__check { width: 2.8rem; height: 2.8rem; }
+  .built-item__title { font-size: 2.6rem; }
+  .built-item__text { font-size: 2.1rem; }
   .project-photos { padding: 12rem 0 10rem; }
-  .project-gallery { grid-template-columns: minmax(0, 1fr); gap: 4rem; margin-top: 5rem; }
+  /* El desfile corre también en vertical. Antes no: la fila se arrastraba con el dedo
+     y quedaba quieta, y quieta no se lee como un carrusel —parece una foto cortada por
+     el borde de la pantalla—. Lo que no viaja es el destaque al pasar el puntero, que
+     en un teléfono no existe; el toque sigue abriendo la captura en grande. */
+  .project-gallery { margin-top: 5rem; padding: 1rem 0; overflow: hidden; }
+  .project-gallery__track { gap: 2.4rem; padding: 0 2.4rem; }
+  .shot { width: 78vw; }
+  .project-gallery:hover .shot { filter: none; opacity: 1; }
+  .project-gallery:hover .shot:hover { transform: none; }
   .shot figcaption { font-size: 1.9rem; }
+  /* La imagen va centrada, que es donde la espera cualquiera que abrió una foto.
+     Las flechas, abajo y juntas al medio: a los costados no entran —a este ancho la
+     imagen ocupa la pantalla entera y quedaban tapadas debajo de ella, que era lo que
+     hacía imposible pasar de una captura a otra— y abajo caen donde está el pulgar.
+     Arriba queda sólo la cruz. El padding inferior es el que les hace el lugar.
+     Y el fondo sube a 0.96 con desenfoque: a 0.92 y sin él, la galería que quedaba
+     detrás se seguía leyendo y competía con la captura abierta. */
+  .project-viewer { padding: 8rem 2.4rem 18rem; align-items: center; background: rgba(10, 10, 10, 0.96); -webkit-backdrop-filter: blur(1rem); backdrop-filter: blur(1rem); }
+  .project-viewer__caja { max-height: none; }
+  .project-viewer__caja img { max-height: 56vh; }
+  .project-viewer__caja figcaption { margin-top: 1.8rem; font-size: 1.9rem; }
+  .project-viewer__cerrar { top: 1.8rem; right: 2.4rem; width: 4.4rem; height: 4.4rem; }
+  /* 11rem y no menos: en el teléfono la barra de abajo del navegador flota sobre la
+     página, y más pegadas al borde quedan debajo de ella. */
+  .project-viewer__flecha { top: auto; bottom: 11rem; width: 5.4rem; height: 5.4rem; transform: none; }
+  .project-viewer__flecha--izq { left: 50%; margin-left: -6.6rem; }
+  .project-viewer__flecha--der { left: 50%; right: auto; margin-left: 1.2rem; }
+
+  /* Apilado y como una sola pieza. Antes la foto, el texto y los botones flotaban
+     sueltos sobre el fondo —cada uno a una altura distinta, con medio carrusel
+     leyéndose por detrás—, y no se entendía qué era una cosa y qué otra. Ahora es un
+     panel con borde: adentro está el proyecto, afuera están los controles.
+     El desenfoque es lo que termina de apagar lo que queda atrás. */
+  /* El visor del carrusel no sigue al de capturas en la posición de las flechas: acá
+     el panel es alto —portada, texto y botón— y puede necesitar scroll, y una flecha
+     anclada abajo se iría con el contenido o caería sobre el botón "Ver proyecto".
+     Arriba, al lado de la cruz, quedan siempre a la vista. */
+  .portfolio-viewer { padding: 8.4rem 2.4rem 4rem; align-items: flex-start; overflow-y: auto; }
+  /* El panel va centrado, pero con `margin: auto` y no con `align-items: center`:
+     este contenedor scrollea, y centrar con align-items recorta la parte de arriba
+     cuando el panel es más alto que la pantalla —queda inalcanzable, no hay forma de
+     scrollear hacia ahí—. Con margen automático se centra cuando sobra lugar y se
+     apoya arriba cuando no, que es exactamente lo que hace falta. */
+  .portfolio-viewer__caja { margin: auto 0; }
+  .portfolio-viewer .project-viewer__flecha { top: 1.8rem; bottom: auto; width: 4.4rem; height: 4.4rem; margin-left: 0; }
+  .portfolio-viewer .project-viewer__flecha--izq { left: 2.4rem; }
+  .portfolio-viewer .project-viewer__flecha--der { left: 8.2rem; right: auto; }
+  .portfolio-viewer__caja { grid-template-columns: minmax(0, 1fr); gap: 0; width: 100%; padding: 1.4rem 1.4rem 3.4rem; border-radius: 2.8rem; background: rgba(246, 240, 225, 0.05); border: 1px solid rgba(246, 240, 225, 0.12); }
+  .portfolio-viewer__foto { border-radius: 1.8rem; border: 0; background: rgba(10, 10, 10, 0.4); }
+  .portfolio-viewer__foto img { max-height: 36vh; }
+  .portfolio-viewer__texto { padding: 2.8rem 1.6rem 0; }
+  .portfolio-viewer__n { margin-bottom: 1.2rem; }
+  .portfolio-viewer__nombre { font-size: 3.6rem; }
+  .portfolio-viewer__lead { margin-top: 1.4rem; font-size: 2.1rem; }
+  .portfolio-viewer__cta { margin-top: 3rem; }
+  .portfolio-viewer__sinficha { margin-top: 3rem; }
   .project-next { padding: 12rem 0 14rem; }
   .project-next__link { font-size: 4.4rem; gap: 1.6rem; }
   .project-next__link .icon-arrow-diagonal { width: 3rem; height: 3rem; }
   .project-next__cta { margin-top: 5rem; }
 }
+/* ---------- área tocable en vertical ----------
+   El dedo cubre unos 44px y estos enlaces miden entre 14 y 36: el del footer, 15. El
+   área se agranda con un pseudo-elemento en vez de con padding, así el texto no se
+   mueve de lugar ni cambia el alto de la fila; sólo crece lo que responde al toque.
+   Todos tienen el ::after libre: el subrayado de .btn-underline va por background-image
+   y el de .btn-underlined viene en los glifos de la Montserrat Subrayada.
+   .hero-mail no lleva position: relative porque ya está absolute y ponérselo lo
+   descolocaría; su ::after se posiciona igual contra él. */
+@media only screen and (max-width: 1025px) {
+  .menu--list li a,
+  #header .social-list .mail-link,
+  #header .social-list .phone-link,
+  .logo,
+  .project-back,
+  .footer-brand,
+  .footer-link,
+  .footer-mail,
+  .footer-legal a { position: relative; }
+
+  .menu--list li a:after,
+  #header .social-list .mail-link:after,
+  #header .social-list .phone-link:after,
+  .hero-mail:after,
+  .logo:after,
+  .project-back:after,
+  .footer-brand:after,
+  .footer-link:after,
+  .footer-mail:after,
+  .footer-legal a:after {
+    content: ''; position: absolute; left: 0; right: 0; top: 50%;
+    height: 44px; transform: translateY(-50%);
+  }
+}
+
 @media only screen and (max-width: 767.98px) {
-  .project-block, .project-gallery, .project-next__inner { padding-left: 4rem; padding-right: 4rem; }
-  .project-hero__inner { padding: calc(var(--header-height) + 8rem) 9rem 9rem 4rem; }
-  .project-hero__shot { margin: 0 9rem 9rem 4rem; }
+  .project-block, .project-next__inner { padding-left: 4rem; padding-right: 4rem; }
+  .project-gallery__track { gap: 1.8rem; padding: 0 1.8rem; }
+  /* 6.5rem a la derecha y no menos: ahí pasa el contorno blanco, que va a 4.5rem del
+     borde, y el texto no tiene que cruzarlo. Arriba alcanza con 7rem porque la D ya
+     empieza por debajo del header. */
+  .project-hero__inner { padding: 7rem 6.5rem 8rem 4rem; }
+  .project-hero--con-captura .project-hero__inner { padding-right: 6.5rem; }
+  .project-hero__shot { margin: 0 6.5rem 8rem 4rem; }
   /* "CONSULTORIOS" es una palabra sola y no puede partirse: a 8.6vw se salía de su
      columna. Este tamaño la deja entrar en las pantallas angostas. */
   .project-title { font-size: 7.2vw; }
@@ -1021,16 +1462,57 @@ body.menu-active .scroll-top, body.menu-leave .scroll-top { opacity: 0; visibili
    QUÉ NOS DEFINE (/sobre)
    Mismo panel negro que el equipo, con las filas numeradas de "cómo trabajamos".
    ========================================================= */
-.about-traits { position: relative; background: var(--white-1); }
-.about-traits__shape { position: relative; background: var(--black-1); color: var(--white-1); border-radius: 0 var(--blob-radius) var(--blob-radius) 0; overflow: hidden; padding: 14rem 0 16rem; }
+/* =========================================================
+   SOBRE — la historia como recorrido
+   =========================================================
+   El año queda anclado a la izquierda mientras los hitos pasan al costado: es lo único
+   fijo de la página y lo que le da el eje. `position: sticky` es del navegador, no una
+   animación atada al scroll: no hay pin ni scrub en juego. */
+.about-story { position: relative; background: var(--white-1); color: var(--black-1); padding: 18rem 0 16rem; }
+/* Cuando el recorrido abre la página no hay portada que le haga lugar al header, que
+   es fijo: sin esto el "2023" arranca tres rem por debajo del logotipo. */
+.about-story--arranque { padding-top: calc(var(--header-height) + 11rem); }
+.story-inner { display: grid; grid-template-columns: 24rem minmax(0, 1fr); gap: 0 8rem; padding-left: 21rem; padding-right: 21rem; max-width: 168rem; }
+.story-year { position: sticky; top: calc(var(--header-height) + 4rem); margin: 0; font-size: 7.2rem; line-height: 1; font-weight: 800; color: var(--red-1); }
+.story-year small { display: block; margin-top: 1.2rem; font-size: 1.7rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--black-1); opacity: 0.45; }
+.story-steps { position: relative; margin: 0; padding: 0 0 0 7rem; list-style: none; }
+/* El riel se dibuja de arriba hacia abajo cuando el recorrido entra (ver initRecorrido) */
+.story-rail { position: absolute; left: 0; top: 1.4rem; bottom: 1.4rem; width: 0.25rem; background: rgba(10, 10, 10, 0.16); transform: scaleY(0); transform-origin: top center; }
+.story-step { position: relative; }
+.story-step + .story-step { margin-top: 8rem; }
+.story-step__dot { position: absolute; left: -7.85rem; top: 1rem; width: 1.8rem; height: 1.8rem; border-radius: 50%; background: var(--white-1); border: 0.35rem solid var(--red-1); }
+.story-step__etapa { display: block; margin-bottom: 1.6rem; font-size: 1.7rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.45; }
+.story-step__title { margin: 0 0 2rem; font-size: 4rem; line-height: 1.14; font-weight: 800; }
+.story-step__text { margin: 0; max-width: 92rem; font-size: 2.4rem; line-height: 1.55; opacity: 0.82; }
+@media only screen and (max-width: 1025px) {
+  .about-story { padding: 11rem 0 10rem; }
+  .about-story--arranque { padding-top: calc(var(--header-height) + 7rem); }
+  .story-inner { grid-template-columns: 1fr; gap: 4rem; padding-left: 8rem; padding-right: 8rem; }
+  /* En vertical el año no se ancla: la columna desaparece y quedaría flotando sobre
+     el recorrido en vez de al costado. */
+  .story-year { position: static; font-size: 5rem; }
+  .story-steps { padding-left: 4.4rem; }
+  .story-step + .story-step { margin-top: 5rem; }
+  .story-step__dot { left: -5.25rem; width: 1.4rem; height: 1.4rem; border-width: 0.3rem; }
+  .story-step__title { font-size: 3.2rem; }
+  .story-step__text { font-size: 2.1rem; }
+}
+@media only screen and (max-width: 767.98px) {
+  .story-inner { padding-left: 4rem; padding-right: 4rem; }
+  .story-step__title { font-size: 2.8rem; }
+}
+
+/* Qué nos define: sobre el crema. Antes iba dentro de una D negra, pero quedaba pegada
+   al cierre —también oscuro— y las dos se leían como un solo bloque de dos pantallas. */
+.about-traits { position: relative; background: var(--white-1); color: var(--black-1); padding: 4rem 0 18rem; }
 .traits-list { margin-top: 9rem; }
-.trait { display: grid; grid-template-columns: 12rem minmax(0, 1fr); gap: 0 5rem; padding-top: 5rem; border-top: 2px solid rgba(246, 240, 225, 0.24); }
+.trait { display: grid; grid-template-columns: 12rem minmax(0, 1fr); gap: 0 5rem; padding-top: 5rem; border-top: 2px solid rgba(10, 10, 10, 0.18); }
 .trait + .trait { margin-top: 6rem; }
 .trait__n { font-size: 3.2rem; line-height: 1; font-weight: 800; color: var(--red-1); letter-spacing: 0.02em; }
 .trait__title { margin: 0; font-size: 4.4rem; line-height: 1.1; font-weight: 800; text-transform: uppercase; }
 .trait__text { margin-top: 1.8rem; max-width: 86rem; font-size: 2.4rem; line-height: 1.45; opacity: 0.82; }
 @media only screen and (max-width: 1025px) {
-  .about-traits__shape { padding: 9rem 0 11rem; }
+  .about-traits { padding: 2rem 0 11rem; }
   .traits-list { margin-top: 5rem; }
   .trait { grid-template-columns: 8rem minmax(0, 1fr); gap: 0 2.4rem; padding-top: 3rem; }
   .trait + .trait { margin-top: 3.4rem; }
@@ -1045,31 +1527,79 @@ body.menu-active .scroll-top, body.menu-leave .scroll-top { opacity: 0; visibili
 /* =========================================================
    FORMULARIO DE CONTACTO (/contacto)
    ========================================================= */
-.contact-section { position: relative; background: var(--white-1); color: var(--black-1); padding: 12rem 0 16rem; }
-.contact-form { display: grid; gap: 4rem; max-width: 104rem; }
+/* La banda del encabezado: una franja negra a todo el ancho, sin recorte. Va de borde
+   a borde y hace de cabecera de la página, con el header encima. El alto lo pone el
+   contenido —no hay min-height ni 100vh— porque la gracia es que no sea una portada:
+   el formulario tiene que quedar a la vista enseguida.
+   El padding de arriba reserva el alto del header fijo. */
+.contact-band { position: relative; background: var(--black-1); color: var(--white-1); padding: calc(var(--header-height) + 4rem) 0 6rem; }
+.contact-head { padding-left: 21rem; padding-right: 21rem; max-width: 168rem; }
+.contact-title { margin: 2.6rem 0 0; font-size: 6.4rem; line-height: 1.08; font-weight: 800; text-transform: uppercase; }
+.contact-intro { margin: 2.2rem 0 0; max-width: 86rem; font-size: 2.4rem; line-height: 1.45; opacity: 0.82; }
+
+.contact-section { position: relative; background: var(--white-1); color: var(--black-1); padding: 10rem 0 16rem; }
+/* El formulario y, al lado, qué pasa después. Antes el formulario vivía solo en la
+   mitad izquierda y la otra mitad quedaba vacía. */
+.contact-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: 0 10rem; padding-left: 21rem; padding-right: 21rem; max-width: 168rem; }
+.contact-form { display: grid; gap: 3.4rem; }
 .contact-field { display: grid; gap: 1.2rem; }
 .contact-field label { font-size: 1.9rem; line-height: 1; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--red-1); }
+/* Caja con fondo y borde, no una línea al pie: sobre el crema, un border-bottom de 2px
+   es lo único que marcaba dónde se escribe, y no alcanzaba para que el campo se leyera
+   como un campo. */
 .contact-field input, .contact-field textarea {
-  width: 100%; padding: 2rem 0; border: 0; border-bottom: 2px solid rgba(10, 10, 10, 0.24);
-  background: none; color: var(--black-1); font: inherit; font-size: 2.4rem; line-height: 1.4; border-radius: 0;
-  transition: border-color 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+  width: 100%; padding: 1.8rem 2rem; border: 0.2rem solid rgba(10, 10, 10, 0.18); border-radius: 1.2rem;
+  background: var(--white-2); color: var(--black-1); font: inherit; font-size: 2.2rem; line-height: 1.4;
+  transition: border-color 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
 }
-.contact-field textarea { resize: vertical; min-height: 14rem; }
-.contact-field input:focus, .contact-field textarea:focus { outline: none; border-bottom-color: var(--red-1); }
+.contact-field textarea { resize: vertical; min-height: 16rem; }
+.contact-field input:focus, .contact-field textarea:focus { outline: none; border-color: var(--red-1); }
 /* :user-invalid y no :invalid: marca en rojo recién cuando el usuario ya interactuó,
    no apenas carga la página con los campos vacíos. */
-.contact-field input:user-invalid, .contact-field textarea:user-invalid { border-bottom-color: var(--red-1); }
+.contact-field input:user-invalid, .contact-field textarea:user-invalid { border-color: var(--red-1); }
+
+/* ---------- La columna de al lado ---------- */
+.contact-side__title { margin: 0 0 3.4rem; font-size: 2.6rem; line-height: 1.2; font-weight: 800; text-transform: uppercase; letter-spacing: 0.02em; }
+.contact-steps { margin: 0; padding: 0; list-style: none; }
+.contact-step { display: grid; grid-template-columns: 6rem minmax(0, 1fr); gap: 0 2.4rem; padding: 2.6rem 0; border-top: 0.15rem solid rgba(10, 10, 10, 0.18); }
+.contact-step__n { font-size: 1.9rem; line-height: 1.3; font-weight: 800; color: var(--red-1); letter-spacing: 0.06em; }
+.contact-step__title { margin: 0; font-size: 2.2rem; line-height: 1.25; font-weight: 800; }
+.contact-step__text { margin: 0.8rem 0 0; font-size: 1.9rem; line-height: 1.45; opacity: 0.72; }
+.contact-direct { margin-top: 4rem; padding-top: 3rem; border-top: 0.25rem solid var(--black-1); }
+.contact-direct__label { margin: 0 0 1.4rem; font-size: 1.7rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.45; }
+.contact-direct__mail { display: inline-flex; align-items: center; gap: 1rem; font-size: 2.2rem; font-weight: 800; color: var(--black-1); }
+.contact-direct__mail:hover { color: var(--red-1); }
+.contact-direct__mail .icon-arrow-diagonal { width: 1.8rem; height: 1.8rem; flex: none; }
+.contact-redes { display: flex; flex-wrap: wrap; gap: 1.4rem; margin: 2.4rem 0 0; padding: 0; list-style: none; }
+.contact-redes a { display: inline-block; border: 0.2rem solid rgba(10, 10, 10, 0.25); border-radius: 10rem; padding: 0.9rem 2rem; font-size: 1.7rem; font-weight: 700; color: var(--black-1); transition: border-color 0.3s, color 0.3s; }
+.contact-redes a:hover { border-color: var(--red-1); color: var(--red-1); }
 .contact-actions { display: flex; align-items: center; gap: 3rem; flex-wrap: wrap; margin-top: 2rem; }
 .contact-form .btn-d:disabled { opacity: 0.6; cursor: default; }
 .contact-status { font-size: 2rem; line-height: 1.4; max-width: 52rem; }
 @media only screen and (max-width: 1025px) {
-  .contact-section { padding: 8rem 0 11rem; }
+  .contact-band { padding: calc(var(--header-height) + 3rem) 0 4.4rem; }
+  .contact-section { padding: 7rem 0 11rem; }
+  .contact-head { padding-left: 8rem; padding-right: 8rem; }
+  .contact-title { font-size: 4.6rem; margin-top: 2.2rem; }
+  .contact-intro { font-size: 2.1rem; margin-top: 1.8rem; }
+  /* Una columna: el formulario primero y "qué pasa después" debajo. A dos columnas en
+     el ancho de una tablet, los campos quedan demasiado angostos para escribir. */
+  .contact-grid { grid-template-columns: 1fr; gap: 6rem; padding-left: 8rem; padding-right: 8rem; }
   .contact-form { gap: 3rem; }
-  .contact-field input, .contact-field textarea { font-size: 2.1rem; padding: 1.6rem 0; }
+  /* Piso de 16px: iOS hace zoom solo al enfocar un campo que mida menos, y después la
+     página queda corrida. Es la única medida del sitio que no puede bajar. */
+  .contact-field input, .contact-field textarea { font-size: max(2.1rem, 16px); padding: 1.6rem 1.8rem; }
   .contact-status { font-size: 1.8rem; }
+  .contact-side__title { margin-bottom: 2.4rem; }
+  .contact-step { padding: 2.2rem 0; grid-template-columns: 5rem minmax(0, 1fr); gap: 0 1.8rem; }
+  .contact-direct { margin-top: 3rem; }
 }
 @media only screen and (max-width: 767.98px) {
+  .contact-head { padding-left: 4rem; padding-right: 4rem; }
+  .contact-title { font-size: 6.6vw; }
+  .contact-grid { padding-left: 4rem; padding-right: 4rem; }
   .contact-field label { font-size: 1.6rem; }
-  .contact-field input, .contact-field textarea { font-size: 1.9rem; }
+  .contact-field input, .contact-field textarea { font-size: max(1.9rem, 16px); }
   .contact-actions { gap: 2rem; }
+  .contact-step { grid-template-columns: 1fr; gap: 0.8rem; }
 }

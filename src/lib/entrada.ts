@@ -1,24 +1,22 @@
 import gsap from 'gsap'
-import { ScrollSmoother } from 'gsap/ScrollSmoother'
 
 import type { Cleanup } from './marquee'
 
 // La llegada al sitio, igual en las cinco vistas: se entra siempre desde arriba y el
 // loader se disuelve en vez de cortarse de golpe.
 
-const SALIDA = 0.9
+const SALIDA = 0.5
 const LIMITE = 14000
 
 /** El navegador restaura el scroll donde estaba antes de recargar. En la home eso es
- *  fatal: el hero está fijado y la coreografía arranca desde un punto que no es el
- *  suyo, así que aparecía a mitad de camino y a los saltos. En las otras vistas es
- *  menos grave pero igual de feo: se cae en medio de la página sin ninguna entrada.
+ *  fatal: la intro del hero arranca desde un punto que no es el suyo, así que la
+ *  portada aparecía a mitad de camino. En las otras vistas es menos grave pero igual
+ *  de feo: se cae en medio de la página sin ninguna entrada.
  *
  *  Mientras el loader está arriba mantenemos el scroll en cero por frame y no una sola
- *  vez: la restauración del navegador puede llegar después de nuestra llamada, y en
- *  desktop además el ScrollSmoother lleva su propia posición. Al terminar devolvemos
- *  scrollRestoration a 'auto' para no pisar el ir y volver dentro del sitio, que no
- *  recarga el documento y sí debería recordar dónde estaba. */
+ *  vez: la restauración del navegador puede llegar después de nuestra llamada. Al
+ *  terminar devolvemos scrollRestoration a 'auto' para no pisar el ir y volver dentro
+ *  del sitio, que no recarga el documento y sí debería recordar dónde estaba. */
 export function anclarArriba(): Cleanup {
   // Si el loader ya corrió, esto es una navegación dentro del sitio y no una carga del
   // documento: el router se ocupa del scroll —y al volver atrás lo restaura— así que
@@ -53,7 +51,6 @@ export function anclarArriba(): Cleanup {
       return
     }
     if (window.scrollY !== 0) window.scrollTo(0, 0)
-    ScrollSmoother.get()?.scrollTop(0)
     raf = requestAnimationFrame(arriba)
   }
   raf = requestAnimationFrame(arriba)

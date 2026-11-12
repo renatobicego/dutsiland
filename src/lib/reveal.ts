@@ -7,8 +7,8 @@ import type { Cleanup } from './marquee'
 
 gsap.registerPlugin(ScrollTrigger)
 
-/** Cada elemento entra al aparecer en pantalla. Se usa donde no hay pin: en móvil
- *  en la home, y en toda página que no sea la home.
+/** Cada elemento entra al aparecer en pantalla. Es la forma en que entra todo el sitio:
+ *  no hay secciones fijadas ni nada que avance con la rueda.
  *
  *  fromTo y no from: `from` toma el estado ACTUAL como destino, así que si el revelado
  *  se arma dos veces sobre los mismos nodos lee el estado que dejó el anterior
@@ -39,17 +39,21 @@ export function initRevealOnEnter(selectors: string[]): gsap.core.Tween[] {
 /** Red de seguridad de los revelados: ningún contenido puede quedar invisible porque su
  *  animación no llegó a correr.
  *
- *  `gsap.from` deja el elemento oculto hasta que su trigger entra, así que si el trigger
+ *  Un revelado deja el elemento oculto hasta que su trigger entra, así que si el trigger
  *  no entra nunca el texto no existe para el que mira. Y hay dos formas de que no entre:
  *  que el punto de arranque caiga más allá del final del scroll (pasa con lo último de
  *  una página corta) o que las posiciones se hayan calculado con la página más corta de
  *  lo que terminó siendo —fuentes o imágenes que llegaron después— y el tramo quede
  *  detrás del scroll sin que nadie lo dispare.
  *
+ *  Toma tweens sueltos y timelines por igual: desde que no hay secciones fijadas, la
+ *  mayor parte de la página entra así —la frase, los frentes de "qué hacemos", los pasos
+ *  del proceso— y cada una de esas piezas es una timeline con su propio disparador.
+ *
  *  Va en el evento 'refresh' y no en 'refreshInit': el primero corre DESPUÉS de
  *  recalcular las posiciones y de que ScrollTrigger dispare lo que corresponda al scroll
  *  actual, así que lo que siga sin correr acá es lo que de verdad quedó huérfano. */
-export function protegerRevelados(tweens: gsap.core.Tween[]): Cleanup {
+export function protegerRevelados(tweens: (gsap.core.Tween | gsap.core.Timeline)[]): Cleanup {
   const revisar = () => {
     const limite = ScrollTrigger.maxScroll(window)
     tweens.forEach((t) => {
@@ -98,20 +102,22 @@ export function refrescarAlCargarMedios(): Cleanup {
   }
 }
 
-/** El footer se revela por debajo de la última sección, que se va hundiendo.
- *  La última sección lleva .prev-section y su contenido .prev-section__inner. */
+/** El footer entra al aparecer en pantalla: su panel sube a su lugar y, detrás, el
+ *  logotipo se arma letra por letra.
+ *
+ *  Antes avanzaba con el scroll (scrub) y arrastraba consigo la última sección, que se
+ *  hundía y se desvanecía para dejarlo pasar. Ese movimiento no era del footer sino de
+ *  la rueda, y con el scroll libre la última sección se queda donde está: lo único que
+ *  se mueve es el footer, cuando se lo empieza a ver. */
 export function initFooterReveal(): gsap.core.Timeline {
   const foot = gsap.timeline({
-    scrollTrigger: { trigger: '#footer', endTrigger: '.wrapper', start: 'top bottom', end: 'bottom bottom', scrub: true, anticipatePin: 1, invalidateOnRefresh: true },
+    scrollTrigger: { trigger: '#footer', start: 'top 92%', once: true, invalidateOnRefresh: true },
   })
-  foot.fromTo('#footer .footer-panel', { y: '30vh' }, { y: 0, ease: 'none' })
-  foot.to('.prev-section .prev-section__inner', { y: '14vh', ease: 'none' }, '<')
-  // El fade arranca a mitad: si empieza junto con el footer, queda un hueco negro visible
-  foot.to('.prev-section .prev-section__inner', { autoAlpha: 0, ease: 'power2.in' }, '<+0.5')
-  // El logotipo arranca cuando el panel ya terminó de subir, que es cuando de verdad
-  // se lo empieza a ver
+  foot.fromTo('#footer .footer-panel', { y: '18vh' }, { y: 0, duration: 0.9, ease: 'power3.out' })
+  // El logotipo arranca cuando el panel ya casi terminó de subir, que es cuando de
+  // verdad se lo empieza a ver
   const logo = buildFooterLogo()
-  if (logo) foot.add(() => logo.restart(), '>-0.15')
+  if (logo) foot.add(() => logo.restart(), '>-0.35')
   return foot
 }
 

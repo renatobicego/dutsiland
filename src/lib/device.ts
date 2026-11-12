@@ -12,6 +12,41 @@ export type Device = {
   size: DeviceSize
 }
 
+/** Mantiene --vh con el alto real de la ventana, que en vertical no es 100vh.
+ *
+ *  En el teléfono `100vh` cuenta la barra del navegador aunque esté a la vista, así que
+ *  el hero quedaba más alto que la pantalla. De ahí la variable.
+ *
+ *  Se recalcula sólo cuando cambia el ANCHO, no en cada resize: al scrollear en el
+ *  teléfono la barra del navegador se esconde y aparece, y eso dispara resize con un
+ *  alto distinto cada vez. Si se escuchara todo, el hero cambiaría de altura mientras
+ *  alguien lee. El caso que sí hay que atender es rotar el teléfono, y ahí el ancho
+ *  cambia siempre. */
+export function seguirAlturaReal(): () => void {
+  if (typeof window === 'undefined') return () => {}
+  const aplicar = () => document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`)
+  let anchoPrevio = window.innerWidth
+  aplicar()
+  // Las barras del navegador terminan de acomodarse después del primer frame
+  const t = window.setTimeout(aplicar, 1000)
+
+  const alCambiar = () => {
+    if (window.innerWidth === anchoPrevio) return
+    anchoPrevio = window.innerWidth
+    aplicar()
+  }
+  // orientationchange llega antes de que el navegador reporte el alto nuevo
+  const alRotar = () => window.setTimeout(aplicar, 120)
+
+  window.addEventListener('resize', alCambiar)
+  window.addEventListener('orientationchange', alRotar)
+  return () => {
+    window.clearTimeout(t)
+    window.removeEventListener('resize', alCambiar)
+    window.removeEventListener('orientationchange', alRotar)
+  }
+}
+
 export function getDevice(): Device {
   if (typeof window === 'undefined') {
     return { isPhone: false, isTablet: false, isMobile: false, isDesktop: true, size: 'desktop' }

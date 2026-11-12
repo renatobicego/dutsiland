@@ -15,9 +15,10 @@ const montserrat = localFont({
   adjustFontFallback: false,
 })
 
-// Montserrat Subrayada (OFL, solo 400 y 700): la pide el diseñador para todo botón con
-// tipografía subrayada. El subrayado viene en los glifos, así que donde se aplica no
-// se dibuja ninguna línea aparte (ver .btn-underlined y .btn-d__label en globals.css).
+// Montserrat Subrayada (OFL, solo 400 y 700): el subrayado viene dentro de los glifos,
+// así que donde se aplica no se dibuja ninguna línea aparte. Queda para los links de
+// texto —pie, mail del hero, volver a proyectos—, donde la línea dice que son links.
+// Las pastillas (.btn-d) NO la usan: ahí la pastilla ya se lee como botón.
 const subrayada = localFont({
   src: [
     { path: '../fonts/MontserratSubrayada-Regular.ttf', weight: '400', style: 'normal' },
