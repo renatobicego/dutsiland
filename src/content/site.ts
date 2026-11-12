@@ -284,6 +284,9 @@ export const site: Site = {
   // Tres rutas. "Qué hacemos" y "Cómo trabajamos" siguen siendo secciones del home,
   // pero no tienen entrada en el menú ni URL propia.
   menu: [
+    // El logotipo también lleva al inicio, pero sólo lo sabe el que ya sabe que un
+    // logotipo es un link. Escrito, se ve.
+    { label: "Inicio", href: "/" },
     { label: "Sobre Dutsiland", href: "/sobre", short: "Sobre" },
     { label: "Proyectos", href: "/proyectos" },
     // TODO(Dutsiland): "Hablemos" es la palabra del botón del header; el menú a pantalla

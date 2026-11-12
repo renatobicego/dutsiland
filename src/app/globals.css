@@ -537,15 +537,20 @@ body.menu-active #header .social-list { pointer-events: auto; opacity: 1; transf
 @media only screen and (max-width: 1025px) and (max-height: 560px) {
   /* El padding de arriba vuelve a 12rem: en vertical lo fija --header-height, que mide
      8rem cuando el header real mide 84px, y acostado el logotipo le quedaba por debajo. */
-  nav.menu { padding-top: 12rem; padding-bottom: 2rem; }
+  /* Acostado, un teléfono deja menos de 400px de alto y acá entran el logotipo, los
+     cuatro destinos y el bloque de contacto. Las medidas de abajo están apretadas para
+     que entre todo en un iPhone SE acostado (667×375), que es el caso más chico; el
+     overflow es la red por si aparece uno todavía más bajo o alguien agranda la letra
+     del sistema: antes de que algo quede fuera de alcance, el menú scrollea. */
+  nav.menu { padding-top: 12rem; padding-bottom: 2rem; overflow-y: auto; }
   .menu--wrapper { justify-content: flex-start; }
-  .menu--wrapper .container-lottie { max-width: 30rem; margin-bottom: 1.2rem; }
+  .menu--wrapper .container-lottie { max-width: 24rem; margin-bottom: 0.8rem; }
   /* El interlineado va en el enlace y no en el nombre: fs--header lo fija en 1em, que
      se hereda ya resuelto en píxeles del tamaño grande, así que el número —aunque mida
      1.6rem— seguía reservando el renglón entero y dejaba filas de 75px. */
-  .menu--wrapper .menu--list li a { padding: 1.5rem 0; line-height: 1.1; }
-  .menu--list__label { font-size: 3.2rem; }
-  #header .social-list { position: static; width: 100%; margin-top: 1.6rem; padding-left: 0; padding-right: 0; }
+  .menu--wrapper .menu--list li a { padding: 1rem 0; line-height: 1.1; }
+  .menu--list__label { font-size: 2.8rem; }
+  #header .social-list { position: static; width: 100%; margin-top: 1rem; padding-left: 0; padding-right: 0; }
 }
 
 .social-list .phone-wrapper { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; width: 100%; }
