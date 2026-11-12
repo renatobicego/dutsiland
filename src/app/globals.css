@@ -21,6 +21,11 @@
   /* El mismo rojo aclarado, para cuando va sobre negro: --red-1 sobre --black-1 da
      3:1 y los números del menú miden 1.6rem, que es tamaño de texto chico. */
   --red-2: #d98282;
+  /* El naranja del rótulo del cursor. No es un color de la paleta: es el único que se
+     lee tanto sobre el crema como sobre el negro Y sobre una captura cualquiera, que es
+     lo que el cursor tiene debajo la mitad del tiempo. El crema y el negro, que es lo
+     que usaba antes, desaparecen en cuanto la foto de abajo es del mismo tono. */
+  --naranja-1: #e8732a;
   --padding-fluid: 6.4rem;
   --padding: 1.6rem;
   --header-height: 15rem;
@@ -220,13 +225,13 @@ body[data-load='first-done'] #loader .d-mark__d path { fill: var(--white-1); }
   visibility: hidden;
 }
 .cursor-wrapper.is-visible { visibility: visible; }
-/* Sobre fondo oscuro el rótulo del cursor va en crema. Lo marca initCursor midiendo el
-   tono de lo que hay debajo del puntero (ver tonoEn en scrollState). */
+/* El punto sigue tomando el tono de lo que tiene debajo (lo marca initCursor midiendo
+   con tonoEn); el rótulo ya no, va siempre en naranja (ver --naranja-1). */
 .cursor-wrapper[data-tono='dark'] { --color: var(--white-1); }
 @media only screen and (max-width: 1025px) { .cursor-wrapper { display: none !important; } }
 .cursor-wrapper:after {
-  content: attr(data-cursor-title); text-transform: uppercase; font-size: 14px;
-  width: 100%; height: 100%; color: var(--color);
+  content: attr(data-cursor-title); text-transform: uppercase; font-size: 14px; font-weight: 800;
+  width: 100%; height: 100%; color: var(--naranja-1);
   display: flex; align-items: center; position: absolute; top: 0; left: 140px;
 }
 [data-cursor='default'] > div, [data-cursor='off'] > div, [data-cursor='default-white'] > div, [data-cursor='hovered'] > div, [data-cursor='hovered-dark'] > div, [data-cursor='hovered-small'] > div {
@@ -909,7 +914,10 @@ html.intro-running body { touch-action: none; }
    forma negra terminaba en el mismo píxel donde arranca Proyectos —que también es
    oscuro— y la cuña de crema que deja la curva quedaba cortada por una horizontal: la
    curva no terminaba, la guillotinaban. */
-.home-process { position: relative; background: var(--white-1); padding-bottom: 13rem; }
+/* El padding de arriba es el aire entre esta D y la de "Qué hacemos": apoyadas una
+   contra la otra, las dos siluetas negras se leían como una sola mancha partida por una
+   línea, en vez de como dos piezas. */
+.home-process { position: relative; background: var(--white-1); padding-top: 5rem; padding-bottom: 13rem; }
 /* La D mira a la izquierda, espejo de la de "Qué hacemos": las dos secciones oscuras
    del medio son parientes, no la misma. Y la curva de abajo deja ver el crema antes de
    Proyectos, que también es oscuro; sin ella los dos bloques negros se fundirían en una

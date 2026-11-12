@@ -25,7 +25,16 @@ export function initCursor({
   // Función flecha y no declaración: así TypeScript conserva dentro del cierre
   // el estrechamiento de `el` que hace el guard de arriba.
   const resolve = (): void => {
-    const stack = document.elementsFromPoint(x, y);
+    const todos = document.elementsFromPoint(x, y);
+    // Un diálogo abierto tapa todo lo que tiene atrás, así que lo de atrás no puede
+    // seguir decidiendo el cursor. elementsFromPoint devuelve de arriba hacia abajo:
+    // cortando en el diálogo queda él y lo que esté por encima, y nada de abajo.
+    // Sin esto, con un proyecto abierto en grande el cursor seguía diciendo "Ver
+    // proyecto", que es el rótulo de la tarjeta del carrusel que quedó debajo.
+    const dialogo = todos.findIndex(
+      (n) => n instanceof HTMLElement && n.getAttribute("aria-modal") === "true",
+    );
+    const stack = dialogo === -1 ? todos : todos.slice(0, dialogo + 1);
     let foundStyle = false;
     let foundTitle = false;
     stack
